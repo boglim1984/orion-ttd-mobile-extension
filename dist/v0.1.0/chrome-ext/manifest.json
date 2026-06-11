@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Orion TTD Mobile Extension",
+  "version": "0.1.0",
+  "description": "Real TTD mobile extension shell for Orion iOS; no composer insertion yet.",
+  "update_url": "https://boglim1984.github.io/orion-ttd-mobile-extension/updates/chrome-updates.xml",
+  "content_scripts": [
+    {
+      "matches": ["*://chatgpt.com/*", "*://*.chatgpt.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}

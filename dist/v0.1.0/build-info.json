@@ -1,0 +1,8 @@
+{
+  "name": "Orion TTD Mobile Extension",
+  "version": "0.1.0",
+  "flavor": "chrome",
+  "channel": "orion-ios-github-pages-update",
+  "updatedAt": "2026-06-11T22:05:53.705Z",
+  "purpose": "real TTD mobile extension shell; no composer insertion yet"
+}

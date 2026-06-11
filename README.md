@@ -7,8 +7,8 @@ This is the real TTD Mobile Extension shell.
 - GitHub Pages update loop is canonical.
 - Bookmarklet remains fallback.
 - Safari Web Inspector is the debugger.
-- v0.1.0 does not perform composer insertion.
-- v0.1.0 does not perform submit behavior.
+- v0.1.1 does not perform composer insertion.
+- v0.1.1 does not perform submit behavior.
 
 ## Layout
 
@@ -18,9 +18,17 @@ This is the real TTD Mobile Extension shell.
 - `updates/`: Chrome update metadata
 - `reports/`: local run/report artifacts
 
-## v0.1.0 behavior
+## v0.1.1 behavior
 
-The content script only runs on ChatGPT pages and exposes:
+The content script only runs on ChatGPT pages and exposes page-visible DOM dataset stamps on `document.documentElement`:
+
+- `dataset.orionTtdBuild`
+- `dataset.orionTtdFlavor`
+- `dataset.orionTtdChannel`
+- `dataset.orionTtdLoaded`
+- `dataset.orionTtdInfo`
+
+The content script also keeps these internal globals:
 
 - `window.__ORION_TTD_BUILD__`
 - `window.__ORION_TTD_INFO__`
@@ -29,7 +37,7 @@ The content script only runs on ChatGPT pages and exposes:
 Console output:
 
 ```text
-[ORION TTD MOBILE] version=0.1.0 flavor=chrome
+[ORION TTD MOBILE] version=0.1.1 flavor=chrome
 ```
 
 ## Canonical update channel
@@ -48,23 +56,27 @@ node scripts/package-ttd-mobile-extension.mjs
 node scripts/verify-ttd-mobile-extension.mjs
 ```
 
-## Billy v0.1.0 test flow
+## Billy v0.1.1 test flow
 
-1. Install or update the Chrome-style package from the iPhone-local Orion extension path.
+1. Open Orion iOS Extensions and tap `Update` for the installed Orion TTD Mobile Extension.
 2. Open `https://chatgpt.com/` in Orion iOS.
 3. Attach Safari Web Inspector from the Mac.
 4. Run:
 
 ```javascript
-window.__ORION_TTD_BUILD__
-window.__ORION_TTD_INFO__
-window.__ORION_TTD_SMOKE__()
+document.documentElement.dataset.orionTtdBuild
+document.documentElement.dataset.orionTtdFlavor
+document.documentElement.dataset.orionTtdChannel
+document.documentElement.dataset.orionTtdLoaded
+document.documentElement.dataset.orionTtdInfo
 ```
 
 Expected results:
 
-- build returns `"0.1.0"`
-- `info.flavor` returns `"chrome"`
-- smoke returns the same info object
+- build returns `"0.1.1"`
+- flavor returns `"chrome"`
+- channel returns `"orion-ios-github-pages-update"`
+- loaded returns `"true"`
+- info contains version `0.1.1` and flavor `chrome`
 - no composer insertion occurs
 - no submit occurs

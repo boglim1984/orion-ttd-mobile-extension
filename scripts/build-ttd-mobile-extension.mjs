@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, "..");
 const SRC_DIR = path.join(ROOT_DIR, "src");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
-const VERSION = "0.1.0";
+const VERSION = "0.1.1";
 const UPDATED_AT = new Date().toISOString();
 
 function ensureDir(dirPath) {
@@ -39,7 +39,7 @@ fs.writeFileSync(
       flavor: "chrome",
       channel: "orion-ios-github-pages-update",
       updatedAt: UPDATED_AT,
-      purpose: "real TTD mobile extension shell; no composer insertion yet"
+      purpose: "real TTD mobile extension shell; page-visible DOM build stamp; no composer insertion yet"
     },
     null,
     2

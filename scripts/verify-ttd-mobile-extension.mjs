@@ -9,12 +9,33 @@ const ROOT_DIR = path.resolve(__dirname, "..");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
 const UPDATES_DIR = path.join(ROOT_DIR, "updates");
 const REPORTS_DIR = path.join(ROOT_DIR, "reports");
-const VERSION = "0.1.0";
+const VERSION = "0.1.1";
 const ZIP_NAME = `orion-ttd-mobile-extension-chrome-v${VERSION}.zip`;
 const ZIP_PATH = path.join(DIST_DIR, `v${VERSION}`, ZIP_NAME);
 const MANIFEST_PATH = path.join(DIST_DIR, `v${VERSION}`, "chrome-ext", "manifest.json");
+const CONTENT_PATH = path.join(DIST_DIR, `v${VERSION}`, "chrome-ext", "content.js");
 const XML_PATH = path.join(UPDATES_DIR, "chrome-updates.xml");
 const EXPECTED_URL = `https://boglim1984.github.io/orion-ttd-mobile-extension/dist/v${VERSION}/${ZIP_NAME}`;
+const REQUIRED_DATASET_SNIPPETS = [
+  'root.dataset.orionTtdBuild = BUILD_VERSION',
+  'root.dataset.orionTtdFlavor = "chrome"',
+  'root.dataset.orionTtdChannel = CHANNEL',
+  'root.dataset.orionTtdLoaded = "true"',
+  'root.dataset.orionTtdInfo = JSON.stringify(info)'
+];
+const FORBIDDEN_SNIPPETS = [
+  "localStorage",
+  "sessionStorage",
+  "document.cookie",
+  "indexedDB",
+  "sendButton",
+  ".click(",
+  "querySelector(",
+  "querySelectorAll(",
+  "Authorization",
+  "navigator.credentials",
+  "chrome.storage"
+];
 
 function assert(condition, message) {
   if (!condition) {
@@ -26,10 +47,19 @@ fs.mkdirSync(REPORTS_DIR, { recursive: true });
 
 assert(fs.existsSync(ZIP_PATH), `Missing package: ${ZIP_PATH}`);
 assert(fs.existsSync(MANIFEST_PATH), `Missing manifest: ${MANIFEST_PATH}`);
+assert(fs.existsSync(CONTENT_PATH), `Missing content script: ${CONTENT_PATH}`);
 assert(fs.existsSync(XML_PATH), `Missing update XML: ${XML_PATH}`);
 
 const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, "utf8"));
 assert(manifest.version === VERSION, `Manifest version mismatch: ${manifest.version}`);
+
+const content = fs.readFileSync(CONTENT_PATH, "utf8");
+for (const snippet of REQUIRED_DATASET_SNIPPETS) {
+  assert(content.includes(snippet), `Content script missing required dataset write: ${snippet}`);
+}
+for (const snippet of FORBIDDEN_SNIPPETS) {
+  assert(!content.includes(snippet), `Content script contains forbidden snippet: ${snippet}`);
+}
 
 const xml = fs.readFileSync(XML_PATH, "utf8");
 assert(xml.includes(`version='${VERSION}'`), "Update XML version mismatch");
@@ -47,11 +77,13 @@ const summary = {
   updateUrl: EXPECTED_URL,
   zipContainsManifest: true,
   zipContainsContentScript: true,
+  contentContainsDomDatasetStampWrites: true,
+  safetyChecksPassed: true,
   verifiedAt: new Date().toISOString()
 };
 
 fs.writeFileSync(
-  path.join(REPORTS_DIR, "ttd-mobile-extension-v0.1.0-verify.json"),
+  path.join(REPORTS_DIR, "ttd-mobile-extension-v0.1.1-verify.json"),
   JSON.stringify(summary, null, 2)
 );
 

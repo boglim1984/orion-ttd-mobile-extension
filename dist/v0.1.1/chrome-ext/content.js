@@ -1,5 +1,5 @@
-const BUILD_VERSION = "__BUILD_VERSION__";
-const UPDATED_AT = "__UPDATED_AT__";
+const BUILD_VERSION = "0.1.1";
+const UPDATED_AT = "2026-06-11T22:36:27.749Z";
 const CHANNEL = "orion-ios-github-pages-update";
 
 const info = {

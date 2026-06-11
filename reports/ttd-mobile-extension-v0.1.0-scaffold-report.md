@@ -24,6 +24,7 @@ Scaffolded the first real Orion-first TTD Mobile Extension shell as a harmless C
 
 - Public repo: `https://github.com/boglim1984/orion-ttd-mobile-extension`
 - GitHub Pages base: `https://boglim1984.github.io/orion-ttd-mobile-extension/`
+- Pages status at handoff: configured and repo-backed, still reporting `building` during this run
 
 ## Chrome update metadata URL
 

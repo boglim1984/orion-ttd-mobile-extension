@@ -1,0 +1,210 @@
+[
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":null,
+    "Unnamed: 1":null,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Metric",
+    "Unnamed: 1":"Value",
+    "Unnamed: 2":null,
+    "Unnamed: 3":"Purpose",
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Total failure rows",
+    "Unnamed: 1":158,
+    "Unnamed: 2":null,
+    "Unnamed: 3":"Predict likely failure events in the User \u2194 LLM \u2194 Harness three-body dynamic, then map each to a concrete recovery mechanism, skill logic block, and reducer guard.",
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Critical failures",
+    "Unnamed: 1":29,
+    "Unnamed: 2":null,
+    "Unnamed: 3":"Use this as a simulation seed for agents: pick current milestone, filter relevant failure rows, generate fixtures, run trials, and update the map after real failures.",
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"High failures",
+    "Unnamed: 1":71,
+    "Unnamed: 2":null,
+    "Unnamed: 3":"Core rule: chat turns are not predictable; route invariants and legal transitions are the test target.",
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Automatable tests",
+    "Unnamed: 1":70,
+    "Unnamed: 2":null,
+    "Unnamed: 3":"Next build use: command protocol + workflow fixtures before more automation.",
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Semi-manual tests",
+    "Unnamed: 1":59,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Manual\/design-time tests",
+    "Unnamed: 1":29,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":null,
+    "Unnamed: 1":null,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":null,
+    "Unnamed: 1":null,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Layer",
+    "Unnamed: 1":"Count",
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"Severity",
+    "Unnamed: 5":"Count"
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Agent\/Build",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"Critical",
+    "Unnamed: 5":29
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Compiler",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"High",
+    "Unnamed: 5":71
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Cross-Cutting",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"Medium",
+    "Unnamed: 5":56
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Insertion\/DOM",
+    "Unnamed: 1":12,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"Low",
+    "Unnamed: 5":2
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"LLM Response",
+    "Unnamed: 1":12,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Need Compiler",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Orion Runtime",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"Automation Level",
+    "Unnamed: 5":"Count"
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Protocol Packet",
+    "Unnamed: 1":12,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"Automatable",
+    "Unnamed: 5":70
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Reducer",
+    "Unnamed: 1":12,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"Design-time",
+    "Unnamed: 5":25
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Safety\/Autonomy",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"Manual",
+    "Unnamed: 5":4
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Skill Library",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":"Semi-manual",
+    "Unnamed: 5":59
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Task\/Signal",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"User Response",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Voice\/Shortcut",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  },
+  {
+    "Orion TTD Harness \u2014 Failure Latent Map":"Workflow Testing",
+    "Unnamed: 1":10,
+    "Unnamed: 2":null,
+    "Unnamed: 3":null,
+    "Unnamed: 4":null,
+    "Unnamed: 5":null
+  }
+]

@@ -1,0 +1,18 @@
+{"Dimension":"Severity","Value":"Critical","Meaning":"Can corrupt state, violate trust, or trigger unsafe\/private action","Recommended Reducer Behavior":"Block, repair, or require explicit user confirmation"}
+{"Dimension":"Severity","Value":"High","Meaning":"Can lose route, commit wrong state, or create major friction","Recommended Reducer Behavior":"Reject commit; repair or hold"}
+{"Dimension":"Severity","Value":"Medium","Meaning":"Can reduce usefulness or create noisy failures","Recommended Reducer Behavior":"Log, repair if repeated, tune skill logic"}
+{"Dimension":"Severity","Value":"Low","Meaning":"Mainly diagnostic\/noise","Recommended Reducer Behavior":"Log and filter; do not overbuild"}
+{"Dimension":"Likelihood","Value":"High","Meaning":"Expected in normal live use","Recommended Reducer Behavior":"Must have fixture before automation"}
+{"Dimension":"Likelihood","Value":"Medium","Meaning":"Expected under plausible boundary conditions","Recommended Reducer Behavior":"Fixture or manual trial recommended"}
+{"Dimension":"Likelihood","Value":"Low","Meaning":"Rare but still important if severity high","Recommended Reducer Behavior":"Static guard or targeted trial"}
+{"Dimension":"Detection_Confidence","Value":"High","Meaning":"Can be detected by state\/DOM\/static scan reliably","Recommended Reducer Behavior":"Automate scorer"}
+{"Dimension":"Detection_Confidence","Value":"Medium","Meaning":"Needs heuristic or semi-manual judgment","Recommended Reducer Behavior":"Flag for review"}
+{"Dimension":"Detection_Confidence","Value":"Low","Meaning":"Mostly subjective\/live-observation","Recommended Reducer Behavior":"Capture transcript and user feedback"}
+{"Dimension":"Outcome","Value":"PASS","Meaning":"Route invariants held and final\/next state is legal","Recommended Reducer Behavior":"Commit allowed transition"}
+{"Dimension":"Outcome","Value":"PASS_WITH_REPAIR","Meaning":"Drift occurred but repair restored legal route","Recommended Reducer Behavior":"Record repair and keep route active"}
+{"Dimension":"Outcome","Value":"FAIL_ADVANCED_WITHOUT_PERMISSION","Meaning":"Chunk\/route advanced without legal signal","Recommended Reducer Behavior":"Reject\/rollback and inject repair"}
+{"Dimension":"Outcome","Value":"FAIL_INVENTED_STATE","Meaning":"Assistant claimed uncommitted progress","Recommended Reducer Behavior":"Reject and re-anchor authoritative state"}
+{"Dimension":"Outcome","Value":"FAIL_LOST_ROUTE","Meaning":"Assistant\/user\/harness lost active route\/chunk","Recommended Reducer Behavior":"Insert TTD_REPAIR_V1 or low-contact hold"}
+{"Dimension":"Outcome","Value":"FAIL_TOO_MANY_QUESTIONS","Meaning":"Assistant increased cognitive load","Recommended Reducer Behavior":"Inject one_question_only or cadence upshift"}
+{"Dimension":"Outcome","Value":"FAIL_UNSAFE_ACTION","Meaning":"Action was hidden, private, or not user-triggered","Recommended Reducer Behavior":"Block; require explicit trusted mode"}
+{"Dimension":"Outcome","Value":"FAIL_NO_RESPONSE_CONTRACT","Meaning":"No parseable footer\/status in test lane","Recommended Reducer Behavior":"Ask response-contract repair or flag review"}

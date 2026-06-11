@@ -1,0 +1,19 @@
+Dimension,Value,Meaning,Recommended Reducer Behavior
+Severity,Critical,"Can corrupt state, violate trust, or trigger unsafe/private action","Block, repair, or require explicit user confirmation"
+Severity,High,"Can lose route, commit wrong state, or create major friction",Reject commit; repair or hold
+Severity,Medium,Can reduce usefulness or create noisy failures,"Log, repair if repeated, tune skill logic"
+Severity,Low,Mainly diagnostic/noise,Log and filter; do not overbuild
+Likelihood,High,Expected in normal live use,Must have fixture before automation
+Likelihood,Medium,Expected under plausible boundary conditions,Fixture or manual trial recommended
+Likelihood,Low,Rare but still important if severity high,Static guard or targeted trial
+Detection_Confidence,High,Can be detected by state/DOM/static scan reliably,Automate scorer
+Detection_Confidence,Medium,Needs heuristic or semi-manual judgment,Flag for review
+Detection_Confidence,Low,Mostly subjective/live-observation,Capture transcript and user feedback
+Outcome,PASS,Route invariants held and final/next state is legal,Commit allowed transition
+Outcome,PASS_WITH_REPAIR,Drift occurred but repair restored legal route,Record repair and keep route active
+Outcome,FAIL_ADVANCED_WITHOUT_PERMISSION,Chunk/route advanced without legal signal,Reject/rollback and inject repair
+Outcome,FAIL_INVENTED_STATE,Assistant claimed uncommitted progress,Reject and re-anchor authoritative state
+Outcome,FAIL_LOST_ROUTE,Assistant/user/harness lost active route/chunk,Insert TTD_REPAIR_V1 or low-contact hold
+Outcome,FAIL_TOO_MANY_QUESTIONS,Assistant increased cognitive load,Inject one_question_only or cadence upshift
+Outcome,FAIL_UNSAFE_ACTION,"Action was hidden, private, or not user-triggered",Block; require explicit trusted mode
+Outcome,FAIL_NO_RESPONSE_CONTRACT,No parseable footer/status in test lane,Ask response-contract repair or flag review

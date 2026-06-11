@@ -1,0 +1,11 @@
+Source,Type,Reference / URL / Path,Why it matters
+Current Orion project chat,Source chat,https://chatgpt.com/g/g-p-6a2b126d79488191a0d18a6085eb6962-orion-browser/c/6a2b1270-d53c-83ea-abbd-e846f0029199,Origin of current Orion mobile TTD harness design
+Orion TTD local project,Local path,/Users/oflahertys/Desktop/Code Projects/ACTIVE/orion-ios-ttd-injector,Implementation working copy
+Real mobile extension repo,GitHub,https://github.com/boglim1984/orion-ttd-mobile-extension,Public Chrome-style update loop for Orion iOS extension
+Extension update Pages,GitHub Pages,https://boglim1984.github.io/orion-ttd-mobile-extension/updates/chrome-updates.xml,Canonical Chrome update XML
+Command Center project card,Local path,/Users/oflahertys/Desktop/Code Projects/ACTIVE/Billy-Project-Command-Center/project-cards/ios-orion-browser-mobile-ttd-injector.md,Durable project status and milestones
+TTD core context,Project source,Main TTD System Context Report for Orion State Harness.md,"Defines reducer-owned state, allowed intents, done/move_on boundary"
+Air-gap protocol note,Project source,Orion TTD Command Protocol — Air-Gapped Workflow Harness Plan,Defines command packet → unpredictable turn → reducer loop
+Programmable state machine note,Project source,Orion TTD Harness — Programmable State Machine Direction,Defines processor/memory/skills/workflow-test metaphor
+Task DOM signal note,Project source,ChatGPT Task DOM Signal — Recovery Watcher Finding,Defines task-return signal as recovery source
+Voice mode source note,Project source,Voice Mode DOM Control — Recover Turn Action Surface,"Defines voice as action surface, not state authority"

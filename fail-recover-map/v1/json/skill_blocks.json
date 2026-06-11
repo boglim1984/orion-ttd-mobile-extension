@@ -1,0 +1,602 @@
+[
+  {
+    "Skill_Block":"cadence_downshift",
+    "Purpose":"Slow down when user\/harness risk rises.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Downshift confidence; ask confirm",
+    "Reducer_Guard":"Risk can override requested fast mode",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F055, F131",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"cadence_upshift",
+    "Purpose":"Raise speed for low-risk physical steps.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Upshift confidence for low-risk chunks",
+    "Reducer_Guard":"Low-risk physical chunk can infer likely intent",
+    "Cadence_Mode":"high_confidence_fast",
+    "Covered_Failure_IDs":"F056, F132",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"composer_occupied_guard",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Hold pending recovery; ask or show status",
+    "Reducer_Guard":"Never overwrite non-protocol composer text",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F043, F086",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"packet_minimal_disclosure",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Minimize\/redact to current state",
+    "Reducer_Guard":"Packets carry least necessary state",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F031, F128",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"skill_regression_suite",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Run regression suite per skill change",
+    "Reducer_Guard":"Every skill change covers old and new cases",
+    "Cadence_Mode":"contextual_confidence",
+    "Covered_Failure_IDs":"F078, F133",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"active_chunk_required",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Repair with active_chunk and completion_condition",
+    "Reducer_Guard":"No check-in command without active_chunk",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F024",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"ambiguity_counter",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Track ambiguity_count",
+    "Reducer_Guard":"Ask once; then hold or safe default by mode",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F071",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"answer_then_return",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Answer briefly then return to route",
+    "Reducer_Guard":"Side answer ends with active route restoration",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F062",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"artifact_consistency_check",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Single source compile pipeline; checksum state",
+    "Reducer_Guard":"Packet generated from fixture\/current state only",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F020",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"autonomy_scope_gate",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Insert autonomy boundary and require explicit mode",
+    "Reducer_Guard":"No hidden action without explicit trusted\/POC\/user-triggered mode",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F009",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"away_state_policy",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Set hold\/recovery phase",
+    "Reducer_Guard":"Long silence means hold\/recovery, not failure",
+    "Cadence_Mode":"low_confidence_recovery",
+    "Covered_Failure_IDs":"F066",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"boundary_case_expander",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Auto-expand boundary cases",
+    "Reducer_Guard":"Every workflow has drift and repair tests",
+    "Cadence_Mode":"slow_decision_boundary",
+    "Covered_Failure_IDs":"F019",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"boundary_task_only",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Use tasks only delayed recovery flares",
+    "Reducer_Guard":"Task creation only at timed boundary\/pause",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F088",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"cadence_anchor_request",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Ask for one timing anchor or choose low-friction default",
+    "Reducer_Guard":"Every active route gets cadence policy",
+    "Cadence_Mode":"slow_decision_boundary",
+    "Covered_Failure_IDs":"F003",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"cadence_required",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Add cadence\/confidence governor",
+    "Reducer_Guard":"Every command names cadence mode",
+    "Cadence_Mode":"contextual_confidence",
+    "Covered_Failure_IDs":"F032",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"cadence_risk_matrix",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Risk\/cadence matrix",
+    "Reducer_Guard":"Risk and cadence influence clarify\/commit threshold",
+    "Cadence_Mode":"contextual_confidence",
+    "Covered_Failure_IDs":"F077",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"chrome_only_canonical",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Chrome-only canonical rule",
+    "Reducer_Guard":"Firefox fallback\/probe only unless changed",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F112",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"closed_transition_table",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Closed transition table",
+    "Reducer_Guard":"Unknown transitions reject to repair\/hold",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F069",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"command_id_guard",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Ignore footer and insert repair if needed",
+    "Reducer_Guard":"No commit from mismatched command_id",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F023",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"completion_condition_lock",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Require observable finish condition for route\/chunks",
+    "Reducer_Guard":"No terminal state without completion condition",
+    "Cadence_Mode":"slow_decision_boundary",
+    "Covered_Failure_IDs":"F004",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"composer_ready_wait",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Bounded wait\/retry status",
+    "Reducer_Guard":"Wait but do not loop forever",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F103",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"composer_selector_cascade",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Selector cascade and visible fail status",
+    "Reducer_Guard":"No silent failure; dataset insert_status",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F033",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"composer_target_kind_switch",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Target-kind-specific insertion path",
+    "Reducer_Guard":"Handle textarea\/input\/contenteditable",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F034",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"concrete_chunk_labels",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Rewrite to verb-object chunks",
+    "Reducer_Guard":"active_chunk requires verb+object+finish condition",
+    "Cadence_Mode":"slow_decision_boundary",
+    "Covered_Failure_IDs":"F014",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"confidence_gain_tuning",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Raise confidence for low-risk physical chunks",
+    "Reducer_Guard":"Cadence adjusted from failure metrics",
+    "Cadence_Mode":"high_confidence_fast",
+    "Covered_Failure_IDs":"F124",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"confidence_router",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Risk-aware skill router",
+    "Reducer_Guard":"High-risk stages downrank fast skills",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F142",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"constraint_conflict_resolver",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Ask one forced-choice question or park conflict",
+    "Reducer_Guard":"No route compile until hard conflict resolved",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F002",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"contextual_intents",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Narrow intents by phase",
+    "Reducer_Guard":"Allowed intents depend on phase\/chunk",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F025",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"debug_noise_filter",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Filter by ORION\/dataset status",
+    "Reducer_Guard":"Result uses stamp\/status not console cleanliness",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F104",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"device_pass_required",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Separate local\/Pages\/device pass",
+    "Reducer_Guard":"Orion runtime pass needs device evidence",
+    "Cadence_Mode":"slow_decision_boundary",
+    "Covered_Failure_IDs":"F114",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"done_enough_policy",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Accept on low-risk; confirm on high-risk",
+    "Reducer_Guard":"Risk\/cadence decides clarify vs accept",
+    "Cadence_Mode":"contextual_confidence",
+    "Covered_Failure_IDs":"F057",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"done_vs_move_on",
+    "Purpose":"Separate completion from advancement.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Inject done_vs_move_on; reject advance",
+    "Reducer_Guard":"done completes; move_on advances exactly one chunk",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F047",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"event_dedupe",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Dedupe by event_id\/state_version",
+    "Reducer_Guard":"Event can commit once",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F074",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"event_queue_priority",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Event queue and user-input priority",
+    "Reducer_Guard":"User-visible action wins over background signal",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F073",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"exact_recovery_token",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Use exact token and secondary cues",
+    "Reducer_Guard":"Recovery tasks include literal token",
+    "Cadence_Mode":"low_confidence_recovery",
+    "Covered_Failure_IDs":"F080",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"explicit_commit_policy",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Inject explicit policy",
+    "Reducer_Guard":"Every command has named commit_policy",
+    "Cadence_Mode":"slow_decision_boundary",
+    "Covered_Failure_IDs":"F026",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"extension_enabled_check",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Install-state checklist\/fallback",
+    "Reducer_Guard":"No test without build stamp",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F100",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"external_signal_dedupe",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Dedupe external signals",
+    "Reducer_Guard":"External event commits once",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F095",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"external_signal_min_state",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Carry minimal IDs or request lookup",
+    "Reducer_Guard":"External signals include route\/session when possible",
+    "Cadence_Mode":"low_confidence_recovery",
+    "Covered_Failure_IDs":"F098",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"failure_map_learning_loop",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Post-run failure row update workflow",
+    "Reducer_Guard":"Every new live failure becomes row\/test candidate",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F157",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"failure_map_lookup",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Predict failure from map before packet",
+    "Reducer_Guard":"Packet builder consults failure taxonomy",
+    "Cadence_Mode":"contextual_confidence",
+    "Covered_Failure_IDs":"F135",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"failure_map_to_fixture",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Map every row to test\/recovery\/guard",
+    "Reducer_Guard":"Every failure maps to mechanism and test",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F116",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"fast_physical_prompt",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Inject fast physical style",
+    "Reducer_Guard":"Fast mode is terse and action-oriented",
+    "Cadence_Mode":"high_confidence_fast",
+    "Covered_Failure_IDs":"F051",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"footer_is_proposal",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Validate independently",
+    "Reducer_Guard":"Footer is proposal, not authority",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F067",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"footer_repair",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Soft parse or ask footer repair in test mode",
+    "Reducer_Guard":"No unstructured commit unless manual override",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F046",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"foreground_live_watcher",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Treat foreground as live-only; rescan on focus",
+    "Reducer_Guard":"No background reliability assumption",
+    "Cadence_Mode":"low_confidence_recovery",
+    "Covered_Failure_IDs":"F102",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"foreground_liveness_probe",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Heartbeat\/status stamp and reload-safe recovery",
+    "Reducer_Guard":"Long-session tests log liveness without state mutation",
+    "Cadence_Mode":"low_confidence_recovery",
+    "Covered_Failure_IDs":"F108",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"foreground_recovery_scan",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Foreground scan recent messages \/ Shortcut fallback",
+    "Reducer_Guard":"On resume scan recent DOM for token",
+    "Cadence_Mode":"low_confidence_recovery",
+    "Covered_Failure_IDs":"F083",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"freshness_guard",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Refresh\/re-anchor before send",
+    "Reducer_Guard":"Old packet requires refresh\/recovery",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F030",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"friction_score",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Add friction score alongside correctness",
+    "Reducer_Guard":"Workflow pass includes burden\/friction metric",
+    "Cadence_Mode":"contextual_confidence",
+    "Covered_Failure_IDs":"F153",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"friction_sensitive_check_in",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Switch to humane micro-step or pause",
+    "Reducer_Guard":"Friction lowers cadence and shrinks next action",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F008",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"friction_to_microstep",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Acknowledge and shrink\/pause",
+    "Reducer_Guard":"Frustration lowers cadence",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F061",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"generic_ack_guard",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Clarify if prior prompt had multiple choices",
+    "Reducer_Guard":"Generic ack commits only after single-option prompt",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F065",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"humane_repair_copy",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Humane repair copy",
+    "Reducer_Guard":"Repair states facts and tiny next move",
+    "Cadence_Mode":"low_confidence_recovery",
+    "Covered_Failure_IDs":"F125",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"idempotent_insert",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Replace by command_id; do not append",
+    "Reducer_Guard":"Same command_id cannot duplicate",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F037",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"input_lifecycle_required",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Dispatch beforeinput\/input\/change",
+    "Reducer_Guard":"Insert verifies composer match and send state",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F035",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"inspector_context_check",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Context checklist; page-visible stamp",
+    "Reducer_Guard":"No test proceeds without correct URL\/stamp",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F044",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"intent_synonym_map",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Add phrase-class examples but commit via reducer rules",
+    "Reducer_Guard":"Intent mapping feeds proposal, reducer still guards",
+    "Cadence_Mode":"contextual_confidence",
+    "Covered_Failure_IDs":"F139",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"intent_vocab_lock",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Map to supported intent or explicit route mutation",
+    "Reducer_Guard":"Unsupported intents rejected\/mapped by rule",
+    "Cadence_Mode":"low_confidence",
+    "Covered_Failure_IDs":"F017",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  },
+  {
+    "Skill_Block":"invariant_scoring_only",
+    "Purpose":"Reusable rule block for a specific failure boundary.",
+    "When_to_Inject":"Inject when the current stage matches one of the covered failure rows.",
+    "Primary_Recovery":"Score invariants not prose",
+    "Reducer_Guard":"Exact prose never primary pass condition",
+    "Cadence_Mode":"fast_check_in",
+    "Covered_Failure_IDs":"F045",
+    "Notes":"Generated from Failure_Map; refine as real trials produce evidence."
+  }
+]

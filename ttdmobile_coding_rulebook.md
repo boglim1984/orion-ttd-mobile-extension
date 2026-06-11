@@ -57,6 +57,18 @@ The extension must remain safe, visible, and auditable:
 - Submit is POC-gated only.
 - Public update probes must remain harmless and must not contain private data.
 
+## Fail/recover map
+
+Rules:
+- Before implementing command protocol, workflow tests, reducer/scorer logic, repair packets, or recovery behavior, read:
+  `fail-recover-map/README.md`
+  and the latest fail/recover map files.
+- Treat the XLSX as the human-editable source artifact.
+- Treat CSV/JSON/JSONL as agent-ingest/test-generation formats.
+- Do not let the map override the rulebook or project card.
+- Use the map to choose test cases, failure classes, recovery mechanisms, and metrics.
+- When real tests reveal new failures, update the map or create a new version instead of burying discoveries in chat only.
+
 ## Architecture boundary
 - Orion project is the product/integration home.
 - Orion iOS is the source-of-truth runtime.

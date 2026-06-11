@@ -1,0 +1,27 @@
+Orion TTD Harness — Failure Latent Map,Unnamed: 1,Unnamed: 2,Unnamed: 3,Unnamed: 4,Unnamed: 5
+,,,,,
+Metric,Value,,Purpose,,
+Total failure rows,158,,"Predict likely failure events in the User ↔ LLM ↔ Harness three-body dynamic, then map each to a concrete recovery mechanism, skill logic block, and reducer guard.",,
+Critical failures,29,,"Use this as a simulation seed for agents: pick current milestone, filter relevant failure rows, generate fixtures, run trials, and update the map after real failures.",,
+High failures,71,,Core rule: chat turns are not predictable; route invariants and legal transitions are the test target.,,
+Automatable tests,70,,Next build use: command protocol + workflow fixtures before more automation.,,
+Semi-manual tests,59,,,,
+Manual/design-time tests,29,,,,
+,,,,,
+,,,,,
+Layer,Count,,,Severity,Count
+Agent/Build,10,,,Critical,29
+Compiler,10,,,High,71
+Cross-Cutting,10,,,Medium,56
+Insertion/DOM,12,,,Low,2
+LLM Response,12,,,,
+Need Compiler,10,,,,
+Orion Runtime,10,,,Automation Level,Count
+Protocol Packet,12,,,Automatable,70
+Reducer,12,,,Design-time,25
+Safety/Autonomy,10,,,Manual,4
+Skill Library,10,,,Semi-manual,59
+Task/Signal,10,,,,
+User Response,10,,,,
+Voice/Shortcut,10,,,,
+Workflow Testing,10,,,,

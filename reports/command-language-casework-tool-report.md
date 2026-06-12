@@ -25,6 +25,8 @@ Implemented as local tooling only.
 
 The server, GUI, suite validator, heuristic classifier, result writer, and console-injected runner are all present.
 
+The tool now also includes a Casework Designer Skill bookmarklet helper for the current ChatGPT dev chat and a quieter launcher for the support tabs.
+
 ## How It Was Tested
 
 - example suite validation
@@ -54,6 +56,14 @@ The server, GUI, suite validator, heuristic classifier, result writer, and conso
 - legacy server-run controls, loader snippet, and raw diagnostics moved behind `Advanced / Legacy / Diagnostics`
 - the GUI now exposes an example-suite loader and a launcher script for opening the GUI plus a disposable ChatGPT tab
 
+## Skill Bookmarklet And Launcher Split
+
+- the dev chat now has a dedicated `Copy Skill Bookmarklet` helper that injects the Command Language Casework Designer Skill prompt without sending
+- the bookmarklet shows a small popup that explains the mental model and points Billy to the support tabs
+- the bookmarklet does not start the local server, does not run tests, and does not click `Send`
+- the launcher now owns the support-tab job: start server, open Casework GUI, open disposable ChatGPT, copy setup note
+- focus preservation is best effort only; the launcher now says so directly instead of pretending it is guaranteed
+
 ## Handoff Tightening Update
 
 - the main lane no longer shows the long console-setup helper button or draft-save control
@@ -80,4 +90,4 @@ The server, GUI, suite validator, heuristic classifier, result writer, and conso
 
 ## Next Action
 
-Run the baseline suite in a disposable ChatGPT test chat, then drop `run-summary.md` and `run-result.json` into a fresh chat loaded with the Command Language Casework Designer Skill.
+Use the dev-chat bookmarklet to design the next suite, run it through the GUI plus disposable ChatGPT support tab, then drop `run-summary.md` and `run-result.json` back into the dev chat for Mermaid review.

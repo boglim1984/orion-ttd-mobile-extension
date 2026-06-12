@@ -6,6 +6,7 @@ It exists so Billy and ChatGPT can design, run, and analyze `TTD_COMMAND_V1` lan
 
 ## What It Does
 
+- injects a Casework Designer Skill prompt into the current ChatGPT dev chat by bookmarklet, insert-only
 - serves a local GUI for pasted suite JSON
 - validates suite structure before a run
 - provides a console-injected ChatGPT runner
@@ -37,12 +38,17 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 
 ## First Run
 
-1. Start the server, or run `tools/command-language-casework/launch-casework.command`.
-2. Open a disposable ChatGPT test chat.
-3. Use the GUI step lane to load/paste a suite and validate it.
-4. Copy the self-contained runner for the current suite.
-5. Paste it into the ChatGPT page console once per page load, then use the overlay `Run` button.
-6. Use the copied result text as the main handoff if the browser allows clipboard access. Use the downloaded `orion-casework-result-*.json` file as backup.
+1. In the current ChatGPT dev chat, use the GUI `Copy Skill Bookmarklet` helper and save/click that bookmarklet there.
+2. Run `tools/command-language-casework/launch-casework.command` to start the local server and open the Casework GUI plus a disposable ChatGPT support tab.
+3. Ask the dev chat to design the next suite JSON block.
+4. Use the GUI step lane to load/paste that suite and validate it.
+5. Copy the self-contained runner for the current suite.
+6. Paste it into the disposable ChatGPT page console once per page load, then use the overlay `Run` button.
+7. Use the copied result text as the main handoff if the browser allows clipboard access. Use the downloaded `orion-casework-result-*.json` file as backup.
+
+## Mental Model
+
+Dev chat designs the test suite. Casework GUI validates JSON and copies the runner. Disposable ChatGPT executes the test. Result JSON comes back to the dev chat for Mermaid review.
 
 ## Example Suites
 
@@ -69,6 +75,8 @@ Each run includes:
 
 ## Notes
 
+- The skill bookmarklet injects the design/review prompt into the current dev chat and shows the next-step popup. It does not start the server, run tests, or click Send.
+- The launcher starts the local server and opens the support tabs quietly when macOS/Chrome allow it, but focus preservation is best effort only.
 - The supported path is the self-contained payload, not the legacy localhost bootstrap.
 - The legacy loader and server-run buttons remain available as secondary tooling only.
 - Use this only in dedicated test chats.

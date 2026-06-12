@@ -1,3 +1,9 @@
+import {
+  CASEWORK_SKILL_PROMPT,
+  CASEWORK_SKILL_USAGE,
+  buildSkillBookmarklet
+} from "./casework-skill-setup.js";
+
 const suiteInput = document.querySelector("#suite-input");
 const loaderOutput = document.querySelector("#loader-output");
 const statusLogPanel = document.querySelector("#status-log-panel");
@@ -5,6 +11,7 @@ const currentCasePanel = document.querySelector("#current-case-panel");
 const resultLinksPanel = document.querySelector("#result-links-panel");
 const validationSummary = document.querySelector("#validation-summary");
 const overlayStatus = document.querySelector("#overlay-status");
+const skillSetupStatus = document.querySelector("#skill-setup-status");
 
 const serverStateLabel = document.querySelector("#server-state");
 const suiteStateLabel = document.querySelector("#suite-state");
@@ -25,6 +32,9 @@ const openResultsButton = document.querySelector("#open-results-button");
 const copySummaryButton = document.querySelector("#copy-summary-button");
 const copyLoaderButton = document.querySelector("#copy-loader-button");
 const copyResultInstructionsButton = document.querySelector("#copy-result-instructions-button");
+const copySkillBookmarkletButton = document.querySelector("#copy-skill-bookmarklet-button");
+const copySkillPromptButton = document.querySelector("#copy-skill-prompt-button");
+const skillHowToUseButton = document.querySelector("#skill-how-to-use-button");
 
 const uiState = {
   suiteDirty: false,
@@ -47,6 +57,10 @@ function setValidationSummary(message, variant = "muted") {
 
 function setOverlayStatus(message) {
   overlayStatus.textContent = message;
+}
+
+function setSkillSetupStatus(message) {
+  skillSetupStatus.textContent = message;
 }
 
 function markSuiteDirty() {
@@ -234,6 +248,27 @@ copyConsoleStepsButton.addEventListener("click", () =>
   })
 );
 
+copySkillBookmarkletButton.addEventListener("click", () =>
+  withAction(async () => {
+    await copyToClipboard(buildSkillBookmarklet(), "Copied skill injection bookmarklet.");
+    setSkillSetupStatus("Bookmarklet copied. Save it in the browser bookmarks bar, then click it from the current ChatGPT dev chat.");
+  })
+);
+
+copySkillPromptButton.addEventListener("click", () =>
+  withAction(async () => {
+    await copyToClipboard(CASEWORK_SKILL_PROMPT, "Copied skill prompt.");
+    setSkillSetupStatus("Skill prompt copied. Paste it directly if you do not want to save the bookmarklet first.");
+  })
+);
+
+skillHowToUseButton.addEventListener("click", () =>
+  withAction(async () => {
+    await copyToClipboard(CASEWORK_SKILL_USAGE, "Copied skill setup note.");
+    setSkillSetupStatus(CASEWORK_SKILL_USAGE);
+  })
+);
+
 loadExampleButton.addEventListener("click", () =>
   withAction(async () => {
     await loadExampleSuite();
@@ -334,4 +369,5 @@ await refreshLoader();
 renderStateStrip();
 setValidationSummary("Load or paste a suite, then validate it.", "muted");
 setOverlayStatus("Open a disposable ChatGPT chat to begin.");
+setSkillSetupStatus("Dev chat designs the suite. Casework GUI validates JSON. Disposable ChatGPT runs the test. Result JSON comes back here for Mermaid review.");
 await refreshState();

@@ -36,6 +36,11 @@ body {
   margin-bottom: 20px;
 }
 
+.skill-setup {
+  margin-bottom: 22px;
+  padding: 20px 22px;
+}
+
 .eyebrow {
   margin: 0 0 10px;
   text-transform: uppercase;

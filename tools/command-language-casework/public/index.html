@@ -14,6 +14,24 @@
         <p class="warning">Load example → Validate → Copy Runner → paste in ChatGPT console → click Run → paste result back here.</p>
       </header>
 
+      <section class="skill-setup card">
+        <div>
+          <p class="step-meta">Design Chat Setup</p>
+          <h2>Prepare The Dev Chat</h2>
+          <p class="step-copy">
+            Use the skill bookmarklet in your current ChatGPT dev chat. It inserts the Casework Designer Skill prompt without sending.
+          </p>
+          <div class="step-actions">
+            <button id="copy-skill-bookmarklet-button" type="button" class="primary">Copy Skill Bookmarklet</button>
+            <button id="copy-skill-prompt-button" type="button" class="secondary">Copy Skill Prompt</button>
+            <button id="skill-how-to-use-button" type="button" class="secondary">How To Use</button>
+          </div>
+          <div id="skill-setup-status" class="instruction-box">
+            Dev chat designs the suite. Casework GUI validates JSON. Disposable ChatGPT runs the test. Result JSON comes back here for Mermaid review.
+          </div>
+        </div>
+      </section>
+
       <section class="state-strip card">
         <div class="state-pill">
           <span class="state-label">Server</span>

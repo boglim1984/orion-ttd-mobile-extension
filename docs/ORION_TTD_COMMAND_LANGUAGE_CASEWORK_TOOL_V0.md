@@ -33,19 +33,21 @@ The tool is evidence capture and batch running only. It does not gain route auth
 
 Core loop:
 
-1. ChatGPT skill designs a JSON suite.
-2. Billy pastes the suite into the local GUI.
-3. Billy installs the runner in a disposable ChatGPT test chat.
-4. Billy clicks `Run`.
-5. The runner sends the packet and scripted replies in explicit casework mode.
-6. The runner records visible assistant replies and sends them back to the local server.
-7. The server writes result files and reveals them in Finder.
-8. Billy drops the result files back into a fresh skill-loaded chat to design the next batch.
+1. The dev chat gets the Command Language Casework Designer Skill by insert-only bookmarklet.
+2. Billy asks that dev chat for a JSON suite block.
+3. Billy pastes the suite into the local GUI.
+4. Billy installs the runner in a disposable ChatGPT test chat.
+5. Billy clicks `Run`.
+6. The runner sends the packet and scripted replies in explicit casework mode.
+7. The runner records visible assistant replies and sends them back to the local server.
+8. The server writes result files and reveals them in Finder.
+9. Billy drops the result files back into the dev chat for Mermaid review and the next batch.
 
 ## GUI Workflow
 
 The GUI includes:
 
+- skill bookmarklet helpers for the dev/design chat
 - large suite JSON textarea
 - `Validate`
 - `Run`
@@ -140,10 +142,38 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 ## How To Paste Suite Data
 
 - use an example suite from `tools/command-language-casework/examples/`
-- or paste JSON from a fresh chat using the Command Language Casework Designer Skill
+- or paste JSON from the current dev chat after using the Command Language Casework Designer Skill bookmarklet
+
+## Skill Bookmarklet Split
+
+Skill bookmarklet:
+
+- injects the design/review skill into the current ChatGPT dev chat
+- shows a small popup explaining the next step
+- does not run the local server
+- does not run tests
+- does not click `Send` by default
+- does not use cookies, storage, or credential APIs
+
+Launcher:
+
+- starts the local server
+- opens the Casework GUI and a disposable ChatGPT support tab
+- copies a short setup note
+- tries to avoid stealing focus, but Chrome/macOS focus control is best effort only
+
+Dev chat:
+
+- designs suites
+- reviews result JSON with Mermaid
+
+Disposable ChatGPT tab:
+
+- runs the actual test runner
 
 ## Supported Runner Path
 
+- first use the skill bookmarklet in the current dev chat and get the suite block there
 - primary path: open disposable ChatGPT test chat, validate suite, then `Copy Self-Contained Runner`
 - paste the payload into a disposable ChatGPT test-chat console
 - nothing sends until Billy clicks the visible overlay `Run` button

@@ -7,11 +7,12 @@ const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, "..");
 const SRC_DIR = path.join(ROOT_DIR, "src");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 const UPDATED_AT = new Date().toISOString();
 const CONTENT_MODULE_FILES = [
   path.join(SRC_DIR, "content", "packet-builder.js"),
   path.join(SRC_DIR, "content", "composer-finder.js"),
+  path.join(SRC_DIR, "content", "witness.js"),
   path.join(SRC_DIR, "content", "orion-ttd-insert-only.js"),
   path.join(SRC_DIR, "content.js")
 ];

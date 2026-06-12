@@ -9,7 +9,7 @@ const ROOT_DIR = path.resolve(__dirname, "..");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
 const UPDATES_DIR = path.join(ROOT_DIR, "updates");
 const REPORTS_DIR = path.join(ROOT_DIR, "reports");
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 const ZIP_NAME = `orion-ttd-mobile-extension-chrome-v${VERSION}.zip`;
 const ZIP_PATH = path.join(DIST_DIR, `v${VERSION}`, ZIP_NAME);
 const MANIFEST_PATH = path.join(DIST_DIR, `v${VERSION}`, "chrome-ext", "manifest.json");
@@ -87,7 +87,7 @@ const summary = {
 };
 
 fs.writeFileSync(
-  path.join(REPORTS_DIR, "ttd-mobile-extension-v0.1.2-verify.json"),
+  path.join(REPORTS_DIR, "ttd-mobile-extension-v0.1.3-verify.json"),
   JSON.stringify(summary, null, 2)
 );
 

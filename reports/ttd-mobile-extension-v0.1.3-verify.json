@@ -1,0 +1,12 @@
+{
+  "version": "0.1.3",
+  "zipPath": "/Users/oflahertys/Code Projects/ACTIVE/orion-ios-ttd-injector/ttd-mobile-extension/dist/v0.1.3/orion-ttd-mobile-extension-chrome-v0.1.3.zip",
+  "manifestVersion": "0.1.3",
+  "updateXmlPath": "/Users/oflahertys/Code Projects/ACTIVE/orion-ios-ttd-injector/ttd-mobile-extension/updates/chrome-updates.xml",
+  "updateUrl": "https://boglim1984.github.io/orion-ttd-mobile-extension/dist/v0.1.3/orion-ttd-mobile-extension-chrome-v0.1.3.zip",
+  "zipContainsManifest": true,
+  "zipContainsContentScript": true,
+  "contentContainsDomDatasetStampWrites": true,
+  "safetyChecksPassed": true,
+  "verifiedAt": "2026-06-12T18:51:57.493Z"
+}

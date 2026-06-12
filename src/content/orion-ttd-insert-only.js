@@ -7,6 +7,7 @@
 })(typeof globalThis !== "undefined" ? globalThis : this, function insertOnlyFactory(root) {
   const packetBuilder = root.OrionTtdPacketBuilder || require("./packet-builder.js");
   const composerFinder = root.OrionTtdComposerFinder || require("./composer-finder.js");
+  const witness = root.OrionTtdWitness || require("./witness.js");
 
   function getRootElement(documentRef) {
     return documentRef?.documentElement || null;
@@ -27,6 +28,20 @@
     });
     pageRoot.dataset.orionTtdInsertOnlyLastSelector = result.selectorUsed || "";
     pageRoot.dataset.orionTtdInsertOnlyLastOk = result.ok ? "true" : "false";
+  }
+
+  function summarizePacketText(packetText) {
+    return {
+      packetPrefix: packetText.slice(0, 32),
+      packetLength: packetText.length
+    };
+  }
+
+  function emitWitness(documentRef, consoleRef, kind, payload) {
+    return witness.emitOrionTtdWitness(kind, payload, {
+      documentRef,
+      consoleRef
+    });
   }
 
   function createEventFactory(documentRef) {
@@ -98,8 +113,17 @@
 
   function runInsertOnlySmoke(options = {}) {
     const documentRef = options.documentRef || root.document;
+    const consoleRef = options.consoleRef || root.console;
     const allowOverwrite = Boolean(options.allowOverwrite);
     const packetText = options.packetText || packetBuilder.buildInsertOnlyPacketText(options.packetOverrides);
+    const packetSummary = summarizePacketText(packetText);
+
+    emitWitness(documentRef, consoleRef, "insert_only_smoke_started", {
+      allowOverwrite,
+      targetSelector: options.targetSelector || null,
+      ...packetSummary
+    });
+
     const locatedComposer = options.targetElement
       ? {
           found: true,
@@ -119,6 +143,14 @@
         submitAttempted: false
       };
       writeDatasetStatus(documentRef, result);
+      emitWitness(documentRef, consoleRef, "insert_only_smoke_result", {
+        ok: result.ok,
+        selectorUsed: result.selectorUsed,
+        blockedReason: result.blockedReason,
+        submitAttempted: result.submitAttempted,
+        composerKind: null,
+        ...packetSummary
+      });
       return result;
     }
 
@@ -134,25 +166,59 @@
         submitAttempted: false
       };
       writeDatasetStatus(documentRef, result);
+      emitWitness(documentRef, consoleRef, "insert_only_smoke_result", {
+        ok: result.ok,
+        selectorUsed: result.selectorUsed,
+        blockedReason: result.blockedReason,
+        submitAttempted: result.submitAttempted,
+        composerKind: null,
+        ...packetSummary
+      });
       return result;
     }
 
-    locatedComposer.element.focus?.();
-    const composerKind = setComposerText(locatedComposer.element, packetText);
-    dispatchComposerEvents(locatedComposer.element, packetText, documentRef);
+    try {
+      locatedComposer.element.focus?.();
+      const composerKind = setComposerText(locatedComposer.element, packetText);
+      dispatchComposerEvents(locatedComposer.element, packetText, documentRef);
 
-    const result = {
-      ok: true,
-      selectorUsed: locatedComposer.selectorUsed,
-      attemptedSelectors: locatedComposer.attemptedSelectors,
-      composerDescription: locatedComposer.composerDescription,
-      composerKind,
-      packetText,
-      insertedLength: packetText.length,
-      submitAttempted: false
-    };
-    writeDatasetStatus(documentRef, result);
-    return result;
+      const result = {
+        ok: true,
+        selectorUsed: locatedComposer.selectorUsed,
+        attemptedSelectors: locatedComposer.attemptedSelectors,
+        composerDescription: locatedComposer.composerDescription,
+        composerKind,
+        packetText,
+        insertedLength: packetText.length,
+        submitAttempted: false
+      };
+      writeDatasetStatus(documentRef, result);
+      emitWitness(documentRef, consoleRef, "insert_only_smoke_result", {
+        ok: result.ok,
+        selectorUsed: result.selectorUsed,
+        blockedReason: result.blockedReason || null,
+        submitAttempted: result.submitAttempted,
+        composerKind: result.composerKind || null,
+        ...packetSummary
+      });
+      return result;
+    } catch (error) {
+      const result = {
+        ok: false,
+        selectorUsed: locatedComposer.selectorUsed,
+        attemptedSelectors: locatedComposer.attemptedSelectors,
+        composerDescription: locatedComposer.composerDescription,
+        blockedReason: "insert_only_runtime_error",
+        submitAttempted: false
+      };
+      writeDatasetStatus(documentRef, result);
+      emitWitness(documentRef, consoleRef, "insert_only_smoke_error", {
+        message: error?.message || "unknown_error",
+        selectorUsed: locatedComposer.selectorUsed || null,
+        ...packetSummary
+      });
+      return result;
+    }
   }
 
   return {

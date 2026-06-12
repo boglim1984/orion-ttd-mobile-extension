@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const { runInsertOnlySmoke } = require("../../src/content/orion-ttd-insert-only.js");
+const { WITNESS_NODE_ID } = require("../../src/content/witness.js");
 
 class FakeEvent {
   constructor(type, init = {}) {
@@ -22,6 +23,8 @@ class FakeElement {
     this._contentEditable = contenteditable;
     this.events = [];
     this.dataset = {};
+    this.attributes = {};
+    this.style = {};
   }
 
   get isContentEditable() {
@@ -29,6 +32,9 @@ class FakeElement {
   }
 
   getAttribute(name) {
+    if (Object.hasOwn(this.attributes, name)) {
+      return this.attributes[name];
+    }
     if (name === "contenteditable" && this._contentEditable) {
       return "true";
     }
@@ -36,6 +42,10 @@ class FakeElement {
       return "prompt-textarea";
     }
     return null;
+  }
+
+  setAttribute(name, value) {
+    this.attributes[name] = String(value);
   }
 
   dispatchEvent(event) {
@@ -51,27 +61,65 @@ class FakeElement {
 }
 
 function createFakeDocument(targetSelector, element) {
-  const root = { dataset: {} };
+  const root = new FakeElement({ tagName: "HTML" });
+  root.dataset = {};
+  const body = new FakeElement({ tagName: "BODY" });
+  body.children = [];
+  body.appendChild = function appendChild(child) {
+    this.children.push(child);
+    return child;
+  };
+  const nodeMap = new Map();
   return {
     documentElement: root,
+    body,
     defaultView: {
       Event: FakeEvent,
       InputEvent: FakeEvent
     },
+    createElement(tagName) {
+      return new FakeElement({ tagName: String(tagName).toUpperCase() });
+    },
     querySelector(selector) {
+      if (selector === `#${WITNESS_NODE_ID}`) {
+        return nodeMap.get(WITNESS_NODE_ID) || null;
+      }
       if (selector === targetSelector) {
         return element;
       }
       return null;
+    },
+    registerNode(node) {
+      if (node?.id) {
+        nodeMap.set(node.id, node);
+      }
     }
+  };
+}
+
+function attachWitnessTracking(documentRef) {
+  const originalAppendChild = documentRef.body.appendChild.bind(documentRef.body);
+  documentRef.body.appendChild = function trackedAppendChild(child) {
+    const appended = originalAppendChild(child);
+    documentRef.registerNode(appended);
+    return appended;
   };
 }
 
 test("insert-only smoke writes packet into textarea and dispatches input events", () => {
   const composer = new FakeElement({ tagName: "TEXTAREA", id: "prompt-textarea" });
   const documentRef = createFakeDocument("#prompt-textarea", composer);
+  attachWitnessTracking(documentRef);
+  const consoleCalls = [];
 
-  const result = runInsertOnlySmoke({ documentRef });
+  const result = runInsertOnlySmoke({
+    documentRef,
+    consoleRef: {
+      info(...args) {
+        consoleCalls.push(args);
+      }
+    }
+  });
 
   assert.equal(result.ok, true);
   assert.equal(result.selectorUsed, "#prompt-textarea");
@@ -79,12 +127,21 @@ test("insert-only smoke writes packet into textarea and dispatches input events"
   assert.match(composer.value, /^TTD_ORION_POC_V1/);
   assert.deepEqual(composer.events, ["beforeinput", "input", "change"]);
   assert.equal(documentRef.documentElement.dataset.orionTtdInsertOnlyLastOk, "true");
+  assert.equal(documentRef.documentElement.dataset.orionTtdLastWitnessKind, "insert_only_smoke_result");
+  assert.match(documentRef.documentElement.dataset.orionTtdLastWitness, /"submitAttempted":false/);
+  assert.equal(consoleCalls.length, 2);
+  assert.equal(consoleCalls[0][0], "[ORION_TTD]");
+  assert.equal(consoleCalls[1][0], "[ORION_TTD]");
+  const witnessNode = documentRef.querySelector(`#${WITNESS_NODE_ID}`);
+  assert.ok(witnessNode);
+  assert.equal(witnessNode.textContent, documentRef.documentElement.dataset.orionTtdLastWitness);
 });
 
 test("insert-only smoke refuses to overwrite a non-empty composer by default", () => {
   const composer = new FakeElement({ tagName: "TEXTAREA", id: "prompt-textarea" });
   composer.value = "draft in progress";
   const documentRef = createFakeDocument("#prompt-textarea", composer);
+  attachWitnessTracking(documentRef);
 
   const result = runInsertOnlySmoke({ documentRef });
 
@@ -102,6 +159,7 @@ test("insert-only smoke can target contenteditable composer surfaces", () => {
     contenteditable: true
   });
   const documentRef = createFakeDocument("div[contenteditable='true'][id='prompt-textarea']", composer);
+  attachWitnessTracking(documentRef);
 
   const result = runInsertOnlySmoke({
     documentRef,
@@ -112,4 +170,5 @@ test("insert-only smoke can target contenteditable composer surfaces", () => {
   assert.equal(result.composerKind, "contenteditable");
   assert.match(composer.textContent, /^TTD_ORION_POC_V1/);
   assert.deepEqual(composer.events, ["beforeinput", "input", "change"]);
+  assert.equal(documentRef.documentElement.dataset.orionTtdLastWitnessKind, "insert_only_smoke_result");
 });

@@ -116,3 +116,5 @@ node scripts/orion-webkit-mcp-tether-probe.mjs
 - source inspection confirms `iwdp-mcp` has explicit `list_devices`, `list_pages`, `select_page`, and `evaluate_script` tool surfaces, all backed by the shared `webkit.NewClient(...)` attach logic
 - upstream docs/source state that iwdp target routing depends on receiving `Target.targetCreated` soon after connect
 - keep MCP and CLI usage scoped to tiny eval isolation until one expression returns
+
+If `iwdp` / `Runtime.evaluate` remains blocked on Orion, the next diagnostic route is to observe extension witness channels through the browser inspector GUI or any bridge feature that can read console, dataset, or DOM status without arbitrary eval.

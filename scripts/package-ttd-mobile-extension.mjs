@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, "..");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
 const UPDATES_DIR = path.join(ROOT_DIR, "updates");
-const VERSION = "0.1.2";
+const VERSION = "0.1.3";
 const BASE_URL = "https://boglim1984.github.io/orion-ttd-mobile-extension";
 const APP_ID = "abcdefghijklmnopqrstuvwxyzabcdef";
 

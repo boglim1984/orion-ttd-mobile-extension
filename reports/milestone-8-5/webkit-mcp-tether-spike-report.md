@@ -259,6 +259,42 @@ node scripts/orion-webkit-mcp-tether-probe.mjs
 - proxy stopped:
   yes
 
+## Milestone 8.5E — Extension Witness Channels
+
+- status:
+  implemented in source and validated by local tests
+- files changed:
+  `src/content/witness.js`
+  `src/content/orion-ttd-insert-only.js`
+  `scripts/build-ttd-mobile-extension.mjs`
+  `test/content/witness.test.js`
+  `test/content/insert-only-smoke.test.js`
+- witness fields added:
+  `document.documentElement.dataset.orionTtdLastWitness`
+  `document.documentElement.dataset.orionTtdLastWitnessKind`
+  `document.documentElement.dataset.orionTtdLastWitnessAt`
+  `#orion-ttd-witness`
+  console prefix `[ORION_TTD]`
+- test commands:
+  `node --test test/content/*.test.js`
+  `node --test test/reducer/*.test.js test/content/*.test.js`
+- test results:
+  content tests passed: `5/5`
+  reducer + content tests passed: `19/19`
+- whether runtime behavior changed:
+  yes
+  insert-only smoke now emits start/result/error witness records through console, dataset, and hidden DOM
+- whether auto-submit remains disabled:
+  yes
+- manual Safari Web Inspector verification:
+  1. open Orion ChatGPT page on iPhone
+  2. trigger insert-only smoke from the existing manual trigger
+  3. look for `[ORION_TTD]` console lines in Safari Web Inspector
+  4. inspect `document.documentElement` dataset witness fields if GUI eval is available
+  5. inspect `#orion-ttd-witness` in Elements if console eval remains blocked
+- next action:
+  verify that the manual Safari Web Inspector GUI can see the new witness evidence even if `iwdp` still cannot run arbitrary eval
+
 ## Runtime Change Confirmation
 
 No runtime code changed in this milestone preparation job.

@@ -260,6 +260,22 @@ Safe eval ladder for isolation:
 - the current key discriminator is whether the target emits `Target.targetCreated`
 - if the Orion ChatGPT socket opens but emits no `Target.targetCreated`, the wrapped attach path may never activate
 
+## Extension Witness Channels
+
+Why this exists:
+
+- the Orion inspector bridge may fail before arbitrary `Runtime.evaluate` is usable
+- the extension can still expose low-noise witness evidence inside the page
+- this reduces dependence on remote eval for manual Safari Web Inspector checks
+
+Witness policy:
+
+- console is useful for human Safari Web Inspector, but it is not canonical state
+- dataset fields and `#orion-ttd-witness` are the canonical low-noise witness channels
+- witness evidence does not make the extension state authority
+- witness evidence does not mutate committed route state
+- witness evidence must stay clear of private storage, cookies, tokens, and account internals
+
 ## Next Expansion Ladder
 
 ### Phase 1

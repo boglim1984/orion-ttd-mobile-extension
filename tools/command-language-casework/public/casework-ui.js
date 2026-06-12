@@ -5,6 +5,7 @@ const currentCasePanel = document.querySelector("#current-case-panel");
 const resultLinksPanel = document.querySelector("#result-links-panel");
 
 const validateButton = document.querySelector("#validate-button");
+const copySelfContainedButton = document.querySelector("#copy-self-contained-button");
 const runButton = document.querySelector("#run-button");
 const stopButton = document.querySelector("#stop-button");
 const saveDraftButton = document.querySelector("#save-draft-button");
@@ -96,6 +97,13 @@ async function refreshLoader() {
   loaderOutput.value = await response.text();
 }
 
+async function copySelfContainedRunner() {
+  const payload = await postJson("/api/runner/self-contained-payload", {
+    suite_text: suiteInput.value
+  });
+  await navigator.clipboard.writeText(payload.payload);
+}
+
 async function withAction(action) {
   try {
     await action();
@@ -110,6 +118,12 @@ validateButton.addEventListener("click", () =>
     await postJson("/api/validate", {
       suite_text: suiteInput.value
     });
+  })
+);
+
+copySelfContainedButton.addEventListener("click", () =>
+  withAction(async () => {
+    await copySelfContainedRunner();
   })
 );
 

@@ -19,18 +19,23 @@
     return String(value || "").replace(/\s+/g, " ").trim();
   }
 
-  function createOverlay(documentRef, onStop) {
+  function safeJsonParse(text) {
+    try {
+      return JSON.parse(text);
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  function isAllowedChatGptPage(locationRef) {
+    const hostname = String(locationRef?.hostname || "");
+    return hostname === "chatgpt.com" || hostname.endsWith(".chatgpt.com") || hostname === "chat.openai.com";
+  }
+
+  function createOverlay(documentRef, options = {}) {
     const existing = documentRef.getElementById?.(OVERLAY_ID);
     if (existing) {
-      return {
-        node: existing,
-        setStatus(text) {
-          const target = existing.querySelector("[data-casework-status]");
-          if (target) {
-            target.textContent = text;
-          }
-        }
-      };
+      existing.remove?.();
     }
 
     const node = documentRef.createElement("div");
@@ -42,46 +47,91 @@
       "z-index:2147483647",
       "background:#111",
       "color:#fff",
-      "padding:12px 14px",
-      "border-radius:12px",
-      "font:12px/1.4 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif",
+      "padding:14px",
+      "border-radius:14px",
+      "font:12px/1.45 -apple-system,BlinkMacSystemFont,Segoe UI,sans-serif",
       "box-shadow:0 14px 36px rgba(0,0,0,0.25)",
-      "max-width:280px"
+      "max-width:340px",
+      "width:340px"
     ].join(";"));
+
+    const title = documentRef.createElement("div");
+    title.textContent = "Command Language Casework Runner";
+    title.setAttribute("style", "font-weight:700;margin-bottom:6px;");
+
+    const meta = documentRef.createElement("div");
+    meta.setAttribute("data-casework-meta", "true");
+    meta.setAttribute("style", "opacity:0.88;margin-bottom:8px;");
+    meta.textContent = options.metaText || "No suite loaded.";
+
+    const warning = documentRef.createElement("div");
+    warning.setAttribute("data-casework-warning", "true");
+    warning.setAttribute("style", "color:#f5c173;margin-bottom:10px;");
+    warning.textContent =
+      options.warningText ||
+      "This sends scripted messages in the visible test chat after you click Run.";
 
     const status = documentRef.createElement("div");
     status.setAttribute("data-casework-status", "true");
-    status.textContent = "Casework runner ready.";
+    status.setAttribute("style", "white-space:pre-wrap;margin-bottom:10px;");
+    status.textContent = options.statusText || "Ready.";
 
-    const button = documentRef.createElement("button");
-    button.type = "button";
-    button.textContent = "STOP";
-    button.setAttribute("style", [
-      "margin-top:8px",
+    const buttonRow = documentRef.createElement("div");
+    buttonRow.setAttribute("style", "display:flex;gap:8px;flex-wrap:wrap;");
+
+    const runButton = documentRef.createElement("button");
+    runButton.type = "button";
+    runButton.textContent = "Run";
+    runButton.setAttribute("style", [
       "border:0",
       "border-radius:999px",
-      "padding:8px 10px",
+      "padding:8px 12px",
+      "background:#1f6f5f",
+      "color:#fff",
+      "cursor:pointer"
+    ].join(";"));
+
+    const stopButton = documentRef.createElement("button");
+    stopButton.type = "button";
+    stopButton.textContent = "Stop";
+    stopButton.setAttribute("style", [
+      "border:0",
+      "border-radius:999px",
+      "padding:8px 12px",
       "background:#d95d39",
       "color:#fff",
       "cursor:pointer"
     ].join(";"));
-    button.addEventListener("click", () => onStop?.("overlay_stop"));
 
+    buttonRow.appendChild(runButton);
+    buttonRow.appendChild(stopButton);
+
+    node.appendChild(title);
+    node.appendChild(meta);
+    node.appendChild(warning);
     node.appendChild(status);
-    node.appendChild(button);
+    node.appendChild(buttonRow);
     (documentRef.body || documentRef.documentElement).appendChild(node);
 
     return {
       node,
+      runButton,
+      stopButton,
       setStatus(text) {
         status.textContent = text;
+      },
+      setMeta(text) {
+        meta.textContent = text;
+      },
+      setWarning(text) {
+        warning.textContent = text;
+      },
+      setRunDisabled(disabled) {
+        runButton.disabled = Boolean(disabled);
+        runButton.style.opacity = disabled ? "0.55" : "1";
+        runButton.style.cursor = disabled ? "default" : "pointer";
       }
     };
-  }
-
-  function isAllowedPage(locationRef) {
-    const hostname = String(locationRef?.hostname || "");
-    return hostname === "chatgpt.com" || hostname.endsWith(".chatgpt.com") || hostname === "chat.openai.com";
   }
 
   function buildFetchOptions(method, payload) {
@@ -230,9 +280,7 @@
       }
     }
 
-    return nodes
-      .map((node) => cleanText(node.textContent || ""))
-      .filter(Boolean);
+    return nodes.map((node) => cleanText(node.textContent || "")).filter(Boolean);
   }
 
   async function waitForStableAssistantMessage(documentRef, baseline, runConfig, stopState) {
@@ -321,9 +369,162 @@
     };
   }
 
-  async function runCase(documentRef, serverBaseUrl, run, caseDef, overlay, stopState) {
+  function buildEmptyCaseFailure(caseDef, message) {
+    return {
+      case_id: caseDef.case_id,
+      title: caseDef.title,
+      research_question: caseDef.research_question,
+      language_feature: caseDef.language_feature || "",
+      packet_sent: caseDef.packet,
+      scripted_user_replies_sent: [],
+      assistant_responses: [],
+      visible_turn_text: "",
+      observed_chunks_or_keywords: [],
+      expected_behavior: caseDef.expected_behavior || [],
+      forbidden_behavior: caseDef.forbidden_behavior || [],
+      notes: message,
+      raw_turn_log: []
+    };
+  }
+
+  function deriveObservedKeywords(caseResult) {
+    const combined = cleanText(caseResult.assistant_responses.join(" ")).toLowerCase();
+    const packetJson = safeJsonParse(String(caseResult.packet_sent || "").slice(String(caseResult.packet_sent || "").indexOf("{")));
+    const candidates = [
+      packetJson?.active_chunk_id,
+      packetJson?.active_chunk_label,
+      "clear trash",
+      "collect dishes",
+      "stack papers",
+      "pause",
+      "continue",
+      "done",
+      "move_on",
+      "next"
+    ];
+    return [...new Set(candidates.filter((item) => item && combined.includes(cleanText(item).toLowerCase())))];
+  }
+
+  function heuristicClassify(caseResult) {
+    const combined = cleanText(caseResult.assistant_responses.join(" ")).toLowerCase();
+    const replies = caseResult.scripted_user_replies_sent.map((value) => cleanText(value).toLowerCase());
+
+    if (
+      ["milestone 7", "transport", "insert only", "packet arrived", "composer"].some((token) =>
+        combined.includes(token)
+      ) &&
+      !combined.includes("clear trash") &&
+      !combined.includes("collect dishes")
+    ) {
+      return "FAIL_NO_ROUTE_ENGAGEMENT";
+    }
+
+    if (!replies.includes("move_on") && !replies.includes("next") && combined.includes("collect dishes")) {
+      return "FAIL_ADVANCED_WITHOUT_PERMISSION";
+    }
+
+    if (!replies.includes("done") && combined.includes("clear trash is complete")) {
+      return "FAIL_INVENTED_PROGRESS";
+    }
+
+    if (replies.length > 0 && !combined.includes("clear trash") && !combined.includes("collect dishes")) {
+      return "FAIL_LOST_ROUTE";
+    }
+
+    return "PASS_CANDIDATE";
+  }
+
+  function finalizeRunResult(runResult) {
+    runResult.cases = runResult.cases.map((caseResult) => {
+      const observedKeywords = deriveObservedKeywords(caseResult);
+      return {
+        ...caseResult,
+        observed_chunks_or_keywords: observedKeywords,
+        heuristic_classification: heuristicClassify(caseResult)
+      };
+    });
+    return runResult;
+  }
+
+  function buildSummaryMarkdown(runResult) {
+    const lines = [
+      "# Command Language Casework Run Summary",
+      "",
+      `- suite_id: ${runResult.suite_id}`,
+      `- run_id: ${runResult.run_id}`,
+      `- started_at: ${runResult.started_at}`,
+      `- completed_at: ${runResult.completed_at}`,
+      ""
+    ];
+
+    runResult.cases.forEach((caseResult) => {
+      lines.push(`## ${caseResult.case_id}`, "");
+      lines.push(`- heuristic classification: ${caseResult.heuristic_classification}`);
+      lines.push(`- visible turn text: ${caseResult.visible_turn_text || "none"}`);
+      lines.push(`- observed chunks or keywords: ${(caseResult.observed_chunks_or_keywords || []).join(", ") || "none"}`);
+      lines.push("");
+    });
+
+    if ((runResult.warnings || []).length > 0) {
+      lines.push("## Warnings", "");
+      runResult.warnings.forEach((warning) => lines.push(`- ${warning}`));
+      lines.push("");
+    }
+
+    if ((runResult.errors || []).length > 0) {
+      lines.push("## Errors", "");
+      runResult.errors.forEach((error) => lines.push(`- ${error}`));
+      lines.push("");
+    }
+
+    return lines.join("\n");
+  }
+
+  function triggerDownload(filename, text, mimeType, documentRef) {
+    const blob = new root.Blob([text], {
+      type: mimeType
+    });
+    const objectUrl = root.URL.createObjectURL(blob);
+    const anchor = documentRef.createElement("a");
+    anchor.href = objectUrl;
+    anchor.download = filename;
+    anchor.style.display = "none";
+    (documentRef.body || documentRef.documentElement).appendChild(anchor);
+    anchor.click();
+    anchor.remove?.();
+    root.setTimeout(() => root.URL.revokeObjectURL(objectUrl), 1000);
+  }
+
+  async function bestEffortUploadResult(serverBaseUrl, suite, runResult) {
+    if (!serverBaseUrl || typeof root.fetch !== "function") {
+      return {
+        ok: false,
+        blocked: true,
+        message: "No upload target configured."
+      };
+    }
+
+    try {
+      const response = await sendJson(serverBaseUrl, "/api/runner/self-contained-result", {
+        suite,
+        runResult
+      });
+      return {
+        ok: Boolean(response?.ok),
+        blocked: !response?.ok,
+        message: response?.ok ? "Local result upload succeeded." : "Local result upload was rejected."
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        blocked: true,
+        message: `Local result upload was blocked by ChatGPT CSP. Downloaded result file instead. (${error.message})`
+      };
+    }
+  }
+
+  async function executeCase(documentRef, caseDef, runConfig, stopState) {
     const caseResult = buildCaseResult(caseDef);
-    const runConfig = run.suite.run_config || {};
 
     async function sendAndCapture(actorText, actor) {
       const baseline = createBaseline(documentRef);
@@ -344,14 +545,6 @@
       });
     }
 
-    overlay.setStatus(`Running ${caseDef.case_id}`);
-    await sendJson(serverBaseUrl, "/api/runner/progress", {
-      run_id: run.run_id,
-      case_id: caseDef.case_id,
-      status: "started",
-      message: `Running ${caseDef.case_id}`
-    });
-
     await sendAndCapture(caseDef.packet, "packet");
 
     for (const reply of caseDef.scripted_user_replies || []) {
@@ -359,17 +552,98 @@
       await sendAndCapture(reply, "user");
     }
 
-    await sendJson(serverBaseUrl, "/api/runner/progress", {
-      run_id: run.run_id,
-      case_id: caseDef.case_id,
-      status: "completed",
-      message: `Completed ${caseDef.case_id}`
-    });
-
     return caseResult;
   }
 
-  function createRunner(options = {}) {
+  async function runSuiteLocally({ documentRef, suite, runId, stopState, overlay, browserContextNote }) {
+    const runResult = {
+      suite_id: suite.suite_id,
+      run_id: runId,
+      started_at: nowIso(),
+      completed_at: null,
+      browser_context_note: browserContextNote,
+      tool_version: TOOL_VERSION,
+      cases: [],
+      warnings: [],
+      errors: []
+    };
+
+    const runConfig = suite.run_config || {};
+    for (const caseDef of suite.cases || []) {
+      if (stopState.stopRequested) {
+        runResult.warnings.push("Run stopped by user before all cases completed.");
+        break;
+      }
+
+      overlay.setStatus(`Running ${caseDef.case_id}`);
+      try {
+        const caseResult = await executeCase(documentRef, caseDef, runConfig, stopState);
+        runResult.cases.push(caseResult);
+      } catch (error) {
+        runResult.errors.push(`${caseDef.case_id}: ${error.message}`);
+        runResult.cases.push(buildEmptyCaseFailure(caseDef, error.message));
+        if (runConfig.stop_on_case_failure) {
+          break;
+        }
+      }
+
+      if (runConfig.stop_after_each_case) {
+        runResult.warnings.push("Run stopped after one case because stop_after_each_case is true.");
+        break;
+      }
+    }
+
+    runResult.completed_at = nowIso();
+    return finalizeRunResult(runResult);
+  }
+
+  async function runSelfContainedSuite(options = {}) {
+    const documentRef = options.documentRef || root.document;
+    const locationRef = options.locationRef || root.location;
+    const overlay = options.overlay;
+    const stopState = options.stopState || { stopRequested: false };
+    const suite = options.suite;
+    const runId = options.runId;
+    const serverBaseUrl = options.serverBaseUrl || null;
+
+    if (!isAllowedChatGptPage(locationRef)) {
+      throw new Error("This runner must be used on a visible ChatGPT test chat for live execution.");
+    }
+
+    overlay.setRunDisabled(true);
+    overlay.setStatus("Running suite...");
+    const runResult = await runSuiteLocally({
+      documentRef,
+      suite,
+      runId,
+      stopState,
+      overlay,
+      browserContextNote: "Real ChatGPT page with self-contained console payload."
+    });
+
+    const resultJson = JSON.stringify(runResult, null, 2);
+    triggerDownload(`orion-casework-result-${runId}.json`, resultJson, "application/json", documentRef);
+
+    const summaryMarkdown = buildSummaryMarkdown(runResult);
+    try {
+      triggerDownload(`orion-casework-summary-${runId}.md`, summaryMarkdown, "text/markdown", documentRef);
+    } catch (_error) {
+      runResult.warnings.push("Summary markdown download failed; JSON result still downloaded.");
+    }
+
+    const uploadOutcome = await bestEffortUploadResult(serverBaseUrl, suite, runResult);
+    if (!uploadOutcome.ok) {
+      runResult.warnings.push(uploadOutcome.message);
+      overlay.setStatus(`Run complete.\n${uploadOutcome.message}`);
+    } else {
+      overlay.setStatus("Run complete. Result uploaded locally and downloaded.");
+    }
+
+    overlay.setRunDisabled(false);
+    return runResult;
+  }
+
+  function createServerRunner(options = {}) {
     const documentRef = options.documentRef || root.document;
     const locationRef = options.locationRef || root.location;
     const serverBaseUrl = options.serverBaseUrl || DEFAULT_SERVER_BASE_URL;
@@ -377,7 +651,14 @@
     const stopState = {
       stopRequested: false
     };
-    const overlay = createOverlay(documentRef, async () => {
+    const overlay = createOverlay(documentRef, {
+      metaText: "Legacy server-assisted mode",
+      statusText: "Casework runner ready. Waiting for server-side Run.",
+      warningText: "Legacy mode. This path may be blocked by ChatGPT CSP."
+    });
+
+    overlay.runButton.style.display = "none";
+    overlay.stopButton.addEventListener("click", async () => {
       stopState.stopRequested = true;
       overlay.setStatus("Stop requested.");
       try {
@@ -392,7 +673,7 @@
     let activeRunId = null;
 
     async function heartbeat() {
-      if (!isAllowedPage(locationRef)) {
+      if (!isAllowedChatGptPage(locationRef)) {
         overlay.setStatus("Runner disabled: not a ChatGPT page.");
         return;
       }
@@ -414,7 +695,7 @@
     }
 
     async function pollForWork() {
-      if (!isAllowedPage(locationRef) || activeRunId) {
+      if (!isAllowedChatGptPage(locationRef) || activeRunId) {
         return;
       }
 
@@ -431,57 +712,14 @@
         activeRunId = payload.run.run_id;
         stopState.stopRequested = false;
         overlay.setStatus(`Accepted run ${activeRunId}`);
-
-        const runResult = {
-          suite_id: payload.run.suite.suite_id,
-          run_id: payload.run.run_id,
-          started_at: nowIso(),
-          completed_at: null,
-          browser_context_note: "Real ChatGPT page with local console-injected runner.",
-          tool_version: TOOL_VERSION,
-          cases: [],
-          warnings: [],
-          errors: []
-        };
-
-        for (const caseDef of payload.run.suite.cases) {
-          if (stopState.stopRequested) {
-            runResult.warnings.push("Run stopped by user before all cases completed.");
-            break;
-          }
-
-          try {
-            const caseResult = await runCase(documentRef, serverBaseUrl, payload.run, caseDef, overlay, stopState);
-            runResult.cases.push(caseResult);
-          } catch (error) {
-            runResult.errors.push(`${caseDef.case_id}: ${error.message}`);
-            runResult.cases.push({
-              case_id: caseDef.case_id,
-              title: caseDef.title,
-              research_question: caseDef.research_question,
-              language_feature: caseDef.language_feature || "",
-              packet_sent: caseDef.packet,
-              scripted_user_replies_sent: [],
-              assistant_responses: [],
-              visible_turn_text: "",
-              observed_chunks_or_keywords: [],
-              expected_behavior: caseDef.expected_behavior || [],
-              forbidden_behavior: caseDef.forbidden_behavior || [],
-              notes: error.message,
-              raw_turn_log: []
-            });
-            if (payload.run.suite.run_config?.stop_on_case_failure) {
-              break;
-            }
-          }
-
-          if (payload.run.suite.run_config?.stop_after_each_case) {
-            runResult.warnings.push("Run stopped after one case because stop_after_each_case is true.");
-            break;
-          }
-        }
-
-        runResult.completed_at = nowIso();
+        const runResult = await runSuiteLocally({
+          documentRef,
+          suite: payload.run.suite,
+          runId: payload.run.run_id,
+          stopState,
+          overlay,
+          browserContextNote: "Real ChatGPT page with local console-injected runner."
+        });
         await sendJson(serverBaseUrl, "/api/runner/report-run", runResult);
         overlay.setStatus(`Completed run ${activeRunId}`);
       } catch (error) {
@@ -507,7 +745,6 @@
     }
 
     function start() {
-      overlay.setStatus("Casework runner ready. Waiting for Run.");
       heartbeat();
       root.setInterval(heartbeat, HEARTBEAT_INTERVAL_MS);
       root.setInterval(pollForWork, POLL_INTERVAL_MS);
@@ -521,12 +758,66 @@
   }
 
   function install(options = {}) {
-    const runner = createRunner(options);
+    const runner = createServerRunner(options);
     runner.start();
     return runner;
   }
 
+  function installSelfContained(options = {}) {
+    const documentRef = options.documentRef || root.document;
+    const locationRef = options.locationRef || root.location;
+    const suite = options.suite || {
+      suite_id: "unknown-suite",
+      cases: []
+    };
+    const runId = options.runId || `self-contained-${Date.now()}`;
+    const serverBaseUrl = options.serverBaseUrl || null;
+    const stopState = {
+      stopRequested: false
+    };
+
+    const overlay = createOverlay(documentRef, {
+      metaText: `suite_id: ${suite.suite_id}\ncase_count: ${(suite.cases || []).length}`,
+      statusText: isAllowedChatGptPage(locationRef)
+        ? "Ready. Nothing will send until you click Run."
+        : "Installed. For live execution, switch to a visible disposable ChatGPT test chat before clicking Run.",
+      warningText:
+        "This sends scripted messages in the visible test chat after you click Run. Use only in a disposable ChatGPT test chat."
+    });
+
+    overlay.stopButton.addEventListener("click", () => {
+      stopState.stopRequested = true;
+      overlay.setStatus("Stop requested.");
+      overlay.setRunDisabled(false);
+    });
+
+    overlay.runButton.addEventListener("click", async () => {
+      stopState.stopRequested = false;
+      try {
+        await runSelfContainedSuite({
+          documentRef,
+          locationRef,
+          suite,
+          runId,
+          serverBaseUrl,
+          overlay,
+          stopState
+        });
+      } catch (error) {
+        overlay.setRunDisabled(false);
+        overlay.setStatus(`Run failed: ${error.message}`);
+      }
+    });
+
+    return {
+      runId,
+      suiteId: suite.suite_id,
+      caseCount: (suite.cases || []).length
+    };
+  }
+
   return {
-    install
+    install,
+    installSelfContained
   };
 });

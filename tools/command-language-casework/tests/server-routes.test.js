@@ -77,6 +77,99 @@ test("root route, index route, and api/state are served on the selected port", a
   }
 });
 
+test("self-contained payload endpoint returns inline suite data without bootstrap dependency", async () => {
+  const serverModule = await loadServerModule();
+  const started = await serverModule.startServer({
+    host: "127.0.0.1",
+    port: 0
+  });
+
+  try {
+    const payloadText = JSON.stringify({
+      suite_text: JSON.stringify({
+        suite_id: "self-contained-suite",
+        suite_title: "Self-contained Suite",
+        suite_goal: "Validate payload generation",
+        created_for_tool: "command-language-casework-runner-v1",
+        route_id: "desk-reset-v0",
+        run_config: {
+          target_chat: "visible_current_chatgpt_page",
+          send_mode: "explicit_casework_run_button",
+          turn_timeout_ms: 1000,
+          stability_wait_ms: 250,
+          stop_on_case_failure: false,
+          stop_after_each_case: false
+        },
+        cases: [
+          {
+            case_id: "case-001",
+            title: "Case",
+            research_question: "Question",
+            packet: "TTD_COMMAND_V1\\n{}",
+            scripted_user_replies: [],
+            expected_behavior: [
+              "behavior"
+            ],
+            forbidden_behavior: [
+              "forbidden"
+            ],
+            expected_reducer_semantics: "continue -> keep_active_chunk",
+            classification_targets: [
+              "PASS"
+            ]
+          }
+        ]
+      })
+    });
+
+    const response = await new Promise((resolve, reject) => {
+      const request = http.request(
+        `${started.guiUrl}/api/runner/self-contained-payload`,
+        {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "content-length": Buffer.byteLength(payloadText)
+          }
+        },
+        (result) => {
+          const chunks = [];
+          result.on("data", (chunk) => chunks.push(chunk));
+          result.on("end", () => {
+            resolve({
+              statusCode: result.statusCode,
+              headers: result.headers,
+              body: Buffer.concat(chunks).toString("utf8")
+            });
+          });
+        }
+      );
+      request.on("error", reject);
+      request.write(payloadText);
+      request.end();
+    });
+
+    assert.equal(response.statusCode, 200);
+    const payload = JSON.parse(response.body);
+    assert.equal(payload.ok, true);
+    assert.match(payload.payload, /installSelfContained/);
+    assert.match(payload.payload, /self-contained-suite/);
+    assert.doesNotMatch(payload.payload, /\/api\/runner\/bootstrap\.js/);
+    assert.doesNotMatch(payload.payload, /fetch\("http:\/\/127\.0\.0\.1/);
+    assert.match(payload.payload, /orion-casework-result-/);
+  } finally {
+    await new Promise((resolve, reject) => {
+      started.server.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      });
+    });
+  }
+});
+
 test("occupied port handling rejects cleanly with EADDRINUSE", async () => {
   const serverModule = await loadServerModule();
   const occupiedServer = http.createServer((_request, response) => {

@@ -24,3 +24,11 @@ test("runner source keeps send behavior behind explicit casework control", () =>
   assert.match(runnerSource, /Runner stop requested before send/);
   assert.match(runnerSource, /Visible send button not found/);
 });
+
+test("runner source supports self-contained payload without auto-run and with download fallback", () => {
+  assert.match(runnerSource, /installSelfContained/);
+  assert.match(runnerSource, /Nothing will send until you click Run/);
+  assert.match(runnerSource, /overlay\.runButton\.addEventListener\("click", async \(\) =>/);
+  assert.match(runnerSource, /triggerDownload/);
+  assert.match(runnerSource, /Local result upload was blocked by ChatGPT CSP/);
+});

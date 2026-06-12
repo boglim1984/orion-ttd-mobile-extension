@@ -105,6 +105,17 @@ function getBootstrapScript(port) {
   return `${source}\nwindow.OrionCommandLanguageCaseworkRunner.install({ serverBaseUrl: "http://127.0.0.1:${port}" });\n`;
 }
 
+function getSelfContainedPayload({ suite, runId, port }) {
+  const source = fs.readFileSync(INJECTOR_PATH, "utf8");
+  return `${source}
+window.OrionCommandLanguageCaseworkRunner.installSelfContained({
+  runId: ${JSON.stringify(runId)},
+  serverBaseUrl: ${JSON.stringify(`http://127.0.0.1:${port}`)},
+  suite: ${JSON.stringify(suite, null, 2)}
+});
+`;
+}
+
 function revealInFinder(targetPath) {
   try {
     execFileSync("open", ["-R", targetPath]);
@@ -181,6 +192,27 @@ async function handleApi(request, response, url, port) {
       return;
     }
     sendText(response, 200, fs.readFileSync(state.last_result.summary_path, "utf8"));
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/runner/self-contained-payload") {
+    const body = await readJsonBody(request);
+    const validation = validateSuiteText(body.suite_text || "");
+    if (!validation.ok) {
+      sendJson(response, 400, validation);
+      return;
+    }
+
+    const runId = createRunId(validation.suite.suite_id);
+    sendJson(response, 200, {
+      ok: true,
+      run_id: runId,
+      payload: getSelfContainedPayload({
+        suite: validation.suite,
+        runId,
+        port
+      })
+    });
     return;
   }
 
@@ -336,6 +368,35 @@ async function handleApi(request, response, url, port) {
     state.stop_requested = false;
     revealInFinder(outputPaths.runSummaryPath);
     logStatus(`Wrote casework results to ${outputPaths.outputDir}`);
+    sendJson(response, 200, {
+      ok: true,
+      ...state.last_result
+    });
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/runner/self-contained-result") {
+    const body = await readJsonBody(request);
+    const suite = body.suite || { suite_id: body.runResult?.suite_id || "unknown" };
+    const runResult = enrichCaseResults({
+      ...body.runResult,
+      browser_context_note:
+        body.runResult?.browser_context_note ||
+        "Real ChatGPT page with self-contained console payload.",
+      tool_version: CASEWORK_TOOL_VERSION,
+      warnings: body.runResult?.warnings || [],
+      errors: body.runResult?.errors || []
+    });
+
+    const outputPaths = writeCaseworkRunResults({
+      resultsRoot: RESULTS_DIR,
+      suite,
+      runResult
+    });
+
+    state.last_result = summarizeResultPaths(outputPaths);
+    revealInFinder(outputPaths.runSummaryPath);
+    logStatus(`Wrote self-contained casework results to ${outputPaths.outputDir}`);
     sendJson(response, 200, {
       ok: true,
       ...state.last_result

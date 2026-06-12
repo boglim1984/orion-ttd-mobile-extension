@@ -1,0 +1,28 @@
+# Witness-Observed Trial Result Template
+
+- date/time:
+- device/browser:
+- extension version:
+- route_id:
+- session_id:
+- starting active_chunk_id:
+- packet source:
+- witness kind before send:
+- witness insert result:
+- submitAttempted:
+- packetLength:
+- sent manually yes/no:
+- assistant initial response:
+- assistant entered route yes/no:
+- Billy reply:
+- assistant response after Billy reply:
+- did active_chunk_id remain stable:
+- did assistant invent progress:
+- did assistant advance without move_on:
+- side question tested yes/no:
+- side question returned to route yes/no:
+- reducer/scorer expected category:
+- observed result category:
+- pass/fail:
+- notes:
+- screenshot/log references if any:

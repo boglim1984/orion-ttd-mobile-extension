@@ -1,0 +1,26 @@
+TTD_COMMAND_V1
+{
+  "command_id": "cmd_orion_m8_6_001",
+  "route_id": "desk-reset-v0",
+  "session_id": "orion-witness-trial-001",
+  "state_version": 1,
+  "phase": "witness_observed_manual_workflow_trial",
+  "active_goal": "reset the desk enough to choose the next work item",
+  "active_chunk_id": "clear_trash",
+  "active_chunk_label": "clear trash",
+  "allowed_intents": ["continue", "done", "move_on", "pause", "side_question"],
+  "witness_expectation": "Extension witness should show insert_only_smoke_result with ok:true and submitAttempted:false before Billy sends.",
+  "commit_policy": "proposal_only_reducer_required_no_runtime_commit",
+  "response_contract": [
+    "Do not evaluate this packet as a transport test.",
+    "Transport is already validated.",
+    "Begin the route trial now.",
+    "Ask one short check-in about active_chunk_id: clear_trash.",
+    "Do not advance.",
+    "Do not claim hidden progress.",
+    "Wait for Billy's reply.",
+    "If Billy replies continue, preserve active_chunk_id: clear_trash.",
+    "If Billy replies done, mark only the current chunk complete; do not advance unless Billy says move_on or next.",
+    "If Billy asks a side question, answer briefly and return to active_chunk_id."
+  ]
+}

@@ -24,10 +24,12 @@ This is the real TTD Mobile Extension shell.
 
 - `docs/ORION_TTD_COMMAND_PROTOCOL_V0.md`
 - `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`
+- `docs/ORION_TTD_REDUCER_V0.md`
 - `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
 - `docs/ORION_TTD_MERMAID_PLANNING_RULE_V0.md`
 - `docs/ORION_TTD_SMARTNESS_BUDGET_V0.md`
 - `test-fixtures/workflows/`
+- `reports/milestone-6b-pure-reducer-report.md`
 
 ## v0.1.1 behavior
 

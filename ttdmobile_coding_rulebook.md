@@ -71,6 +71,11 @@ Rules:
 - Before implementing command protocol, workflow tests, reducer/scorer logic, repair packets, or recovery behavior, read:
   `fail-recover-map/README.md`
   and the latest fail/recover map files.
+- Before modifying reducer behavior, also read:
+  `docs/ORION_TTD_REDUCER_V0.md`
+  `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`
+  `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
+  `fail-recover-map/README.md`
 - Before implementing command protocol, workflow tests, reducer/scorer logic, repair packets, recovery behavior, metrics, or skill-library design, also read:
   `docs/ORION_TTD_COMMAND_PROTOCOL_V0.md`
   `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`

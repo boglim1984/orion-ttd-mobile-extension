@@ -1,0 +1,9 @@
+Source / Concept,Project Meaning,Relevant Use,Source Location / URL
+State harness direction,"Project is a state harness, not only injector",Keep language focused on route preservation,Project source: Orion / Skill Dump / TTD — State Harness Direction
+TTD core model,Reducer/state machine commits legal route state,Distinguish LLM interpretation from state authority,Project source: Main TTD System Context Report for Orion State Harness
+Air-gapped command protocol,ChatGPT UI is the air gap; protocol steers through composer/DOM,Phrase language as packet/response/reducer boundaries,Project source: Orion TTD Command Protocol — Air-Gapped Workflow Harness Plan
+Smartness budget,Use minimal intelligence needed per boundary,Choose fast/slow/repair language based on risk,Project source: Orion TTD Harness — Smartness Budget Design Rule
+Fail/Recover Map v1,Failure classes become test and skill handles,Map language to expected fail classes,Repo: fail-recover-map/v1/
+Reducer design clarification,Advanced Skill Injector = validation/proposal/commit source; Skill Dump = delivery lane,Use proposal/commit/gate vocabulary,Project source: Orion TTD — Reducer Design Source Clarification
+Pass/Fail boundary language,PASS/FAIL is collapse language after the event,This workbook maps pre-collapse steering language,Project source: Orion TTD — Pass/Fail as Skill Boundary Language
+Milestone 6C scorer,Fixture runner turns events into scorer categories,Use categories as skill feedback,Repo docs/reports: ORION_TTD_SCORER_FIXTURE_RUNNER_V0.md

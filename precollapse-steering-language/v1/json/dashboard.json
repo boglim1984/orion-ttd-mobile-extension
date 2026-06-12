@@ -1,0 +1,74 @@
+[
+  {
+    "Metric": "Steering matrix rows",
+    "Value": 144,
+    "Concept": "Frame",
+    "Meaning": "What kind of situation this is",
+    "Prompt-usable form": "Treat this as recovery, not a new task",
+    "Reducer/Scorer connection": "Changes expected legal move",
+    "Notes": "Most important pre-collapse layer"
+  },
+  {
+    "Metric": "Lexicon entries",
+    "Value": 30,
+    "Concept": "Bias",
+    "Meaning": "Soft preference under uncertainty",
+    "Prompt-usable form": "Prefer preserving state over guessing progress",
+    "Reducer/Scorer connection": "Avoids overreach",
+    "Notes": "Useful when not binary"
+  },
+  {
+    "Metric": "Skill blocks",
+    "Value": 12,
+    "Concept": "Risk",
+    "Meaning": "Boundary danger",
+    "Prompt-usable form": "This is state-mutating/high-risk",
+    "Reducer/Scorer connection": "Triggers downshift",
+    "Notes": "Smartness budget"
+  },
+  {
+    "Metric": "Simulation scenarios",
+    "Value": 60,
+    "Concept": "Motion shape",
+    "Meaning": "Sequence of response",
+    "Prompt-usable form": "Answer briefly, then return",
+    "Reducer/Scorer connection": "Prevents route loss",
+    "Notes": "Side branches"
+  },
+  {
+    "Metric": "Core principle",
+    "Value": "Context steers before PASS/FAIL collapses",
+    "Concept": "Scope",
+    "Meaning": "How much to do",
+    "Prompt-usable form": "Choose smallest legal next move",
+    "Reducer/Scorer connection": "Prevents overplanning",
+    "Notes": "Strong operator phrase"
+  },
+  {
+    "Metric": "Authority rule",
+    "Value": "LLM proposes; reducer commits; scorer names outcome",
+    "Concept": "Authority",
+    "Meaning": "Who can commit",
+    "Prompt-usable form": "Treat LLM claim as proposal",
+    "Reducer/Scorer connection": "Reducer owns state",
+    "Notes": "Advanced Skill Injector lesson"
+  },
+  {
+    "Metric": "Primary use",
+    "Value": "Skill injection vocabulary + test design",
+    "Concept": "Visibility",
+    "Meaning": "Safety/action surface",
+    "Prompt-usable form": "Keep action visible and gated",
+    "Reducer/Scorer connection": "Prevents unsafe action",
+    "Notes": "Orion runtime future"
+  },
+  {
+    "Metric": "Next repo use",
+    "Value": "Seed skill blocks / future prompt library",
+    "Concept": "Score",
+    "Meaning": "Boundary result",
+    "Prompt-usable form": "PASS_WITH_REPAIR",
+    "Reducer/Scorer connection": "Feeds skill choice",
+    "Notes": "Post-collapse"
+  }
+]

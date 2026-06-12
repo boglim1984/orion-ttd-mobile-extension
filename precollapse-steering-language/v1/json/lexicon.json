@@ -1,0 +1,302 @@
+[
+  {
+    "Term / Phrase": "treat this as",
+    "Type": "frame setter",
+    "Primary Bias": "chooses context frame",
+    "Use Before Boundary": "any ambiguous event",
+    "Good Example": "Treat this as recovery, not a new task.",
+    "Avoid Using When": "when legal transition is already explicit",
+    "Related Fail Class": "FAIL_LOST_ROUTE",
+    "Related Skill": "repair_reanchor"
+  },
+  {
+    "Term / Phrase": "prefer",
+    "Type": "soft bias",
+    "Primary Bias": "tilts choice without hard rule",
+    "Use Before Boundary": "low-risk uncertainty",
+    "Good Example": "Prefer preserving state over guessing progress.",
+    "Avoid Using When": "when hard safety rule is required",
+    "Related Fail Class": "FAIL_CADENCE_TOO_FAST",
+    "Related Skill": "cadence_downshift"
+  },
+  {
+    "Term / Phrase": "default to",
+    "Type": "default policy",
+    "Primary Bias": "sets fallback behavior",
+    "Use Before Boundary": "missing info",
+    "Good Example": "Default to holding route state.",
+    "Avoid Using When": "when user explicitly commands a legal move",
+    "Related Fail Class": "FAIL_INVENTED_STATE",
+    "Related Skill": "low_contact_hold"
+  },
+  {
+    "Term / Phrase": "preserve unless",
+    "Type": "guard phrase",
+    "Primary Bias": "protects current state",
+    "Use Before Boundary": "before state mutation",
+    "Good Example": "Preserve active_chunk_id unless move_on is explicit.",
+    "Avoid Using When": "when active_chunk_id is invalid/stale",
+    "Related Fail Class": "FAIL_ADVANCED_WITHOUT_PERMISSION",
+    "Related Skill": "done_vs_move_on"
+  },
+  {
+    "Term / Phrase": "smallest legal",
+    "Type": "resolution prior",
+    "Primary Bias": "minimizes overreach",
+    "Use Before Boundary": "route/mutation boundary",
+    "Good Example": "Choose the smallest legal next move.",
+    "Avoid Using When": "when broad creative planning is requested",
+    "Related Fail Class": "FAIL_TOO_MANY_QUESTIONS",
+    "Related Skill": "smallest_legal_move"
+  },
+  {
+    "Term / Phrase": "answer briefly then return",
+    "Type": "motion shape",
+    "Primary Bias": "handles side branch",
+    "Use Before Boundary": "side question",
+    "Good Example": "Answer briefly, then return to active_chunk_id.",
+    "Avoid Using When": "when Billy changes goal explicitly",
+    "Related Fail Class": "FAIL_LOST_ROUTE",
+    "Related Skill": "side_question_return"
+  },
+  {
+    "Term / Phrase": "re-anchor",
+    "Type": "recovery motion",
+    "Primary Bias": "restores state coordinates",
+    "Use Before Boundary": "after drift/recovery",
+    "Good Example": "Re-anchor to route_id and active_chunk_id before helping.",
+    "Avoid Using When": "when current state is unknown",
+    "Related Fail Class": "FAIL_REPAIR_DID_NOT_REANCHOR",
+    "Related Skill": "repair_reanchor"
+  },
+  {
+    "Term / Phrase": "downshift",
+    "Type": "cadence control",
+    "Primary Bias": "slows at risky boundary",
+    "Use Before Boundary": "state-mutating event",
+    "Good Example": "Downshift to confirmation before route completion.",
+    "Avoid Using When": "low-risk repetitive physical steps",
+    "Related Fail Class": "FAIL_CADENCE_TOO_FAST",
+    "Related Skill": "cadence_downshift"
+  },
+  {
+    "Term / Phrase": "fast physical",
+    "Type": "cadence control",
+    "Primary Bias": "reduces friction",
+    "Use Before Boundary": "known physical chunk",
+    "Good Example": "This is fast physical mode: one short action.",
+    "Avoid Using When": "ambiguous or irreversible decisions",
+    "Related Fail Class": "FAIL_CADENCE_TOO_SLOW",
+    "Related Skill": "fast_physical_checkin"
+  },
+  {
+    "Term / Phrase": "parked",
+    "Type": "state relation",
+    "Primary Bias": "separates side branch",
+    "Use Before Boundary": "side question/interruption",
+    "Good Example": "Treat this as a parked branch.",
+    "Avoid Using When": "when a branch is actually route change",
+    "Related Fail Class": "FAIL_LOST_ROUTE",
+    "Related Skill": "side_question_return"
+  },
+  {
+    "Term / Phrase": "committed",
+    "Type": "authority marker",
+    "Primary Bias": "separates reality from proposal",
+    "Use Before Boundary": "any proposal",
+    "Good Example": "Only committed state is real.",
+    "Avoid Using When": "when drafting human-facing prose only",
+    "Related Fail Class": "FAIL_INVENTED_STATE",
+    "Related Skill": "state_authority_guard"
+  },
+  {
+    "Term / Phrase": "visible",
+    "Type": "safety qualifier",
+    "Primary Bias": "prevents hidden automation",
+    "Use Before Boundary": "runtime action",
+    "Good Example": "Keep recovery packet visible before submit.",
+    "Avoid Using When": "pure local tests with no UI",
+    "Related Fail Class": "FAIL_UNSAFE_ACTION",
+    "Related Skill": "visible_action_gate"
+  },
+  {
+    "Term / Phrase": "bounded",
+    "Type": "scope limiter",
+    "Primary Bias": "reduces sprawl",
+    "Use Before Boundary": "LLM response generation",
+    "Good Example": "Give bounded help inside current chunk.",
+    "Avoid Using When": "when brainstorming is desired",
+    "Related Fail Class": "FAIL_TOO_MANY_QUESTIONS",
+    "Related Skill": "one_question_only"
+  },
+  {
+    "Term / Phrase": "explicit",
+    "Type": "authority qualifier",
+    "Primary Bias": "requires user/signal clarity",
+    "Use Before Boundary": "mutation boundaries",
+    "Good Example": "Advance only on explicit move_on.",
+    "Avoid Using When": "low-risk implied continuation",
+    "Related Fail Class": "FAIL_ADVANCED_WITHOUT_PERMISSION",
+    "Related Skill": "done_vs_move_on"
+  },
+  {
+    "Term / Phrase": "fresh",
+    "Type": "validity qualifier",
+    "Primary Bias": "protects from stale packet",
+    "Use Before Boundary": "packet/state check",
+    "Good Example": "Use only fresh state_version.",
+    "Avoid Using When": "when no state version exists yet",
+    "Related Fail Class": "FAIL_INVENTED_STATE",
+    "Related Skill": "stale_packet_refusal"
+  },
+  {
+    "Term / Phrase": "hold",
+    "Type": "safe non-mutation",
+    "Primary Bias": "prevents accidental advance",
+    "Use Before Boundary": "uncertainty",
+    "Good Example": "Hold route state and ask one question.",
+    "Avoid Using When": "when legal move is explicit",
+    "Related Fail Class": "FAIL_CADENCE_TOO_SLOW",
+    "Related Skill": "low_contact_hold"
+  },
+  {
+    "Term / Phrase": "restore before",
+    "Type": "order constraint",
+    "Primary Bias": "fixes route before content",
+    "Use Before Boundary": "after interruption",
+    "Good Example": "Restore route before answering next action.",
+    "Avoid Using When": "when route is already active and clear",
+    "Related Fail Class": "FAIL_REPAIR_DID_NOT_REANCHOR",
+    "Related Skill": "repair_reanchor"
+  },
+  {
+    "Term / Phrase": "gate",
+    "Type": "safety verb",
+    "Primary Bias": "requires check before action",
+    "Use Before Boundary": "runtime/submit/autonomy",
+    "Good Example": "Gate submit behind explicit POC mode.",
+    "Avoid Using When": "pure language-only response",
+    "Related Fail Class": "FAIL_UNSAFE_ACTION",
+    "Related Skill": "visible_action_gate"
+  },
+  {
+    "Term / Phrase": "classify before committing",
+    "Type": "process prior",
+    "Primary Bias": "separates interpretation from mutation",
+    "Use Before Boundary": "messy reply",
+    "Good Example": "Classify intent before committing state.",
+    "Avoid Using When": "exact commands",
+    "Related Fail Class": "FAIL_INVENTED_STATE",
+    "Related Skill": "intent_classifier"
+  },
+  {
+    "Term / Phrase": "one short",
+    "Type": "friction control",
+    "Primary Bias": "limits questions",
+    "Use Before Boundary": "ambiguity",
+    "Good Example": "Ask one short question.",
+    "Avoid Using When": "deep planning sessions",
+    "Related Fail Class": "FAIL_TOO_MANY_QUESTIONS",
+    "Related Skill": "one_question_only"
+  },
+  {
+    "Term / Phrase": "route-preserving",
+    "Type": "success frame",
+    "Primary Bias": "aims at route survival",
+    "Use Before Boundary": "recovery/side branch",
+    "Good Example": "Use route-preserving language.",
+    "Avoid Using When": "when route should be changed",
+    "Related Fail Class": "FAIL_LOST_ROUTE",
+    "Related Skill": "repair_reanchor"
+  },
+  {
+    "Term / Phrase": "state-mutating",
+    "Type": "risk label",
+    "Primary Bias": "raises caution",
+    "Use Before Boundary": "before commit",
+    "Good Example": "This is state-mutating; verify first.",
+    "Avoid Using When": "low-risk output formatting",
+    "Related Fail Class": "FAIL_CADENCE_TOO_FAST",
+    "Related Skill": "cadence_downshift"
+  },
+  {
+    "Term / Phrase": "low-risk",
+    "Type": "risk label",
+    "Primary Bias": "allows speed",
+    "Use Before Boundary": "obvious physical steps",
+    "Good Example": "This is low-risk; keep it moving.",
+    "Avoid Using When": "terminal commit or unsafe action",
+    "Related Fail Class": "FAIL_CADENCE_TOO_SLOW",
+    "Related Skill": "fast_physical_checkin"
+  },
+  {
+    "Term / Phrase": "high-risk",
+    "Type": "risk label",
+    "Primary Bias": "requires verification",
+    "Use Before Boundary": "completion/submit/route switch",
+    "Good Example": "This is high-risk; do not infer.",
+    "Avoid Using When": "basic check-in",
+    "Related Fail Class": "FAIL_CADENCE_TOO_FAST",
+    "Related Skill": "visible_action_gate"
+  },
+  {
+    "Term / Phrase": "proposal",
+    "Type": "authority marker",
+    "Primary Bias": "keeps LLM non-authoritative",
+    "Use Before Boundary": "footer/assistant claim",
+    "Good Example": "Treat assistant state claim as proposal.",
+    "Avoid Using When": "none",
+    "Related Fail Class": "FAIL_INVENTED_STATE",
+    "Related Skill": "proposal_commit_boundary"
+  },
+  {
+    "Term / Phrase": "legal move",
+    "Type": "state-game phrase",
+    "Primary Bias": "narrows action set",
+    "Use Before Boundary": "transition selection",
+    "Good Example": "Choose a legal move from allowed_intents.",
+    "Avoid Using When": "freeform creativity",
+    "Related Fail Class": "FAIL_ADVANCED_WITHOUT_PERMISSION",
+    "Related Skill": "allowed_intent_guard"
+  },
+  {
+    "Term / Phrase": "repair is expected",
+    "Type": "failure posture",
+    "Primary Bias": "normalizes recovery",
+    "Use Before Boundary": "after drift",
+    "Good Example": "Repair is expected; restore route.",
+    "Avoid Using When": "when no drift occurred",
+    "Related Fail Class": "FAIL_REPAIR_DID_NOT_REANCHOR",
+    "Related Skill": "repair_reanchor"
+  },
+  {
+    "Term / Phrase": "do not start a new branch",
+    "Type": "scope limiter",
+    "Primary Bias": "prevents topic drift",
+    "Use Before Boundary": "side questions",
+    "Good Example": "Do not start a new branch.",
+    "Avoid Using When": "explicit change_goal",
+    "Related Fail Class": "FAIL_LOST_ROUTE",
+    "Related Skill": "side_question_return"
+  },
+  {
+    "Term / Phrase": "from last committed",
+    "Type": "state anchor",
+    "Primary Bias": "prevents hallucinated progress",
+    "Use Before Boundary": "recovery",
+    "Good Example": "Resume from last committed action.",
+    "Avoid Using When": "brand-new route setup",
+    "Related Fail Class": "FAIL_INVENTED_STATE",
+    "Related Skill": "repair_reanchor"
+  },
+  {
+    "Term / Phrase": "safe to continue",
+    "Type": "continuation marker",
+    "Primary Bias": "allows route motion",
+    "Use Before Boundary": "after verification",
+    "Good Example": "If safe to continue, ask for move_on.",
+    "Avoid Using When": "ambiguous completion",
+    "Related Fail Class": "FAIL_CADENCE_TOO_FAST",
+    "Related Skill": "smallest_legal_move"
+  }
+]

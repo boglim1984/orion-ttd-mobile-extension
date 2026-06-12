@@ -136,3 +136,4 @@ For the current Orion TTD repo:
 - runtime extension behavior remains effectively Level 0
 - protocol/reducer design supports Levels 0–4 conceptually
 - no Level 5 runtime autonomy is introduced
+- pre-collapse steering vocabulary may inform higher-layer cadence/confidence wording, but reducer authority remains deterministic

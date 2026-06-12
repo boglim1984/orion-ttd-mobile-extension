@@ -99,6 +99,8 @@ Markdown summary includes:
 
 The fixture runner preserves `failure_rows_covered` from each workflow fixture and carries them into the aggregated report. This makes the local reducer harness measurable against the Fail/Recover Map baseline before any Orion runtime packet insertion work begins.
 
+Pre-collapse steering language remains an upstream skill and prompt input, not part of scorer authority. See `precollapse-steering-language/README.md`.
+
 ## Connection To Milestone 7
 
 Milestone 6C is the measurable local harness step before Milestone 7.

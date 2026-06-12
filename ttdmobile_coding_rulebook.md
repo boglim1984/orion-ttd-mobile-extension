@@ -81,10 +81,16 @@ Rules:
   `docs/ORION_TTD_REDUCER_V0.md`
   `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
   `fail-recover-map/README.md`
+- Before modifying skill-injection language, prompt packets, contextual steering terms, cadence/confidence wording, assistant behavior tests, or skill-library rule blocks, also read:
+  `precollapse-steering-language/README.md`
+  `precollapse-steering-language/v1/summaries/precollapse_steering_language_v1_summary.md`
 - Before implementing command protocol, workflow tests, reducer/scorer logic, repair packets, recovery behavior, metrics, or skill-library design, also read:
   `docs/ORION_TTD_COMMAND_PROTOCOL_V0.md`
   `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`
   `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
+- Fail/Recover Map v1 is the failure/recovery/test map.
+- Pre-Collapse Steering Language Matrix v1 is the skill/prompt language map.
+- Reducer/scorer remains committed-state and test authority.
 - Treat the XLSX as the human-editable source artifact.
 - Treat CSV/JSON/JSONL as agent-ingest/test-generation formats.
 - Do not let the map override the rulebook or project card.

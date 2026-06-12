@@ -1,0 +1,31 @@
+Term / Phrase,Type,Primary Bias,Use Before Boundary,Good Example,Avoid Using When,Related Fail Class,Related Skill
+treat this as,frame setter,chooses context frame,any ambiguous event,"Treat this as recovery, not a new task.",when legal transition is already explicit,FAIL_LOST_ROUTE,repair_reanchor
+prefer,soft bias,tilts choice without hard rule,low-risk uncertainty,Prefer preserving state over guessing progress.,when hard safety rule is required,FAIL_CADENCE_TOO_FAST,cadence_downshift
+default to,default policy,sets fallback behavior,missing info,Default to holding route state.,when user explicitly commands a legal move,FAIL_INVENTED_STATE,low_contact_hold
+preserve unless,guard phrase,protects current state,before state mutation,Preserve active_chunk_id unless move_on is explicit.,when active_chunk_id is invalid/stale,FAIL_ADVANCED_WITHOUT_PERMISSION,done_vs_move_on
+smallest legal,resolution prior,minimizes overreach,route/mutation boundary,Choose the smallest legal next move.,when broad creative planning is requested,FAIL_TOO_MANY_QUESTIONS,smallest_legal_move
+answer briefly then return,motion shape,handles side branch,side question,"Answer briefly, then return to active_chunk_id.",when Billy changes goal explicitly,FAIL_LOST_ROUTE,side_question_return
+re-anchor,recovery motion,restores state coordinates,after drift/recovery,Re-anchor to route_id and active_chunk_id before helping.,when current state is unknown,FAIL_REPAIR_DID_NOT_REANCHOR,repair_reanchor
+downshift,cadence control,slows at risky boundary,state-mutating event,Downshift to confirmation before route completion.,low-risk repetitive physical steps,FAIL_CADENCE_TOO_FAST,cadence_downshift
+fast physical,cadence control,reduces friction,known physical chunk,This is fast physical mode: one short action.,ambiguous or irreversible decisions,FAIL_CADENCE_TOO_SLOW,fast_physical_checkin
+parked,state relation,separates side branch,side question/interruption,Treat this as a parked branch.,when a branch is actually route change,FAIL_LOST_ROUTE,side_question_return
+committed,authority marker,separates reality from proposal,any proposal,Only committed state is real.,when drafting human-facing prose only,FAIL_INVENTED_STATE,state_authority_guard
+visible,safety qualifier,prevents hidden automation,runtime action,Keep recovery packet visible before submit.,pure local tests with no UI,FAIL_UNSAFE_ACTION,visible_action_gate
+bounded,scope limiter,reduces sprawl,LLM response generation,Give bounded help inside current chunk.,when brainstorming is desired,FAIL_TOO_MANY_QUESTIONS,one_question_only
+explicit,authority qualifier,requires user/signal clarity,mutation boundaries,Advance only on explicit move_on.,low-risk implied continuation,FAIL_ADVANCED_WITHOUT_PERMISSION,done_vs_move_on
+fresh,validity qualifier,protects from stale packet,packet/state check,Use only fresh state_version.,when no state version exists yet,FAIL_INVENTED_STATE,stale_packet_refusal
+hold,safe non-mutation,prevents accidental advance,uncertainty,Hold route state and ask one question.,when legal move is explicit,FAIL_CADENCE_TOO_SLOW,low_contact_hold
+restore before,order constraint,fixes route before content,after interruption,Restore route before answering next action.,when route is already active and clear,FAIL_REPAIR_DID_NOT_REANCHOR,repair_reanchor
+gate,safety verb,requires check before action,runtime/submit/autonomy,Gate submit behind explicit POC mode.,pure language-only response,FAIL_UNSAFE_ACTION,visible_action_gate
+classify before committing,process prior,separates interpretation from mutation,messy reply,Classify intent before committing state.,exact commands,FAIL_INVENTED_STATE,intent_classifier
+one short,friction control,limits questions,ambiguity,Ask one short question.,deep planning sessions,FAIL_TOO_MANY_QUESTIONS,one_question_only
+route-preserving,success frame,aims at route survival,recovery/side branch,Use route-preserving language.,when route should be changed,FAIL_LOST_ROUTE,repair_reanchor
+state-mutating,risk label,raises caution,before commit,This is state-mutating; verify first.,low-risk output formatting,FAIL_CADENCE_TOO_FAST,cadence_downshift
+low-risk,risk label,allows speed,obvious physical steps,This is low-risk; keep it moving.,terminal commit or unsafe action,FAIL_CADENCE_TOO_SLOW,fast_physical_checkin
+high-risk,risk label,requires verification,completion/submit/route switch,This is high-risk; do not infer.,basic check-in,FAIL_CADENCE_TOO_FAST,visible_action_gate
+proposal,authority marker,keeps LLM non-authoritative,footer/assistant claim,Treat assistant state claim as proposal.,none,FAIL_INVENTED_STATE,proposal_commit_boundary
+legal move,state-game phrase,narrows action set,transition selection,Choose a legal move from allowed_intents.,freeform creativity,FAIL_ADVANCED_WITHOUT_PERMISSION,allowed_intent_guard
+repair is expected,failure posture,normalizes recovery,after drift,Repair is expected; restore route.,when no drift occurred,FAIL_REPAIR_DID_NOT_REANCHOR,repair_reanchor
+do not start a new branch,scope limiter,prevents topic drift,side questions,Do not start a new branch.,explicit change_goal,FAIL_LOST_ROUTE,side_question_return
+from last committed,state anchor,prevents hallucinated progress,recovery,Resume from last committed action.,brand-new route setup,FAIL_INVENTED_STATE,repair_reanchor
+safe to continue,continuation marker,allows route motion,after verification,"If safe to continue, ask for move_on.",ambiguous completion,FAIL_CADENCE_TOO_FAST,smallest_legal_move

@@ -1,0 +1,110 @@
+[
+  {
+    "Skill Block": "done_vs_move_on",
+    "Purpose": "Separate completion from advancement",
+    "Trigger / Situation": "Billy says done or completion-like phrase",
+    "Recommended Prompt Language": "Treat done as current chunk completion only. Preserve active_chunk_id unless move_on/next is explicit.",
+    "Cadence": "normal",
+    "Expected Scorer Effect": "reduces FAIL_ADVANCED_WITHOUT_PERMISSION",
+    "Notes": "Core reducer boundary."
+  },
+  {
+    "Skill Block": "side_question_return",
+    "Purpose": "Prevent side question from eating route",
+    "Trigger / Situation": "Billy asks unrelated/context question",
+    "Recommended Prompt Language": "Treat this as a parked side branch. Answer briefly, then return to active_chunk_id.",
+    "Cadence": "repair_mode",
+    "Expected Scorer Effect": "reduces FAIL_LOST_ROUTE",
+    "Notes": "Phrase shape matters more than binary rule."
+  },
+  {
+    "Skill Block": "one_question_only",
+    "Purpose": "Prevent friction overload",
+    "Trigger / Situation": "Ambiguous reply / missing info",
+    "Recommended Prompt Language": "Ask the smallest useful question. One short question only.",
+    "Cadence": "slow_boundary",
+    "Expected Scorer Effect": "reduces FAIL_TOO_MANY_QUESTIONS",
+    "Notes": "Works with bounded inference."
+  },
+  {
+    "Skill Block": "low_contact_hold",
+    "Purpose": "Preserve state under uncertainty",
+    "Trigger / Situation": "No reply, fatigue, overload",
+    "Recommended Prompt Language": "Hold route state. Do not probe. Offer resume words only.",
+    "Cadence": "low_contact_hold",
+    "Expected Scorer Effect": "reduces FAIL_CADENCE_TOO_FAST",
+    "Notes": "Useful for ADHD route preservation."
+  },
+  {
+    "Skill Block": "repair_reanchor",
+    "Purpose": "Restore coordinates after drift",
+    "Trigger / Situation": "Assistant loses route or task returns",
+    "Recommended Prompt Language": "Re-anchor to route_id, session_id, active_chunk_id, last_committed_action before helping.",
+    "Cadence": "repair_mode",
+    "Expected Scorer Effect": "reduces FAIL_REPAIR_DID_NOT_REANCHOR",
+    "Notes": "Packet-friendly."
+  },
+  {
+    "Skill Block": "task_return_recovery",
+    "Purpose": "Treat timer/task as signal only",
+    "Trigger / Situation": "ChatGPT Task/Shortcut/email returns",
+    "Recommended Prompt Language": "Treat this as recovery, not a new task. Construct visible recovery packet; no state mutation from signal alone.",
+    "Cadence": "repair_mode",
+    "Expected Scorer Effect": "reduces FAIL_INVENTED_STATE",
+    "Notes": "Task DOM is a signal surface."
+  },
+  {
+    "Skill Block": "smallest_legal_move",
+    "Purpose": "Reduce overreach",
+    "Trigger / Situation": "Any decision boundary",
+    "Recommended Prompt Language": "Choose the smallest legal next move; do not solve adjacent tasks.",
+    "Cadence": "normal",
+    "Expected Scorer Effect": "reduces FAIL_TOO_MANY_QUESTIONS",
+    "Notes": "Important phrase family."
+  },
+  {
+    "Skill Block": "explicit_terminal_commit",
+    "Purpose": "Separate final chunk done from route complete",
+    "Trigger / Situation": "Final chunk completion",
+    "Recommended Prompt Language": "Final done completes the chunk; route complete requires terminal_commit.",
+    "Cadence": "slow_boundary",
+    "Expected Scorer Effect": "reduces FAIL_INVENTED_STATE",
+    "Notes": "Matches 6A/6B contract."
+  },
+  {
+    "Skill Block": "visible_action_gate",
+    "Purpose": "Prevent hidden automation",
+    "Trigger / Situation": "Runtime action, submit, voice, shortcut",
+    "Recommended Prompt Language": "Keep action visible and gated. Submit only in explicit trusted/POC mode.",
+    "Cadence": "slow_boundary",
+    "Expected Scorer Effect": "reduces FAIL_UNSAFE_ACTION",
+    "Notes": "Needed before Milestone 7+."
+  },
+  {
+    "Skill Block": "stale_packet_refusal",
+    "Purpose": "Avoid old context mutation",
+    "Trigger / Situation": "State version mismatch or old packet",
+    "Recommended Prompt Language": "If stale, reject mutation and ask for/emit repair state.",
+    "Cadence": "repair_mode",
+    "Expected Scorer Effect": "reduces FAIL_INVENTED_STATE",
+    "Notes": "Borrowed from validator posture."
+  },
+  {
+    "Skill Block": "fast_physical_checkin",
+    "Purpose": "Keep low-risk route moving",
+    "Trigger / Situation": "Physical cleanup step with clear action",
+    "Recommended Prompt Language": "This is low-risk physical progress; one short action, no extra planning.",
+    "Cadence": "fast_physical",
+    "Expected Scorer Effect": "reduces FAIL_CADENCE_TOO_SLOW",
+    "Notes": "Use when route is clear."
+  },
+  {
+    "Skill Block": "cadence_downshift",
+    "Purpose": "Slow at risky boundary",
+    "Trigger / Situation": "Route switch, final commit, uncertainty",
+    "Recommended Prompt Language": "This is state-mutating/high-risk; downshift to confirmation before commit.",
+    "Cadence": "slow_boundary",
+    "Expected Scorer Effect": "reduces FAIL_CADENCE_TOO_FAST",
+    "Notes": "Smartness budget in language."
+  }
+]

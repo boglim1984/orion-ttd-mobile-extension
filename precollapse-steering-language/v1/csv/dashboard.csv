@@ -1,0 +1,9 @@
+Metric,Value,Concept,Meaning,Prompt-usable form,Reducer/Scorer connection,Notes
+Steering matrix rows,144,Frame,What kind of situation this is,"Treat this as recovery, not a new task",Changes expected legal move,Most important pre-collapse layer
+Lexicon entries,30,Bias,Soft preference under uncertainty,Prefer preserving state over guessing progress,Avoids overreach,Useful when not binary
+Skill blocks,12,Risk,Boundary danger,This is state-mutating/high-risk,Triggers downshift,Smartness budget
+Simulation scenarios,60,Motion shape,Sequence of response,"Answer briefly, then return",Prevents route loss,Side branches
+Core principle,Context steers before PASS/FAIL collapses,Scope,How much to do,Choose smallest legal next move,Prevents overplanning,Strong operator phrase
+Authority rule,LLM proposes; reducer commits; scorer names outcome,Authority,Who can commit,Treat LLM claim as proposal,Reducer owns state,Advanced Skill Injector lesson
+Primary use,Skill injection vocabulary + test design,Visibility,Safety/action surface,Keep action visible and gated,Prevents unsafe action,Orion runtime future
+Next repo use,Seed skill blocks / future prompt library,Score,Boundary result,PASS_WITH_REPAIR,Feeds skill choice,Post-collapse

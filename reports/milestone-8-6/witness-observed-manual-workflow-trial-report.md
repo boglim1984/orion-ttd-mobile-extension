@@ -12,6 +12,19 @@ Milestone 8.5E witness channel PASS.
 
 Use console, dataset, and hidden DOM witness evidence as the primary observable route for manual Orion iPhone workflow trials while keeping send manual and visible.
 
+## Scope Clarification
+
+Milestone 8.6's behavioral route result is primarily a `TTD_COMMAND_V1` protocol / prompt-language result, not an Orion-specific runtime result. Orion was the real mobile surface used during the trial, but the `continue` / `done` / `move_on` route behavior does not inherently require Orion.
+
+Keep this distinction:
+
+- Milestone 7 and 8.5E:
+  Orion transport and witness proof on the real iPhone browser surface
+- Milestone 8.6:
+  strengthened `TTD_COMMAND_V1` language / protocol route-behavior proof
+- WebKit/MCP lane:
+  future agent-run testing so Billy does not remain the manual operator
+
 ## Files Added
 
 - `docs/ORION_TTD_MILESTONE_8_6_WITNESS_OBSERVED_MANUAL_WORKFLOW_TRIAL_V0.md`

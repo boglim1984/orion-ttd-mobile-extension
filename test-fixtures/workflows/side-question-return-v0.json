@@ -1,0 +1,66 @@
+{
+  "fixture_version": "0.1.0",
+  "route_id": "side-question-return-v0",
+  "goal": "verify that a side question does not displace the active route",
+  "description": "Small fixture focused on interruption handling and route restoration.",
+  "chunks": [
+    {
+      "chunk_id": "chunk_01_stack_papers",
+      "label": "stack papers"
+    }
+  ],
+  "allowed_intents": [
+    "continue",
+    "side_question",
+    "return_to_route",
+    "done"
+  ],
+  "state_template": {
+    "route_id": "desk-reset-v0",
+    "session_id": "session_side_question_return_v0",
+    "active_goal": "reset the desk enough to choose the next work item",
+    "active_chunk": "chunk_03_stack_papers",
+    "chunk_index": 2,
+    "phase": "active",
+    "last_committed_action": "move_on",
+    "allowed_intents": [
+      "continue",
+      "side_question",
+      "return_to_route",
+      "done"
+    ],
+    "cadence_mode": "fast_physical",
+    "confidence_bias": "one_question_only"
+  },
+  "trial_events": [
+    {
+      "event_id": "sq01",
+      "type": "side_question",
+      "actor": "user",
+      "utterance": "also, what is the weather tomorrow?",
+      "expected_interpreted_intent": "side_question",
+      "expected_reducer_effect": "answer_briefly_without_route_mutation",
+      "expected_active_chunk_id": "chunk_03_stack_papers"
+    },
+    {
+      "event_id": "sq02",
+      "type": "return_to_route",
+      "actor": "assistant",
+      "utterance": "back to stack papers",
+      "expected_interpreted_intent": "return_to_route",
+      "expected_reducer_effect": "restore_same_active_chunk",
+      "expected_active_chunk_id": "chunk_03_stack_papers"
+    }
+  ],
+  "assertions": [
+    "assistant answers briefly",
+    "assistant restores active route and chunk",
+    "reducer does not advance due to side question",
+    "reducer does not complete state due to side question"
+  ],
+  "failure_rows_covered": [
+    "F048",
+    "F059",
+    "F062"
+  ]
+}

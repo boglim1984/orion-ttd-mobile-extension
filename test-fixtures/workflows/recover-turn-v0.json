@@ -1,0 +1,70 @@
+{
+  "fixture_version": "0.1.0",
+  "route_id": "recover-turn-v0",
+  "goal": "verify that a recovery signal reanchors the route without unsafe authority",
+  "description": "Small fixture focused on recovery packet construction and signal authority boundaries.",
+  "chunks": [
+    {
+      "chunk_id": "chunk_02_collect_dishes",
+      "label": "collect dishes"
+    }
+  ],
+  "allowed_intents": [
+    "continue",
+    "repair",
+    "return_to_route",
+    "hold"
+  ],
+  "state_template": {
+    "route_id": "desk-reset-v0",
+    "session_id": "session_recover_turn_v0",
+    "active_goal": "reset the desk enough to choose the next work item",
+    "active_chunk": "chunk_02_collect_dishes",
+    "chunk_index": 1,
+    "phase": "hold",
+    "last_committed_action": "hold_for_recovery",
+    "allowed_intents": [
+      "continue",
+      "repair",
+      "return_to_route",
+      "hold"
+    ],
+    "cadence_mode": "low_confidence_recovery",
+    "confidence_bias": "repair_before_commit",
+    "pending_recovery": true,
+    "submit_mode": "disabled"
+  },
+  "trial_events": [
+    {
+      "event_id": "rt01",
+      "type": "recovery_signal",
+      "actor": "surface",
+      "signal": "TTD_TIMER_RETURN_V1",
+      "expected_interpreted_intent": "recovery_signal",
+      "expected_reducer_effect": "construct_repair_packet_without_commit",
+      "expected_active_chunk_id": "chunk_02_collect_dishes"
+    },
+    {
+      "event_id": "rt02",
+      "type": "repair_packet",
+      "actor": "assistant",
+      "utterance": "TTD_REPAIR_V1 reanchor to collect dishes",
+      "expected_interpreted_intent": "repair",
+      "expected_reducer_effect": "reanchor_route_keep_submit_disabled",
+      "expected_active_chunk_id": "chunk_02_collect_dishes"
+    }
+  ],
+  "assertions": [
+    "recovery signal detected",
+    "recovery packet constructed",
+    "packet reanchors route",
+    "submit remains disabled by default",
+    "Voice Mode, task DOM, and email or Shortcut are signal or action surfaces only, not state authority"
+  ],
+  "failure_rows_covered": [
+    "F054",
+    "F072",
+    "F073",
+    "F079"
+  ]
+}

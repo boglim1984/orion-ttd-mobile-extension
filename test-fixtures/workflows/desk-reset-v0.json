@@ -1,0 +1,246 @@
+{
+  "fixture_version": "0.1.0",
+  "route_id": "desk-reset-v0",
+  "goal": "reset the desk enough to choose the next work item",
+  "description": "Canonical Milestone 5 workflow fixture for reducer, cadence, and interruption behavior.",
+  "source_context": {
+    "mermaid_rule": "docs/ORION_TTD_MERMAID_PLANNING_RULE_V0.md",
+    "workflow_tests_rule": "docs/ORION_TTD_WORKFLOW_TESTS_V0.md",
+    "fail_recover_map": "fail-recover-map/v1"
+  },
+  "chunks": [
+    {
+      "chunk_id": "chunk_01_clear_trash",
+      "label": "clear trash",
+      "completion_condition": "obvious trash is off the desk surface"
+    },
+    {
+      "chunk_id": "chunk_02_collect_dishes",
+      "label": "collect dishes",
+      "completion_condition": "dishes are gathered away from the desk area"
+    },
+    {
+      "chunk_id": "chunk_03_stack_papers",
+      "label": "stack papers",
+      "completion_condition": "papers are stacked into one deliberate pile"
+    },
+    {
+      "chunk_id": "chunk_04_wipe_surface",
+      "label": "wipe surface",
+      "completion_condition": "main work surface is wiped enough for use"
+    },
+    {
+      "chunk_id": "chunk_05_choose_next_work_item",
+      "label": "choose next work item",
+      "completion_condition": "one next work item is explicitly selected"
+    }
+  ],
+  "allowed_intents": [
+    "done",
+    "stuck",
+    "continue",
+    "move_on",
+    "pause",
+    "re_chunk"
+  ],
+  "state_template": {
+    "route_id": "desk-reset-v0",
+    "session_id": "session_desk_reset_v0",
+    "active_goal": "reset the desk enough to choose the next work item",
+    "active_chunk": "chunk_01_clear_trash",
+    "chunk_index": 0,
+    "phase": "active",
+    "last_committed_action": "start",
+    "allowed_intents": [
+      "done",
+      "stuck",
+      "continue",
+      "move_on",
+      "pause",
+      "re_chunk"
+    ],
+    "cadence_mode": "fast_physical",
+    "confidence_bias": "high_if_low_risk"
+  },
+  "trial_events": [
+    {
+      "event_id": "e01",
+      "type": "start",
+      "actor": "system",
+      "utterance": "start route",
+      "expected_interpreted_intent": "start",
+      "expected_reducer_effect": "hold_active_chunk",
+      "expected_active_chunk_id": "chunk_01_clear_trash"
+    },
+    {
+      "event_id": "e02",
+      "type": "continue",
+      "actor": "user",
+      "utterance": "continue",
+      "expected_interpreted_intent": "continue",
+      "expected_reducer_effect": "keep_active_chunk",
+      "expected_active_chunk_id": "chunk_01_clear_trash"
+    },
+    {
+      "event_id": "e03",
+      "type": "done",
+      "actor": "user",
+      "utterance": "done",
+      "expected_interpreted_intent": "done",
+      "expected_reducer_effect": "complete_chunk_no_advance",
+      "expected_active_chunk_id": "chunk_01_clear_trash"
+    },
+    {
+      "event_id": "e04",
+      "type": "move_on",
+      "actor": "user",
+      "utterance": "move on",
+      "expected_interpreted_intent": "move_on",
+      "expected_reducer_effect": "advance_exactly_one_chunk",
+      "expected_active_chunk_id": "chunk_02_collect_dishes"
+    },
+    {
+      "event_id": "e05",
+      "type": "stuck",
+      "actor": "user",
+      "utterance": "stuck",
+      "expected_interpreted_intent": "stuck",
+      "expected_reducer_effect": "hold_and_help",
+      "expected_active_chunk_id": "chunk_02_collect_dishes"
+    },
+    {
+      "event_id": "e06",
+      "type": "continue",
+      "actor": "user",
+      "utterance": "continue",
+      "expected_interpreted_intent": "continue",
+      "expected_reducer_effect": "keep_active_chunk",
+      "expected_active_chunk_id": "chunk_02_collect_dishes"
+    },
+    {
+      "event_id": "e07",
+      "type": "done",
+      "actor": "user",
+      "utterance": "done",
+      "expected_interpreted_intent": "done",
+      "expected_reducer_effect": "complete_chunk_no_advance",
+      "expected_active_chunk_id": "chunk_02_collect_dishes"
+    },
+    {
+      "event_id": "e08",
+      "type": "move_on",
+      "actor": "user",
+      "utterance": "next",
+      "expected_interpreted_intent": "move_on",
+      "expected_reducer_effect": "advance_exactly_one_chunk",
+      "expected_active_chunk_id": "chunk_03_stack_papers"
+    },
+    {
+      "event_id": "e09",
+      "type": "side_question",
+      "actor": "user",
+      "utterance": "wait, what day is trash pickup again?",
+      "expected_interpreted_intent": "side_question",
+      "expected_reducer_effect": "answer_then_restore_route",
+      "expected_active_chunk_id": "chunk_03_stack_papers"
+    },
+    {
+      "event_id": "e10",
+      "type": "return_to_route",
+      "actor": "assistant",
+      "utterance": "returning to stack papers",
+      "expected_interpreted_intent": "return_to_route",
+      "expected_reducer_effect": "keep_active_chunk",
+      "expected_active_chunk_id": "chunk_03_stack_papers"
+    },
+    {
+      "event_id": "e11",
+      "type": "done",
+      "actor": "user",
+      "utterance": "done",
+      "expected_interpreted_intent": "done",
+      "expected_reducer_effect": "complete_chunk_no_advance",
+      "expected_active_chunk_id": "chunk_03_stack_papers"
+    },
+    {
+      "event_id": "e12",
+      "type": "move_on",
+      "actor": "user",
+      "utterance": "move_on",
+      "expected_interpreted_intent": "move_on",
+      "expected_reducer_effect": "advance_exactly_one_chunk",
+      "expected_active_chunk_id": "chunk_04_wipe_surface"
+    },
+    {
+      "event_id": "e13",
+      "type": "done",
+      "actor": "user",
+      "utterance": "done",
+      "expected_interpreted_intent": "done",
+      "expected_reducer_effect": "complete_chunk_no_advance",
+      "expected_active_chunk_id": "chunk_04_wipe_surface"
+    },
+    {
+      "event_id": "e14",
+      "type": "move_on",
+      "actor": "user",
+      "utterance": "next",
+      "expected_interpreted_intent": "move_on",
+      "expected_reducer_effect": "advance_exactly_one_chunk",
+      "expected_active_chunk_id": "chunk_05_choose_next_work_item"
+    },
+    {
+      "event_id": "e15",
+      "type": "done",
+      "actor": "user",
+      "utterance": "done",
+      "expected_interpreted_intent": "done",
+      "expected_reducer_effect": "complete_chunk_no_route_complete_until_legal_terminal_commit",
+      "expected_active_chunk_id": "chunk_05_choose_next_work_item"
+    }
+  ],
+  "assertions": [
+    "done completes but does not advance",
+    "move_on advances exactly one chunk",
+    "stuck does not advance",
+    "continue keeps active chunk",
+    "side_question returns to route",
+    "assistant does not invent hidden state",
+    "final goal only after legal transitions"
+  ],
+  "failure_rows_covered": [
+    "F019",
+    "F024",
+    "F025",
+    "F026",
+    "F047",
+    "F048",
+    "F049",
+    "F050",
+    "F057",
+    "F058",
+    "F059",
+    "F062",
+    "F067",
+    "F075",
+    "F076"
+  ],
+  "scoring_profile": {
+    "pass_categories": [
+      "PASS",
+      "PASS_WITH_REPAIR"
+    ],
+    "fail_categories": [
+      "FAIL_ADVANCED_WITHOUT_PERMISSION",
+      "FAIL_INVENTED_STATE",
+      "FAIL_LOST_ROUTE",
+      "FAIL_TOO_MANY_QUESTIONS",
+      "FAIL_NO_RESPONSE_CONTRACT",
+      "FAIL_REPAIR_DID_NOT_REANCHOR"
+    ]
+  },
+  "smartness_budget": {
+    "max_runtime_level": 3,
+    "compile_level": 4
+  }
+}

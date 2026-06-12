@@ -14,9 +14,20 @@ This is the real TTD Mobile Extension shell.
 
 - `src/`: manifest and content-script templates
 - `scripts/`: build, package, and verification scripts
+- `docs/`: protocol, reducer, workflow, Mermaid, and smartness-budget design docs
+- `test-fixtures/`: canonical workflow fixtures for future reducer/scorer work
 - `dist/`: built extension artifacts
 - `updates/`: Chrome update metadata
 - `reports/`: local run/report artifacts
+
+## Milestone 5 Design Docs
+
+- `docs/ORION_TTD_COMMAND_PROTOCOL_V0.md`
+- `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`
+- `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
+- `docs/ORION_TTD_MERMAID_PLANNING_RULE_V0.md`
+- `docs/ORION_TTD_SMARTNESS_BUDGET_V0.md`
+- `test-fixtures/workflows/`
 
 ## v0.1.1 behavior
 

@@ -63,6 +63,10 @@ Rules:
 - Before implementing command protocol, workflow tests, reducer/scorer logic, repair packets, or recovery behavior, read:
   `fail-recover-map/README.md`
   and the latest fail/recover map files.
+- Before implementing command protocol, workflow tests, reducer/scorer logic, repair packets, recovery behavior, metrics, or skill-library design, also read:
+  `docs/ORION_TTD_COMMAND_PROTOCOL_V0.md`
+  `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`
+  `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
 - Treat the XLSX as the human-editable source artifact.
 - Treat CSV/JSON/JSONL as agent-ingest/test-generation formats.
 - Do not let the map override the rulebook or project card.

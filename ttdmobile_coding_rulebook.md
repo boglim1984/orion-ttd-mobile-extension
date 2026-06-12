@@ -84,13 +84,22 @@ Rules:
 - Before modifying skill-injection language, prompt packets, contextual steering terms, cadence/confidence wording, assistant behavior tests, or skill-library rule blocks, also read:
   `precollapse-steering-language/README.md`
   `precollapse-steering-language/v1/summaries/precollapse_steering_language_v1_summary.md`
+- Before modifying reducer law, scorer categories, Judge packets, skill-language packets, command protocol legal moves, fail/recover metrics, or pre-collapse steering rules, also read:
+  `legal-framework/README.md`
+  `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`
+  `fail-recover-map/README.md`
+  `precollapse-steering-language/README.md`
 - Before implementing command protocol, workflow tests, reducer/scorer logic, repair packets, recovery behavior, metrics, or skill-library design, also read:
   `docs/ORION_TTD_COMMAND_PROTOCOL_V0.md`
   `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`
   `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
 - Fail/Recover Map v1 is the failure/recovery/test map.
 - Pre-Collapse Steering Language Matrix v1 is the skill/prompt language map.
+- Constitution v1 is the legal synthesis.
+- Fail/Recover Map v1 is case law.
+- Pre-Collapse Steering Language Matrix v1 is language law.
 - Reducer/scorer remains committed-state and test authority.
+- Reducer/scorer implementation remains the executable authority.
 - Treat the XLSX as the human-editable source artifact.
 - Treat CSV/JSON/JSONL as agent-ingest/test-generation formats.
 - Do not let the map override the rulebook or project card.

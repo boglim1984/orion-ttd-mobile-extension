@@ -163,6 +163,8 @@ It remains Orion-native:
 - reducer state is authoritative
 - assistant/proposal language never commits state directly
 
+See `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md` for the legal framing that keeps reducer authority above prose, signals, and extension observation.
+
 ## Non-goals
 
 - no scorer yet

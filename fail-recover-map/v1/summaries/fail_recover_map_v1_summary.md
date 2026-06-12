@@ -25,3 +25,5 @@ The Fail/Recover Map v1 serves as the foundational artifact predicting and catal
   - cases with passing repair tests;
   - cases still unresolved;
   - failures by layer / source / severity / cadence mode / skill block.
+
+The legal synthesis layer that treats this map as case law now lives in `legal-framework/README.md`.

@@ -14,6 +14,8 @@ Define the smallest protocol contract between:
 
 The protocol is deliberately narrow. The LLM may help interpret meaning, but it is not state authority.
 
+The legal framing for these moves lives in `legal-framework/README.md` and `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`.
+
 ## Core principle
 
 - Orion extension = actuator/observer through the ChatGPT UI air gap.

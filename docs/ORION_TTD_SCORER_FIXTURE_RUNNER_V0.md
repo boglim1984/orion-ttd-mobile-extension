@@ -101,6 +101,8 @@ The fixture runner preserves `failure_rows_covered` from each workflow fixture a
 
 Pre-collapse steering language remains an upstream skill and prompt input, not part of scorer authority. See `precollapse-steering-language/README.md`.
 
+The legal synthesis tying scorer verdicts to authority, evidence, claims, and default HOLD behavior lives in `legal-framework/README.md`.
+
 ## Connection To Milestone 7
 
 Milestone 6C is the measurable local harness step before Milestone 7.

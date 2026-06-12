@@ -64,3 +64,5 @@ This artifact tracks:
 - steering terms
 - reusable skill blocks
 - simulations that may improve pass or fail outcomes before the reducer judges the turn
+
+The legal synthesis layer that treats this matrix as language law now lives in `legal-framework/README.md`.

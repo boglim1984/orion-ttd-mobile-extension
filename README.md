@@ -29,6 +29,8 @@ This is the real TTD Mobile Extension shell.
 - `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
 - `docs/ORION_TTD_MERMAID_PLANNING_RULE_V0.md`
 - `docs/ORION_TTD_SMARTNESS_BUDGET_V0.md`
+- `legal-framework/README.md`
+- `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`
 - `precollapse-steering-language/README.md`
 - `precollapse-steering-language/v1/summaries/precollapse_steering_language_v1_summary.md`
 - `test-fixtures/workflows/`

@@ -3,7 +3,18 @@ const loaderOutput = document.querySelector("#loader-output");
 const statusLogPanel = document.querySelector("#status-log-panel");
 const currentCasePanel = document.querySelector("#current-case-panel");
 const resultLinksPanel = document.querySelector("#result-links-panel");
+const validationSummary = document.querySelector("#validation-summary");
+const overlayStatus = document.querySelector("#overlay-status");
 
+const serverStateLabel = document.querySelector("#server-state");
+const suiteStateLabel = document.querySelector("#suite-state");
+const caseCountStateLabel = document.querySelector("#case-count-state");
+const runnerStateLabel = document.querySelector("#runner-state");
+const resultStateLabel = document.querySelector("#result-state");
+
+const openTestChatButton = document.querySelector("#open-test-chat-button");
+const copyConsoleStepsButton = document.querySelector("#copy-console-steps-button");
+const loadExampleButton = document.querySelector("#load-example-button");
 const validateButton = document.querySelector("#validate-button");
 const copySelfContainedButton = document.querySelector("#copy-self-contained-button");
 const runButton = document.querySelector("#run-button");
@@ -13,9 +24,53 @@ const copyStatusLogButton = document.querySelector("#copy-status-log-button");
 const openResultsButton = document.querySelector("#open-results-button");
 const copySummaryButton = document.querySelector("#copy-summary-button");
 const copyLoaderButton = document.querySelector("#copy-loader-button");
+const copyResultInstructionsButton = document.querySelector("#copy-result-instructions-button");
+
+const uiState = {
+  suiteDirty: false,
+  suiteValid: false,
+  suiteId: null,
+  caseCount: null,
+  runnerCopied: false,
+  copiedRunId: null,
+  serverState: null
+};
 
 function appendStatusLine(message) {
   statusLogPanel.textContent = `${statusLogPanel.textContent}\n${message}`.trim();
+}
+
+function setValidationSummary(message, variant = "muted") {
+  validationSummary.textContent = message;
+  validationSummary.className = `inline-status ${variant}`;
+}
+
+function setOverlayStatus(message) {
+  overlayStatus.textContent = message;
+}
+
+function markSuiteDirty() {
+  uiState.suiteDirty = true;
+  uiState.suiteValid = false;
+  uiState.runnerCopied = false;
+  uiState.copiedRunId = null;
+  setValidationSummary("Suite edited. Validate again before copying a runner for this version.", "muted");
+  setOverlayStatus("Waiting for suite validation.");
+  renderStateStrip();
+}
+
+function renderStateStrip() {
+  const origin = window.location.origin;
+  serverStateLabel.textContent = uiState.serverState ? `Running on ${origin}` : `Checking ${origin}`;
+  suiteStateLabel.textContent = uiState.suiteId || "None";
+  caseCountStateLabel.textContent = uiState.caseCount ?? "Unknown";
+  runnerStateLabel.textContent = uiState.runnerCopied ? "Copied" : "Not copied";
+
+  if (uiState.serverState?.last_result?.result_json_path) {
+    resultStateLabel.textContent = "Latest server result available";
+  } else {
+    resultStateLabel.textContent = "No server result";
+  }
 }
 
 async function readJson(response) {
@@ -42,9 +97,7 @@ async function fetchJson(url) {
   return readJson(response);
 }
 
-function renderStatus(state) {
-  statusLogPanel.textContent = (state.status_log || []).join("\n") || "No status yet.";
-
+function renderCurrentCase(state) {
   if (state.active_run) {
     currentCasePanel.textContent = JSON.stringify(
       {
@@ -57,7 +110,10 @@ function renderStatus(state) {
       null,
       2
     );
-  } else if (state.pending_run) {
+    return;
+  }
+
+  if (state.pending_run) {
     currentCasePanel.textContent = JSON.stringify(
       {
         pending_run_id: state.pending_run.run_id,
@@ -67,10 +123,13 @@ function renderStatus(state) {
       null,
       2
     );
-  } else {
-    currentCasePanel.textContent = "No active case.";
+    return;
   }
 
+  currentCasePanel.textContent = "No active case.";
+}
+
+function renderResults(state) {
   if (state.last_result) {
     const links = [];
     if (state.last_result.summary_path) {
@@ -86,10 +145,19 @@ function renderStatus(state) {
     openResultsButton.disabled = false;
     copySummaryButton.disabled = false;
   } else {
-    resultLinksPanel.textContent = "No completed run yet.";
+    resultLinksPanel.textContent =
+      "Self-contained runs download JSON from the ChatGPT tab. Server result buttons stay disabled until a legacy/server run writes local artifacts.";
     openResultsButton.disabled = true;
     copySummaryButton.disabled = true;
   }
+}
+
+function renderStatus(state) {
+  uiState.serverState = state;
+  statusLogPanel.textContent = (state.status_log || []).join("\n") || "No status yet.";
+  renderCurrentCase(state);
+  renderResults(state);
+  renderStateStrip();
 }
 
 async function refreshState() {
@@ -106,12 +174,34 @@ async function refreshLoader() {
   loaderOutput.value = await response.text();
 }
 
+async function loadExampleSuite() {
+  const response = await fetchJson("/api/example-suite?name=desk-reset-baseline-suite.json");
+  suiteInput.value = response.suite_text;
+  uiState.suiteDirty = true;
+  uiState.suiteValid = false;
+  uiState.runnerCopied = false;
+  uiState.suiteId = null;
+  uiState.caseCount = null;
+  setValidationSummary(`Loaded example: ${response.name}. Validate before copying a runner.`, "muted");
+  setOverlayStatus("Example loaded. Validate the suite next.");
+  renderStateStrip();
+}
+
 async function copySelfContainedRunner() {
   const payload = await postJson("/api/runner/self-contained-payload", {
     suite_text: suiteInput.value
   });
   await navigator.clipboard.writeText(payload.payload);
+  uiState.runnerCopied = true;
+  uiState.copiedRunId = payload.run_id;
+  setOverlayStatus("Runner copied. Paste it into the ChatGPT console, then click Run in the overlay.");
   appendStatusLine(`Copied self-contained runner for ${payload.run_id}`);
+  renderStateStrip();
+}
+
+async function copyToClipboard(text, successMessage) {
+  await navigator.clipboard.writeText(text);
+  appendStatusLine(successMessage);
 }
 
 async function withAction(action) {
@@ -123,17 +213,78 @@ async function withAction(action) {
   }
 }
 
+openTestChatButton.addEventListener("click", () => {
+  window.open("https://chatgpt.com/", "_blank", "noopener");
+  appendStatusLine("Opened ChatGPT in a new tab.");
+});
+
+copyConsoleStepsButton.addEventListener("click", () =>
+  withAction(async () => {
+    await copyToClipboard(
+      [
+        "Command Language Casework setup",
+        "1. Open a disposable ChatGPT test chat.",
+        "2. Open DevTools with Option + Command + I.",
+        "3. Return to the GUI and copy the self-contained runner for the current suite.",
+        "4. Paste the runner into the ChatGPT console.",
+        "5. Click Run in the black overlay on the ChatGPT page."
+      ].join("\n"),
+      "Copied console setup note."
+    );
+  })
+);
+
+loadExampleButton.addEventListener("click", () =>
+  withAction(async () => {
+    await loadExampleSuite();
+  })
+);
+
+suiteInput.addEventListener("input", () => {
+  markSuiteDirty();
+});
+
 validateButton.addEventListener("click", () =>
   withAction(async () => {
-    await postJson("/api/validate", {
+    const response = await postJson("/api/validate", {
       suite_text: suiteInput.value
     });
+    uiState.suiteDirty = false;
+    uiState.suiteValid = true;
+    uiState.suiteId = response.suite.suite_id;
+    uiState.caseCount = Array.isArray(response.suite.cases) ? response.suite.cases.length : 0;
+    setValidationSummary(`Valid suite: ${uiState.suiteId} (${uiState.caseCount} cases).`, "success");
+    setOverlayStatus("Suite valid. Copy the self-contained runner next.");
+    renderStateStrip();
   })
 );
 
 copySelfContainedButton.addEventListener("click", () =>
   withAction(async () => {
     await copySelfContainedRunner();
+  })
+);
+
+saveDraftButton.addEventListener("click", () =>
+  withAction(async () => {
+    const response = await postJson("/api/save-draft", {
+      suite_text: suiteInput.value
+    });
+    appendStatusLine(`Saved draft suite: ${response.draft_path}`);
+  })
+);
+
+copyResultInstructionsButton.addEventListener("click", () =>
+  withAction(async () => {
+    await copyToClipboard(
+      [
+        "Casework result handling",
+        "1. After the self-contained run finishes, use the JSON downloaded by the ChatGPT tab.",
+        "2. Drag that JSON result back into ChatGPT for analysis.",
+        "3. Server result buttons in the GUI apply only to the legacy server-run path."
+      ].join("\n"),
+      "Copied result instructions."
+    );
   })
 );
 
@@ -151,19 +302,9 @@ stopButton.addEventListener("click", () =>
   })
 );
 
-saveDraftButton.addEventListener("click", () =>
-  withAction(async () => {
-    const response = await postJson("/api/save-draft", {
-      suite_text: suiteInput.value
-    });
-    appendStatusLine(`Saved draft suite: ${response.draft_path}`);
-  })
-);
-
 copyStatusLogButton.addEventListener("click", () =>
   withAction(async () => {
-    await navigator.clipboard.writeText(statusLogPanel.textContent);
-    appendStatusLine("Copied status log.");
+    await copyToClipboard(statusLogPanel.textContent, "Copied status log.");
   })
 );
 
@@ -177,19 +318,20 @@ copySummaryButton.addEventListener("click", () =>
   withAction(async () => {
     const response = await fetch("/api/latest-summary");
     const text = await response.text();
-    await navigator.clipboard.writeText(text);
-    appendStatusLine("Copied latest server-side result summary.");
+    await copyToClipboard(text, "Copied latest server-side result summary.");
   })
 );
 
 copyLoaderButton.addEventListener("click", () =>
   withAction(async () => {
-    await navigator.clipboard.writeText(loaderOutput.value);
-    appendStatusLine("Copied legacy loader snippet.");
+    await copyToClipboard(loaderOutput.value, "Copied legacy loader snippet.");
   })
 );
 
 setInterval(refreshState, 2000);
 
 await refreshLoader();
+renderStateStrip();
+setValidationSummary("Load or paste a suite, then validate it.", "muted");
+setOverlayStatus("Open a disposable ChatGPT chat to begin.");
 await refreshState();

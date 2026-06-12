@@ -47,6 +47,13 @@ The server, GUI, suite validator, heuristic classifier, result writer, and conso
 - conservative selectors are used, but ChatGPT DOM changes can still break composer or send detection
 - heuristic classifications are advisory only and do not replace reducer/scorer or human review
 
+## GUI Simplification Update
+
+- the GUI now defaults to a calm step-lane flow instead of a wrapped pile of buttons
+- the supported self-contained path is the only prominent lane
+- legacy server-run controls, loader snippet, and raw diagnostics moved behind `Advanced / Legacy / Diagnostics`
+- the GUI now exposes an example-suite loader and a launcher script for opening the GUI plus a disposable ChatGPT tab
+
 ## First Live Self-Contained Run Finding
 
 - the self-contained payload architecture worked: inline install, overlay display, and downloaded results all succeeded on the live ChatGPT page

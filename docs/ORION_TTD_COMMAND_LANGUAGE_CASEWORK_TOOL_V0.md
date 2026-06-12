@@ -144,11 +144,12 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 
 ## Supported Runner Path
 
-- primary path: `Copy Self-Contained Runner`
+- primary path: open disposable ChatGPT test chat, validate suite, then `Copy Self-Contained Runner`
 - paste the payload into a disposable ChatGPT test-chat console
 - nothing sends until Billy clicks the visible overlay `Run` button
 - downloaded JSON results are the primary output path
 - legacy loader / server-run controls remain secondary and may be blocked by ChatGPT CSP
+- the default GUI now presents this as a step lane and hides legacy/server controls in `Advanced / Legacy / Diagnostics`
 
 ## How Results Pop In Finder
 

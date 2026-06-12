@@ -28,6 +28,7 @@ const TOOL_ROOT = path.resolve(__dirname, "..");
 const PUBLIC_DIR = path.join(TOOL_ROOT, "public");
 const RESULTS_DIR = path.join(TOOL_ROOT, "results");
 const DRAFTS_DIR = path.join(TOOL_ROOT, "drafts");
+const EXAMPLES_DIR = path.join(TOOL_ROOT, "examples");
 const INJECTOR_PATH = path.join(TOOL_ROOT, "injectors", "chatgpt-casework-runner.js");
 const DEFAULT_PORT = 4317;
 const DEFAULT_HOST = "127.0.0.1";
@@ -129,6 +130,19 @@ function createRunId(suiteId) {
   return `${formatTimestamp(new Date())}-${suiteId}`;
 }
 
+function getExampleSuitePath(name) {
+  const requestedName = String(name || "desk-reset-baseline-suite.json");
+  const allowed = new Set([
+    "desk-reset-baseline-suite.json",
+    "side-question-return-suite.json",
+    "ambiguity-fail-gracefully-suite.json"
+  ]);
+  if (!allowed.has(requestedName)) {
+    return null;
+  }
+  return path.join(EXAMPLES_DIR, requestedName);
+}
+
 function buildServerRunState(suite) {
   return {
     run_id: createRunId(suite.suite_id),
@@ -192,6 +206,25 @@ async function handleApi(request, response, url, port) {
       return;
     }
     sendText(response, 200, fs.readFileSync(state.last_result.summary_path, "utf8"));
+    return;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/example-suite") {
+    const name = url.searchParams.get("name");
+    const examplePath = getExampleSuitePath(name);
+    if (!examplePath || !fs.existsSync(examplePath)) {
+      sendJson(response, 404, {
+        ok: false,
+        errors: ["Example suite not found."]
+      });
+      return;
+    }
+
+    sendJson(response, 200, {
+      ok: true,
+      name: path.basename(examplePath),
+      suite_text: fs.readFileSync(examplePath, "utf8")
+    });
     return;
   }
 

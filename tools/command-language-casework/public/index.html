@@ -12,60 +12,140 @@
         <p class="eyebrow">Orion TTD Local Tooling</p>
         <h1>Command Language Casework Runner</h1>
         <p class="warning">
-          Run only in a dedicated ChatGPT test chat. This tool will send scripted messages after Billy clicks Run.
-          Do not use in an important live chat.
+          Run only in a disposable ChatGPT test chat. The supported path is the self-contained runner and the
+          downloaded JSON result from the ChatGPT tab.
         </p>
       </header>
 
-      <section class="card">
-        <div class="toolbar">
-          <button id="validate-button" type="button">Validate</button>
-          <button id="copy-self-contained-button" type="button">Copy Self-Contained Runner</button>
-          <button id="save-draft-button" type="button">Save Draft Suite</button>
-          <button id="copy-status-log-button" type="button">Copy Status Log</button>
-          <button id="run-button" type="button">Queue Legacy Server Run</button>
-          <button id="stop-button" type="button">Stop Legacy Server Run</button>
-          <button id="open-results-button" type="button">Open Results Folder (Server results only)</button>
-          <button id="copy-summary-button" type="button">Copy Latest Result Summary (Server results only)</button>
-          <button id="copy-loader-button" type="button">Copy Runner Loader (Legacy / likely blocked by ChatGPT CSP)</button>
+      <section class="state-strip card">
+        <div class="state-pill">
+          <span class="state-label">Server</span>
+          <strong id="server-state">Starting…</strong>
         </div>
-        <label class="block-label" for="suite-input">Paste suite JSON</label>
-        <textarea id="suite-input" spellcheck="false"></textarea>
+        <div class="state-pill">
+          <span class="state-label">Current suite</span>
+          <strong id="suite-state">None</strong>
+        </div>
+        <div class="state-pill">
+          <span class="state-label">Cases</span>
+          <strong id="case-count-state">Unknown</strong>
+        </div>
+        <div class="state-pill">
+          <span class="state-label">Runner</span>
+          <strong id="runner-state">Not copied</strong>
+        </div>
+        <div class="state-pill">
+          <span class="state-label">Result</span>
+          <strong id="result-state">No server result</strong>
+        </div>
       </section>
 
-      <section class="grid">
-        <article class="card">
-          <h2>Runner Setup</h2>
-          <ol class="steps">
-            <li>Validate suite.</li>
-            <li>Open a disposable ChatGPT test chat.</li>
-            <li>Open the browser console on that page.</li>
-            <li>Use <strong>Copy Self-Contained Runner</strong>, paste it into the console, and press Enter.</li>
-            <li>Use the page overlay Run button. Nothing sends until that visible Run click.</li>
-            <li>Use the downloaded JSON result file as the primary output.</li>
-          </ol>
-          <p class="warning">The self-contained payload is the supported path. The legacy loader is kept only as a fallback reference and may be blocked by ChatGPT CSP.</p>
-          <label class="block-label" for="loader-output">Runner loader snippet</label>
-          <textarea id="loader-output" readonly spellcheck="false"></textarea>
+      <section class="lane">
+        <article class="step-card card">
+          <div class="step-meta">Step 1</div>
+          <h2>Open Test Chat</h2>
+          <p class="step-copy">
+            Start with a disposable ChatGPT chat and open DevTools there. Nothing sends until the overlay Run button is clicked.
+          </p>
+          <div class="step-actions">
+            <button id="open-test-chat-button" type="button" class="primary">Open Disposable ChatGPT</button>
+            <button id="copy-console-steps-button" type="button" class="secondary">Copy Console Setup Note</button>
+          </div>
+          <p class="helper">Chrome DevTools shortcut: <code>Option + Command + I</code></p>
         </article>
 
-        <article class="card">
-          <h2>Current Case</h2>
-          <pre id="current-case-panel">No active case.</pre>
+        <article class="step-card card">
+          <div class="step-meta">Step 2</div>
+          <h2>Paste Or Load Suite</h2>
+          <p class="step-copy">
+            The self-contained runner is built from the current suite JSON, so load or paste the suite here before copying the runner payload.
+          </p>
+          <div class="step-actions">
+            <button id="load-example-button" type="button" class="secondary">Load Baseline Example</button>
+            <button id="validate-button" type="button" class="primary">Validate Suite</button>
+            <button id="save-draft-button" type="button" class="secondary">Save Draft</button>
+          </div>
+          <div id="validation-summary" class="inline-status muted">No suite validated yet.</div>
+          <label class="block-label" for="suite-input">Suite JSON</label>
+          <textarea id="suite-input" spellcheck="false" placeholder="Paste or load a casework suite JSON file."></textarea>
         </article>
 
-        <article class="card">
-          <h2>Result Links</h2>
-          <div id="result-links-panel">No completed run yet.</div>
+        <article class="step-card card">
+          <div class="step-meta">Step 3</div>
+          <h2>Copy Runner For Current Suite</h2>
+          <p class="step-copy">
+            This copies the self-contained runner payload for the suite currently in Step 2. Paste it into the ChatGPT console.
+          </p>
+          <div class="step-actions">
+            <button id="copy-self-contained-button" type="button" class="primary">Copy Self-Contained Runner</button>
+          </div>
+          <p class="helper">
+            The payload embeds the current suite. If you change the suite JSON, validate and copy the runner again.
+          </p>
+        </article>
+
+        <article class="step-card card">
+          <div class="step-meta">Step 4</div>
+          <h2>Run In ChatGPT Overlay</h2>
+          <p class="step-copy">
+            Return to the ChatGPT tab, paste the runner into DevTools, and click Run in the black overlay there.
+          </p>
+          <div id="overlay-status" class="inline-status">Waiting for runner copy.</div>
+          <div class="instruction-box">
+            The overlay is the only place that actually starts sending scripted messages.
+          </div>
+        </article>
+
+        <article class="step-card card">
+          <div class="step-meta">Step 5</div>
+          <h2>Results</h2>
+          <p class="step-copy">
+            Self-contained runs download result JSON from the ChatGPT tab. Server result buttons below apply only to the legacy server-run path.
+          </p>
+          <div class="step-actions">
+            <button id="copy-result-instructions-button" type="button" class="secondary">Copy Result Instructions</button>
+            <button id="open-results-button" type="button" class="secondary">Reveal Latest Server Result</button>
+            <button id="copy-summary-button" type="button" class="secondary">Copy Latest Server Summary</button>
+          </div>
+          <div id="result-links-panel" class="result-panel">No server-side result available.</div>
         </article>
       </section>
 
-      <section class="card">
-        <h2>Status Log</h2>
-        <pre id="status-log-panel">Server starting…</pre>
-      </section>
+      <details class="advanced card">
+        <summary>Advanced / Legacy / Diagnostics</summary>
+        <p class="advanced-note">
+          These controls are for the old localhost/server-run path, server-only artifacts, and debugging. They are not the recommended flow.
+        </p>
+
+        <div class="advanced-grid">
+          <section>
+            <h3>Legacy Server-Run Path</h3>
+            <div class="step-actions">
+              <button id="run-button" type="button" class="secondary">Queue Legacy Server Run</button>
+              <button id="stop-button" type="button" class="danger">Stop Legacy Server Run</button>
+              <button id="copy-loader-button" type="button" class="secondary">Copy Legacy Loader</button>
+            </div>
+            <label class="block-label" for="loader-output">Legacy loader snippet</label>
+            <textarea id="loader-output" readonly spellcheck="false"></textarea>
+          </section>
+
+          <section>
+            <h3>Diagnostics</h3>
+            <div class="step-actions">
+              <button id="copy-status-log-button" type="button" class="secondary">Copy Status Log</button>
+            </div>
+            <label class="block-label" for="current-case-panel">Current case / runner state</label>
+            <pre id="current-case-panel">No active case.</pre>
+          </section>
+        </div>
+
+        <section class="status-panel">
+          <h3>Status Log</h3>
+          <pre id="status-log-panel">Server starting…</pre>
+        </section>
+      </details>
     </main>
 
     <script src="/casework-ui.js" type="module"></script>
   </body>
-  </html>
+</html>

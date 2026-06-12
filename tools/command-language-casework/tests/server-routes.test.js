@@ -170,6 +170,34 @@ test("self-contained payload endpoint returns inline suite data without bootstra
   }
 });
 
+test("example suite endpoint returns the baseline suite text", async () => {
+  const serverModule = await loadServerModule();
+  const started = await serverModule.startServer({
+    host: "127.0.0.1",
+    port: 0
+  });
+
+  try {
+    const response = await requestText(`${started.guiUrl}/api/example-suite?name=desk-reset-baseline-suite.json`);
+    assert.equal(response.statusCode, 200);
+    assert.match(response.headers["content-type"], /application\/json/);
+    const payload = JSON.parse(response.body);
+    assert.equal(payload.ok, true);
+    assert.equal(payload.name, "desk-reset-baseline-suite.json");
+    assert.match(payload.suite_text, /"suite_id":/);
+  } finally {
+    await new Promise((resolve, reject) => {
+      started.server.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      });
+    });
+  }
+});
+
 test("occupied port handling rejects cleanly with EADDRINUSE", async () => {
   const serverModule = await loadServerModule();
   const occupiedServer = http.createServer((_request, response) => {

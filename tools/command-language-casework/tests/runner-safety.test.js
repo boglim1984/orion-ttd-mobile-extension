@@ -31,6 +31,8 @@ test("runner source supports self-contained payload without auto-run and with do
   assert.match(runnerSource, /Nothing will send until you click Run/);
   assert.match(runnerSource, /overlay\.runButton\.addEventListener\("click", async \(\) =>/);
   assert.match(runnerSource, /triggerDownload/);
+  assert.match(runnerSource, /navigator\?\.clipboard\?\.writeText/);
+  assert.match(runnerSource, /Paste the result back into ChatGPT\./);
   assert.match(runnerSource, /Local result upload was blocked by ChatGPT CSP/);
 });
 

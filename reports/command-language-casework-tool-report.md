@@ -54,6 +54,13 @@ The server, GUI, suite validator, heuristic classifier, result writer, and conso
 - legacy server-run controls, loader snippet, and raw diagnostics moved behind `Advanced / Legacy / Diagnostics`
 - the GUI now exposes an example-suite loader and a launcher script for opening the GUI plus a disposable ChatGPT tab
 
+## Handoff Tightening Update
+
+- the main lane no longer shows the long console-setup helper button or draft-save control
+- the hero copy is now a single compact run sentence instead of a longer warning paragraph
+- overlay completion now tries to copy a usable result payload to clipboard and tells Billy to paste the result back into ChatGPT
+- downloaded result JSON still remains the backup artifact when clipboard write is blocked
+
 ## First Live Self-Contained Run Finding
 
 - the self-contained payload architecture worked: inline install, overlay display, and downloaded results all succeeded on the live ChatGPT page

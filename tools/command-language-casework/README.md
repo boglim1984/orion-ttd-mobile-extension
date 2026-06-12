@@ -42,7 +42,7 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 3. Use the GUI step lane to load/paste a suite and validate it.
 4. Copy the self-contained runner for the current suite.
 5. Paste it into the ChatGPT page console once per page load, then use the overlay `Run` button.
-6. Use the downloaded `orion-casework-result-*.json` file as the primary result artifact.
+6. Use the copied result text as the main handoff if the browser allows clipboard access. Use the downloaded `orion-casework-result-*.json` file as backup.
 
 ## Example Suites
 
@@ -73,6 +73,7 @@ Each run includes:
 - The legacy loader and server-run buttons remain available as secondary tooling only.
 - Use this only in dedicated test chats.
 - The GUI now hides legacy/server-run controls under `Advanced / Legacy / Diagnostics`.
+- Draft/save and setup-note controls are also secondary and live in `Advanced / Legacy / Diagnostics`.
 - The self-contained runner embeds the current suite JSON, so copy it after validating the suite you intend to run.
 
 ## First Live Self-Contained Run Finding

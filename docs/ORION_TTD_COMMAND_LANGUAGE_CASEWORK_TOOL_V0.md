@@ -147,7 +147,7 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 - primary path: open disposable ChatGPT test chat, validate suite, then `Copy Self-Contained Runner`
 - paste the payload into a disposable ChatGPT test-chat console
 - nothing sends until Billy clicks the visible overlay `Run` button
-- downloaded JSON results are the primary output path
+- clipboard handoff is preferred when the browser allows it; downloaded JSON remains the backup path
 - legacy loader / server-run controls remain secondary and may be blocked by ChatGPT CSP
 - the default GUI now presents this as a step lane and hides legacy/server controls in `Advanced / Legacy / Diagnostics`
 
@@ -159,7 +159,7 @@ If Finder reveal fails, the GUI still shows the output paths.
 
 ## How To Drop Results Back Into ChatGPT
 
-Use the result folder as the next skill input.
+Use the copied result text as the first handoff path when available, or use the downloaded JSON file.
 
 Recommended minimum:
 

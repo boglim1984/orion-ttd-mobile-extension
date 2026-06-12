@@ -11,10 +11,7 @@
       <header class="hero">
         <p class="eyebrow">Orion TTD Local Tooling</p>
         <h1>Command Language Casework Runner</h1>
-        <p class="warning">
-          Run only in a disposable ChatGPT test chat. The supported path is the self-contained runner and the
-          downloaded JSON result from the ChatGPT tab.
-        </p>
+        <p class="warning">Load example → Validate → Copy Runner → paste in ChatGPT console → click Run → paste result back here.</p>
       </header>
 
       <section class="state-strip card">
@@ -45,13 +42,11 @@
           <div class="step-meta">Step 1</div>
           <h2>Open Test Chat</h2>
           <p class="step-copy">
-            Start with a disposable ChatGPT chat and open DevTools there. Nothing sends until the overlay Run button is clicked.
+            Open a disposable ChatGPT tab, open DevTools with Option + Command + I, then paste the runner after Step 3.
           </p>
           <div class="step-actions">
             <button id="open-test-chat-button" type="button" class="primary">Open Disposable ChatGPT</button>
-            <button id="copy-console-steps-button" type="button" class="secondary">Copy Console Setup Note</button>
           </div>
-          <p class="helper">Chrome DevTools shortcut: <code>Option + Command + I</code></p>
         </article>
 
         <article class="step-card card">
@@ -63,7 +58,6 @@
           <div class="step-actions">
             <button id="load-example-button" type="button" class="secondary">Load Baseline Example</button>
             <button id="validate-button" type="button" class="primary">Validate Suite</button>
-            <button id="save-draft-button" type="button" class="secondary">Save Draft</button>
           </div>
           <div id="validation-summary" class="inline-status muted">No suite validated yet.</div>
           <label class="block-label" for="suite-input">Suite JSON</label>
@@ -132,6 +126,8 @@
           <section>
             <h3>Diagnostics</h3>
             <div class="step-actions">
+              <button id="copy-console-steps-button" type="button" class="secondary">Copy Setup Note</button>
+              <button id="save-draft-button" type="button" class="secondary">Save Draft</button>
               <button id="copy-status-log-button" type="button" class="secondary">Copy Status Log</button>
             </div>
             <label class="block-label" for="current-case-panel">Current case / runner state</label>

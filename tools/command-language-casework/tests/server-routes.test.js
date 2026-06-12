@@ -52,6 +52,8 @@ test("root route, index route, and api/state are served on the selected port", a
     assert.equal(rootResponse.statusCode, 200);
     assert.match(rootResponse.headers["content-type"], /text\/html/);
     assert.match(rootResponse.body, /Command Language Casework Runner/);
+    assert.match(rootResponse.body, /Load example → Validate → Copy Runner → paste in ChatGPT console → click Run → paste result back here\./);
+    assert.doesNotMatch(rootResponse.body, /Copy Console Setup Note/);
 
     const indexResponse = await requestText(`${started.guiUrl}/index.html`);
     assert.equal(indexResponse.statusCode, 200);

@@ -1089,6 +1089,63 @@
     return lines.join("\n");
   }
 
+  function buildClipboardResultText(runResult, filename) {
+    const compact = {
+      suite_id: runResult.suite_id,
+      run_id: runResult.run_id,
+      status: runResult.status,
+      cases: (runResult.cases || []).map((caseResult) => ({
+        case_id: caseResult.case_id,
+        case_status: caseResult.case_status,
+        heuristic_classification: caseResult.heuristic_classification,
+        tool_failure_label: caseResult.tool_failure_label || null,
+        visible_turn_text: caseResult.visible_turn_text || "",
+        dom_turn_trace_entries: Array.isArray(caseResult.dom_turn_trace) ? caseResult.dom_turn_trace.length : 0
+      }))
+    };
+    const compactJson = JSON.stringify(compact, null, 2);
+    if (compactJson.length <= 12000) {
+      return compactJson;
+    }
+
+    const lines = [
+      "# Command Language Casework Result",
+      "",
+      `- suite_id: ${runResult.suite_id}`,
+      `- run_id: ${runResult.run_id}`,
+      `- status: ${runResult.status}`,
+      `- downloaded_json: ${filename}`,
+      ""
+    ];
+
+    for (const caseResult of runResult.cases || []) {
+      lines.push(`## ${caseResult.case_id}`);
+      lines.push(`- case_status: ${caseResult.case_status}`);
+      lines.push(`- heuristic_classification: ${caseResult.heuristic_classification}`);
+      lines.push(`- tool_failure_label: ${caseResult.tool_failure_label || "none"}`);
+      lines.push(`- dom_turn_trace: ${Array.isArray(caseResult.dom_turn_trace) ? "present" : "absent"}`);
+      lines.push("");
+    }
+
+    return lines.join("\n");
+  }
+
+  async function bestEffortCopyRunResult(runResult, filename) {
+    const text = buildClipboardResultText(runResult, filename);
+    try {
+      await root.navigator?.clipboard?.writeText?.(text);
+      return {
+        ok: true,
+        message: "Test done.\nResult copied to clipboard if allowed.\nPaste the result back into ChatGPT."
+      };
+    } catch (_error) {
+      return {
+        ok: false,
+        message: "Test done.\nResult downloaded.\nClipboard copy was blocked, so drag the result JSON back into ChatGPT."
+      };
+    }
+  }
+
   function triggerDownload(filename, text, mimeType, documentRef) {
     const blob = new root.Blob([text], {
       type: mimeType
@@ -1280,18 +1337,20 @@
     });
 
     const resultJson = JSON.stringify(runResult, null, 2);
-    triggerDownload(`orion-casework-result-${runId}.json`, resultJson, "application/json", documentRef);
+    const resultFilename = `orion-casework-result-${runId}.json`;
+    triggerDownload(resultFilename, resultJson, "application/json", documentRef);
 
     const uploadOutcome = await bestEffortUploadResult(serverBaseUrl, suite, runResult);
+    const clipboardOutcome = await bestEffortCopyRunResult(runResult, resultFilename);
     const latestCaseDiagnostics = runResult.cases[runResult.cases.length - 1]?.diagnostics || null;
     if (latestCaseDiagnostics) {
       overlay.setDiagnostics(describeDiagnostics(latestCaseDiagnostics));
     }
     if (!uploadOutcome.ok) {
       runResult.warnings.push(uploadOutcome.message);
-      overlay.setStatus(`Run complete.\n${uploadOutcome.message}`);
+      overlay.setStatus(`${clipboardOutcome.message}\n${uploadOutcome.message}`);
     } else {
-      overlay.setStatus("Run complete. Result uploaded locally and downloaded.");
+      overlay.setStatus(clipboardOutcome.message);
     }
 
     overlay.setRunDisabled(false);

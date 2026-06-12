@@ -225,11 +225,11 @@ copyConsoleStepsButton.addEventListener("click", () =>
         "Command Language Casework setup",
         "1. Open a disposable ChatGPT test chat.",
         "2. Open DevTools with Option + Command + I.",
-        "3. Return to the GUI and copy the self-contained runner for the current suite.",
+        "3. Validate the suite and copy the self-contained runner.",
         "4. Paste the runner into the ChatGPT console.",
         "5. Click Run in the black overlay on the ChatGPT page."
       ].join("\n"),
-      "Copied console setup note."
+      "Copied setup note."
     );
   })
 );

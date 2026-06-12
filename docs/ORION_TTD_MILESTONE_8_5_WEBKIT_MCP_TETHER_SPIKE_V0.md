@@ -27,7 +27,11 @@ Prepare a small but real WebKit/MCP tether spike so Codex, and AG if practical, 
     `brew install ios-webkit-debug-proxy`
 - `iwdp-mcp`
   - first MCP candidate because it explicitly targets `ios-webkit-debug-proxy` and WebKit Inspector Protocol
-  - local npm registry check on this Mac returned `404`, so package name or distribution path must be verified from the repo before use
+  - verified from upstream README as a Go-based binary install, not an npm package
+  - documented install command:
+    `go install github.com/nnemirovsky/iwdp-mcp/cmd/...@latest`
+  - companion CLI:
+    `iwdp-cli`
 - `safari-web-inspector-bridge`
   - second candidate / audit note only for this spike
   - treat as a fallback or comparative architecture reference until maturity and install path are verified
@@ -49,20 +53,29 @@ Expected local checks:
 
 Current local state on Billy's Mac at doc time:
 
-- `ios_webkit_debug_proxy` not found in `PATH`
-- `brew list ios-webkit-debug-proxy` did not find an installed keg
+- installed via Homebrew at `/opt/homebrew/bin/ios_webkit_debug_proxy`
+- `ios_webkit_debug_proxy --help` returns normally
+- probe endpoints `9221/json` and `9222/json` respond when the proxy is running
 
 ## iwdp-mcp Setup
 
-Preferred posture:
+Verified posture:
 
-- use `npx` or repo-based launch rather than global install
-- verify the actual package/repo launch command before wiring it into a permanent config
+- install from Go using:
+  `go install github.com/nnemirovsky/iwdp-mcp/cmd/...@latest`
+- launch binaries from `$(go env GOPATH)/bin` unless that directory is already on `PATH`
+- MCP server command is:
+  `iwdp-mcp`
+- CLI command is:
+  `iwdp-cli`
 
 Current local state on Billy's Mac at doc time:
 
-- `npm view iwdp-mcp version` returned `404`
-- treat the GitHub repo as the current source of truth until npm distribution is confirmed
+- upstream README confirms the Go install path
+- binaries were installed at:
+  `/Users/oflahertys/go/bin/iwdp-mcp`
+  `/Users/oflahertys/go/bin/iwdp-cli`
+- `$(go env GOPATH)/bin` is not on Billy's current `PATH`, so absolute paths or a later PATH fix are required
 
 ## safari-web-inspector-bridge Audit Notes
 
@@ -95,6 +108,14 @@ Goal:
 - same restricted-use envelope as Codex
 
 If AG config paths or launcher conventions are not known locally, keep the doc generic and verify later.
+
+Known config targets from upstream README:
+
+- Codex CLI:
+  `codex mcp add iwdp-mcp -- iwdp-mcp`
+  or `~/.codex/config.toml`
+- Antigravity:
+  `~/.gemini/antigravity/mcp_config.json`
 
 ## Allowed Tool Envelope
 
@@ -200,7 +221,7 @@ Composer prefix/length checks:
 - verify Orion is open to a live ChatGPT page
 - verify `ios_webkit_debug_proxy` is installed and running
 - if `9221/json` is empty, try `9222/json`
-- if MCP package lookup fails, use repo-based setup notes until distribution is clarified
+- if dataset eval hangs even though page discovery works, treat discovery as passed and isolate eval/wrapper work in a second tiny job rather than escalating to broad automation
 
 ## Next Expansion Ladder
 

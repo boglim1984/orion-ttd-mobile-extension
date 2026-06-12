@@ -76,6 +76,11 @@ Rules:
   `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`
   `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
   `fail-recover-map/README.md`
+- Before modifying scorer or fixture-runner behavior, also read:
+  `docs/ORION_TTD_SCORER_FIXTURE_RUNNER_V0.md`
+  `docs/ORION_TTD_REDUCER_V0.md`
+  `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
+  `fail-recover-map/README.md`
 - Before implementing command protocol, workflow tests, reducer/scorer logic, repair packets, recovery behavior, metrics, or skill-library design, also read:
   `docs/ORION_TTD_COMMAND_PROTOCOL_V0.md`
   `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`

@@ -142,9 +142,9 @@ Required fields:
 
 `submit_mode` defaults to `disabled`.
 
-## Allowed intents
+## Core user intents
 
-Initial canonical set for Milestone 5 fixtures:
+Initial canonical user-intent set for Milestone 5 fixtures:
 
 - `done`
 - `move_on`
@@ -152,8 +152,24 @@ Initial canonical set for Milestone 5 fixtures:
 - `stuck`
 - `pause`
 - `re_chunk`
-- `return_to_route`
+
+These are the core user-control intents the reducer should expect from direct check-in turns.
+
+## Recovery and system event classes
+
+These are reducer-recognized event classes, not part of the narrow core user-intent vocabulary:
+
 - `side_question`
+- `return_to_route`
+- `recovery_signal`
+- `terminal_commit`
+
+Interpretation rule:
+
+- `side_question` represents an interruption branch that should not directly mutate committed route progress;
+- `return_to_route` represents a recovery or restoration event that reanchors the prior route;
+- `recovery_signal` represents a signal surface, not committed state authority;
+- `terminal_commit` is the explicit legal route-completion event after final chunk conditions are already satisfied.
 
 The reducer may map synonyms to this set, but unsupported intents never commit directly.
 
@@ -192,14 +208,15 @@ Canonical rule:
 - `done` does not advance.
 - `move_on` or `next` advances exactly one chunk.
 - after `move_on`, the assistant must name the new active chunk.
+- route completion remains separate and requires a later legal `terminal_commit` or equivalent explicit terminal reducer effect.
 
 Example:
 
 - current chunk: `clear trash`
 - Billy says `done`
-- legal result: `clear trash` becomes complete, `active_chunk` remains `clear trash` until a later `move_on`
+- legal result: `clear trash` becomes complete, `active_chunk_id` remains `chunk_01_clear_trash` until a later `move_on`
 - Billy says `move_on`
-- legal result: `active_chunk` becomes `collect dishes`, and the assistant names `collect dishes`
+- legal result: `active_chunk_id` becomes `chunk_02_collect_dishes`, and the assistant names `collect dishes`
 
 ## Repair policy
 

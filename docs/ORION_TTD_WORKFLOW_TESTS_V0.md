@@ -24,6 +24,7 @@ Each workflow fixture should contain:
 - `source_context`
 - `chunks`
 - `allowed_intents`
+- `reducer_event_types` when recovery/system events are modeled separately from core user intents
 - `state_template`
 - `trial_events`
 - `assertions`
@@ -42,6 +43,7 @@ Each trial event should contain:
 - `expected_interpreted_intent`
 - `expected_reducer_effect`
 - `expected_active_chunk_id`
+- optional `expected_route_status`
 - `notes`
 
 Valid event types include:
@@ -57,6 +59,12 @@ Valid event types include:
 - `return_to_route`
 - `recovery_signal`
 - `repair_packet`
+- `terminal_commit`
+
+Classification rule:
+
+- core user intents such as `done`, `move_on`, `continue`, `stuck`, `pause`, and `re_chunk` belong in `allowed_intents`
+- interruption, restoration, and explicit terminalization events such as `side_question`, `return_to_route`, `recovery_signal`, and `terminal_commit` should be modeled as reducer-handled recovery/system event classes
 
 ## Invariant assertions
 
@@ -109,7 +117,7 @@ The system claimed completion, progress, or route mutation not supported by user
 
 ### `FAIL_LOST_ROUTE`
 
-The response answered locally but did not restore `route_id` and `active_chunk`.
+The response answered locally but did not restore `route_id` and `active_chunk_id`.
 
 ### `FAIL_TOO_MANY_QUESTIONS`
 

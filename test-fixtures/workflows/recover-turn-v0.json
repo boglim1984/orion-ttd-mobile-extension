@@ -10,8 +10,11 @@
     }
   ],
   "allowed_intents": [
-    "continue",
-    "repair",
+    "continue"
+  ],
+  "reducer_event_types": [
+    "recovery_signal",
+    "repair_packet",
     "return_to_route",
     "hold"
   ],
@@ -19,13 +22,18 @@
     "route_id": "desk-reset-v0",
     "session_id": "session_recover_turn_v0",
     "active_goal": "reset the desk enough to choose the next work item",
-    "active_chunk": "chunk_02_collect_dishes",
+    "route_status": "hold",
+    "active_chunk_id": "chunk_02_collect_dishes",
+    "active_chunk_label": "collect dishes",
     "chunk_index": 1,
     "phase": "hold",
     "last_committed_action": "hold_for_recovery",
     "allowed_intents": [
-      "continue",
-      "repair",
+      "continue"
+    ],
+    "reducer_event_types": [
+      "recovery_signal",
+      "repair_packet",
       "return_to_route",
       "hold"
     ],

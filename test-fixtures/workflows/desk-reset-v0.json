@@ -47,7 +47,9 @@
     "route_id": "desk-reset-v0",
     "session_id": "session_desk_reset_v0",
     "active_goal": "reset the desk enough to choose the next work item",
-    "active_chunk": "chunk_01_clear_trash",
+    "route_status": "active",
+    "active_chunk_id": "chunk_01_clear_trash",
+    "active_chunk_label": "clear trash",
     "chunk_index": 0,
     "phase": "active",
     "last_committed_action": "start",
@@ -196,7 +198,18 @@
       "utterance": "done",
       "expected_interpreted_intent": "done",
       "expected_reducer_effect": "complete_chunk_no_route_complete_until_legal_terminal_commit",
-      "expected_active_chunk_id": "chunk_05_choose_next_work_item"
+      "expected_active_chunk_id": "chunk_05_choose_next_work_item",
+      "expected_route_status": "active"
+    },
+    {
+      "event_id": "e16",
+      "type": "terminal_commit",
+      "actor": "system",
+      "signal": "final chunk already complete and legal terminal conditions met",
+      "expected_interpreted_intent": "terminal_commit",
+      "expected_reducer_effect": "complete_route",
+      "expected_active_chunk_id": "chunk_05_choose_next_work_item",
+      "expected_route_status": "complete"
     }
   ],
   "assertions": [
@@ -206,7 +219,7 @@
     "continue keeps active chunk",
     "side_question returns to route",
     "assistant does not invent hidden state",
-    "final goal only after legal transitions"
+    "final route completion requires explicit terminal commit after final chunk completion"
   ],
   "failure_rows_covered": [
     "F019",
@@ -242,5 +255,10 @@
   "smartness_budget": {
     "max_runtime_level": 3,
     "compile_level": 4
+  },
+  "terminal_policy": {
+    "final_done_does_not_complete_route": true,
+    "route_completion_event": "terminal_commit",
+    "route_completion_effect": "complete_route"
   }
 }

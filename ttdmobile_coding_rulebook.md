@@ -30,14 +30,22 @@ The standard update loop requires these components:
 - Safari Web Inspector build-stamp verification
 
 ## Build stamp rule
-Every content-script build must expose a visible/checkable build stamp so updates can be instantly verified in the Safari Web Inspector console. For probe builds, the existing pattern was:
+Every content-script build must expose a visible/checkable build stamp so updates can be instantly verified from Safari Web Inspector. The preferred verification contract is a page-visible DOM stamp such as dataset attributes on `document.documentElement`, because Orion content scripts may run in an isolated or user-script world where page-console globals are not the safest primary signal.
+
+For probe builds, the older pattern was:
 ```javascript
 window.__ORION_TTD_UPDATE_PROBE_BUILD__
 window.__ORION_TTD_UPDATE_PROBE_FLAVOR__
 window.__ORION_TTD_UPDATE_PROBE_INFO__
 window.__ORION_TTD_UPDATE_PROBE_SMOKE__()
 ```
-For the actual TTD mobile extension, pick and document the final global names (e.g. `window.__ORION_TTD_BUILD__`) before first implementation.
+
+Rule:
+
+- prefer a DOM-visible dataset stamp or other agreed page-visible marker as the primary verification surface;
+- console logs may help, but they are secondary to page-visible verification;
+- do not rely on page globals as the preferred verification contract;
+- if globals exist for debugging, treat them as supplementary, not canonical.
 
 ## Install/update rules
 - AG/Codex must not assume iCloud Drive direct install works; iCloud direct install failed.

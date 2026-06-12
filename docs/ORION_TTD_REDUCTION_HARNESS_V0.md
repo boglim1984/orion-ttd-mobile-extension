@@ -82,6 +82,22 @@ Signal classes:
 - `manual_test_event`
 - `workflow_fixture_event`
 
+Core user intents stay narrow:
+
+- `done`
+- `move_on`
+- `continue`
+- `stuck`
+- `pause`
+- `re_chunk`
+
+Reducer-recognized recovery or system events may include:
+
+- `side_question`
+- `return_to_route`
+- `recovery_signal`
+- `terminal_commit`
+
 Surface examples:
 
 - typed user reply
@@ -188,9 +204,10 @@ Core invariants:
 - `move_on` advances exactly one chunk
 - `stuck` does not advance
 - `continue` keeps the active chunk
-- side questions restore the route
+- side questions create a temporary recovery branch without mutating route progress
+- `return_to_route` restores the prior route/chunk as a reducer-handled recovery event
 - no hidden state is invented
-- final route completion occurs only after legal transitions
+- final route completion occurs only after legal transitions and an explicit terminal commit boundary
 - recovery signals do not directly mutate committed state
 
 ## Smartness budget levels

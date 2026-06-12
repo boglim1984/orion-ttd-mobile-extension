@@ -11,23 +11,29 @@
   ],
   "allowed_intents": [
     "continue",
-    "side_question",
-    "return_to_route",
     "done"
+  ],
+  "reducer_event_types": [
+    "side_question",
+    "return_to_route"
   ],
   "state_template": {
     "route_id": "desk-reset-v0",
     "session_id": "session_side_question_return_v0",
     "active_goal": "reset the desk enough to choose the next work item",
-    "active_chunk": "chunk_03_stack_papers",
+    "route_status": "active",
+    "active_chunk_id": "chunk_03_stack_papers",
+    "active_chunk_label": "stack papers",
     "chunk_index": 2,
     "phase": "active",
     "last_committed_action": "move_on",
     "allowed_intents": [
       "continue",
-      "side_question",
-      "return_to_route",
       "done"
+    ],
+    "reducer_event_types": [
+      "side_question",
+      "return_to_route"
     ],
     "cadence_mode": "fast_physical",
     "confidence_bias": "one_question_only"

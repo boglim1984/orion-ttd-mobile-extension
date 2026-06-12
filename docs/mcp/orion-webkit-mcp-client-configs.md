@@ -101,6 +101,14 @@ Not allowed:
 ```bash
 /opt/homebrew/bin/ios_webkit_debug_proxy --no-frontend
 node scripts/orion-webkit-mcp-tether-probe.mjs
+/Users/oflahertys/go/bin/iwdp-cli eval '1 + 1' ws://localhost:9222/devtools/page/3
 /Users/oflahertys/go/bin/iwdp-cli devices
 /Users/oflahertys/go/bin/iwdp-cli pages
 ```
+
+## Current Eval Boundary
+
+- target selection syntax for `iwdp-cli eval` is:
+  `iwdp-cli eval '<expr>' <ws-url>`
+- the current Orion ChatGPT target accepts the WebSocket connection, but `Runtime.enable` and `Page.enable` are timing out without result payloads
+- keep MCP and CLI usage scoped to tiny eval isolation until one expression returns

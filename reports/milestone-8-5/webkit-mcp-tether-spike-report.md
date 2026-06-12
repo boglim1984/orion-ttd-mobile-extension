@@ -90,6 +90,47 @@ node scripts/orion-webkit-mcp-tether-probe.mjs
 - next action:
   isolate the minimal eval/wrapper step in a second tiny job, starting from the known-good target page and websocket URL without broadening scope
 
+## Milestone 8.5B — Runtime.evaluate Isolation
+
+- date/time:
+  `2026-06-12 02:14 PM EDT`
+- proxy command used:
+  `ios_webkit_debug_proxy --no-frontend > /tmp/orion-iwdp-8_5b-short.log 2>&1 &`
+- target page title/url/websocket:
+  `Orion TTD Insert Test`
+  `https://chatgpt.com/c/6a2c4184-f104-83ea-8205-d9ad171904f7`
+  `ws://localhost:9222/devtools/page/3`
+- iwdp-cli devices/pages summary:
+  device listing still found `iPhone (6)` on `localhost:9222`
+  pages listing still found the same ChatGPT target at page `3`
+- diagnostic script path:
+  `scripts/orion-webkit-runtime-eval-probe.mjs`
+- commands run:
+  `node scripts/orion-webkit-runtime-eval-probe.mjs --ws ws://localhost:9222/devtools/page/3 --timeout-ms 2000 --expression '1 + 1'`
+  `node scripts/orion-webkit-runtime-eval-probe.mjs --ws ws://localhost:9222/devtools/page/3 --timeout-ms 2000 --expression 'document.title'`
+  `node scripts/orion-webkit-runtime-eval-probe.mjs --ws ws://localhost:9222/devtools/page/3 --timeout-ms 2000 --expression 'document.readyState'`
+  `node scripts/orion-webkit-runtime-eval-probe.mjs --ws ws://localhost:9222/devtools/page/3 --timeout-ms 2000 --with-page-enable --expression '1 + 1'`
+  `node scripts/orion-webkit-runtime-eval-probe.mjs --ws ws://localhost:9222/devtools/page/3 --timeout-ms 2000 --with-page-enable --expression 'document.title'`
+- whether Runtime.enable responded:
+  no, timed out on every probe run
+- whether Page.enable responded:
+  no, also timed out when explicitly added
+- expression results:
+  `1 + 1` timed out
+  `document.title` timed out
+  `document.readyState` timed out
+  no event messages were observed from the target socket during these runs
+- whether iwdp-cli eval worked:
+  no quick success observed; comparison attempts remained hung beyond the intended short check window
+- eval path result:
+  `BLOCKED`
+- likely cause if inferable:
+  target page selection appears correct and the socket opens, so the current blocker is more likely WebKit protocol responsiveness on this Orion target than JavaScript expression choice
+- proxy stopped or left running:
+  stopped
+- next action:
+  protocol-level debugging of WebKit target responsiveness or alternate target-session handling, not browser automation
+
 ## Runtime Change Confirmation
 
 No runtime code changed in this milestone preparation job.

@@ -223,6 +223,27 @@ Composer prefix/length checks:
 - if `9221/json` is empty, try `9222/json`
 - if dataset eval hangs even though page discovery works, treat discovery as passed and isolate eval/wrapper work in a second tiny job rather than escalating to broad automation
 
+## Milestone 8.5B Runtime.evaluate Isolation
+
+Current protocol boundary:
+
+- page discovery passed
+- target websocket was identified
+- WebSocket connection opens successfully
+- `Runtime.enable` currently times out on the real Orion ChatGPT target
+- adding `Page.enable` first does not currently unblock the target
+- no insert dispatch should be attempted until a tiny eval returns
+
+Safe eval ladder for isolation:
+
+1. `1 + 1`
+2. `document.title`
+3. `document.readyState`
+4. `document.location.href`
+5. `document.documentElement.dataset.orionTtdBuild`
+6. `document.documentElement.dataset.orionTtdLoaded`
+7. `document.documentElement.dataset.orionTtdInsertOnlyReady`
+
 ## Next Expansion Ladder
 
 ### Phase 1

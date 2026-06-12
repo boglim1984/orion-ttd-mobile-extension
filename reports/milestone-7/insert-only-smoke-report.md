@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented locally as an insert-only command packet smoke for the Orion extension. Manual iPhone Orion validation remains pending.
+Implemented locally as an insert-only command packet smoke for the Orion extension. Phone-side update validation passed, but manual Web Inspector insertion validation remains pending.
 
 ## Files Added Or Changed
 
@@ -52,6 +52,16 @@ Implemented locally as an insert-only command packet smoke for the Orion extensi
   - result: packaged `dist/v0.1.2/orion-ttd-mobile-extension-chrome-v0.1.2.zip`
 - `node scripts/verify-ttd-mobile-extension.mjs`
   - result: verification passed for `v0.1.2`
+
+## Phone-Side Update Validation
+
+- Billy updated the Orion TTD Mobile Extension on iPhone away from the computer
+- Orion iOS update path: PASS
+- ChatGPT page use in Orion still worked after the update
+- a normal phone-side ChatGPT message still came through
+- this confirms update/install health only, not insert-only smoke success
+- the actual Milestone 7 insertion trigger remains pending:
+  `document.dispatchEvent(new CustomEvent("orion-ttd-run-insert-only-smoke"))`
 
 ## Manual Orion iPhone Test
 

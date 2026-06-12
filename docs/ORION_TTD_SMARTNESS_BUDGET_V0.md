@@ -138,3 +138,4 @@ For the current Orion TTD repo:
 - no Level 5 runtime autonomy is introduced
 - pre-collapse steering vocabulary may inform higher-layer cadence/confidence wording, but reducer authority remains deterministic
 - `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md` defines why ambiguity can use legal language while committed-state authority stays with the reducer
+- `llm-legal-deference/` defines when semantic interpretation may receive legal weight, and `FAIL_GRACEFULLY_V1` defines when the lawful answer is to preserve state and ask Billy one direct question

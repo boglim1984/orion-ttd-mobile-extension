@@ -27,3 +27,4 @@ The Fail/Recover Map v1 serves as the foundational artifact predicting and catal
   - failures by layer / source / severity / cadence mode / skill block.
 
 The legal synthesis layer that treats this map as case law now lives in `legal-framework/README.md`.
+See `llm-legal-deference/` for the complementary deference-law layer that maps when LLM semantic interpretation deserves legal weight before reducer commit.

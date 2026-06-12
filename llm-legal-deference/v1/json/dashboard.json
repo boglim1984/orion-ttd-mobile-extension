@@ -1,0 +1,66 @@
+[
+  {
+    "artifact": "LLM Legal Deference Map v1",
+    "role": "deference law / interpretive authority map",
+    "row_count": 1,
+    "answers": "When should LLM interpretation deserve legal weight before reducer commit?",
+    "authority_boundary": "LLM may win interpretation, never silent committed state.",
+    "primary_use": "Judge packets, semantic classifiers, safety holds, ambiguity handling"
+  },
+  {
+    "artifact": "LLM_Wins_Cases",
+    "role": "case matrix",
+    "row_count": 192,
+    "answers": "Which exact situations justify LLM deference?",
+    "authority_boundary": "Reducer validation still required.",
+    "primary_use": "Scenario generation and deference tests"
+  },
+  {
+    "artifact": "Legal_Standards",
+    "role": "standard bank",
+    "row_count": 25,
+    "answers": "What rule makes deference lawful?",
+    "authority_boundary": "Standards guide interpretation, not mutation.",
+    "primary_use": "Judge/script-Judge question design"
+  },
+  {
+    "artifact": "Boundary_Tests",
+    "role": "test seed bank",
+    "row_count": 72,
+    "answers": "How do we prove deference did not become sovereignty?",
+    "authority_boundary": "Tests must verify no illegal state mutation.",
+    "primary_use": "Reducer/scorer fixture expansion"
+  },
+  {
+    "artifact": "Skill_Blocks",
+    "role": "packet language library",
+    "row_count": 20,
+    "answers": "What should the skill say at this boundary?",
+    "authority_boundary": "Language can steer, but cannot commit state.",
+    "primary_use": "Milestone 7+ packet wording"
+  },
+  {
+    "artifact": "Simulations",
+    "role": "predictive scenario map",
+    "row_count": 96,
+    "answers": "What likely happens if LLM wins or loses?",
+    "authority_boundary": "Simulation rows are evidence seeds, not runtime truth.",
+    "primary_use": "LLM predictive simulation and review"
+  },
+  {
+    "artifact": "Sources",
+    "role": "context map",
+    "row_count": 8,
+    "answers": "What legal framework sources ground this artifact?",
+    "authority_boundary": "Sources guide agents but do not override tests.",
+    "primary_use": "Agent orientation"
+  },
+  {
+    "artifact": "Core thesis",
+    "role": "constitutional boundary",
+    "row_count": 1,
+    "answers": "Where may the LLM win?",
+    "authority_boundary": "The LLM may win interpretation, language, cadence, safety, planning, or conflict detection — but never silent committed state.",
+    "primary_use": "Legal framework taxonomy"
+  }
+]

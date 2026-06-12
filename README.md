@@ -30,7 +30,11 @@ This is the real TTD Mobile Extension shell.
 - `docs/ORION_TTD_MERMAID_PLANNING_RULE_V0.md`
 - `docs/ORION_TTD_SMARTNESS_BUDGET_V0.md`
 - `legal-framework/README.md`
+- `legal-framework/v1/ORION_TTD_FAIL_GRACEFULLY_HUMAN_WITNESS_ESCALATION_V1.md`
 - `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`
+- `llm-legal-deference/README.md`
+- `llm-legal-deference/v1/summaries/llm_legal_deference_map_v1_summary.md`
+- `llm-legal-deference/v1/summaries/legal_spreadsheet_comparative_analysis_v1.md`
 - `precollapse-steering-language/README.md`
 - `precollapse-steering-language/v1/summaries/precollapse_steering_language_v1_summary.md`
 - `test-fixtures/workflows/`

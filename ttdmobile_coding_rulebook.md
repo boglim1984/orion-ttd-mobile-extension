@@ -89,6 +89,13 @@ Rules:
   `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`
   `fail-recover-map/README.md`
   `precollapse-steering-language/README.md`
+- Before modifying Judge packets, semantic-intent classification, LLM-vs-log conflict handling, safety overrides, cadence/confidence language, legal deference rules, or ambiguous event handling, agents must read:
+  `legal-framework/README.md`
+  `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`
+  `legal-framework/v1/ORION_TTD_FAIL_GRACEFULLY_HUMAN_WITNESS_ESCALATION_V1.md`
+  `llm-legal-deference/README.md`
+  `llm-legal-deference/v1/summaries/llm_legal_deference_map_v1_summary.md`
+  `llm-legal-deference/v1/summaries/legal_spreadsheet_comparative_analysis_v1.md`
 - Before implementing command protocol, workflow tests, reducer/scorer logic, repair packets, recovery behavior, metrics, or skill-library design, also read:
   `docs/ORION_TTD_COMMAND_PROTOCOL_V0.md`
   `docs/ORION_TTD_REDUCTION_HARNESS_V0.md`
@@ -98,6 +105,9 @@ Rules:
 - Constitution v1 is the legal synthesis.
 - Fail/Recover Map v1 is case law.
 - Pre-Collapse Steering Language Matrix v1 is language law.
+- LLM Legal Deference Map v1 defines when LLM interpretation deserves legal weight.
+- It does not give the LLM commit authority.
+- Fail Gracefully is a legal recovery action, not a route reset.
 - Reducer/scorer remains committed-state and test authority.
 - Reducer/scorer implementation remains the executable authority.
 - Treat the XLSX as the human-editable source artifact.

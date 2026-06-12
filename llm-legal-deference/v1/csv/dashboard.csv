@@ -1,0 +1,9 @@
+artifact,role,row_count,answers,authority_boundary,primary_use
+LLM Legal Deference Map v1,deference law / interpretive authority map,1,When should LLM interpretation deserve legal weight before reducer commit?,"LLM may win interpretation, never silent committed state.","Judge packets, semantic classifiers, safety holds, ambiguity handling"
+LLM_Wins_Cases,case matrix,192,Which exact situations justify LLM deference?,Reducer validation still required.,Scenario generation and deference tests
+Legal_Standards,standard bank,25,What rule makes deference lawful?,"Standards guide interpretation, not mutation.",Judge/script-Judge question design
+Boundary_Tests,test seed bank,72,How do we prove deference did not become sovereignty?,Tests must verify no illegal state mutation.,Reducer/scorer fixture expansion
+Skill_Blocks,packet language library,20,What should the skill say at this boundary?,"Language can steer, but cannot commit state.",Milestone 7+ packet wording
+Simulations,predictive scenario map,96,What likely happens if LLM wins or loses?,"Simulation rows are evidence seeds, not runtime truth.",LLM predictive simulation and review
+Sources,context map,8,What legal framework sources ground this artifact?,Sources guide agents but do not override tests.,Agent orientation
+Core thesis,constitutional boundary,1,Where may the LLM win?,"The LLM may win interpretation, language, cadence, safety, planning, or conflict detection — but never silent committed state.",Legal framework taxonomy

@@ -15,6 +15,7 @@ Define the smallest protocol contract between:
 The protocol is deliberately narrow. The LLM may help interpret meaning, but it is not state authority.
 
 The legal framing for these moves lives in `legal-framework/README.md` and `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`.
+Interpretive-deference standards and fail-gracefully escalation now also live in `llm-legal-deference/README.md` and `legal-framework/v1/ORION_TTD_FAIL_GRACEFULLY_HUMAN_WITNESS_ESCALATION_V1.md`.
 
 ## Core principle
 

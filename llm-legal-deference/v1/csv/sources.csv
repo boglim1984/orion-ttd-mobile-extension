@@ -1,0 +1,9 @@
+source_id,source_name,role,relationship_to_deference_map,repo_or_project_path
+SRC-001,Constitution v1,authority law,"Defines committed state, evidence, claims, Judge, reducer/scorer authority",legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md
+SRC-002,Fail/Recover Map v1,case law,Names failure classes this map helps prevent or adjudicate,fail-recover-map/v1/
+SRC-003,Pre-Collapse Steering Language Matrix v1,language law,Provides upstream wording that shapes LLM behavior before collapse,precollapse-steering-language/v1/
+SRC-004,Reducer v0,executable authority,Validates and commits legal state only after interpretation,docs/ORION_TTD_REDUCER_V0.md
+SRC-005,Scorer/Fixture Runner v0,outcome judge,Measures PASS/PASS_WITH_REPAIR/FAIL after reducer result,docs/ORION_TTD_SCORER_FIXTURE_RUNNER_V0.md
+SRC-006,Smartness Budget v0,intelligence allocation,Says extra LLM judgment belongs only at boundaries needing it,docs/ORION_TTD_SMARTNESS_BUDGET_V0.md
+SRC-007,Route-Preserving Correction Harness,runtime principle,Amend current route instead of restarting when new evidence arrives,legal-framework/source-note
+SRC-008,Fail Gracefully / Human Witness Escalation,live witness rule,Ask Billy when the system cannot lawfully know,legal-framework/v1/ORION_TTD_FAIL_GRACEFULLY_HUMAN_WITNESS_ESCALATION_V1.md

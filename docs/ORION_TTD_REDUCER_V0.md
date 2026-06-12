@@ -164,6 +164,7 @@ It remains Orion-native:
 - assistant/proposal language never commits state directly
 
 See `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md` for the legal framing that keeps reducer authority above prose, signals, and extension observation.
+See `llm-legal-deference/v1/summaries/llm_legal_deference_map_v1_summary.md` for the narrower standards that may influence interpretation without moving commit authority out of the reducer.
 
 ## Non-goals
 

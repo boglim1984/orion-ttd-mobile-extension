@@ -47,6 +47,19 @@ It answers:
 
 - Before the model resolves this situation, what phrase, frame, cadence, or prior should bias it toward the legal outcome?
 
+### LLM Legal Deference Map v1
+
+Role:
+
+- deference law
+- interpretive authority map
+- LLM-wins case map
+- ambiguity standard bank
+
+It answers:
+
+- When should the LLM's semantic interpretation, safety judgment, or conflict detection receive legal weight before reducer commit?
+
 ## Article I -- Authority
 
 Committed reducer state is law.
@@ -55,6 +68,7 @@ Valid reducer audit records are legal history.
 The scorer names the outcome.
 The Judge may interpret ambiguity.
 The LLM may propose.
+The LLM may receive legal deference under defined standards, but it cannot commit state.
 The extension may observe and carry packets.
 No layer may silently become all layers.
 
@@ -106,6 +120,7 @@ When intent is unclear, HOLD.
 When logs are stale, HOLD.
 When assistant prose claims too much, HOLD.
 When a repair fails to re-anchor, REPAIR again or HOLD.
+If ambiguity remains after legal reduction, the system may fail gracefully by preserving committed state and asking Billy one direct question. Billy is the highest-context live witness. This does not mutate state by itself.
 Ambiguity should slow mutation, not freeze the whole system.
 
 ## Article VI -- Smallest Legal Reduction

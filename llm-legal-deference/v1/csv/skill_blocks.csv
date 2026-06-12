@@ -1,0 +1,21 @@
+block_id,name,use_when,packet_language,expected_effect,forbidden_effect,related_standard
+SB-001,Semantic intent as evidence,User clearly implies an allowed move without exact token,"Treat semantic intent as evidence, not committed state. Propose the likely intent, then let reducer validate.",reduces false rejection,silent state mutation,STD-001
+SB-002,Stale log demotion,Logs conflict with current evidence,"Treat stale logs as evidence requiring re-anchor, not authority.",prevents stale override,discarding committed state,STD-002
+SB-003,Safety hold,"Boundary touches mic, submit, credential, private data, or hidden automation",Safety-sensitive boundary: HOLD before action. Explain briefly.,prevents unsafe route momentum,panic or route abandonment,STD-003
+SB-004,Cadence downshift,User friction or overloaded context appears,Downshift. Ask one short question. Preserve active_chunk_id.,reduces overwhelm,unnecessary route mutation,STD-004
+SB-005,Planning before commit,"Billy is designing, not running, a route",Draft the route as objects and pointers; do not claim it is active.,separates design from runtime,fake active state,STD-005
+SB-006,Conflict detector,Assistant prose conflicts with logs or state,Treat prose as claim. Compare to committed state before deciding.,flags contradiction,trusting loud prose,STD-006
+SB-007,Human witness escalation,Legal reduction cannot safely decide,"If the system cannot lawfully know, preserve state and ask Billy one direct question.",clean graceful failure,pretending certainty,STD-007
+SB-008,Parked side branch,User asks side question mid-route,"Answer briefly, then return to active_chunk_id without advancing.",route survives side branch,lost route,STD-008
+SB-009,Amend current job,User supplies missing file type/path/constraint,Treat as AMEND_CURRENT_JOB_V1. Patch the active route; do not restart.,route-preserving correction,duplicate job,STD-009
+SB-010,Ambiguity hold,Multiple legal moves remain plausible,"When uncertain, HOLD. Ask the smallest useful question.",safe non-mutation,guessing,STD-010
+SB-011,Smallest legal move,LLM wants to overbuild,Choose the smallest legal next move that preserves route.,less sprawl,scope expansion,STD-016
+SB-012,No hidden progress,Assistant claims progress not in audit,A claim is not state. Do not treat uncommitted progress as real.,blocks invented state,invented state,STD-014
+SB-013,Explicit route switch,User may be changing goals,Require explicit route switch before abandoning active route.,protects active route,accidental new route,STD-018
+SB-014,Terminal commit check,Final route completion is tempting,Do not complete route without terminal_commit.,prevents premature complete,false final state,STD-019
+SB-015,Visible packet preference,Runtime action considered,Prefer visible packet over hidden automation.,auditable bridge,hidden action,STD-020
+SB-016,Signal demotion,Task/DOM/email signal appears,"Signal is evidence, not state. Reduce before commit.",safe signal use,blind mutation,STD-021
+SB-017,Judge activation,Normal turn ambiguity too high,Invoke Judge only for boundary conflict; return small verdict.,narrow adjudication,judge every turn,STD-022
+SB-018,Script judge examination,Facts can be forced,"Answer admissible fact questions, then apply law.",less freewheeling,LLM essay,STD-023
+SB-019,Deference boundary,LLM deserves weight,"LLM may win interpretation, but never silent committed state.",clear role split,LLM sovereignty,STD-024
+SB-020,Graceful failure,All reductions fail,"Fail gracefully: preserve route, admit confusion, ask Billy one direct question.",phone-a-friend recovery,route reset,STD-025

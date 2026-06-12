@@ -1,0 +1,182 @@
+[
+  {
+    "block_id": "SB-001",
+    "name": "Semantic intent as evidence",
+    "use_when": "User clearly implies an allowed move without exact token",
+    "packet_language": "Treat semantic intent as evidence, not committed state. Propose the likely intent, then let reducer validate.",
+    "expected_effect": "reduces false rejection",
+    "forbidden_effect": "silent state mutation",
+    "related_standard": "STD-001"
+  },
+  {
+    "block_id": "SB-002",
+    "name": "Stale log demotion",
+    "use_when": "Logs conflict with current evidence",
+    "packet_language": "Treat stale logs as evidence requiring re-anchor, not authority.",
+    "expected_effect": "prevents stale override",
+    "forbidden_effect": "discarding committed state",
+    "related_standard": "STD-002"
+  },
+  {
+    "block_id": "SB-003",
+    "name": "Safety hold",
+    "use_when": "Boundary touches mic, submit, credential, private data, or hidden automation",
+    "packet_language": "Safety-sensitive boundary: HOLD before action. Explain briefly.",
+    "expected_effect": "prevents unsafe route momentum",
+    "forbidden_effect": "panic or route abandonment",
+    "related_standard": "STD-003"
+  },
+  {
+    "block_id": "SB-004",
+    "name": "Cadence downshift",
+    "use_when": "User friction or overloaded context appears",
+    "packet_language": "Downshift. Ask one short question. Preserve active_chunk_id.",
+    "expected_effect": "reduces overwhelm",
+    "forbidden_effect": "unnecessary route mutation",
+    "related_standard": "STD-004"
+  },
+  {
+    "block_id": "SB-005",
+    "name": "Planning before commit",
+    "use_when": "Billy is designing, not running, a route",
+    "packet_language": "Draft the route as objects and pointers; do not claim it is active.",
+    "expected_effect": "separates design from runtime",
+    "forbidden_effect": "fake active state",
+    "related_standard": "STD-005"
+  },
+  {
+    "block_id": "SB-006",
+    "name": "Conflict detector",
+    "use_when": "Assistant prose conflicts with logs or state",
+    "packet_language": "Treat prose as claim. Compare to committed state before deciding.",
+    "expected_effect": "flags contradiction",
+    "forbidden_effect": "trusting loud prose",
+    "related_standard": "STD-006"
+  },
+  {
+    "block_id": "SB-007",
+    "name": "Human witness escalation",
+    "use_when": "Legal reduction cannot safely decide",
+    "packet_language": "If the system cannot lawfully know, preserve state and ask Billy one direct question.",
+    "expected_effect": "clean graceful failure",
+    "forbidden_effect": "pretending certainty",
+    "related_standard": "STD-007"
+  },
+  {
+    "block_id": "SB-008",
+    "name": "Parked side branch",
+    "use_when": "User asks side question mid-route",
+    "packet_language": "Answer briefly, then return to active_chunk_id without advancing.",
+    "expected_effect": "route survives side branch",
+    "forbidden_effect": "lost route",
+    "related_standard": "STD-008"
+  },
+  {
+    "block_id": "SB-009",
+    "name": "Amend current job",
+    "use_when": "User supplies missing file type/path/constraint",
+    "packet_language": "Treat as AMEND_CURRENT_JOB_V1. Patch the active route; do not restart.",
+    "expected_effect": "route-preserving correction",
+    "forbidden_effect": "duplicate job",
+    "related_standard": "STD-009"
+  },
+  {
+    "block_id": "SB-010",
+    "name": "Ambiguity hold",
+    "use_when": "Multiple legal moves remain plausible",
+    "packet_language": "When uncertain, HOLD. Ask the smallest useful question.",
+    "expected_effect": "safe non-mutation",
+    "forbidden_effect": "guessing",
+    "related_standard": "STD-010"
+  },
+  {
+    "block_id": "SB-011",
+    "name": "Smallest legal move",
+    "use_when": "LLM wants to overbuild",
+    "packet_language": "Choose the smallest legal next move that preserves route.",
+    "expected_effect": "less sprawl",
+    "forbidden_effect": "scope expansion",
+    "related_standard": "STD-016"
+  },
+  {
+    "block_id": "SB-012",
+    "name": "No hidden progress",
+    "use_when": "Assistant claims progress not in audit",
+    "packet_language": "A claim is not state. Do not treat uncommitted progress as real.",
+    "expected_effect": "blocks invented state",
+    "forbidden_effect": "invented state",
+    "related_standard": "STD-014"
+  },
+  {
+    "block_id": "SB-013",
+    "name": "Explicit route switch",
+    "use_when": "User may be changing goals",
+    "packet_language": "Require explicit route switch before abandoning active route.",
+    "expected_effect": "protects active route",
+    "forbidden_effect": "accidental new route",
+    "related_standard": "STD-018"
+  },
+  {
+    "block_id": "SB-014",
+    "name": "Terminal commit check",
+    "use_when": "Final route completion is tempting",
+    "packet_language": "Do not complete route without terminal_commit.",
+    "expected_effect": "prevents premature complete",
+    "forbidden_effect": "false final state",
+    "related_standard": "STD-019"
+  },
+  {
+    "block_id": "SB-015",
+    "name": "Visible packet preference",
+    "use_when": "Runtime action considered",
+    "packet_language": "Prefer visible packet over hidden automation.",
+    "expected_effect": "auditable bridge",
+    "forbidden_effect": "hidden action",
+    "related_standard": "STD-020"
+  },
+  {
+    "block_id": "SB-016",
+    "name": "Signal demotion",
+    "use_when": "Task/DOM/email signal appears",
+    "packet_language": "Signal is evidence, not state. Reduce before commit.",
+    "expected_effect": "safe signal use",
+    "forbidden_effect": "blind mutation",
+    "related_standard": "STD-021"
+  },
+  {
+    "block_id": "SB-017",
+    "name": "Judge activation",
+    "use_when": "Normal turn ambiguity too high",
+    "packet_language": "Invoke Judge only for boundary conflict; return small verdict.",
+    "expected_effect": "narrow adjudication",
+    "forbidden_effect": "judge every turn",
+    "related_standard": "STD-022"
+  },
+  {
+    "block_id": "SB-018",
+    "name": "Script judge examination",
+    "use_when": "Facts can be forced",
+    "packet_language": "Answer admissible fact questions, then apply law.",
+    "expected_effect": "less freewheeling",
+    "forbidden_effect": "LLM essay",
+    "related_standard": "STD-023"
+  },
+  {
+    "block_id": "SB-019",
+    "name": "Deference boundary",
+    "use_when": "LLM deserves weight",
+    "packet_language": "LLM may win interpretation, but never silent committed state.",
+    "expected_effect": "clear role split",
+    "forbidden_effect": "LLM sovereignty",
+    "related_standard": "STD-024"
+  },
+  {
+    "block_id": "SB-020",
+    "name": "Graceful failure",
+    "use_when": "All reductions fail",
+    "packet_language": "Fail gracefully: preserve route, admit confusion, ask Billy one direct question.",
+    "expected_effect": "phone-a-friend recovery",
+    "forbidden_effect": "route reset",
+    "related_standard": "STD-025"
+  }
+]

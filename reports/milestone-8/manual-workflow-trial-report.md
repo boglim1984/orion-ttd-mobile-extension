@@ -2,7 +2,7 @@
 
 ## Status
 
-Prepared / pending Billy manual run.
+Trial 1 complete / PASS_WITH_REPAIR.
 
 ## Milestone 7 Dependency
 
@@ -14,6 +14,21 @@ Passed. Real Orion iPhone + ChatGPT insert-only smoke is already validated.
 - `test-fixtures/manual/orion-milestone-8-manual-trial-packet.txt`
 - `reports/milestone-8/manual-trial-result-template.md`
 - `reports/milestone-8/manual-workflow-trial-report.md`
+- `reports/milestone-8/trial-1-continue-boundary-result.md`
+
+## Trial 1 Result
+
+- status: Trial 1 complete / PASS_WITH_REPAIR
+- result record:
+  `reports/milestone-8/trial-1-continue-boundary-result.md`
+- initial failure:
+  `FAIL_NO_ROUTE_ENGAGEMENT`
+- recovery used:
+  route re-anchor / trial clarification prompt
+- final behavior:
+  assistant preserved `clear_trash` on `continue`
+- next recommended action:
+  patch Milestone 8 packet wording before Trial 2, or use strengthened route-start wording that explicitly says not to evaluate transport and to begin the route trial immediately
 
 ## How To Run
 
@@ -42,7 +57,7 @@ Passed. Real Orion iPhone + ChatGPT insert-only smoke is already validated.
 
 - compare the observed ChatGPT behavior against reducer/scorer expectations
 - classify the result
-- decide whether to refine packet wording, manual trial structure, or later response-contract design
+- refine packet wording before Trial 2 so the assistant starts the route trial directly instead of evaluating transport
 
 ## Runtime Change Confirmation
 

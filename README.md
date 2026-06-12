@@ -15,6 +15,7 @@ This is the real TTD Mobile Extension shell.
 
 - `src/`: manifest and content-script templates
 - `scripts/`: build, package, and verification scripts
+- `tools/`: local language-lab and casework tooling
 - `docs/`: protocol, reducer, workflow, Mermaid, and smartness-budget design docs
 - `test-fixtures/`: canonical workflow fixtures for future reducer/scorer work
 - `dist/`: built extension artifacts
@@ -34,6 +35,7 @@ This is the real TTD Mobile Extension shell.
 - `docs/ORION_TTD_MILESTONE_8_MANUAL_WORKFLOW_TRIAL_V0.md`
 - `docs/ORION_TTD_MILESTONE_8_5_WEBKIT_MCP_TETHER_SPIKE_V0.md`
 - `docs/ORION_TTD_MILESTONE_8_6_WITNESS_OBSERVED_MANUAL_WORKFLOW_TRIAL_V0.md`
+- `docs/ORION_TTD_COMMAND_LANGUAGE_CASEWORK_TOOL_V0.md`
 - `legal-framework/README.md`
 - `legal-framework/v1/ORION_TTD_FAIL_GRACEFULLY_HUMAN_WITNESS_ESCALATION_V1.md`
 - `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`
@@ -48,11 +50,16 @@ This is the real TTD Mobile Extension shell.
 - `reports/milestone-6b-pure-reducer-report.md`
 - `reports/milestone-8/manual-workflow-trial-report.md`
 - `reports/milestone-8-6/witness-observed-manual-workflow-trial-report.md`
+- `reports/command-language-casework-tool-report.md`
 - `docs/mcp/orion-webkit-mcp-client-configs.md`
 - `reports/milestone-8-5/webkit-mcp-tether-spike-report.md`
 - `scripts/run-workflow-fixtures.mjs`
 - `scripts/orion-webkit-mcp-tether-probe.mjs`
 - `reports/milestone-6c-scorer-fixture-runner-report.md`
+- `tools/command-language-casework/README.md`
+- `tools/command-language-casework/examples/`
+- Command Center skill:
+  `/Users/oflahertys/Desktop/Code Projects/ACTIVE/_worktrees/Billy-Project-Command-Center-main-for-skill-dump/library/skills/chatgpt/command-language-casework-designer-skill.md`
 
 ## v0.1.3 behavior
 

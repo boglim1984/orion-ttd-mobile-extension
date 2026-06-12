@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://boglim1984.github.io/orion-ttd-mobile-extension/tools/command-language-casework/schema/casework-result.schema.json",
+  "title": "Command Language Casework Result",
+  "type": "object",
+  "required": [
+    "suite_id",
+    "run_id",
+    "started_at",
+    "completed_at",
+    "browser_context_note",
+    "tool_version",
+    "cases",
+    "warnings",
+    "errors"
+  ],
+  "properties": {
+    "suite_id": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "started_at": {
+      "type": "string"
+    },
+    "completed_at": {
+      "type": "string"
+    },
+    "browser_context_note": {
+      "type": "string"
+    },
+    "tool_version": {
+      "type": "string"
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "packet_sent",
+          "scripted_user_replies_sent",
+          "assistant_responses",
+          "visible_turn_text",
+          "observed_chunks_or_keywords",
+          "heuristic_classification",
+          "expected_behavior",
+          "forbidden_behavior",
+          "notes",
+          "raw_turn_log"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string"
+          },
+          "packet_sent": {
+            "type": "string"
+          },
+          "scripted_user_replies_sent": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assistant_responses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "visible_turn_text": {
+            "type": "string"
+          },
+          "observed_chunks_or_keywords": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "heuristic_classification": {
+            "type": "string"
+          },
+          "expected_behavior": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "forbidden_behavior": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "string"
+          },
+          "raw_turn_log": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

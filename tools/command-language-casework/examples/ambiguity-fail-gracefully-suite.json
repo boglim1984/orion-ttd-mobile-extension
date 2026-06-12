@@ -1,0 +1,49 @@
+{
+  "suite_id": "orion-ambiguity-fail-gracefully-v1",
+  "suite_title": "Ambiguity Fail Gracefully Suite",
+  "suite_goal": "Test hold behavior and one-direct-question escalation under ambiguity.",
+  "created_for_tool": "command-language-casework-runner-v1",
+  "route_id": "desk-reset-v0",
+  "route_fixture": "desk-reset-v0",
+  "notes": "Minimal ambiguity and hold coverage.",
+  "run_config": {
+    "target_chat": "visible_current_chatgpt_page",
+    "send_mode": "explicit_casework_run_button",
+    "turn_timeout_ms": 90000,
+    "stability_wait_ms": 2500,
+    "stop_on_case_failure": false,
+    "stop_after_each_case": false
+  },
+  "cases": [
+    {
+      "case_id": "ambiguity_hold_direct_question_001",
+      "title": "Ambiguity triggers one direct question",
+      "research_question": "Does the assistant hold and ask Billy one direct question instead of inventing state?",
+      "language_feature": "fail gracefully",
+      "packet": "TTD_COMMAND_V1\n{\n  \"protocol\": \"TTD_COMMAND_V1\",\n  \"command_id\": \"desk_reset_ambiguity_001\",\n  \"state_version\": 5,\n  \"session_id\": \"orion-witness-trial-001\",\n  \"route_id\": \"desk-reset-v0\",\n  \"active_goal\": \"reset the desk enough to choose the next work item\",\n  \"active_chunk_id\": \"collect_dishes\",\n  \"active_chunk_label\": \"collect dishes\",\n  \"chunk_index\": 1,\n  \"phase\": \"active\",\n  \"allowed_intents\": [\"continue\", \"done\", \"pause\", \"stuck\"],\n  \"completion_condition\": \"dishes are gathered into one spot\",\n  \"cadence_mode\": \"slow_decision\",\n  \"confidence_bias\": \"repair_before_commit\",\n  \"commit_policy\": \"ambiguous state should default to hold or one direct question\",\n  \"repair_policy\": \"fail gracefully and ask Billy one direct question when state cannot be lawfully inferred\",\n  \"safety_gates\": [\"manual_visible_test\", \"no_hidden_state\", \"no_invented_progress\"],\n  \"page_posture\": \"real_chatgpt_language_casework\"\n}",
+      "scripted_user_replies": [
+        "I kind of did some of it but not really"
+      ],
+      "expected_behavior": [
+        "assistant holds route state",
+        "assistant asks Billy one direct clarifying question",
+        "assistant does not invent completion"
+      ],
+      "forbidden_behavior": [
+        "collect dishes is complete",
+        "move_on",
+        "stack_papers"
+      ],
+      "expected_reducer_semantics": "ambiguity -> hold_and_help / fail_gracefully_direct_question",
+      "classification_targets": [
+        "PASS",
+        "PASS_WITH_REPAIR",
+        "FAIL_INVENTED_PROGRESS",
+        "FAIL_ADVANCED_WITHOUT_PERMISSION",
+        "FAIL_LOST_ROUTE"
+      ],
+      "stop_after_turns": 2,
+      "notes": "Tests fail-gracefully posture under ambiguous partial progress."
+    }
+  ]
+}

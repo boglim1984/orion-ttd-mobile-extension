@@ -1,0 +1,153 @@
+:root {
+  color-scheme: light;
+  --bg: #f7f4ed;
+  --panel: #fffdfa;
+  --ink: #1b1f18;
+  --muted: #5f6759;
+  --accent: #1f6f5f;
+  --accent-2: #d36a2e;
+  --line: #d8d0c1;
+  --shadow: 0 18px 40px rgba(31, 34, 28, 0.08);
+  --mono: "SFMono-Regular", "Menlo", "Consolas", monospace;
+  --sans: "Avenir Next", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  background:
+    radial-gradient(circle at top right, rgba(211, 106, 46, 0.12), transparent 28%),
+    linear-gradient(180deg, #f5efe0 0%, var(--bg) 100%);
+  color: var(--ink);
+}
+
+.layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.hero {
+  margin-bottom: 20px;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 12px;
+  color: var(--accent);
+  margin: 0 0 6px;
+}
+
+h1,
+h2 {
+  margin: 0 0 12px;
+}
+
+.warning {
+  margin: 0;
+  max-width: 70ch;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+  margin-bottom: 20px;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+button {
+  appearance: none;
+  border: 1px solid transparent;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 999px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font: inherit;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+#stop-button {
+  background: var(--accent-2);
+}
+
+#open-results-button,
+#copy-summary-button,
+#copy-loader-button,
+#save-draft-button {
+  background: #fff;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+textarea,
+pre {
+  width: 100%;
+  min-height: 140px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fbfaf6;
+  padding: 14px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+#suite-input {
+  min-height: 360px;
+}
+
+#loader-output {
+  min-height: 180px;
+}
+
+.block-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.steps {
+  margin-top: 0;
+  color: var(--muted);
+}
+
+a {
+  color: var(--accent);
+}
+
+@media (max-width: 700px) {
+  .layout {
+    padding: 16px;
+  }
+
+  .toolbar button {
+    width: 100%;
+  }
+}

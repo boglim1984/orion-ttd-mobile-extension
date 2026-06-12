@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://boglim1984.github.io/orion-ttd-mobile-extension/tools/command-language-casework/schema/casework-suite.schema.json",
+  "title": "Command Language Casework Suite",
+  "type": "object",
+  "required": [
+    "suite_id",
+    "suite_title",
+    "suite_goal",
+    "created_for_tool",
+    "route_id",
+    "run_config",
+    "cases"
+  ],
+  "properties": {
+    "suite_id": {
+      "type": "string"
+    },
+    "suite_title": {
+      "type": "string"
+    },
+    "suite_goal": {
+      "type": "string"
+    },
+    "created_for_tool": {
+      "const": "command-language-casework-runner-v1"
+    },
+    "route_id": {
+      "type": "string"
+    },
+    "route_fixture": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "run_config": {
+      "type": "object",
+      "required": [
+        "target_chat",
+        "send_mode",
+        "turn_timeout_ms",
+        "stability_wait_ms",
+        "stop_on_case_failure",
+        "stop_after_each_case"
+      ],
+      "properties": {
+        "target_chat": {
+          "const": "visible_current_chatgpt_page"
+        },
+        "send_mode": {
+          "const": "explicit_casework_run_button"
+        },
+        "turn_timeout_ms": {
+          "type": "number"
+        },
+        "stability_wait_ms": {
+          "type": "number"
+        },
+        "stop_on_case_failure": {
+          "type": "boolean"
+        },
+        "stop_after_each_case": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "title",
+          "research_question",
+          "packet",
+          "scripted_user_replies",
+          "expected_behavior",
+          "forbidden_behavior",
+          "expected_reducer_semantics",
+          "classification_targets"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "research_question": {
+            "type": "string"
+          },
+          "language_feature": {
+            "type": "string"
+          },
+          "packet": {
+            "type": "string"
+          },
+          "scripted_user_replies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_behavior": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "forbidden_behavior": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "expected_reducer_semantics": {
+            "type": "string"
+          },
+          "classification_targets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "stop_after_turns": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

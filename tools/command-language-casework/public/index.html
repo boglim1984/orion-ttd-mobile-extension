@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Command Language Casework Runner</title>
+    <link rel="stylesheet" href="/casework-style.css">
+  </head>
+  <body>
+    <main class="layout">
+      <header class="hero">
+        <p class="eyebrow">Orion TTD Local Tooling</p>
+        <h1>Command Language Casework Runner</h1>
+        <p class="warning">
+          Run only in a dedicated ChatGPT test chat. This tool will send scripted messages after Billy clicks Run.
+          Do not use in an important live chat.
+        </p>
+      </header>
+
+      <section class="card">
+        <div class="toolbar">
+          <button id="validate-button" type="button">Validate</button>
+          <button id="run-button" type="button">Run</button>
+          <button id="stop-button" type="button">Stop</button>
+          <button id="save-draft-button" type="button">Save Draft Suite</button>
+          <button id="open-results-button" type="button">Open Results Folder</button>
+          <button id="copy-summary-button" type="button">Copy Latest Result Summary</button>
+          <button id="copy-loader-button" type="button">Copy Runner Loader</button>
+        </div>
+        <label class="block-label" for="suite-input">Paste suite JSON</label>
+        <textarea id="suite-input" spellcheck="false"></textarea>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Runner Setup</h2>
+          <ol class="steps">
+            <li>Open a disposable ChatGPT test chat.</li>
+            <li>Open the browser console on that page.</li>
+            <li>Paste the copied runner loader and press Enter once per page load.</li>
+            <li>Return here and click Run.</li>
+          </ol>
+          <label class="block-label" for="loader-output">Runner loader snippet</label>
+          <textarea id="loader-output" readonly spellcheck="false"></textarea>
+        </article>
+
+        <article class="card">
+          <h2>Current Case</h2>
+          <pre id="current-case-panel">No active case.</pre>
+        </article>
+
+        <article class="card">
+          <h2>Result Links</h2>
+          <div id="result-links-panel">No completed run yet.</div>
+        </article>
+      </section>
+
+      <section class="card">
+        <h2>Status Log</h2>
+        <pre id="status-log-panel">Server starting…</pre>
+      </section>
+    </main>
+
+    <script src="/casework-ui.js" type="module"></script>
+  </body>
+  </html>

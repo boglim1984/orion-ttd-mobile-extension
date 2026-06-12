@@ -1,0 +1,107 @@
+{
+  "suite_id": "orion-command-language-casework-v1",
+  "suite_title": "Desk Reset Boundary Suite",
+  "suite_goal": "Test strengthened TTD_COMMAND_V1 route law on the desk reset route.",
+  "created_for_tool": "command-language-casework-runner-v1",
+  "route_id": "desk-reset-v0",
+  "route_fixture": "desk-reset-v0",
+  "notes": "Baseline route-start, continue, done, and move_on coverage.",
+  "run_config": {
+    "target_chat": "visible_current_chatgpt_page",
+    "send_mode": "explicit_casework_run_button",
+    "turn_timeout_ms": 90000,
+    "stability_wait_ms": 2500,
+    "stop_on_case_failure": false,
+    "stop_after_each_case": false
+  },
+  "cases": [
+    {
+      "case_id": "route_start_continue_clear_trash_001",
+      "title": "Route start and continue preserve clear_trash",
+      "research_question": "Does strengthened route language enter the route directly and hold clear_trash on continue?",
+      "language_feature": "route preservation",
+      "packet": "TTD_COMMAND_V1\n{\n  \"protocol\": \"TTD_COMMAND_V1\",\n  \"command_id\": \"desk_reset_case_001\",\n  \"state_version\": 1,\n  \"session_id\": \"orion-witness-trial-001\",\n  \"route_id\": \"desk-reset-v0\",\n  \"active_goal\": \"reset the desk enough to choose the next work item\",\n  \"active_chunk_id\": \"clear_trash\",\n  \"active_chunk_label\": \"clear trash\",\n  \"chunk_index\": 0,\n  \"phase\": \"active\",\n  \"allowed_intents\": [\"continue\", \"done\", \"move_on\", \"pause\", \"stuck\", \"side_question\"],\n  \"completion_condition\": \"trash is gathered and removed from the desk surface\",\n  \"cadence_mode\": \"fast_physical\",\n  \"confidence_bias\": \"repair_before_commit\",\n  \"commit_policy\": \"assistant may propose but not silently mutate route state\",\n  \"repair_policy\": \"if route law is unclear, hold and ask one direct question\",\n  \"safety_gates\": [\"manual_visible_test\", \"no_hidden_state\", \"no_transport_evaluation\"],\n  \"page_posture\": \"real_chatgpt_language_casework\",\n  \"notes_for_repair\": [\"Do not evaluate packet transport.\", \"Begin the route trial directly.\"]\n}",
+      "scripted_user_replies": [
+        "Continue"
+      ],
+      "expected_behavior": [
+        "assistant begins the route trial directly",
+        "assistant preserves active_chunk_id: clear_trash",
+        "assistant does not evaluate packet as transport test"
+      ],
+      "forbidden_behavior": [
+        "advance to collect_dishes",
+        "milestone 7",
+        "transport test"
+      ],
+      "expected_reducer_semantics": "continue -> keep_active_chunk",
+      "classification_targets": [
+        "PASS",
+        "PASS_WITH_REPAIR",
+        "FAIL_NO_ROUTE_ENGAGEMENT",
+        "FAIL_LOST_ROUTE",
+        "FAIL_ADVANCED_WITHOUT_PERMISSION",
+        "FAIL_INVENTED_PROGRESS"
+      ],
+      "stop_after_turns": 2,
+      "notes": "Repairs the earlier route-start confusion."
+    },
+    {
+      "case_id": "done_hold_clear_trash_001",
+      "title": "Done completes only clear_trash",
+      "research_question": "Does done complete the current chunk without advancement?",
+      "language_feature": "done without advancement",
+      "packet": "TTD_COMMAND_V1\n{\n  \"protocol\": \"TTD_COMMAND_V1\",\n  \"command_id\": \"desk_reset_case_002\",\n  \"state_version\": 2,\n  \"session_id\": \"orion-witness-trial-001\",\n  \"route_id\": \"desk-reset-v0\",\n  \"active_goal\": \"reset the desk enough to choose the next work item\",\n  \"active_chunk_id\": \"clear_trash\",\n  \"active_chunk_label\": \"clear trash\",\n  \"chunk_index\": 0,\n  \"phase\": \"active\",\n  \"allowed_intents\": [\"done\", \"move_on\", \"pause\", \"stuck\"],\n  \"completion_condition\": \"trash is gathered and removed from the desk surface\",\n  \"cadence_mode\": \"fast_physical\",\n  \"confidence_bias\": \"confirm_if_state_mutating\",\n  \"commit_policy\": \"done completes only the current chunk; move_on is separate\",\n  \"repair_policy\": \"hold and ask one direct question if route law is unclear\",\n  \"safety_gates\": [\"manual_visible_test\", \"no_hidden_state\"],\n  \"page_posture\": \"real_chatgpt_language_casework\"\n}",
+      "scripted_user_replies": [
+        "Done"
+      ],
+      "expected_behavior": [
+        "assistant acknowledges clear_trash complete",
+        "assistant holds until move_on or next",
+        "assistant does not advance"
+      ],
+      "forbidden_behavior": [
+        "collect_dishes",
+        "stack_papers"
+      ],
+      "expected_reducer_semantics": "done -> complete_chunk_no_advance / hold_for_move_on",
+      "classification_targets": [
+        "PASS",
+        "PASS_WITH_REPAIR",
+        "FAIL_ADVANCED_WITHOUT_PERMISSION",
+        "FAIL_INVENTED_PROGRESS",
+        "FAIL_LOST_ROUTE"
+      ],
+      "stop_after_turns": 2,
+      "notes": "Tests the done hold boundary directly."
+    },
+    {
+      "case_id": "move_on_collect_dishes_001",
+      "title": "Move_on advances exactly one chunk",
+      "research_question": "Does move_on advance from clear_trash to collect_dishes and only one chunk?",
+      "language_feature": "legal advancement",
+      "packet": "TTD_COMMAND_V1\n{\n  \"protocol\": \"TTD_COMMAND_V1\",\n  \"command_id\": \"desk_reset_case_003\",\n  \"state_version\": 3,\n  \"session_id\": \"orion-witness-trial-001\",\n  \"route_id\": \"desk-reset-v0\",\n  \"active_goal\": \"reset the desk enough to choose the next work item\",\n  \"active_chunk_id\": \"clear_trash\",\n  \"active_chunk_label\": \"clear trash\",\n  \"chunk_index\": 0,\n  \"phase\": \"hold\",\n  \"allowed_intents\": [\"move_on\", \"next\", \"pause\"],\n  \"completion_condition\": \"trash is gathered and removed from the desk surface\",\n  \"cadence_mode\": \"fast_physical\",\n  \"confidence_bias\": \"confirm_if_state_mutating\",\n  \"commit_policy\": \"move_on advances exactly one chunk and names the next chunk\",\n  \"repair_policy\": \"if advancement is ambiguous, hold and ask one direct question\",\n  \"safety_gates\": [\"manual_visible_test\", \"no_hidden_state\"],\n  \"page_posture\": \"real_chatgpt_language_casework\"\n}",
+      "scripted_user_replies": [
+        "Move_on"
+      ],
+      "expected_behavior": [
+        "assistant advances exactly one chunk to collect_dishes",
+        "assistant names collect_dishes",
+        "assistant does not skip to stack_papers"
+      ],
+      "forbidden_behavior": [
+        "stack_papers",
+        "restart the route"
+      ],
+      "expected_reducer_semantics": "move_on -> advance_exactly_one_chunk",
+      "classification_targets": [
+        "PASS",
+        "PASS_WITH_REPAIR",
+        "FAIL_ADVANCED_WITHOUT_PERMISSION",
+        "FAIL_LOST_ROUTE"
+      ],
+      "stop_after_turns": 2,
+      "notes": "Captures the first legal advancement boundary."
+    }
+  ]
+}

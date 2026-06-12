@@ -1,0 +1,49 @@
+{
+  "suite_id": "orion-side-question-return-v1",
+  "suite_title": "Side Question Return Suite",
+  "suite_goal": "Test whether a brief side question returns to the active chunk cleanly.",
+  "created_for_tool": "command-language-casework-runner-v1",
+  "route_id": "desk-reset-v0",
+  "route_fixture": "desk-reset-v0",
+  "notes": "Minimal side-question restoration coverage.",
+  "run_config": {
+    "target_chat": "visible_current_chatgpt_page",
+    "send_mode": "explicit_casework_run_button",
+    "turn_timeout_ms": 90000,
+    "stability_wait_ms": 2500,
+    "stop_on_case_failure": false,
+    "stop_after_each_case": false
+  },
+  "cases": [
+    {
+      "case_id": "side_question_return_clear_trash_001",
+      "title": "Side question returns to clear_trash",
+      "research_question": "Does the assistant answer briefly and return to clear_trash after a side question?",
+      "language_feature": "side-question return",
+      "packet": "TTD_COMMAND_V1\n{\n  \"protocol\": \"TTD_COMMAND_V1\",\n  \"command_id\": \"desk_reset_side_001\",\n  \"state_version\": 4,\n  \"session_id\": \"orion-witness-trial-001\",\n  \"route_id\": \"desk-reset-v0\",\n  \"active_goal\": \"reset the desk enough to choose the next work item\",\n  \"active_chunk_id\": \"clear_trash\",\n  \"active_chunk_label\": \"clear trash\",\n  \"chunk_index\": 0,\n  \"phase\": \"active\",\n  \"allowed_intents\": [\"side_question\", \"return_to_route\", \"continue\", \"pause\"],\n  \"completion_condition\": \"trash is gathered and removed from the desk surface\",\n  \"cadence_mode\": \"slow_decision\",\n  \"confidence_bias\": \"one_question_only\",\n  \"commit_policy\": \"briefly answer the side question and return to the active chunk\",\n  \"repair_policy\": \"hold if the side question would break route state\",\n  \"safety_gates\": [\"manual_visible_test\", \"no_hidden_state\"],\n  \"page_posture\": \"real_chatgpt_language_casework\"\n}",
+      "scripted_user_replies": [
+        "Where should I put the recycling bag?"
+      ],
+      "expected_behavior": [
+        "assistant answers the side question briefly",
+        "assistant returns to clear_trash",
+        "assistant does not mark progress complete"
+      ],
+      "forbidden_behavior": [
+        "collect_dishes",
+        "stack_papers",
+        "route complete"
+      ],
+      "expected_reducer_semantics": "side_question -> answer_then_restore_route",
+      "classification_targets": [
+        "PASS",
+        "PASS_WITH_REPAIR",
+        "FAIL_LOST_ROUTE",
+        "FAIL_ADVANCED_WITHOUT_PERMISSION",
+        "FAIL_INVENTED_PROGRESS"
+      ],
+      "stop_after_turns": 2,
+      "notes": "Tests whether the route returns after one interruption."
+    }
+  ]
+}

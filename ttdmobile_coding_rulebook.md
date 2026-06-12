@@ -112,6 +112,7 @@ Rules:
 - WebKit MCP tether tests must start with targeted dataset/composer probes only. Do not use cookies/storage/full DOM/screenshots/auto-submit unless a later explicit milestone authorizes it. The MCP is a test instrument, not state authority.
 - Extension witness channels may expose low-noise test evidence through console, dataset, and DOM nodes, but they are evidence only. They must not become route state authority, must not read private storage, and must not submit or mutate ChatGPT conversation state.
 - Witness-observed manual workflow trials must keep witness records as evidence only. Do not treat extension witness data, console logs, or DOM witness nodes as committed route state. Do not add auto-submit, response observers, repair insertion, storage reads, or credential access during Milestone 8.6.
+- Command-language casework tests are language/protocol research, not Orion transport proof. Do not confuse the local casework runner with extension runtime authority. The runner may send scripted messages only in explicit local casework mode in a visible test chat. It must not read private storage, cookies, tokens, or mutate hidden state.
 - Reducer/scorer remains committed-state and test authority.
 - Reducer/scorer implementation remains the executable authority.
 - Treat the XLSX as the human-editable source artifact.

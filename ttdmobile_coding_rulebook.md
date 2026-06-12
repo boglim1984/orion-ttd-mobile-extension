@@ -108,6 +108,7 @@ Rules:
 - LLM Legal Deference Map v1 defines when LLM interpretation deserves legal weight.
 - It does not give the LLM commit authority.
 - Fail Gracefully is a legal recovery action, not a route reset.
+- Milestone 8 manual workflow trials must remain manual and visible. Do not add auto-submit, observer, repair insertion, task watcher, or Voice Mode during this milestone. The goal is to test whether the Milestone 7 packet transport can steer a real ChatGPT route boundary.
 - Reducer/scorer remains committed-state and test authority.
 - Reducer/scorer implementation remains the executable authority.
 - Treat the XLSX as the human-editable source artifact.

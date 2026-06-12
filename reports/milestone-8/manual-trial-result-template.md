@@ -1,0 +1,22 @@
+# Milestone 8 Manual Trial Result Template
+
+- date/time:
+- device/browser:
+- extension version:
+- route_id:
+- session_id:
+- starting active_chunk_id:
+- inserted packet source:
+- sent manually yes/no:
+- Billy reply:
+- assistant behavior summary:
+- did assistant ask one short question:
+- did active_chunk_id remain stable:
+- did assistant invent progress:
+- did assistant advance without move_on:
+- did side question return to route:
+- reducer/scorer expected category:
+- observed result category:
+- pass/fail:
+- notes:
+- screenshot/log references if any:

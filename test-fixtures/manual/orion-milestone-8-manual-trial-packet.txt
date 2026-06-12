@@ -1,0 +1,32 @@
+TTD_COMMAND_V1
+{
+  "command_id": "cmd_orion_m8_001",
+  "route_id": "desk-reset-v0",
+  "session_id": "orion-manual-trial-001",
+  "state_version": 1,
+  "active_goal": "reset the desk enough to choose the next work item",
+  "active_chunk_id": "clear_trash",
+  "active_chunk_label": "clear trash",
+  "phase": "manual_workflow_trial",
+  "last_committed_action": "route_started",
+  "allowed_intents": [
+    "done",
+    "stuck",
+    "continue",
+    "move_on",
+    "pause",
+    "re_chunk"
+  ],
+  "commit_policy": "Treat this as route preservation only. Do not claim hidden progress. Do not advance unless Billy explicitly says move_on or next.",
+  "response_contract": {
+    "ask_style": "one_short_check_in",
+    "side_question_rule": "If Billy asks a side question, answer briefly and return to active_chunk_id.",
+    "steering_language": [
+      "Treat this as route preservation.",
+      "Prefer preserving active_chunk_id over guessing progress.",
+      "Ask one short check-in.",
+      "Do not claim hidden progress.",
+      "Do not advance unless Billy explicitly says move_on or next."
+    ]
+  }
+}

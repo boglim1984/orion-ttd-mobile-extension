@@ -31,6 +31,7 @@ const DRAFTS_DIR = path.join(TOOL_ROOT, "drafts");
 const INJECTOR_PATH = path.join(TOOL_ROOT, "injectors", "chatgpt-casework-runner.js");
 const DEFAULT_PORT = 4317;
 const DEFAULT_HOST = "127.0.0.1";
+const INDEX_HTML_PATH = path.join(PUBLIC_DIR, "index.html");
 
 const state = {
   tool_version: CASEWORK_TOOL_VERSION,
@@ -348,6 +349,11 @@ async function handleApi(request, response, url, port) {
   });
 }
 
+function resolvePort(value, fallback = DEFAULT_PORT) {
+  const numericValue = Number(value);
+  return Number.isInteger(numericValue) && numericValue > 0 ? numericValue : fallback;
+}
+
 function serveStatic(response, urlPathname) {
   const requestedPath = urlPathname === "/" ? "/index.html" : urlPathname;
   const filePath = path.join(PUBLIC_DIR, requestedPath.replace(/^\/+/, ""));
@@ -383,14 +389,14 @@ function parseCli(argv) {
   const args = [...argv];
   const options = {
     host: DEFAULT_HOST,
-    port: DEFAULT_PORT,
+    port: resolvePort(process.env.PORT, DEFAULT_PORT),
     validatePath: null
   };
 
   while (args.length > 0) {
     const current = args.shift();
     if (current === "--port") {
-      options.port = Number(args.shift() || DEFAULT_PORT);
+      options.port = resolvePort(args.shift(), options.port);
     } else if (current === "--host") {
       options.host = args.shift() || DEFAULT_HOST;
     } else if (current === "--validate") {
@@ -401,9 +407,12 @@ function parseCli(argv) {
   return options;
 }
 
-function startServer({ host, port }) {
-  ensureToolDirs();
-  const server = http.createServer(async (request, response) => {
+function formatGuiUrl({ host, port }) {
+  return `http://${host}:${port}`;
+}
+
+function createRequestHandler({ host, port }) {
+  return async (request, response) => {
     const url = new URL(request.url, `http://${host}:${port}`);
     try {
       if (url.pathname.startsWith("/api/")) {
@@ -418,18 +427,76 @@ function startServer({ host, port }) {
       });
       logStatus(`Server error: ${error.message}`);
     }
-  });
+  };
+}
 
-  server.listen(port, host, () => {
-    logStatus(`Command Language Casework Runner listening on http://${host}:${port}`);
-    logStatus("Open the GUI, paste a suite, install the runner in a disposable ChatGPT test chat, then click Run.");
+function buildPortInUseMessage({ host, port }) {
+  return [
+    "Command Language Casework Runner could not start.",
+    `Port ${port} is already in use on ${host}.`,
+    `Try: node tools/command-language-casework/server/casework-server.mjs --port ${port + 1}`,
+    `Or: PORT=${port + 1} node tools/command-language-casework/server/casework-server.mjs`
+  ].join("\n");
+}
+
+function startServer({ host, port }) {
+  ensureToolDirs();
+  const server = http.createServer(createRequestHandler({ host, port }));
+
+  return new Promise((resolve, reject) => {
+    server.once("error", (error) => {
+      if (error?.code === "EADDRINUSE") {
+        console.error(buildPortInUseMessage({ host, port }));
+        reject(Object.assign(new Error(`Port ${port} is already in use.`), { code: "EADDRINUSE" }));
+        return;
+      }
+
+      console.error(`Command Language Casework Runner failed to start: ${error.message}`);
+      reject(error);
+    });
+
+    server.listen(port, host, () => {
+      const address = server.address();
+      const actualPort = typeof address === "object" && address ? address.port : port;
+      logStatus("Command Language Casework Runner");
+      logStatus(`GUI: ${formatGuiUrl({ host, port: actualPort })}`);
+      logStatus("Open the GUI, paste a suite, install the runner in a disposable ChatGPT test chat, then click Run.");
+      resolve({
+        server,
+        host,
+        port: actualPort,
+        guiUrl: formatGuiUrl({ host, port: actualPort })
+      });
+    });
   });
 }
 
-const options = parseCli(process.argv.slice(2));
+async function main(argv = process.argv.slice(2)) {
+  const options = parseCli(argv);
 
-if (options.validatePath) {
-  process.exitCode = printValidateResult(loadSuiteFromFile(options.validatePath));
-} else {
-  startServer(options);
+  if (options.validatePath) {
+    process.exitCode = printValidateResult(loadSuiteFromFile(options.validatePath));
+    return;
+  }
+
+  try {
+    await startServer(options);
+  } catch (error) {
+    process.exitCode = error?.code === "EADDRINUSE" ? 1 : 1;
+  }
 }
+
+if (process.argv[1] === __filename) {
+  main();
+}
+
+export {
+  INDEX_HTML_PATH,
+  buildPortInUseMessage,
+  createRequestHandler,
+  formatGuiUrl,
+  main,
+  parseCli,
+  resolvePort,
+  startServer
+};

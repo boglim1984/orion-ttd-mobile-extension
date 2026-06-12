@@ -2,7 +2,7 @@
 
 ## Status
 
-Trial 1R complete / PASS.
+Trial 1R complete / PASS, including the `move_on` boundary.
 
 ## Dependency
 
@@ -33,8 +33,21 @@ Trial 1R — repaired continue boundary rerun with strengthened packet wording.
 - assistant stayed on `clear_trash`
 - done boundary held until `move_on` or `next`
 - no hidden progress was invented
+
+## Move On Boundary Result
+
+- result record:
+  `reports/milestone-8-6/trial-1r-move-on-boundary-result.md`
+- status:
+  PASS
+- `continue` preserved `active_chunk_id: clear_trash`
+- `done` completed only `clear_trash` and held
+- `move_on` advanced exactly one chunk to `collect_dishes`
+- assistant did not skip to `stack_papers`
+- assistant did not restart the route
+- assistant did not invent unrelated progress
 - next trial:
-  `move_on` boundary
+  record the next boundary only after the `collect_dishes` step is exercised cleanly
 
 ## How To Run
 

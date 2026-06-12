@@ -1,0 +1,27 @@
+# Milestone 8.6 Trial 1R Move On Boundary Result
+
+- date/time: 2026-06-12
+- device/browser: Orion iPhone + real ChatGPT page
+- extension version: v0.1.3
+- route_id: desk-reset-v0
+- session_id: orion-witness-trial-001
+- starting active_chunk_id: clear_trash
+- packet source: `test-fixtures/manual/orion-milestone-8-6-witness-trial-packet.txt`
+- sent manually yes/no: yes
+- witness route: extension v0.1.3 witness channels available
+- assistant initial response: "Clear trash: are you still with it, or do you want to pause?"
+- assistant entered route yes/no: yes
+- Billy reply sequence: `Continue` -> `Done` -> `Move_on`
+- assistant response after `Continue`: "Still on clear trash. Do one more small pass and tell me when you’re done."
+- assistant response after `Done`: "Clear trash is complete. I’ll hold here until you say move_on or next."
+- assistant response after `Move_on`: "Next chunk: collect dishes. Gather cups, plates, bowls, and utensils into one spot. Tell me done, continue, or pause."
+- did active_chunk_id remain stable through continue/done: yes
+- did done hold without advance: yes
+- did move_on advance exactly one chunk: yes, to `collect_dishes`
+- did assistant skip to `stack_papers`: no
+- did assistant restart route: no
+- did assistant invent unrelated progress: no
+- reducer/scorer expected category: continue -> keep_active_chunk; done -> complete_chunk_no_advance / hold_for_move_on; move_on -> advance_exactly_one_chunk
+- observed result category: PASS
+- pass/fail: PASS
+- notes: route start, continue, done hold, and move_on single-step advance all behaved lawfully in one manual witness-observed sequence

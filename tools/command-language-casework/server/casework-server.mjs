@@ -90,11 +90,26 @@ function readJsonBody(request) {
       try {
         resolve(JSON.parse(bodyText));
       } catch (error) {
-        reject(error);
+        resolve({ _raw_text: bodyText, _parse_error: error.message });
       }
     });
     request.on("error", reject);
   });
+}
+
+function normalizeSuiteText(body) {
+  if (!body) return "";
+  if (typeof body._raw_text === "string") return body._raw_text;
+  if (typeof body.suiteText === "string") return body.suiteText;
+  if (typeof body.suite_text === "string") return body.suite_text;
+  if (typeof body.suite_json === "string") return body.suite_json;
+  if (body.suite && typeof body.suite === "object" && !Array.isArray(body.suite)) {
+    return JSON.stringify(body.suite);
+  }
+  if (body.suite_id !== undefined || body.cases !== undefined) {
+    return JSON.stringify(body);
+  }
+  return "";
 }
 
 function getBootstrapSnippet(port) {
@@ -230,7 +245,7 @@ async function handleApi(request, response, url, port) {
 
   if (request.method === "POST" && url.pathname === "/api/runner/self-contained-payload") {
     const body = await readJsonBody(request);
-    const validation = validateSuiteText(body.suite_text || "");
+    const validation = validateSuiteText(normalizeSuiteText(body));
     if (!validation.ok) {
       sendJson(response, 400, validation);
       return;
@@ -251,7 +266,7 @@ async function handleApi(request, response, url, port) {
 
   if (request.method === "POST" && url.pathname === "/api/validate") {
     const body = await readJsonBody(request);
-    const validation = validateSuiteText(body.suite_text || "");
+    const validation = validateSuiteText(normalizeSuiteText(body));
     sendJson(response, validation.ok ? 200 : 400, {
       ok: validation.ok,
       errors: validation.errors || [],
@@ -265,7 +280,7 @@ async function handleApi(request, response, url, port) {
 
   if (request.method === "POST" && url.pathname === "/api/save-draft") {
     const body = await readJsonBody(request);
-    const validation = validateSuiteText(body.suite_text || "");
+    const validation = validateSuiteText(normalizeSuiteText(body));
     if (!validation.ok) {
       sendJson(response, 400, validation);
       return;
@@ -286,7 +301,7 @@ async function handleApi(request, response, url, port) {
 
   if (request.method === "POST" && url.pathname === "/api/run") {
     const body = await readJsonBody(request);
-    const validation = validateSuiteText(body.suite_text || "");
+    const validation = validateSuiteText(normalizeSuiteText(body));
     if (!validation.ok) {
       sendJson(response, 400, validation);
       return;

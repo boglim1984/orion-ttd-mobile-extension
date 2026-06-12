@@ -243,3 +243,118 @@ test("occupied port handling rejects cleanly with EADDRINUSE", async () => {
     });
   }
 });
+
+function postValidation(url, payloadText, contentType = "application/json") {
+  return new Promise((resolve, reject) => {
+    const request = http.request(
+      url,
+      {
+        method: "POST",
+        headers: {
+          "content-type": contentType,
+          "content-length": Buffer.byteLength(payloadText)
+        }
+      },
+      (result) => {
+        const chunks = [];
+        result.on("data", (chunk) => chunks.push(chunk));
+        result.on("end", () => {
+          resolve({
+            statusCode: result.statusCode,
+            headers: result.headers,
+            body: Buffer.concat(chunks).toString("utf8")
+          });
+        });
+      }
+    );
+    request.on("error", reject);
+    request.write(payloadText);
+    request.end();
+  });
+}
+
+test("/api/validate accepts various normalized shapes", async () => {
+  const serverModule = await loadServerModule();
+  const started = await serverModule.startServer({
+    host: "127.0.0.1",
+    port: 0
+  });
+
+  const validSuite = {
+    suite_id: "test-shapes-v1",
+    suite_title: "Test Shapes",
+    suite_goal: "Verify normalization",
+    created_for_tool: "command-language-casework-runner-v1",
+    route_id: "desk-reset-v0",
+    run_config: {
+      send_mode: "explicit_casework_run_button",
+      turn_timeout_ms: 1000,
+      stability_wait_ms: 250
+    },
+    cases: [
+      {
+        case_id: "case-01",
+        title: "Test case",
+        research_question: "Q",
+        packet: "TTD_COMMAND_V1\\n{}",
+        scripted_user_replies: [],
+        expected_behavior: ["pass"],
+        forbidden_behavior: ["fail"],
+        expected_reducer_semantics: "continue",
+        classification_targets: ["PASS"]
+      }
+    ]
+  };
+  const validSuiteJson = JSON.stringify(validSuite);
+
+  try {
+    const url = `${started.guiUrl}/api/validate`;
+
+    // 1. { suiteText: "..." }
+    let res = await postValidation(url, JSON.stringify({ suiteText: validSuiteJson }));
+    if(res.statusCode !== 200) console.log(res.body); assert.equal(res.statusCode, 200);
+    assert.equal(JSON.parse(res.body).suite.suite_id, "test-shapes-v1");
+
+    // 2. { suite_text: "..." }
+    res = await postValidation(url, JSON.stringify({ suite_text: validSuiteJson }));
+    if(res.statusCode !== 200) console.log(res.body); assert.equal(res.statusCode, 200);
+
+    // 3. { suite_json: "..." }
+    res = await postValidation(url, JSON.stringify({ suite_json: validSuiteJson }));
+    if(res.statusCode !== 200) console.log(res.body); assert.equal(res.statusCode, 200);
+
+    // 4. { suite: { ... } }
+    res = await postValidation(url, JSON.stringify({ suite: validSuite }));
+    if(res.statusCode !== 200) console.log(res.body); assert.equal(res.statusCode, 200);
+
+    // 5. raw suite
+    res = await postValidation(url, validSuiteJson);
+    if(res.statusCode !== 200) console.log(res.body); assert.equal(res.statusCode, 200);
+
+    // 6. empty string
+    res = await postValidation(url, "");
+    assert.equal(res.statusCode, 400);
+    assert.match(JSON.parse(res.body).errors[0], /Suite JSON is empty/);
+
+    // 7. malformed json
+    res = await postValidation(url, JSON.stringify({ suite_text: "not json" }));
+    assert.equal(res.statusCode, 400);
+    assert.match(JSON.parse(res.body).errors[0], /could not be parsed/);
+
+    // 8. raw text/plain
+    res = await postValidation(url, validSuiteJson, "text/plain");
+    if(res.statusCode !== 200) console.log(res.body); assert.equal(res.statusCode, 200);
+
+  } finally {
+    await new Promise((resolve, reject) => {
+      started.server.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+        resolve();
+      });
+    });
+  }
+});
+

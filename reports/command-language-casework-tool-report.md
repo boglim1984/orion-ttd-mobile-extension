@@ -88,6 +88,12 @@ The tool now also includes a Casework Designer Skill bookmarklet helper for the 
 - the runner now treats active-generation indicators as hard locks and records `TOOL_FAIL_TURN_SEQUENCING_NO_ASSISTANT_COMPLETION` when assistant completion is not safely observed
 - result files now carry `dom_turn_trace` so DOM-level timing and UI-state evidence survive without screenshots
 
+## Validation Request Shape Fix
+
+- Validate Suite now accepts the GUI textarea suite through a normalized server request shape.
+- The skill bookmarklet remains the dev/design chat setup surface.
+- The validation fix is separate from runner execution.
+
 ## Next Action
 
 Use the dev-chat bookmarklet to design the next suite, run it through the GUI plus disposable ChatGPT support tab, then drop `run-summary.md` and `run-result.json` back into the dev chat for Mermaid review.

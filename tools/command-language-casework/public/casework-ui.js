@@ -279,8 +279,8 @@ suiteInput.addEventListener("input", () => {
   markSuiteDirty();
 });
 
-validateButton.addEventListener("click", () =>
-  withAction(async () => {
+validateButton.addEventListener("click", async () => {
+  try {
     const response = await postJson("/api/validate", {
       suite_text: suiteInput.value
     });
@@ -291,8 +291,12 @@ validateButton.addEventListener("click", () =>
     setValidationSummary(`Valid suite: ${uiState.suiteId} (${uiState.caseCount} cases).`, "success");
     setOverlayStatus("Suite valid. Copy the self-contained runner next.");
     renderStateStrip();
-  })
-);
+    await refreshState();
+  } catch (error) {
+    setValidationSummary(`Validation failed: ${error.message}`, "danger");
+    appendStatusLine(`Validation failed: ${error.message}`);
+  }
+});
 
 copySelfContainedButton.addEventListener("click", () =>
   withAction(async () => {

@@ -180,6 +180,14 @@ Those files preserve both a quick human summary and the raw per-case record.
 - tool failures are now labeled explicitly, including `TOOL_FAIL_SEND_BUTTON_NOT_FOUND`, `TOOL_FAIL_COMPOSER_NOT_FOUND`, `TOOL_FAIL_COMPOSER_INSERT_VERIFY`, `TOOL_FAIL_MESSAGE_NOT_SENT`, and `TOOL_FAIL_RESPONSE_NOT_OBSERVED`
 - the runner now stops after the first tool-send failure and exposes overlay diagnostics for composer discovery, insert verification, send-button selection, and last error
 
+## First Successful Send Run And Turn-Boundary Finding
+
+- runner send activation now works on the live ChatGPT page
+- the next live finding was sequencing: ChatGPT can accept a new send while the previous assistant turn still shows `Thinking` / `Stop answering`
+- the runner must therefore treat `Stop answering`, `Thinking`, and changing assistant text as hard locks before any scripted follow-up reply
+- completed assistant responses must be stable DOM text, not transient `Thinking`
+- `dom_turn_trace` is now required evidence in the result JSON for language casework analysis
+
 ## How This Differs From Reducer/Scorer Tests
 
 - reducer/scorer tests are deterministic local legal checks

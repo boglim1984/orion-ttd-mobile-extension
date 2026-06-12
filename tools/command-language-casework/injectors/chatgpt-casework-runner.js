@@ -17,8 +17,14 @@
     SEND_CONTROL_NOT_ENABLED_AFTER_INSERT: "TOOL_FAIL_SEND_CONTROL_NOT_ENABLED_AFTER_INSERT",
     SEND_BUTTON_NOT_FOUND: "TOOL_FAIL_SEND_BUTTON_NOT_FOUND",
     MESSAGE_NOT_SENT: "TOOL_FAIL_MESSAGE_NOT_SENT",
-    RESPONSE_NOT_OBSERVED: "TOOL_FAIL_RESPONSE_NOT_OBSERVED"
+    RESPONSE_NOT_OBSERVED: "TOOL_FAIL_RESPONSE_NOT_OBSERVED",
+    TURN_SEQUENCING_NO_ASSISTANT_COMPLETION: "TOOL_FAIL_TURN_SEQUENCING_NO_ASSISTANT_COMPLETION"
   };
+  const STOP_GENERATION_SELECTORS = [
+    "button[data-testid='stop-button']",
+    "button[aria-label*='Stop answering']",
+    "button[aria-label*='stop answering']"
+  ];
 
   function nowIso() {
     return new Date().toISOString();
@@ -268,7 +274,8 @@
       failureStage: "composer_insert",
       fallbackMethodUsed: "none",
       submitAttempted: false,
-      lastError: null
+      lastError: null,
+      domTurnTrace: []
     };
   }
 
@@ -349,8 +356,88 @@
       `send button data-testid: ${sendMeta.dataTestId || "none"}`,
       `fallback method used: ${diagnostics.fallbackMethodUsed || "none"}`,
       `failure stage: ${diagnostics.failureStage || "unknown"}`,
+      `dom turn trace entries: ${Array.isArray(diagnostics.domTurnTrace) ? diagnostics.domTurnTrace.length : 0}`,
       `last error: ${diagnostics.lastError || "none"}`
     ].join("\n");
+  }
+
+  function latestExcerpt(text) {
+    return cleanText(String(text || "")).slice(0, 160);
+  }
+
+  function looksLikeThinking(text) {
+    const normalized = cleanText(text).toLowerCase();
+    return normalized === "thinking" || normalized === "thinking..." || normalized === "thinking…" || normalized.startsWith("thinking ");
+  }
+
+  function collectUserMessages(documentRef) {
+    const selectors = [
+      "[data-message-author-role='user']",
+      "article [data-message-author-role='user']"
+    ];
+    const nodes = [];
+    for (const selector of selectors) {
+      documentRef.querySelectorAll(selector).forEach((node) => {
+        if (isVisible(node)) {
+          nodes.push(node);
+        }
+      });
+      if (nodes.length > 0) {
+        break;
+      }
+    }
+    return nodes.map((node) => cleanText(node.textContent || "")).filter(Boolean);
+  }
+
+  function isStopButtonVisible(documentRef) {
+    for (const selector of STOP_GENERATION_SELECTORS) {
+      const node = documentRef.querySelector(selector);
+      if (node && isVisible(node)) {
+        return true;
+      }
+    }
+
+    return [...documentRef.querySelectorAll("button")]
+      .some((node) => isVisible(node) && /stop answering/i.test(textFromElement(node)));
+  }
+
+  function snapshotDomTurnState(documentRef, composer, diagnostics) {
+    const userMessages = collectUserMessages(documentRef);
+    const assistantMessages = collectAssistantMessages(documentRef);
+    const latestAssistant = assistantMessages[assistantMessages.length - 1] || "";
+    const latestUser = userMessages[userMessages.length - 1] || "";
+    const sendButton = composer ? findSendButton(documentRef, composer, diagnostics || makeAttemptDiagnostics()) : null;
+    const composerText = composer ? getComposerText(composer) : "";
+    const stopVisible = isStopButtonVisible(documentRef);
+    const thinkingVisible = looksLikeThinking(latestAssistant) || stopVisible;
+
+    return {
+      timestamp: nowIso(),
+      user_message_count: userMessages.length,
+      assistant_message_count: assistantMessages.length,
+      latest_user_text_excerpt: latestExcerpt(latestUser),
+      latest_assistant_text_excerpt: latestExcerpt(latestAssistant),
+      thinking_visible: thinkingVisible,
+      stop_button_visible: stopVisible,
+      send_button_visible: Boolean(sendButton),
+      composer_text_length: composer ? composerText.length : 0,
+      composer_verified: composer ? (cleanText(composerText) ? true : false) : "unknown"
+    };
+  }
+
+  function pushDomTurnTrace(caseResult, documentRef, composer, diagnostics, phase, actionTaken, notes = "") {
+    const snapshot = snapshotDomTurnState(documentRef, composer, diagnostics);
+    const entry = {
+      ...snapshot,
+      phase,
+      action_taken: actionTaken,
+      notes
+    };
+    caseResult.dom_turn_trace.push(entry);
+    if (diagnostics) {
+      diagnostics.domTurnTrace = caseResult.dom_turn_trace;
+    }
+    return entry;
   }
 
   function collectComposerControls(composer) {
@@ -660,38 +747,149 @@
     return nodes.map((node) => cleanText(node.textContent || "")).filter(Boolean);
   }
 
-  async function waitForStableAssistantMessage(documentRef, baseline, runConfig, stopState) {
-    const timeoutMs = Number(runConfig.turn_timeout_ms || 90000);
-    const stabilityWaitMs = Number(runConfig.stability_wait_ms || 2500);
-    const start = Date.now();
+  async function waitForAssistantStartAndCompletion(documentRef, baseline, runConfig, stopState, caseResult, overlay, diagnostics, composer) {
+    const startTimeoutMs = Number(runConfig.assistant_start_timeout_ms || 30000);
+    const completeTimeoutMs = Number(runConfig.assistant_complete_timeout_ms || 120000);
+    const stabilityWaitMs = Number(runConfig.assistant_stability_wait_ms || runConfig.stability_wait_ms || 2000);
+    const startedAt = Date.now();
+    let started = false;
+    let latestObservedText = "";
     let stableSince = null;
-    let lastText = "";
 
-    while (Date.now() - start < timeoutMs) {
+    while (Date.now() - startedAt < completeTimeoutMs) {
       if (stopState.stopRequested) {
-        throw new Error("Runner stop requested.");
+        diagnostics.failureStage = "response_observe";
+        diagnostics.lastError = "Runner stop requested.";
+        pushDomTurnTrace(caseResult, documentRef, composer, diagnostics, "response_observe", "run_stopped", diagnostics.lastError);
+        throw createToolFailure("MESSAGE_NOT_SENT", diagnostics.lastError, diagnostics);
       }
 
-      const messages = collectAssistantMessages(documentRef);
-      const newest = messages[messages.length - 1] || "";
-      const hasNewTurn = messages.length > baseline.count || newest !== baseline.lastText;
+      const assistantMessages = collectAssistantMessages(documentRef);
+      const newest = assistantMessages[assistantMessages.length - 1] || "";
+      const stopVisible = isStopButtonVisible(documentRef);
+      const thinkingVisible = looksLikeThinking(newest) || stopVisible;
+      const hasNewTurn = assistantMessages.length > baseline.count || newest !== baseline.lastText;
 
-      if (hasNewTurn && newest) {
-        if (newest !== lastText) {
-          lastText = newest;
-          stableSince = Date.now();
-        } else if (stableSince && Date.now() - stableSince >= stabilityWaitMs) {
-          return {
-            latestText: newest,
-            allMessages: messages
-          };
-        }
+      if (!started && Date.now() - startedAt > startTimeoutMs) {
+        diagnostics.failureStage = "response_observe";
+        diagnostics.lastError = "Timed out waiting for assistant to start responding.";
+        pushDomTurnTrace(caseResult, documentRef, composer, diagnostics, "response_observe", "timeout_waiting_for_completion", diagnostics.lastError);
+        throw createToolFailure("TURN_SEQUENCING_NO_ASSISTANT_COMPLETION", diagnostics.lastError, diagnostics);
       }
 
-      await wait(500);
+      if (hasNewTurn) {
+        started = true;
+        pushDomTurnTrace(
+          caseResult,
+          documentRef,
+          composer,
+          diagnostics,
+          "response_observe",
+          thinkingVisible ? "assistant_thinking_seen" : "waiting_for_assistant_stable",
+          thinkingVisible ? "Thinking detected, holding next scripted reply." : "Assistant content changed."
+        );
+      }
+
+      if (!started) {
+        overlay?.setStatus("Waiting for assistant to start...");
+        pushDomTurnTrace(caseResult, documentRef, composer, diagnostics, "response_observe", "waiting_for_assistant_start", "Waiting for assistant message count or text change.");
+        await wait(300);
+        continue;
+      }
+
+      if (thinkingVisible || !cleanText(newest) || looksLikeThinking(newest)) {
+        stableSince = null;
+        overlay?.setStatus("Thinking detected, holding next scripted reply...");
+        await wait(300);
+        continue;
+      }
+
+      if (newest !== latestObservedText) {
+        latestObservedText = newest;
+        stableSince = Date.now();
+        overlay?.setStatus("Waiting for assistant to finish...");
+        pushDomTurnTrace(caseResult, documentRef, composer, diagnostics, "response_observe", "waiting_for_assistant_stable", "Assistant text changed; waiting for stability window.");
+        await wait(300);
+        continue;
+      }
+
+      if (stableSince && Date.now() - stableSince >= stabilityWaitMs && !stopVisible) {
+        overlay?.setStatus("Assistant response stable.");
+        pushDomTurnTrace(caseResult, documentRef, composer, diagnostics, "response_observe", "assistant_stable", "Assistant text remained stable past the completion window.");
+        return {
+          latestText: newest,
+          allMessages: assistantMessages
+        };
+      }
+
+      await wait(300);
     }
 
-    throw new Error("Timed out waiting for assistant response stability.");
+    diagnostics.failureStage = "response_observe";
+    diagnostics.lastError = "Timed out waiting for assistant completion.";
+    pushDomTurnTrace(caseResult, documentRef, composer, diagnostics, "response_observe", "timeout_waiting_for_completion", diagnostics.lastError);
+    throw createToolFailure("TURN_SEQUENCING_NO_ASSISTANT_COMPLETION", diagnostics.lastError, diagnostics);
+  }
+
+  async function waitForReadyToSend(documentRef, runConfig, stopState, caseResult, overlay, actor) {
+    const completeTimeoutMs = Number(runConfig.assistant_complete_timeout_ms || 120000);
+    const stabilityWaitMs = Number(runConfig.assistant_stability_wait_ms || runConfig.stability_wait_ms || 2000);
+    const startedAt = Date.now();
+    let lastAssistantText = "";
+    let stableSince = null;
+
+    while (Date.now() - startedAt < completeTimeoutMs) {
+      if (stopState.stopRequested) {
+        pushDomTurnTrace(caseResult, documentRef, null, null, "pre_send_wait", "run_stopped", "Stop requested before scripted send.");
+        throw createToolFailure("MESSAGE_NOT_SENT", "Runner stop requested before scripted send.", {
+          ...makeAttemptDiagnostics(),
+          failureStage: "send_activation",
+          lastError: "Runner stop requested before scripted send.",
+          domTurnTrace: caseResult.dom_turn_trace
+        });
+      }
+
+      const assistantMessages = collectAssistantMessages(documentRef);
+      const latestAssistant = assistantMessages[assistantMessages.length - 1] || "";
+      const stopVisible = isStopButtonVisible(documentRef);
+      const thinkingVisible = looksLikeThinking(latestAssistant) || stopVisible;
+
+      if (thinkingVisible) {
+        stableSince = null;
+        overlay?.setStatus("Thinking detected, holding next scripted reply...");
+        pushDomTurnTrace(caseResult, documentRef, null, null, "pre_send_wait", "assistant_thinking_seen", `${actor} blocked while generation is active.`);
+        await wait(300);
+        continue;
+      }
+
+      if (latestAssistant && latestAssistant !== lastAssistantText) {
+        lastAssistantText = latestAssistant;
+        stableSince = Date.now();
+        overlay?.setStatus("Waiting for assistant to finish...");
+        pushDomTurnTrace(caseResult, documentRef, null, null, "pre_send_wait", "waiting_for_assistant_stable", `${actor} waiting for assistant stability.`);
+        await wait(300);
+        continue;
+      }
+
+      if (!latestAssistant) {
+        return;
+      }
+
+      if (stableSince && Date.now() - stableSince >= stabilityWaitMs) {
+        overlay?.setStatus("Assistant response stable, sending next scripted reply...");
+        pushDomTurnTrace(caseResult, documentRef, null, null, "pre_send_wait", "assistant_stable", `${actor} may send now.`);
+        return;
+      }
+
+      await wait(300);
+    }
+
+    pushDomTurnTrace(caseResult, documentRef, null, null, "pre_send_wait", "timeout_waiting_for_completion", `${actor} timed out waiting for assistant completion.`);
+    const diagnostics = makeAttemptDiagnostics();
+    diagnostics.failureStage = "response_observe";
+    diagnostics.lastError = "Timed out waiting for assistant completion before next scripted reply.";
+    diagnostics.domTurnTrace = caseResult.dom_turn_trace;
+    throw createToolFailure("TURN_SEQUENCING_NO_ASSISTANT_COMPLETION", diagnostics.lastError, diagnostics);
   }
 
   async function sendMessage(documentRef, text, stopState) {
@@ -769,6 +967,7 @@
       forbidden_behavior: caseDef.forbidden_behavior || [],
       notes: caseDef.notes || "",
       raw_turn_log: [],
+      dom_turn_trace: [],
       case_status: "PENDING",
       packet_prepared: Boolean(caseDef.packet),
       packet_submitted: false,
@@ -780,9 +979,10 @@
   function buildEmptyCaseFailure(caseDef, message, toolFailureLabel, diagnostics) {
     const failure = buildCaseResult(caseDef);
     failure.notes = message;
-    failure.case_status = "NOT_SENT";
+    failure.case_status = toolFailureLabel === TOOL_FAILURE_LABELS.TURN_SEQUENCING_NO_ASSISTANT_COMPLETION ? "TOOL_FAILED" : "NOT_SENT";
     failure.tool_failure_label = toolFailureLabel || null;
     failure.diagnostics = diagnostics || null;
+    failure.dom_turn_trace = diagnostics?.domTurnTrace || failure.dom_turn_trace;
     return failure;
   }
 
@@ -936,7 +1136,11 @@
     const caseResult = buildCaseResult(caseDef);
 
     async function sendAndCapture(actorText, actor) {
+      if (actor !== "packet") {
+        await waitForReadyToSend(documentRef, runConfig, stopState, caseResult, runConfig.overlayRef, actor);
+      }
       const baseline = createBaseline(documentRef);
+      pushDomTurnTrace(caseResult, documentRef, null, null, "send", actor === "packet" ? "before_packet_insert" : "before_scripted_reply_send", `Preparing to send ${actor}.`);
       caseResult.raw_turn_log.push({
         at: nowIso(),
         actor,
@@ -946,10 +1150,29 @@
       caseResult.packet_submitted = actor === "packet" ? true : caseResult.packet_submitted;
       caseResult.case_status = "SENT";
       caseResult.diagnostics = sendDiagnostics;
-      const observation = await waitForStableAssistantMessage(documentRef, baseline, runConfig, stopState).catch((error) => {
+      sendDiagnostics.domTurnTrace = caseResult.dom_turn_trace;
+      pushDomTurnTrace(caseResult, documentRef, null, sendDiagnostics, "send", actor === "packet" ? "after_packet_send" : "after_scripted_reply_send", `${actor} submitted.`);
+      const observation = await waitForAssistantStartAndCompletion(
+        documentRef,
+        baseline,
+        runConfig,
+        stopState,
+        caseResult,
+        runConfig.overlayRef,
+        sendDiagnostics,
+        null
+      ).catch((error) => {
+        if (error.toolFailureLabel) {
+          throw error;
+        }
         throw createToolFailure("RESPONSE_NOT_OBSERVED", error.message, sendDiagnostics);
       });
       const latestText = observation.latestText;
+      if (looksLikeThinking(latestText)) {
+        sendDiagnostics.failureStage = "response_observe";
+        sendDiagnostics.lastError = "Thinking was observed without assistant completion.";
+        throw createToolFailure("TURN_SEQUENCING_NO_ASSISTANT_COMPLETION", sendDiagnostics.lastError, sendDiagnostics);
+      }
       caseResult.assistant_responses.push(latestText);
       caseResult.visible_turn_text = latestText;
       caseResult.case_status = "RESPONDED";
@@ -983,7 +1206,10 @@
       errors: []
     };
 
-    const runConfig = suite.run_config || {};
+    const runConfig = {
+      ...(suite.run_config || {}),
+      overlayRef: overlay
+    };
     for (const caseDef of suite.cases || []) {
       if (stopState.stopRequested) {
         runResult.warnings.push("Run stopped by user before all cases completed.");

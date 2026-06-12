@@ -81,3 +81,10 @@ Each run includes:
 - That outcome is a runner tool failure, not a command-language result.
 - Tool failures now classify as `TOOL_FAIL_*` labels such as `TOOL_FAIL_SEND_BUTTON_NOT_FOUND` instead of `PASS_CANDIDATE`.
 - The runner now stops after the first send/composer tool failure and exposes overlay diagnostics for composer and send-button discovery.
+
+## First Successful Send Run And Turn-Boundary Finding
+
+- The runner now reaches send activation on the live ChatGPT page.
+- The first successful send run exposed a new tool failure: ChatGPT accepts another send while the prior answer is still thinking.
+- `Stop answering` and `Thinking` must be treated as hard turn-boundary locks before any scripted follow-up reply is sent.
+- Result JSON now includes `dom_turn_trace` so timing, stop-button visibility, send visibility, and assistant/user DOM state are visible without screenshots.

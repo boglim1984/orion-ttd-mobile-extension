@@ -56,6 +56,14 @@ The server, GUI, suite validator, heuristic classifier, result writer, and conso
 - the runner now records explicit `TOOL_FAIL_*` labels, stops after the first send/composer tool failure, and emits overlay diagnostics for selector investigation
 - the self-contained download path is now the primary documented path; server-side result buttons remain secondary/legacy
 
+## First Successful Send Run And Turn-Boundary Finding
+
+- send activation is now proven: the runner can install, insert, activate send, and download results
+- the first successful send run exposed a sequencing bug: the runner advanced while ChatGPT still showed `Thinking` / `Stop answering`
+- this is a tool failure, not a language-behavior pass
+- the runner now treats active-generation indicators as hard locks and records `TOOL_FAIL_TURN_SEQUENCING_NO_ASSISTANT_COMPLETION` when assistant completion is not safely observed
+- result files now carry `dom_turn_trace` so DOM-level timing and UI-state evidence survive without screenshots
+
 ## Next Action
 
 Run the baseline suite in a disposable ChatGPT test chat, then drop `run-summary.md` and `run-result.json` into a fresh chat loaded with the Command Language Casework Designer Skill.

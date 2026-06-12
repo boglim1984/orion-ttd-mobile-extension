@@ -110,6 +110,19 @@ function createContentEditableComposer() {
   };
 }
 
+function createOverlayRecorder() {
+  return {
+    statuses: [],
+    diagnostics: [],
+    setStatus(text) {
+      this.statuses.push(text);
+    },
+    setDiagnostics(text) {
+      this.diagnostics.push(text);
+    }
+  };
+}
+
 test("send button ranking prefers visible send-like button and ignores disabled or non-send buttons", () => {
   const composer = {
     closest(selector) {
@@ -213,16 +226,7 @@ test("tool failure run stops after first composer state-sync failure and records
       return [];
     }
   };
-  const overlay = {
-    statuses: [],
-    diagnostics: [],
-    setStatus(text) {
-      this.statuses.push(text);
-    },
-    setDiagnostics(text) {
-      this.diagnostics.push(text);
-    }
-  };
+  const overlay = createOverlayRecorder();
   const suite = {
     suite_id: "desk-reset-v0",
     run_config: {
@@ -317,16 +321,7 @@ test("contenteditable insertion records insertion method and state-sync failure 
   };
   composer.ownerDocument = documentRef;
 
-  const overlay = {
-    statuses: [],
-    diagnostics: [],
-    setStatus(text) {
-      this.statuses.push(text);
-    },
-    setDiagnostics(text) {
-      this.diagnostics.push(text);
-    }
-  };
+  const overlay = createOverlayRecorder();
   const suite = {
     suite_id: "desk-reset-v0",
     run_config: {
@@ -361,4 +356,264 @@ test("contenteditable insertion records insertion method and state-sync failure 
   assert.equal(runResult.cases[0].diagnostics.failureStage, "composer_state_sync");
   assert.match(overlay.statuses.join("\n"), /composer state-sync failure/i);
   assert.match(overlay.diagnostics.join("\n"), /insertion method used: contenteditable_execCommand_insertText/);
+});
+
+test("thinking is not accepted as a completed assistant response and completion timeout becomes turn-sequencing failure", async () => {
+  const composer = {
+    value: "",
+    disabled: false,
+    readOnly: false,
+    focus() {},
+    setSelectionRange() {},
+    dispatchEvent() {
+      return true;
+    },
+    closest() {
+      return {
+        querySelectorAll() {
+          return [];
+        }
+      };
+    },
+    parentElement: {
+      contains() {
+        return false;
+      }
+    },
+    getBoundingClientRect() {
+      return { width: 200, height: 40 };
+    }
+  };
+  const sendButton = createFakeButton({
+    ariaLabel: "Send message",
+    dataTestId: "send-button",
+    type: "submit"
+  });
+  sendButton.click = () => {};
+  const assistantNode = {
+    textContent: "Thinking",
+    getBoundingClientRect() {
+      return { width: 200, height: 40 };
+    }
+  };
+  const stopButton = createFakeButton({
+    ariaLabel: "Stop answering",
+    dataTestId: "stop-button",
+    text: "Stop answering"
+  });
+
+  const documentRef = {
+    title: "Disposable ChatGPT Test",
+    defaultView: {
+      Event: class Event {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      },
+      InputEvent: class InputEvent {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      }
+    },
+    querySelector(selector) {
+      if (selector === "#prompt-textarea") {
+        return composer;
+      }
+      if (selector === "button[data-testid='send-button']") {
+        return sendButton;
+      }
+      if (selector === "button[data-testid='stop-button']") {
+        return stopButton;
+      }
+      return null;
+    },
+    querySelectorAll(selector) {
+      if (selector === "button[data-testid='send-button']") {
+        return [sendButton];
+      }
+      if (selector === "button[type='submit']") {
+        return [sendButton];
+      }
+      if (selector === "form button") {
+        return [sendButton, stopButton];
+      }
+      if (selector === "[data-message-author-role='assistant']") {
+        return [assistantNode];
+      }
+      return [];
+    }
+  };
+  const overlay = createOverlayRecorder();
+  const suite = {
+    suite_id: "desk-reset-v0",
+    run_config: {
+      assistant_start_timeout_ms: 500,
+      assistant_complete_timeout_ms: 1200,
+      assistant_stability_wait_ms: 300,
+      stop_on_case_failure: false,
+      stop_after_each_case: false
+    },
+    cases: [
+      {
+        case_id: "case-001",
+        title: "First case",
+        research_question: "Question",
+        packet: "TTD_COMMAND_V1\n{\"active_chunk_id\":\"clear_trash\"}",
+        scripted_user_replies: []
+      }
+    ]
+  };
+
+  const runResult = await runner.__test.runSuiteLocally({
+    documentRef,
+    suite,
+    runId: "thinking-timeout-test",
+    stopState: { stopRequested: false },
+    overlay,
+    browserContextNote: "Test"
+  });
+
+  assert.equal(runResult.status, "TOOL_FAILED");
+  assert.equal(runResult.cases[0].tool_failure_label, "TOOL_FAIL_TURN_SEQUENCING_NO_ASSISTANT_COMPLETION");
+  assert.notEqual(runResult.cases[0].visible_turn_text, "Thinking");
+  assert.equal(runResult.cases[0].case_status, "TOOL_FAILED");
+  assert.match(overlay.statuses.join("\n"), /Waiting for assistant to start|Stopped: Timed out waiting for assistant to start responding/);
+});
+
+test("dom turn trace records stop and thinking fields during sequencing wait", async () => {
+  const composer = {
+    value: "",
+    disabled: false,
+    readOnly: false,
+    focus() {},
+    setSelectionRange() {},
+    dispatchEvent() {
+      return true;
+    },
+    closest() {
+      return {
+        querySelectorAll() {
+          return [];
+        }
+      };
+    },
+    parentElement: {
+      contains() {
+        return false;
+      }
+    },
+    getBoundingClientRect() {
+      return { width: 200, height: 40 };
+    }
+  };
+  let stopVisible = true;
+  const sendButton = createFakeButton({
+    ariaLabel: "Send message",
+    dataTestId: "send-button",
+    type: "submit"
+  });
+  sendButton.click = () => {
+    stopVisible = true;
+  };
+  const stopButton = createFakeButton({
+    ariaLabel: "Stop answering",
+    dataTestId: "stop-button",
+    text: "Stop answering"
+  });
+  const assistantNode = {
+    textContent: "Thinking",
+    getBoundingClientRect() {
+      return { width: 200, height: 40 };
+    }
+  };
+
+  const documentRef = {
+    title: "Disposable ChatGPT Test",
+    defaultView: {
+      Event: class Event {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      },
+      InputEvent: class InputEvent {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      }
+    },
+    querySelector(selector) {
+      if (selector === "#prompt-textarea") {
+        return composer;
+      }
+      if (selector === "button[data-testid='send-button']") {
+        return sendButton;
+      }
+      if (selector === "button[data-testid='stop-button']" && stopVisible) {
+        return stopButton;
+      }
+      return null;
+    },
+    querySelectorAll(selector) {
+      if (selector === "button[data-testid='send-button']") {
+        return [sendButton];
+      }
+      if (selector === "button[type='submit']") {
+        return [sendButton];
+      }
+      if (selector === "form button") {
+        return stopVisible ? [sendButton, stopButton] : [sendButton];
+      }
+      if (selector === "[data-message-author-role='assistant']") {
+        return [assistantNode];
+      }
+      if (selector === "button") {
+        return stopVisible ? [sendButton, stopButton] : [sendButton];
+      }
+      return [];
+    }
+  };
+
+  const overlay = createOverlayRecorder();
+  const suite = {
+    suite_id: "desk-reset-v0",
+    run_config: {
+      assistant_start_timeout_ms: 200,
+      assistant_complete_timeout_ms: 800,
+      assistant_stability_wait_ms: 200,
+      stop_on_case_failure: false,
+      stop_after_each_case: false
+    },
+    cases: [
+      {
+        case_id: "case-001",
+        title: "First case",
+        research_question: "Question",
+        packet: "TTD_COMMAND_V1\n{\"active_chunk_id\":\"clear_trash\"}",
+        scripted_user_replies: ["Continue"]
+      }
+    ]
+  };
+
+  const runResult = await runner.__test.runSuiteLocally({
+    documentRef,
+    suite,
+    runId: "dom-trace-test",
+    stopState: { stopRequested: false },
+    overlay,
+    browserContextNote: "Test"
+  });
+
+  const trace = runResult.cases[0].dom_turn_trace;
+  assert.ok(Array.isArray(trace));
+  assert.ok(trace.length > 0);
+  assert.equal(typeof trace[0].thinking_visible, "boolean");
+  assert.equal(typeof trace[0].stop_button_visible, "boolean");
+  assert.ok("send_button_visible" in trace[0]);
+  assert.ok("composer_text_length" in trace[0]);
+  assert.ok(trace.some((entry) => entry.action_taken === "assistant_thinking_seen" || entry.action_taken === "waiting_for_assistant_start"));
 });

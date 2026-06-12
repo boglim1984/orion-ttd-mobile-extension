@@ -7,8 +7,14 @@ const __dirname = path.dirname(__filename);
 const ROOT_DIR = path.resolve(__dirname, "..");
 const SRC_DIR = path.join(ROOT_DIR, "src");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
-const VERSION = "0.1.1";
+const VERSION = "0.1.2";
 const UPDATED_AT = new Date().toISOString();
+const CONTENT_MODULE_FILES = [
+  path.join(SRC_DIR, "content", "packet-builder.js"),
+  path.join(SRC_DIR, "content", "composer-finder.js"),
+  path.join(SRC_DIR, "content", "orion-ttd-insert-only.js"),
+  path.join(SRC_DIR, "content.js")
+];
 
 function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true });
@@ -25,7 +31,7 @@ ensureDir(DIST_DIR);
 const buildDir = path.join(DIST_DIR, `v${VERSION}`, "chrome-ext");
 ensureDir(buildDir);
 
-const contentTemplate = fs.readFileSync(path.join(SRC_DIR, "content.js"), "utf8");
+const contentTemplate = CONTENT_MODULE_FILES.map((filePath) => fs.readFileSync(filePath, "utf8")).join("\n\n");
 const manifestTemplate = fs.readFileSync(path.join(SRC_DIR, "manifest.chrome.json"), "utf8");
 
 fs.writeFileSync(path.join(buildDir, "content.js"), replaceTokens(contentTemplate));
@@ -39,7 +45,7 @@ fs.writeFileSync(
       flavor: "chrome",
       channel: "orion-ios-github-pages-update",
       updatedAt: UPDATED_AT,
-      purpose: "real TTD mobile extension shell; page-visible DOM build stamp; no composer insertion yet"
+      purpose: "insert-only Orion command packet smoke; manual trigger only; no submit behavior"
     },
     null,
     2

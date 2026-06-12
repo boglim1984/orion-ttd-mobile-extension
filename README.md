@@ -7,8 +7,8 @@ This is the real TTD Mobile Extension shell.
 - GitHub Pages update loop is canonical.
 - Bookmarklet remains fallback.
 - Safari Web Inspector is the debugger.
-- v0.1.1 does not perform composer insertion.
-- v0.1.1 does not perform submit behavior.
+- v0.1.2 supports manual-trigger insert-only composer smoke.
+- v0.1.2 does not perform submit behavior.
 
 ## Layout
 
@@ -29,6 +29,7 @@ This is the real TTD Mobile Extension shell.
 - `docs/ORION_TTD_WORKFLOW_TESTS_V0.md`
 - `docs/ORION_TTD_MERMAID_PLANNING_RULE_V0.md`
 - `docs/ORION_TTD_SMARTNESS_BUDGET_V0.md`
+- `docs/ORION_TTD_MILESTONE_7_INSERT_ONLY_SMOKE.md`
 - `legal-framework/README.md`
 - `legal-framework/v1/ORION_TTD_FAIL_GRACEFULLY_HUMAN_WITNESS_ESCALATION_V1.md`
 - `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`
@@ -42,7 +43,7 @@ This is the real TTD Mobile Extension shell.
 - `scripts/run-workflow-fixtures.mjs`
 - `reports/milestone-6c-scorer-fixture-runner-report.md`
 
-## v0.1.1 behavior
+## v0.1.2 behavior
 
 The content script only runs on ChatGPT pages and exposes page-visible DOM dataset stamps on `document.documentElement`:
 
@@ -51,17 +52,20 @@ The content script only runs on ChatGPT pages and exposes page-visible DOM datas
 - `dataset.orionTtdChannel`
 - `dataset.orionTtdLoaded`
 - `dataset.orionTtdInfo`
+- `dataset.orionTtdInsertOnlyReady`
+- `dataset.orionTtdInsertOnlyLastResult`
 
 The content script also keeps these internal globals:
 
 - `window.__ORION_TTD_BUILD__`
 - `window.__ORION_TTD_INFO__`
 - `window.__ORION_TTD_SMOKE__()`
+- `window.__ORION_TTD_INSERT_ONLY_SMOKE__()`
 
 Console output:
 
 ```text
-[ORION TTD MOBILE] version=0.1.1 flavor=chrome
+[ORION TTD MOBILE] version=0.1.2 flavor=chrome
 ```
 
 ## Canonical update channel
@@ -80,7 +84,7 @@ node scripts/package-ttd-mobile-extension.mjs
 node scripts/verify-ttd-mobile-extension.mjs
 ```
 
-## Billy v0.1.1 test flow
+## Billy v0.1.2 test flow
 
 1. Open Orion iOS Extensions and tap `Update` for the installed Orion TTD Mobile Extension.
 2. Open `https://chatgpt.com/` in Orion iOS.
@@ -93,14 +97,16 @@ document.documentElement.dataset.orionTtdFlavor
 document.documentElement.dataset.orionTtdChannel
 document.documentElement.dataset.orionTtdLoaded
 document.documentElement.dataset.orionTtdInfo
+document.documentElement.dataset.orionTtdInsertOnlyReady
 ```
 
 Expected results:
 
-- build returns `"0.1.1"`
+- build returns `"0.1.2"`
 - flavor returns `"chrome"`
 - channel returns `"orion-ios-github-pages-update"`
 - loaded returns `"true"`
-- info contains version `0.1.1` and flavor `chrome`
-- no composer insertion occurs
+- info contains version `0.1.2` and flavor `chrome`
+- insert-only ready returns `"true"`
+- composer insertion occurs only after an explicit manual trigger
 - no submit occurs

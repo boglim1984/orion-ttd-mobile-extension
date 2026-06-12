@@ -1,0 +1,8 @@
+{
+  "name": "Orion TTD Mobile Extension",
+  "version": "0.1.2",
+  "flavor": "chrome",
+  "channel": "orion-ios-github-pages-update",
+  "updatedAt": "2026-06-12T04:12:18.856Z",
+  "purpose": "insert-only Orion command packet smoke; manual trigger only; no submit behavior"
+}

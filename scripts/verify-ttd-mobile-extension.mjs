@@ -9,7 +9,7 @@ const ROOT_DIR = path.resolve(__dirname, "..");
 const DIST_DIR = path.join(ROOT_DIR, "dist");
 const UPDATES_DIR = path.join(ROOT_DIR, "updates");
 const REPORTS_DIR = path.join(ROOT_DIR, "reports");
-const VERSION = "0.1.1";
+const VERSION = "0.1.2";
 const ZIP_NAME = `orion-ttd-mobile-extension-chrome-v${VERSION}.zip`;
 const ZIP_PATH = path.join(DIST_DIR, `v${VERSION}`, ZIP_NAME);
 const MANIFEST_PATH = path.join(DIST_DIR, `v${VERSION}`, "chrome-ext", "manifest.json");
@@ -21,7 +21,8 @@ const REQUIRED_DATASET_SNIPPETS = [
   'root.dataset.orionTtdFlavor = "chrome"',
   'root.dataset.orionTtdChannel = CHANNEL',
   'root.dataset.orionTtdLoaded = "true"',
-  'root.dataset.orionTtdInfo = JSON.stringify(info)'
+  'root.dataset.orionTtdInfo = JSON.stringify(info)',
+  'root.dataset.orionTtdInsertOnlyReady = "true"'
 ];
 const FORBIDDEN_SNIPPETS = [
   "localStorage",
@@ -30,8 +31,9 @@ const FORBIDDEN_SNIPPETS = [
   "indexedDB",
   "sendButton",
   ".click(",
-  "querySelector(",
-  "querySelectorAll(",
+  "requestSubmit(",
+  ".submit(",
+  "KeyboardEvent",
   "Authorization",
   "navigator.credentials",
   "chrome.storage"
@@ -57,6 +59,8 @@ const content = fs.readFileSync(CONTENT_PATH, "utf8");
 for (const snippet of REQUIRED_DATASET_SNIPPETS) {
   assert(content.includes(snippet), `Content script missing required dataset write: ${snippet}`);
 }
+assert(content.includes('document.addEventListener("orion-ttd-run-insert-only-smoke"'), "Content script missing insert-only event listener");
+assert(content.includes('mode: "insert_only_no_submit"'), "Content script missing insert-only packet marker");
 for (const snippet of FORBIDDEN_SNIPPETS) {
   assert(!content.includes(snippet), `Content script contains forbidden snippet: ${snippet}`);
 }
@@ -83,7 +87,7 @@ const summary = {
 };
 
 fs.writeFileSync(
-  path.join(REPORTS_DIR, "ttd-mobile-extension-v0.1.1-verify.json"),
+  path.join(REPORTS_DIR, "ttd-mobile-extension-v0.1.2-verify.json"),
   JSON.stringify(summary, null, 2)
 );
 

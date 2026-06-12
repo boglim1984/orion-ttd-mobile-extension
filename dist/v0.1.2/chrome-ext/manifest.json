@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Orion TTD Mobile Extension",
-  "version": "__BUILD_VERSION__",
+  "version": "0.1.2",
   "description": "Orion iOS insert-only TTD command packet smoke; manual trigger only; no submit.",
   "update_url": "https://boglim1984.github.io/orion-ttd-mobile-extension/updates/chrome-updates.xml",
   "content_scripts": [

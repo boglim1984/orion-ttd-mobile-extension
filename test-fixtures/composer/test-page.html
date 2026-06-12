@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Orion TTD Insert-Only Fake Composer</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2rem;
+        line-height: 1.4;
+      }
+      textarea,
+      [contenteditable="true"] {
+        width: 100%;
+        min-height: 10rem;
+        border: 1px solid #999;
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        font: inherit;
+      }
+      #contenteditable-composer {
+        white-space: pre-wrap;
+      }
+      pre {
+        background: #f4f4f4;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Orion TTD Insert-Only Fake Composer</h1>
+    <p>
+      This page gives Billy a local composer-like surface for manual inspection. If the extension is loaded, trigger
+      <code>document.dispatchEvent(new CustomEvent("orion-ttd-run-insert-only-smoke"))</code> from the console.
+    </p>
+
+    <h2>Textarea Candidate</h2>
+    <textarea id="prompt-textarea" placeholder="Fake ChatGPT composer"></textarea>
+
+    <h2>Contenteditable Candidate</h2>
+    <div id="contenteditable-composer" contenteditable="true" role="textbox" data-testid="prompt-textarea"></div>
+
+    <h2>Observed Events</h2>
+    <pre id="event-log"></pre>
+
+    <script>
+      const log = document.getElementById("event-log");
+      const targets = [
+        document.getElementById("prompt-textarea"),
+        document.getElementById("contenteditable-composer")
+      ];
+
+      function write(message) {
+        log.textContent += `${message}\n`;
+      }
+
+      for (const target of targets) {
+        ["beforeinput", "input", "change"].forEach((type) => {
+          target.addEventListener(type, () => {
+            write(`${type} -> ${target.id || target.tagName.toLowerCase()}`);
+          });
+        });
+      }
+    </script>
+  </body>
+  </html>

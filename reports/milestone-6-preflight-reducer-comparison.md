@@ -12,7 +12,8 @@ It only compares:
 
 - Orion Milestone 5 docs and workflow fixtures
 - older TTD reducer-like logic from `voice-plugin-expansion`
-- Skill Dump / injector extension state, parser, and injection patterns
+- advanced Skill Injector design-stage docs and modules
+- the later reduced Skill Dump / injection-infrastructure lane where relevant
 
 ## Sources Inspected
 
@@ -37,10 +38,21 @@ It only compares:
 - `/Users/oflahertys/Code Projects/voice-plugin-expansion/ttd-watcher/test/ttd_text_smoke_harness_v1.test.js`
 - `/Users/oflahertys/Code Projects/voice-plugin-expansion/docs/TTD_TEMPORAL_REANCHOR_PACKET_V0.md`
 
-### Skill Dump / injector extension
+### Advanced Skill Injector design stage
 
 - `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/docs/AI_EDIT_PACKET_VALIDATOR.md`
 - `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/docs/AI_EDIT_FRONT_DOOR.md`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/docs/AI_EDIT_STATE_CONTEXT_PROTOCOL.md`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/docs/AI_EDIT_CONTROL_PROTOCOL.md`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/docs/A2UI_FOOTER_RENDERER.md`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/docs/MESSAGING_PROTOCOL.md`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/docs/AI_EDIT_COMMAND_REGISTRY.md`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/docs/ARCHITECTURE.md`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/ai-edit-command-registry.js`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/ai-edit-operator-manual.js`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/ai-edit-front-door.js`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/skill-operation-protocol.js`
+- `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/command-output-parser.js`
 - `/Users/oflahertys/Desktop/Code Projects/ACTIVE/chatgpt-skill-injector-extension/site-adapter-profiles.js`
 
 ## Executive Verdict
@@ -49,7 +61,17 @@ Milestone 6 should reuse patterns, not implementations.
 
 Older TTD contains real reducer-adjacent state logic, but it is organized around a smoke harness, an apply endpoint, and an offline runtime with a narrower session/chunk model than Orion now requires. It is useful as precedent for transition guards, session/event validation, fixture-first testing, and re-anchor packet discipline. It is not a drop-in Orion reducer.
 
-Skill Dump contains strong safety and injection architecture, but it is explicitly review-only and non-authoritative. It should inform how Orion separates parser/validator/insertion boundaries from reducer authority, but it should not be treated as route-state logic.
+The earlier advanced Skill Injector design is more important than the later reduced Skill Dump lane. It was not merely injection infrastructure. It was aiming at a state-aware control plane with:
+
+- a compact current-state protocol
+- legal-move surfacing
+- proposal vs approval vs mutation taxonomy
+- parser and packet validation boundaries
+- front-door routing
+- review-chain artifacts
+- explicit authority separation between LLM output and extension-committed state
+
+That still does not make Skill Injector the Orion reducer source. It does make it a strong source for Milestone 6 terminology, guard structure, audit-record shape, and proposal/commit separation.
 
 ## What Older TTD Actually Has
 
@@ -70,22 +92,116 @@ Implication:
 - But its state shape is smaller and more runtime-specific than Orion’s Milestone 5 design.
 - It also couples some transition handling to runtime/compiler plumbing that Orion should keep cleaner and more directly fixture-driven.
 
-## What Skill Dump Actually Has
+## What Advanced Skill Injector Actually Has
 
-Skill Dump is not a reducer source.
+Skill Injector and Skill Dump should not be collapsed into the same thing.
 
 Observed concrete behavior:
 
+- `AI_EDIT_STATE_CONTEXT_PROTOCOL.md` defines a compact state object with branch, step, legal moves, constraints, freshness, and explicit transition-proposal / dry-run result shapes.
+- `AI_EDIT_CONTROL_PROTOCOL.md` frames the system as an LLM-to-extension control plane with separate control-command and skill-body streams, explicit state-machine authority, and validation before any accepted command.
+- `MESSAGING_PROTOCOL.md` defines a message taxonomy that separates `proposal`, `dry_run_request`, `approval_request`, `mutation_intent`, and their result categories before any live mutation exists.
+- `AI_EDIT_COMMAND_REGISTRY.md` and `ai-edit-command-registry.js` define an allowlisted command graph with stable IDs, required preconditions, allowed effects, forbidden effects, and allowlisted next transitions.
 - `AI_EDIT_PACKET_VALIDATOR.md` repeatedly states that the validator is a gate, not an executor.
-- Its authority model is explicit: LLM proposes, Billy authorizes, extension validates and commits, persistence happens later.
-- `AI_EDIT_FRONT_DOOR.md` states that move-intent packets are review artifacts only and do not authorize transitions or mutate state.
+- `AI_EDIT_FRONT_DOOR.md` and `ai-edit-front-door.js` define a real front-door routing model plus a small debug-state reducer for menu, review-only, and operator-payload activity.
+- `A2UI_FOOTER_RENDERER.md` defines a multi-stage review chain: legal move surface, move-intent review, transition proposal review, dry-run plan card, approval review, and review-chain checkpoint.
+- `ai-edit-operator-manual.js` explicitly states: current state plus validator plus dry-run plus explicit approval gate are authority; natural language and structured packets are not authority.
+- `command-output-parser.js` shows a concrete sentinel parser with boundary markers, packet summaries, duplicate detection, malformed-packet handling, and non-authoritative parse status.
 - `site-adapter-profiles.js` shows strong injection and safety invariants: `noAutoExecute`, `noAutoSubmit`, and `noComposerInsertFromPassiveObservation`.
 
 Implication:
 
-- Skill Dump is useful for front-door routing, parser/validator layering, and safe composer-insertion boundaries.
-- It is not useful as the source of truth for Orion route/chunk state transitions.
-- Orion should keep Skill Dump’s non-authoritative UI review stance and avoid letting footer packets become state authority.
+- Advanced Skill Injector was trying to be a review-first, validator-gated, LLM-mediated control system with explicit local authority boundaries.
+- It was closer to an edit/review/commit architecture and local control protocol than to a simple injection helper.
+- It is still not the source of truth for Orion route/chunk transitions, but it is highly relevant to how Orion should structure reducer-adjacent packets, validation, and audit surfaces.
+
+## What The Later Skill Dump Lane Represents
+
+The later reduced Skill Dump lane is the narrower infrastructure residue:
+
+- composer insertion
+- site adapters
+- delivery plumbing
+- GitHub-local skill transport concerns
+
+That reduced lane is useful mainly for safety and injection boundaries. It is not the main design source for Orion state logic.
+
+## Amendment - Advanced Skill Injector Design Stage
+
+### Why Skill Injector is distinct from Skill Dump
+
+Skill Injector was the broader design stage.
+
+It was aiming at:
+
+- a local-first LLM control surface
+- a proposal/review/approval architecture
+- a validator-gated command protocol
+- state-aware routing with legal moves and blocked moves
+- explicit separation between visible review artifacts and durable mutation
+
+Skill Dump is the later reduction of that vision toward injection infrastructure and delivery plumbing. It should not be treated as the full architectural source.
+
+### Advanced Skill Injector patterns found
+
+- Compact state-context packets with branch, step, legal moves, freshness, and constraints
+- Intent codes that are signals, not authority
+- Transition-proposal and dry-run result shapes that stay review-only until later approval
+- Stable command IDs and allowlisted next transitions
+- Separate parser, validator, router, review surface, and eventual mutation lanes
+- Explicit message categories for proposal, dry-run, approval, and mutation intent
+- A review-chain checkpoint concept for stale-state and alignment auditing
+- A small reducer-like debug-state pattern in `ai-edit-front-door.js` that records decisions without granting mutation authority
+
+### Patterns relevant to Orion reducer design
+
+- Proposal vs commit separation should be first-class in Orion terminology
+- Orion reducer input should be normalized packet/state data, not raw assistant prose
+- Orion can benefit from a compact audit record shape: source, validated intent, state sequence or session identity, guard result, reducer effect, stale/blocked reason
+- Legal-move and blocked-move language maps well to Orion allowed-intent and refusal handling
+- Freshness/staleness checks from Skill Injector are a good model for Orion `session_id`, route identity, and one-turn validity guards
+- Allowlisted transitions and required preconditions are a good model for Orion guard naming and reducer refusal reasons
+
+### Patterns not relevant to Orion reducer design
+
+- UI-heavy A2UI footer layering is too broad for Orion v0 reducer work
+- Chrome/ChatGPT composer insertion is not Orion state authority
+- Selected-skill and skill-body editing lanes are domain-specific to Skill Injector
+- Workbench, Git review, and local skill-file operations are not Orion reducer responsibilities
+
+### Corrected comparison against TTD and Orion Milestone 5
+
+Older TTD remains the stronger source for route/chunk transition precedent.
+
+Advanced Skill Injector is the stronger source for:
+
+- protocol vocabulary
+- proposal/review/approval separation
+- packet validation boundaries
+- audit-trace structure
+- intent routing before mutation
+
+Orion Milestone 5 remains the primary implementation contract because it already defines:
+
+- the actual route/chunk semantics
+- the `done` vs `move_on` rule
+- interruption/recovery expectations
+- the fixture baseline
+
+The corrected view is:
+
+- older TTD informs transition and session safety patterns
+- advanced Skill Injector informs control-plane and validation architecture
+- Orion Milestone 5 defines the reducer contract that must actually be implemented
+
+### Updated Milestone 6 recommendations
+
+- Keep the Milestone 6 reducer pure and Orion-native
+- Add explicit normalized intent validation ahead of reducer application
+- Name reducer refusals and guards clearly, closer to the Skill Injector validator style
+- Produce compact reducer audit summaries rather than relying on prose or UI interpretation
+- Keep any future footer or review artifacts downstream from reducer truth, never upstream of it
+- Do not import Skill Injector’s UI layers, but do borrow its proposal/review/approval vocabulary where it sharpens Orion docs and tests
 
 ## Orion Milestone 5 Readiness
 
@@ -111,11 +227,14 @@ The current docs and fixtures are strong enough to start reducer coding after on
 - Explicit allowed-intent set rather than open natural-language control
 - Clear state summaries for audit/debug output
 
-### Reuse from Skill Dump
+### Reuse from advanced Skill Injector
 
 - Strict separation between parser/validator/review UI and authoritative reducer
 - No-auto-execute and no-auto-submit safety invariants
-- Front-door style intent classification when routing side questions or repair flows later
+- Front-door style intent classification when routing side questions, repair flows, and future context requests
+- Stable packet/category vocabulary for proposal, dry-run, approval, and blocked/refusal states
+- Allowlisted transition/precondition style from the command registry and state-context protocol
+- Compact audit and freshness concepts such as state sequence, stale detection, and review-only artifacts
 - Site-adapter / injector caution: runtime insertion should remain a separate layer from state logic
 
 ### Reuse from Orion Milestone 5 as the primary source
@@ -133,11 +252,13 @@ The current docs and fixtures are strong enough to start reducer coding after on
 - The smaller legacy state shape as Orion’s state model
 - Any assumption that a text-smoke harness structure is itself the best final reducer architecture
 
-### From Skill Dump
+### From advanced Skill Injector / later Skill Dump lane
 
 - Review packets as transition authority
 - Chat-composer insertion flows as reducer inputs
 - Any storage or UI flow that blurs state review and state mutation
+- The full UI-heavy A2UI review chain as a Milestone 6 implementation dependency
+- Any assumption that chat/composer context is durable Orion route memory
 
 ## Pre-Milestone-6 Fixes To Make Before Coding
 
@@ -164,6 +285,7 @@ Recommended shape:
 - pure input: current authoritative Orion state plus normalized interpreted intent packet
 - pure output: next authoritative state plus explicit reducer effect summary
 - hard guards for `session_id`, route identity, legal intents, and one-active-chunk invariants
+- explicit pre-reducer validation boundary for malformed, stale, out-of-route, or disallowed intent packets
 - fixture-first verification against Milestone 5 workflow files before any richer runtime wiring
 
 Recommended non-goals for first implementation:
@@ -172,9 +294,16 @@ Recommended non-goals for first implementation:
 - no runtime DOM mutation logic
 - no UI review authority
 - no legacy compiler abstraction imported whole from older TTD
+- no import of the Skill Injector front-door or A2UI stack as runtime dependency
 
 ## Final Recommendation
 
-Milestone 6 should be implemented as a new Orion-native reducer that borrows older TTD safety patterns and Skill Dump boundary discipline, but not their concrete architecture as the state source of truth.
+Milestone 6 should be implemented as a new Orion-native reducer that borrows:
+
+- older TTD transition and refusal safety patterns
+- advanced Skill Injector protocol, validation, and proposal/commit separation patterns
+- Orion Milestone 5 fixture semantics as the actual reducer contract
+
+The earlier report’s strongest correction is this: Skill Dump is not the reducer source, but the earlier advanced Skill Injector design is a meaningful design source for reducer-adjacent architecture.
 
 The biggest immediate win before coding is a short doc/fixture alignment pass around `active_chunk_id` naming and terminal-route completion semantics. After that, the current Milestone 5 material is sufficient to start reducer implementation cleanly.

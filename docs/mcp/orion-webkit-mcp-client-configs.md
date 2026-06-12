@@ -113,4 +113,6 @@ node scripts/orion-webkit-mcp-tether-probe.mjs
 - the current Orion ChatGPT target accepts the WebSocket connection, but `Runtime.enable` and `Page.enable` are timing out without result payloads
 - `Inspector.enable` also times out on the Orion ChatGPT target
 - control sockets can return immediate protocol errors, so a silent timeout on the Orion target is a distinct target/session behavior
+- source inspection confirms `iwdp-mcp` has explicit `list_devices`, `list_pages`, `select_page`, and `evaluate_script` tool surfaces, all backed by the shared `webkit.NewClient(...)` attach logic
+- upstream docs/source state that iwdp target routing depends on receiving `Target.targetCreated` soon after connect
 - keep MCP and CLI usage scoped to tiny eval isolation until one expression returns

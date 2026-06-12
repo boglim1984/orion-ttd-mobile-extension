@@ -176,6 +176,58 @@ node scripts/orion-webkit-mcp-tether-probe.mjs
 - proxy stopped or left running:
   stopped
 
+## Milestone 8.5D — Unhobbled WebKit Inspector Diagnostics
+
+- date/time:
+  `2026-06-12 02:31 PM EDT`
+- proxy command and lifecycle:
+  `ios_webkit_debug_proxy --no-frontend > /tmp/orion-iwdp.log 2>&1 &`
+  started for this run and stopped afterward
+- current Orion target:
+  title `ChatGPT`
+  URL `https://chatgpt.com/`
+  websocket `ws://localhost:9222/devtools/page/3`
+- Safari static target:
+  not tested in this run
+  no native Safari page was open
+- iwdp-cli findings:
+  `iwdp-cli` supports explicit target selection by passing `<ws-url>` as the final argument
+  `devices --help`, `pages --help`, and `eval --help` are not real help surfaces in this build; they attempt live device/page access instead
+  `eval --help` reported `no Safari tabs found`, which confirms the CLI expects an active Safari-facing target context
+- iwdp-mcp findings:
+  direct `--help` did not print useful output
+  source inspection in `/Users/oflahertys/go/pkg/mod/github.com/nnemirovsky/iwdp-mcp@v0.5.3` succeeded
+  the MCP server exposes explicit page-selection tools:
+  `list_devices`, `list_pages`, `select_page`, `evaluate_script`, `take_screenshot`, `get_document`, `query_selector`, and many others
+  `select_page` uses `webkit.NewClient(ctx, input.WebSocketURL)` and relies on the shared WebKit client for attach behavior
+- whether MCP tool enumeration succeeded:
+  yes, by source enumeration rather than a live MCP inspector client
+- raw protocol findings:
+  upstream `scripts/ws-debug/main.go` on the Orion ChatGPT target received no initial messages at all
+  no `Target.targetCreated` event arrived within 3 seconds
+  direct `Runtime.evaluate` then timed out
+  on a control socket (`page/1`), `Target.targetCreated` events did arrive, proving the bridge can emit them on other targets
+  the enhanced local probe also confirmed that the Orion target socket opens, all tested commands time out, no events arrive, and the socket closes cleanly with code `1000`
+- whether screenshot/DOM/AX was used, and why:
+  no
+  not required yet because the attach/session failure is already observable at socket/protocol level
+- whether any eval returned:
+  no
+- comparison table:
+
+| target | socket opens | commands respond | eval 1+1 | document.title | conclusion |
+| --- | --- | --- | --- | --- | --- |
+| Orion ChatGPT home (`page/3`) | yes | no, blackholes `Runtime`, `Page`, `Inspector`, `Target.*` | no | no | Orion target is discoverable but not commandable through the current attach path |
+| Control socket (`page/1`) | yes | yes, but only as explicit `-32601` errors | no | not attempted | bridge and socket layer are alive; Orion target behavior is distinct |
+| Native Safari static | not tested | not tested | not tested | not tested | still needed for clean Orion-vs-Safari branch |
+
+- current classification:
+  `ORION_EVAL_BLOCKED`
+- next action:
+  open native Safari on the iPhone to `example.com` or `chatgpt.com` and run the same probe there
+  if Safari static works, treat the blocker as Orion-specific WKWebView / inspector limitation or target-session behavior
+  if Safari static also fails, treat the blocker as iwdp/WebKit attach-session behavior and consider alternate bridge logic
+
 ## Runtime Change Confirmation
 
 No runtime code changed in this milestone preparation job.

@@ -252,6 +252,14 @@ Safe eval ladder for isolation:
 - if non-target sockets return immediate protocol errors but the Orion ChatGPT socket only blackholes, treat that as a target/session behavior clue rather than proof that every message shape is wrong
 - do not attempt insert dispatch until `1+1` returns on the chosen target
 
+## Milestone 8.5D Unhobbled Inspector Diagnostics
+
+- at the protocol-debugging stage, broad diagnostic tool discovery is allowed
+- the hard boundaries remain private state access and ChatGPT mutation
+- source/tool inspection of `iwdp-mcp` is valid when CLI help is insufficient
+- the current key discriminator is whether the target emits `Target.targetCreated`
+- if the Orion ChatGPT socket opens but emits no `Target.targetCreated`, the wrapped attach path may never activate
+
 ## Next Expansion Ladder
 
 ### Phase 1

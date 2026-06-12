@@ -14,8 +14,10 @@ const SAFE_EXPRESSIONS = [
 
 const HANDSHAKE_STEPS = {
   runtime: ["Runtime.enable"],
+  "runtime-only": ["Runtime.enable"],
   "inspector-runtime": ["Inspector.enable", "Runtime.enable"],
-  "page-runtime": ["Page.enable", "Runtime.enable"]
+  "page-runtime": ["Page.enable", "Runtime.enable"],
+  auto: []
 };
 
 function printHelp() {
@@ -29,6 +31,12 @@ Options:
 - --expression <js>            Run one safe one-off expression instead of the default ladder
 - --list-expressions           Print the built-in safe expression ladder and exit
 - --handshake <mode>           One of: runtime, inspector-runtime, page-runtime
+- --target-kind <label>        Optional label for report output
+- --target-title <text>        Optional target title for report output
+- --target-url <url>           Optional target URL for report output
+- --open-wait-ms <n>           Wait after open before first command (default: 0)
+- --between-message-ms <n>     Wait between commands (default: 0)
+- --json-out <path>            Write a JSON summary file
 - --with-page-enable           Alias for --handshake page-runtime
 - --raw-log                    Print low-noise send/recv/close summary lines
 - --help                       Show this help
@@ -49,6 +57,12 @@ function parseArgs(argv) {
     expression: "",
     listExpressions: false,
     handshake: "runtime",
+    targetKind: "",
+    targetTitle: "",
+    targetUrl: "",
+    openWaitMs: 0,
+    betweenMessageMs: 0,
+    jsonOut: "",
     rawLog: false,
     help: false
   };
@@ -83,6 +97,24 @@ function parseArgs(argv) {
       continue;
     }
 
+    if (arg === "--target-kind" && next) {
+      options.targetKind = next;
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--target-title" && next) {
+      options.targetTitle = next;
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--target-url" && next) {
+      options.targetUrl = next;
+      index += 1;
+      continue;
+    }
+
     if (arg === "--timeout-ms" && next) {
       options.timeoutMs = Number.parseInt(next, 10);
       index += 1;
@@ -97,6 +129,24 @@ function parseArgs(argv) {
 
     if (arg === "--handshake" && next) {
       options.handshake = next;
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--open-wait-ms" && next) {
+      options.openWaitMs = Number.parseInt(next, 10);
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--between-message-ms" && next) {
+      options.betweenMessageMs = Number.parseInt(next, 10);
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--json-out" && next) {
+      options.jsonOut = next;
       index += 1;
       continue;
     }
@@ -167,6 +217,18 @@ async function main() {
     return;
   }
 
+  if (!Number.isFinite(options.openWaitMs) || options.openWaitMs < 0) {
+    console.error("Invalid --open-wait-ms value.");
+    process.exitCode = 1;
+    return;
+  }
+
+  if (!Number.isFinite(options.betweenMessageMs) || options.betweenMessageMs < 0) {
+    console.error("Invalid --between-message-ms value.");
+    process.exitCode = 1;
+    return;
+  }
+
   if (!HANDSHAKE_STEPS[options.handshake]) {
     console.error("Invalid --handshake value.");
     process.exitCode = 1;
@@ -186,11 +248,19 @@ async function main() {
     return;
   }
 
-  const handshakeSteps = HANDSHAKE_STEPS[options.handshake];
+  const handshakeSteps = options.handshake === "auto"
+    ? [
+        ...HANDSHAKE_STEPS.runtime,
+        ...HANDSHAKE_STEPS["inspector-runtime"],
+        ...HANDSHAKE_STEPS["page-runtime"]
+      ]
+    : HANDSHAKE_STEPS[options.handshake];
   const eventMethods = new Map();
   const pending = new Map();
   const rawLines = [];
   const timedOutIds = [];
+  const responseIds = [];
+  const errorIds = [];
   let nextId = 1;
   let closed = false;
   let closeInfo = { code: null, reason: "" };
@@ -243,6 +313,11 @@ async function main() {
       const entry = pending.get(payload.id);
       pending.delete(payload.id);
       clearTimeout(entry.timer);
+      if (payload.error) {
+        errorIds.push(payload.id);
+      } else {
+        responseIds.push(payload.id);
+      }
       pushRaw(`recv id=${payload.id}${payload.error ? ` error=${summarizeError(payload.error)}` : " ok"}`);
       entry.resolve({
         id: payload.id,
@@ -298,6 +373,17 @@ async function main() {
   console.log(`WebSocket: ${options.ws}`);
   console.log(`Timeout: ${options.timeoutMs}ms`);
   console.log(`Handshake: ${options.handshake}`);
+  if (options.targetKind) {
+    console.log(`Target kind: ${options.targetKind}`);
+  }
+  if (options.targetTitle) {
+    console.log(`Target title: ${options.targetTitle}`);
+  }
+  if (options.targetUrl) {
+    console.log(`Target URL: ${options.targetUrl}`);
+  }
+  console.log(`Open wait: ${options.openWaitMs}ms`);
+  console.log(`Between messages: ${options.betweenMessageMs}ms`);
   console.log(`Expression count: ${expressions.length}`);
   console.log("");
 
@@ -313,6 +399,10 @@ async function main() {
   console.log("Connection: open");
   console.log("");
 
+  if (options.openWaitMs > 0) {
+    await new Promise((resolve) => setTimeout(resolve, options.openWaitMs));
+  }
+
   const commandResults = [];
 
   for (const method of handshakeSteps) {
@@ -320,6 +410,9 @@ async function main() {
       label: method,
       result: await sendCommand(method)
     });
+    if (options.betweenMessageMs > 0) {
+      await new Promise((resolve) => setTimeout(resolve, options.betweenMessageMs));
+    }
   }
 
   for (const expression of expressions) {
@@ -330,6 +423,9 @@ async function main() {
         returnByValue: true
       })
     });
+    if (options.betweenMessageMs > 0) {
+      await new Promise((resolve) => setTimeout(resolve, options.betweenMessageMs));
+    }
   }
 
   for (const entry of commandResults) {
@@ -395,6 +491,41 @@ async function main() {
     } else {
       rawLines.forEach((line) => console.log(`  - ${line}`));
     }
+  }
+
+  const summary = {
+    webSocket: options.ws,
+    timeoutMs: options.timeoutMs,
+    handshake: options.handshake,
+    targetKind: options.targetKind || null,
+    targetTitle: options.targetTitle || null,
+    targetUrl: options.targetUrl || null,
+    openWaitMs: options.openWaitMs,
+    betweenMessageMs: options.betweenMessageMs,
+    expressions,
+    commands: commandResults.map((entry) => ({
+      label: entry.label,
+      timeout: Boolean(entry.result.timeout),
+      ok: Boolean(entry.result.ok),
+      error: entry.result.error || null,
+      value: entry.label.startsWith("Runtime.evaluate")
+        ? entry.result.response?.result?.result?.value
+        : undefined,
+      type: entry.label.startsWith("Runtime.evaluate")
+        ? entry.result.response?.result?.result?.type || null
+        : null
+    })),
+    eventMethods: Object.fromEntries(eventMethods),
+    timedOutIds,
+    responseIds,
+    errorIds,
+    closeInfo,
+    rawLog: rawLines
+  };
+
+  if (options.jsonOut) {
+    const { writeFile } = await import("node:fs/promises");
+    await writeFile(options.jsonOut, `${JSON.stringify(summary, null, 2)}\n`, "utf8");
   }
 }
 

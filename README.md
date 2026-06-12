@@ -9,6 +9,7 @@ This is the real TTD Mobile Extension shell.
 - Safari Web Inspector is the debugger.
 - v0.1.3 supports manual-trigger insert-only composer smoke plus low-noise witness channels.
 - v0.1.3 does not perform submit behavior.
+- Milestone 8.6 Trial 1R / done boundary: PASS; strengthened packet entered route directly and held `clear_trash` until `move_on`/`next`.
 
 ## Layout
 

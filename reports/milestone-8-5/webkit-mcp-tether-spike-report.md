@@ -4,6 +4,8 @@
 
 PASS_TARGET_FOUND / dataset-eval follow-up still pending.
 
+Witness channels are now validated as the preferred evidence route while `Runtime.evaluate` remains blocked. The next MCP question is not whether Billy can manually inspect the page, but whether Codex can read the witness channel or an equivalent observable surface without arbitrary `Runtime.evaluate`.
+
 ## Setup Target
 
 - `ios-webkit-debug-proxy` as the local WebKit target bridge

@@ -2,7 +2,7 @@
 
 ## Status
 
-Prepared / pending Billy manual run.
+Trial 1R complete / PASS.
 
 ## Dependency
 
@@ -22,6 +22,19 @@ Use console, dataset, and hidden DOM witness evidence as the primary observable 
 ## First Trial
 
 Trial 1R — repaired continue boundary rerun with strengthened packet wording.
+
+## Trial 1R Result
+
+- result record:
+  `reports/milestone-8-6/trial-1r-clear-trash-continue-done-result.md`
+- status:
+  Trial 1R complete / PASS
+- assistant entered the route trial directly
+- assistant stayed on `clear_trash`
+- done boundary held until `move_on` or `next`
+- no hidden progress was invented
+- next trial:
+  `move_on` boundary
 
 ## How To Run
 
@@ -61,6 +74,10 @@ Fail:
 - classify the result against reducer/scorer expectations
 - record the manual result using the 8.6 template
 - decide whether to proceed to Trial 2 or refine packet wording
+
+## Why MCP Still Matters
+
+The witness-observed manual trial is a bridge step, not the destination. The WebKit/MCP lane exists so Codex/agents can eventually run these trials directly: trigger or insert packets, read extension witness evidence, capture visible assistant behavior, compare against reducer/scorer expectations, and write trial records. Billy is currently serving as the manual bridge because Orion `Runtime.evaluate` remains blocked, but the system should continue toward agent-run witness-observed testing.
 
 ## Safety Boundary
 

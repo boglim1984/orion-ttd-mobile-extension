@@ -1,0 +1,28 @@
+# Milestone 8.6 Trial 1R Clear Trash Continue / Done Result
+
+- date/time: 2026-06-12 03:12 PM EDT
+- device/browser: Orion iPhone + real ChatGPT page
+- extension version: v0.1.3
+- route_id: desk-reset-v0
+- session_id: orion-witness-trial-001
+- starting active_chunk_id: clear_trash
+- packet source: `test-fixtures/manual/orion-milestone-8-6-witness-trial-packet.txt`
+- witness kind before send: extension v0.1.3 witness channels available
+- witness insert result: witness-observed route available; manual send used for this trial
+- submitAttempted: manual send only
+- packetLength: not recorded
+- sent manually yes/no: yes
+- assistant initial response: "still on clear trash. Do one more small pass and tell me when your done"
+- assistant entered route yes/no: yes
+- Billy reply: "clear trash complete, on hold til i reply move on or next"
+- assistant response after Billy reply: acknowledged clear_trash complete and held the route until explicit `move_on` or `next`
+- did active_chunk_id remain stable: yes
+- did assistant invent progress: no
+- did assistant advance without move_on: no
+- side question tested yes/no: no
+- side question returned to route yes/no: not tested
+- reducer/scorer expected category: continue -> keep_active_chunk; done -> complete_chunk_no_advance / hold_for_move_on
+- observed result category: PASS
+- pass/fail: PASS
+- notes: strengthened packet fixed the earlier `FAIL_NO_ROUTE_ENGAGEMENT` behavior from Milestone 8 Trial 1
+- screenshot/log references if any: none recorded in repo

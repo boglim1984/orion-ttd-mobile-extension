@@ -9,9 +9,14 @@ const copySelfContainedButton = document.querySelector("#copy-self-contained-but
 const runButton = document.querySelector("#run-button");
 const stopButton = document.querySelector("#stop-button");
 const saveDraftButton = document.querySelector("#save-draft-button");
+const copyStatusLogButton = document.querySelector("#copy-status-log-button");
 const openResultsButton = document.querySelector("#open-results-button");
 const copySummaryButton = document.querySelector("#copy-summary-button");
 const copyLoaderButton = document.querySelector("#copy-loader-button");
+
+function appendStatusLine(message) {
+  statusLogPanel.textContent = `${statusLogPanel.textContent}\n${message}`.trim();
+}
 
 async function readJson(response) {
   const payload = await response.json();
@@ -78,8 +83,12 @@ function renderStatus(state) {
       links.push(`<p><strong>Folder:</strong> <code>${state.last_result.output_dir}</code></p>`);
     }
     resultLinksPanel.innerHTML = links.join("");
+    openResultsButton.disabled = false;
+    copySummaryButton.disabled = false;
   } else {
     resultLinksPanel.textContent = "No completed run yet.";
+    openResultsButton.disabled = true;
+    copySummaryButton.disabled = true;
   }
 }
 
@@ -102,6 +111,7 @@ async function copySelfContainedRunner() {
     suite_text: suiteInput.value
   });
   await navigator.clipboard.writeText(payload.payload);
+  appendStatusLine(`Copied self-contained runner for ${payload.run_id}`);
 }
 
 async function withAction(action) {
@@ -109,7 +119,7 @@ async function withAction(action) {
     await action();
     await refreshState();
   } catch (error) {
-    statusLogPanel.textContent = `${statusLogPanel.textContent}\n${error.message}`.trim();
+    appendStatusLine(error.message);
   }
 }
 
@@ -143,9 +153,17 @@ stopButton.addEventListener("click", () =>
 
 saveDraftButton.addEventListener("click", () =>
   withAction(async () => {
-    await postJson("/api/save-draft", {
+    const response = await postJson("/api/save-draft", {
       suite_text: suiteInput.value
     });
+    appendStatusLine(`Saved draft suite: ${response.draft_path}`);
+  })
+);
+
+copyStatusLogButton.addEventListener("click", () =>
+  withAction(async () => {
+    await navigator.clipboard.writeText(statusLogPanel.textContent);
+    appendStatusLine("Copied status log.");
   })
 );
 
@@ -160,12 +178,14 @@ copySummaryButton.addEventListener("click", () =>
     const response = await fetch("/api/latest-summary");
     const text = await response.text();
     await navigator.clipboard.writeText(text);
+    appendStatusLine("Copied latest server-side result summary.");
   })
 );
 
 copyLoaderButton.addEventListener("click", () =>
   withAction(async () => {
     await navigator.clipboard.writeText(loaderOutput.value);
+    appendStatusLine("Copied legacy loader snippet.");
   })
 );
 

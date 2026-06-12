@@ -142,6 +142,14 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 - use an example suite from `tools/command-language-casework/examples/`
 - or paste JSON from a fresh chat using the Command Language Casework Designer Skill
 
+## Supported Runner Path
+
+- primary path: `Copy Self-Contained Runner`
+- paste the payload into a disposable ChatGPT test-chat console
+- nothing sends until Billy clicks the visible overlay `Run` button
+- downloaded JSON results are the primary output path
+- legacy loader / server-run controls remain secondary and may be blocked by ChatGPT CSP
+
 ## How Results Pop In Finder
 
 When the runner completes, the local server writes the result folder and calls macOS Finder reveal using `open -R` on `run-summary.md`.
@@ -163,6 +171,14 @@ Those files preserve both a quick human summary and the raw per-case record.
 
 - Orion transport tests prove packet insertion, no-submit boundaries, and witness evidence on the real mobile surface.
 - command-language casework proves or challenges `TTD_COMMAND_V1` language and route behavior.
+
+## First Live Self-Contained Run Finding
+
+- the CSP-safe architecture succeeded: inline payload install, overlay display, and result download all worked
+- the first live ChatGPT run failed at visible send-button detection before any scripted messages were sent
+- earlier `PASS_CANDIDATE` labeling for that outcome was misleading because no route trial actually occurred
+- tool failures are now labeled explicitly, including `TOOL_FAIL_SEND_BUTTON_NOT_FOUND`, `TOOL_FAIL_COMPOSER_NOT_FOUND`, `TOOL_FAIL_COMPOSER_INSERT_VERIFY`, `TOOL_FAIL_MESSAGE_NOT_SENT`, and `TOOL_FAIL_RESPONSE_NOT_OBSERVED`
+- the runner now stops after the first tool-send failure and exposes overlay diagnostics for composer discovery, insert verification, send-button selection, and last error
 
 ## How This Differs From Reducer/Scorer Tests
 

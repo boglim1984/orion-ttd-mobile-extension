@@ -21,11 +21,12 @@
         <div class="toolbar">
           <button id="validate-button" type="button">Validate</button>
           <button id="copy-self-contained-button" type="button">Copy Self-Contained Runner</button>
-          <button id="run-button" type="button">Run</button>
-          <button id="stop-button" type="button">Stop</button>
           <button id="save-draft-button" type="button">Save Draft Suite</button>
-          <button id="open-results-button" type="button">Open Results Folder</button>
-          <button id="copy-summary-button" type="button">Copy Latest Result Summary</button>
+          <button id="copy-status-log-button" type="button">Copy Status Log</button>
+          <button id="run-button" type="button">Queue Legacy Server Run</button>
+          <button id="stop-button" type="button">Stop Legacy Server Run</button>
+          <button id="open-results-button" type="button">Open Results Folder (Server results only)</button>
+          <button id="copy-summary-button" type="button">Copy Latest Result Summary (Server results only)</button>
           <button id="copy-loader-button" type="button">Copy Runner Loader (Legacy / likely blocked by ChatGPT CSP)</button>
         </div>
         <label class="block-label" for="suite-input">Paste suite JSON</label>
@@ -36,11 +37,12 @@
         <article class="card">
           <h2>Runner Setup</h2>
           <ol class="steps">
+            <li>Validate suite.</li>
             <li>Open a disposable ChatGPT test chat.</li>
             <li>Open the browser console on that page.</li>
             <li>Use <strong>Copy Self-Contained Runner</strong>, paste it into the console, and press Enter.</li>
             <li>Use the page overlay Run button. Nothing sends until that visible Run click.</li>
-            <li>If localhost upload is blocked by ChatGPT CSP, the runner still downloads a usable result JSON.</li>
+            <li>Use the downloaded JSON result file as the primary output.</li>
           </ol>
           <p class="warning">The self-contained payload is the supported path. The legacy loader is kept only as a fallback reference and may be blocked by ChatGPT CSP.</p>
           <label class="block-label" for="loader-output">Runner loader snippet</label>

@@ -10,6 +10,13 @@
   const HEARTBEAT_INTERVAL_MS = 3000;
   const OVERLAY_ID = "orion-command-language-casework-overlay";
   const TOOL_VERSION = "command-language-casework-runner-v1";
+  const TOOL_FAILURE_LABELS = {
+    COMPOSER_NOT_FOUND: "TOOL_FAIL_COMPOSER_NOT_FOUND",
+    COMPOSER_INSERT_VERIFY: "TOOL_FAIL_COMPOSER_INSERT_VERIFY",
+    SEND_BUTTON_NOT_FOUND: "TOOL_FAIL_SEND_BUTTON_NOT_FOUND",
+    MESSAGE_NOT_SENT: "TOOL_FAIL_MESSAGE_NOT_SENT",
+    RESPONSE_NOT_OBSERVED: "TOOL_FAIL_RESPONSE_NOT_OBSERVED"
+  };
 
   function nowIso() {
     return new Date().toISOString();
@@ -76,6 +83,23 @@
     status.setAttribute("style", "white-space:pre-wrap;margin-bottom:10px;");
     status.textContent = options.statusText || "Ready.";
 
+    const diagnosticsTitle = documentRef.createElement("div");
+    diagnosticsTitle.textContent = "Diagnostics";
+    diagnosticsTitle.setAttribute("style", "font-weight:600;margin-bottom:4px;");
+
+    const diagnostics = documentRef.createElement("pre");
+    diagnostics.setAttribute("data-casework-diagnostics", "true");
+    diagnostics.setAttribute("style", [
+      "white-space:pre-wrap",
+      "margin:0 0 10px 0",
+      "padding:8px",
+      "border-radius:10px",
+      "background:rgba(255,255,255,0.06)",
+      "max-height:180px",
+      "overflow:auto"
+    ].join(";"));
+    diagnostics.textContent = options.diagnosticsText || "No diagnostics yet.";
+
     const buttonRow = documentRef.createElement("div");
     buttonRow.setAttribute("style", "display:flex;gap:8px;flex-wrap:wrap;");
 
@@ -103,13 +127,28 @@
       "cursor:pointer"
     ].join(";"));
 
+    const copyDiagnosticsButton = documentRef.createElement("button");
+    copyDiagnosticsButton.type = "button";
+    copyDiagnosticsButton.textContent = "Copy Diagnostics";
+    copyDiagnosticsButton.setAttribute("style", [
+      "border:0",
+      "border-radius:999px",
+      "padding:8px 12px",
+      "background:#345995",
+      "color:#fff",
+      "cursor:pointer"
+    ].join(";"));
+
     buttonRow.appendChild(runButton);
     buttonRow.appendChild(stopButton);
+    buttonRow.appendChild(copyDiagnosticsButton);
 
     node.appendChild(title);
     node.appendChild(meta);
     node.appendChild(warning);
     node.appendChild(status);
+    node.appendChild(diagnosticsTitle);
+    node.appendChild(diagnostics);
     node.appendChild(buttonRow);
     (documentRef.body || documentRef.documentElement).appendChild(node);
 
@@ -117,6 +156,8 @@
       node,
       runButton,
       stopButton,
+      copyDiagnosticsButton,
+      lastDiagnosticsText: diagnostics.textContent,
       setStatus(text) {
         status.textContent = text;
       },
@@ -130,6 +171,13 @@
         runButton.disabled = Boolean(disabled);
         runButton.style.opacity = disabled ? "0.55" : "1";
         runButton.style.cursor = disabled ? "default" : "pointer";
+      },
+      setRunLabel(text) {
+        runButton.textContent = text;
+      },
+      setDiagnostics(text) {
+        diagnostics.textContent = text || "No diagnostics yet.";
+        this.lastDiagnosticsText = diagnostics.textContent;
       }
     };
   }
@@ -165,9 +213,13 @@
 
   const SEND_SELECTORS = [
     "button[data-testid='send-button']",
+    "button[data-testid='composer-send-button']",
     "button[aria-label='Send message']",
     "button[aria-label='Send prompt']",
-    "button[aria-label*='Send']"
+    "button[aria-label*='Send']",
+    "button[aria-label*='send']",
+    "button[type='submit']",
+    "form button"
   ];
 
   const ASSISTANT_SELECTORS = [
@@ -180,33 +232,230 @@
       return false;
     }
     const style = root.getComputedStyle ? root.getComputedStyle(element) : null;
-    return style ? style.display !== "none" && style.visibility !== "hidden" : true;
+    if (style && (style.display === "none" || style.visibility === "hidden" || style.opacity === "0")) {
+      return false;
+    }
+    const rect = typeof element.getBoundingClientRect === "function" ? element.getBoundingClientRect() : null;
+    if (rect && rect.width === 0 && rect.height === 0) {
+      return false;
+    }
+    return true;
   }
 
-  function findComposer(documentRef) {
+  function makeAttemptDiagnostics() {
+    return {
+      composerSelectorsChecked: [],
+      composerFound: false,
+      composerSelectorUsed: null,
+      composerKind: "unknown",
+      composerTextLength: 0,
+      composerTextVerified: false,
+      sendSelectorsChecked: [],
+      sendCandidatesConsidered: [],
+      sendButtonFound: false,
+      sendButtonSelectorUsed: null,
+      sendButtonDisabled: "unknown",
+      sendButtonMeta: null,
+      submitAttempted: false,
+      lastError: null
+    };
+  }
+
+  function uniqueList(values) {
+    return [...new Set((values || []).filter(Boolean))];
+  }
+
+  function findComposer(documentRef, diagnostics) {
     for (const selector of COMPOSER_SELECTORS) {
+      diagnostics?.composerSelectorsChecked.push(selector);
       const node = documentRef.querySelector(selector);
       if (!node || !isVisible(node) || node.disabled || node.readOnly) {
         continue;
       }
       if (typeof node.value === "string") {
-        return node;
+        return {
+          node,
+          selectorUsed: selector,
+          composerKind: "textarea"
+        };
       }
       if (node.isContentEditable || node.getAttribute?.("contenteditable") === "true") {
-        return node;
+        return {
+          node,
+          selectorUsed: selector,
+          composerKind: "contenteditable"
+        };
       }
     }
     return null;
   }
 
-  function findSendButton(documentRef) {
-    for (const selector of SEND_SELECTORS) {
-      const node = documentRef.querySelector(selector);
-      if (node && isVisible(node) && !node.disabled) {
-        return node;
-      }
+  function textFromElement(node) {
+    return cleanText([
+      node?.getAttribute?.("aria-label"),
+      node?.getAttribute?.("title"),
+      node?.getAttribute?.("data-testid"),
+      node?.textContent
+    ].join(" "));
+  }
+
+  function buildButtonMeta(node) {
+    if (!node) {
+      return null;
     }
-    return null;
+    return {
+      ariaLabel: node.getAttribute?.("aria-label") || "",
+      title: node.getAttribute?.("title") || "",
+      dataTestId: node.getAttribute?.("data-testid") || "",
+      type: node.getAttribute?.("type") || "",
+      text: cleanText(node.textContent || "")
+    };
+  }
+
+  function describeDiagnostics(diagnostics) {
+    const sendMeta = diagnostics.sendButtonMeta || {};
+    return [
+      `composer selector candidates checked: ${(diagnostics.composerSelectorsChecked || []).join(", ") || "none"}`,
+      `composer found: ${diagnostics.composerFound ? "yes" : "no"}`,
+      `composer selector used: ${diagnostics.composerSelectorUsed || "none"}`,
+      `composer kind: ${diagnostics.composerKind || "unknown"}`,
+      `composer text length after insert attempt: ${Number(diagnostics.composerTextLength || 0)}`,
+      `composer text verified: ${diagnostics.composerTextVerified ? "yes" : "no"}`,
+      `send button selector candidates checked: ${(diagnostics.sendSelectorsChecked || []).join(", ") || "none"}`,
+      `send candidates considered: ${(diagnostics.sendCandidatesConsidered || []).join(", ") || "none"}`,
+      `send button found: ${diagnostics.sendButtonFound ? "yes" : "no"}`,
+      `send button selector used: ${diagnostics.sendButtonSelectorUsed || "none"}`,
+      `send button disabled: ${diagnostics.sendButtonDisabled}`,
+      `send button aria-label: ${sendMeta.ariaLabel || "none"}`,
+      `send button title: ${sendMeta.title || "none"}`,
+      `send button data-testid: ${sendMeta.dataTestId || "none"}`,
+      `last error: ${diagnostics.lastError || "none"}`
+    ].join("\n");
+  }
+
+  function isAllowedSendButtonText(text) {
+    const normalized = String(text || "").toLowerCase();
+    if (!normalized) {
+      return false;
+    }
+    if (/(voice|microphone|mic|upload|attach|paperclip|plus|image|photo|record|audio|dictate|canvas|tool|search|reason|stop|cancel)/.test(normalized)) {
+      return false;
+    }
+    return /send|submit/.test(normalized);
+  }
+
+  function rankSendButtonCandidate(node, selectorUsed, composer) {
+    if (!node) {
+      return null;
+    }
+    const visible = isVisible(node);
+    const disabled = typeof node.disabled === "boolean" ? node.disabled : node.getAttribute?.("aria-disabled") === "true";
+    const meta = buildButtonMeta(node);
+    const text = textFromElement(node);
+    const sameForm = Boolean(composer?.closest?.("form") && node.closest?.("form") === composer.closest("form"));
+    const nearby = Boolean(composer?.parentElement && composer.parentElement.contains?.(node));
+    const hasSendLikeText = isAllowedSendButtonText(text);
+    const isSubmitType = String(meta.type || "").toLowerCase() === "submit";
+    let score = 0;
+    if (!visible) {
+      score -= 200;
+    }
+    if (disabled) {
+      score -= 180;
+    }
+    if (selectorUsed === "button[data-testid='send-button']") {
+      score += 120;
+    }
+    if (selectorUsed === "button[data-testid='composer-send-button']") {
+      score += 110;
+    }
+    if (hasSendLikeText) {
+      score += 80;
+    }
+    if (isSubmitType) {
+      score += 35;
+    }
+    if (sameForm) {
+      score += 25;
+    }
+    if (nearby) {
+      score += 15;
+    }
+    if (!hasSendLikeText && !isSubmitType && !/send|submit/i.test(selectorUsed || "")) {
+      score -= 90;
+    }
+    return {
+      node,
+      selectorUsed,
+      score,
+      disabled,
+      visible,
+      meta
+    };
+  }
+
+  function findSendButton(documentRef, composer, diagnostics) {
+    const selectorsChecked = [];
+    const ranked = [];
+    const seen = new Set();
+
+    for (const selector of SEND_SELECTORS) {
+      selectorsChecked.push(selector);
+      documentRef.querySelectorAll(selector).forEach((node) => {
+        if (seen.has(node)) {
+          return;
+        }
+        seen.add(node);
+        const rankedCandidate = rankSendButtonCandidate(node, selector, composer);
+        if (rankedCandidate) {
+          ranked.push(rankedCandidate);
+        }
+      });
+    }
+
+    const composerForm = composer?.closest?.("form");
+    if (composerForm && typeof composerForm.querySelectorAll === "function") {
+      selectorsChecked.push("composer.closest(form) button");
+      composerForm.querySelectorAll("button").forEach((node) => {
+        if (seen.has(node)) {
+          return;
+        }
+        seen.add(node);
+        const rankedCandidate = rankSendButtonCandidate(node, "composer.closest(form) button", composer);
+        if (rankedCandidate) {
+          ranked.push(rankedCandidate);
+        }
+      });
+    }
+
+    diagnostics.sendSelectorsChecked = uniqueList([...(diagnostics.sendSelectorsChecked || []), ...selectorsChecked]);
+    diagnostics.sendCandidatesConsidered = ranked
+      .slice()
+      .sort((left, right) => right.score - left.score)
+      .map((entry) => `${entry.selectorUsed} [score=${entry.score}] ${textFromElement(entry.node) || "(no label)"}`)
+      .slice(0, 8);
+
+    const winner = ranked
+      .filter((entry) => entry.visible && !entry.disabled && (isAllowedSendButtonText(textFromElement(entry.node)) || String(entry.meta.type || "").toLowerCase() === "submit"))
+      .sort((left, right) => right.score - left.score)[0];
+
+    if (!winner) {
+      return null;
+    }
+
+    diagnostics.sendButtonFound = true;
+    diagnostics.sendButtonSelectorUsed = winner.selectorUsed;
+    diagnostics.sendButtonDisabled = winner.disabled ? "yes" : "no";
+    diagnostics.sendButtonMeta = winner.meta;
+    return winner.node;
+  }
+
+  function createToolFailure(code, message, diagnostics) {
+    const error = new Error(message);
+    error.toolFailureCode = code;
+    error.toolFailureLabel = TOOL_FAILURE_LABELS[code] || code;
+    error.diagnostics = diagnostics;
+    return error;
   }
 
   function createEventFactory(documentRef) {
@@ -318,29 +567,44 @@
   }
 
   async function sendMessage(documentRef, text, stopState) {
+    const diagnostics = makeAttemptDiagnostics();
     if (stopState.stopRequested) {
-      throw new Error("Runner stop requested before send.");
+      diagnostics.lastError = "Runner stop requested before send.";
+      throw createToolFailure("MESSAGE_NOT_SENT", diagnostics.lastError, diagnostics);
     }
 
-    const composer = findComposer(documentRef);
-    if (!composer) {
-      throw new Error("ChatGPT composer not found.");
+    const composerRecord = findComposer(documentRef, diagnostics);
+    if (!composerRecord) {
+      diagnostics.lastError = "ChatGPT composer not found.";
+      throw createToolFailure("COMPOSER_NOT_FOUND", diagnostics.lastError, diagnostics);
     }
+    const composer = composerRecord.node;
+    diagnostics.composerFound = true;
+    diagnostics.composerSelectorUsed = composerRecord.selectorUsed;
+    diagnostics.composerKind = composerRecord.composerKind;
 
     composer.focus?.();
     setComposerText(composer, text);
     dispatchComposerEvents(composer, text, documentRef);
+    const composerText = getComposerText(composer);
+    diagnostics.composerTextLength = composerText.length;
+    diagnostics.composerTextVerified = composerText.includes(String(text || "").slice(0, Math.min(String(text || "").length, 24)));
 
-    if (!cleanText(getComposerText(composer))) {
-      throw new Error("Composer text verification failed.");
+    if (!diagnostics.composerTextVerified || !cleanText(composerText)) {
+      diagnostics.lastError = "Composer text verification failed.";
+      throw createToolFailure("COMPOSER_INSERT_VERIFY", diagnostics.lastError, diagnostics);
     }
 
-    const sendButton = findSendButton(documentRef);
+    const sendButton = findSendButton(documentRef, composer, diagnostics);
     if (!sendButton) {
-      throw new Error("Visible send button not found.");
+      diagnostics.lastError = "Visible send button not found.";
+      diagnostics.sendButtonFound = false;
+      throw createToolFailure("SEND_BUTTON_NOT_FOUND", diagnostics.lastError, diagnostics);
     }
 
+    diagnostics.submitAttempted = true;
     sendButton.click();
+    return diagnostics;
   }
 
   function createBaseline(documentRef) {
@@ -365,26 +629,22 @@
       expected_behavior: caseDef.expected_behavior || [],
       forbidden_behavior: caseDef.forbidden_behavior || [],
       notes: caseDef.notes || "",
-      raw_turn_log: []
+      raw_turn_log: [],
+      case_status: "PENDING",
+      packet_prepared: Boolean(caseDef.packet),
+      packet_submitted: false,
+      tool_failure_label: null,
+      diagnostics: null
     };
   }
 
-  function buildEmptyCaseFailure(caseDef, message) {
-    return {
-      case_id: caseDef.case_id,
-      title: caseDef.title,
-      research_question: caseDef.research_question,
-      language_feature: caseDef.language_feature || "",
-      packet_sent: caseDef.packet,
-      scripted_user_replies_sent: [],
-      assistant_responses: [],
-      visible_turn_text: "",
-      observed_chunks_or_keywords: [],
-      expected_behavior: caseDef.expected_behavior || [],
-      forbidden_behavior: caseDef.forbidden_behavior || [],
-      notes: message,
-      raw_turn_log: []
-    };
+  function buildEmptyCaseFailure(caseDef, message, toolFailureLabel, diagnostics) {
+    const failure = buildCaseResult(caseDef);
+    failure.notes = message;
+    failure.case_status = "NOT_SENT";
+    failure.tool_failure_label = toolFailureLabel || null;
+    failure.diagnostics = diagnostics || null;
+    return failure;
   }
 
   function deriveObservedKeywords(caseResult) {
@@ -406,6 +666,9 @@
   }
 
   function heuristicClassify(caseResult) {
+    if (caseResult.tool_failure_label) {
+      return caseResult.tool_failure_label;
+    }
     const combined = cleanText(caseResult.assistant_responses.join(" ")).toLowerCase();
     const replies = caseResult.scripted_user_replies_sent.map((value) => cleanText(value).toLowerCase());
 
@@ -443,6 +706,13 @@
         heuristic_classification: heuristicClassify(caseResult)
       };
     });
+    if (runResult.cases.some((caseResult) => caseResult.tool_failure_label)) {
+      runResult.status = "TOOL_FAILED";
+    } else if ((runResult.errors || []).length > 0) {
+      runResult.status = "FAILED";
+    } else {
+      runResult.status = "COMPLETED";
+    }
     return runResult;
   }
 
@@ -533,11 +803,17 @@
         actor,
         text: actorText
       });
-      await sendMessage(documentRef, actorText, stopState);
-      const observation = await waitForStableAssistantMessage(documentRef, baseline, runConfig, stopState);
+      const sendDiagnostics = await sendMessage(documentRef, actorText, stopState);
+      caseResult.packet_submitted = actor === "packet" ? true : caseResult.packet_submitted;
+      caseResult.case_status = "SENT";
+      caseResult.diagnostics = sendDiagnostics;
+      const observation = await waitForStableAssistantMessage(documentRef, baseline, runConfig, stopState).catch((error) => {
+        throw createToolFailure("RESPONSE_NOT_OBSERVED", error.message, sendDiagnostics);
+      });
       const latestText = observation.latestText;
       caseResult.assistant_responses.push(latestText);
       caseResult.visible_turn_text = latestText;
+      caseResult.case_status = "RESPONDED";
       caseResult.raw_turn_log.push({
         at: nowIso(),
         actor: "assistant",
@@ -581,7 +857,21 @@
         runResult.cases.push(caseResult);
       } catch (error) {
         runResult.errors.push(`${caseDef.case_id}: ${error.message}`);
-        runResult.cases.push(buildEmptyCaseFailure(caseDef, error.message));
+        const toolFailureLabel = error.toolFailureLabel || null;
+        const diagnostics = error.diagnostics || null;
+        runResult.cases.push(buildEmptyCaseFailure(caseDef, error.message, toolFailureLabel, diagnostics));
+        if (diagnostics) {
+          overlay.setDiagnostics(describeDiagnostics(diagnostics));
+        }
+        if (toolFailureLabel) {
+          runResult.status = "TOOL_FAILED";
+          runResult.warnings.push("Run stopped because runner could not send messages.");
+          const stopMessage = toolFailureLabel === TOOL_FAILURE_LABELS.SEND_BUTTON_NOT_FOUND
+            ? "Stopped: visible ChatGPT send button not found."
+            : `Stopped: ${error.message}`;
+          overlay.setStatus(stopMessage);
+          break;
+        }
         if (runConfig.stop_on_case_failure) {
           break;
         }
@@ -611,6 +901,7 @@
     }
 
     overlay.setRunDisabled(true);
+    overlay.setRunLabel("Running...");
     overlay.setStatus("Running suite...");
     const runResult = await runSuiteLocally({
       documentRef,
@@ -624,14 +915,11 @@
     const resultJson = JSON.stringify(runResult, null, 2);
     triggerDownload(`orion-casework-result-${runId}.json`, resultJson, "application/json", documentRef);
 
-    const summaryMarkdown = buildSummaryMarkdown(runResult);
-    try {
-      triggerDownload(`orion-casework-summary-${runId}.md`, summaryMarkdown, "text/markdown", documentRef);
-    } catch (_error) {
-      runResult.warnings.push("Summary markdown download failed; JSON result still downloaded.");
-    }
-
     const uploadOutcome = await bestEffortUploadResult(serverBaseUrl, suite, runResult);
+    const latestCaseDiagnostics = runResult.cases[runResult.cases.length - 1]?.diagnostics || null;
+    if (latestCaseDiagnostics) {
+      overlay.setDiagnostics(describeDiagnostics(latestCaseDiagnostics));
+    }
     if (!uploadOutcome.ok) {
       runResult.warnings.push(uploadOutcome.message);
       overlay.setStatus(`Run complete.\n${uploadOutcome.message}`);
@@ -640,6 +928,7 @@
     }
 
     overlay.setRunDisabled(false);
+    overlay.setRunLabel("Re-run");
     return runResult;
   }
 
@@ -784,28 +1073,45 @@
       warningText:
         "This sends scripted messages in the visible test chat after you click Run. Use only in a disposable ChatGPT test chat."
     });
+    let rerunCount = 0;
+
+    overlay.copyDiagnosticsButton.addEventListener("click", async () => {
+      const diagnosticsText = overlay.lastDiagnosticsText || "No diagnostics yet.";
+      try {
+        await root.navigator?.clipboard?.writeText?.(diagnosticsText);
+        overlay.setStatus("Diagnostics copied.");
+      } catch (_error) {
+        overlay.setStatus("Diagnostics copy failed.");
+      }
+    });
 
     overlay.stopButton.addEventListener("click", () => {
       stopState.stopRequested = true;
       overlay.setStatus("Stop requested.");
       overlay.setRunDisabled(false);
+      overlay.setRunLabel("Re-run");
     });
 
     overlay.runButton.addEventListener("click", async () => {
       stopState.stopRequested = false;
+       rerunCount += 1;
       try {
         await runSelfContainedSuite({
           documentRef,
           locationRef,
           suite,
-          runId,
+          runId: rerunCount === 1 ? runId : `${runId}-r${rerunCount}`,
           serverBaseUrl,
           overlay,
           stopState
         });
       } catch (error) {
         overlay.setRunDisabled(false);
+        overlay.setRunLabel("Re-run");
         overlay.setStatus(`Run failed: ${error.message}`);
+        if (error?.diagnostics) {
+          overlay.setDiagnostics(describeDiagnostics(error.diagnostics));
+        }
       }
     });
 
@@ -818,6 +1124,14 @@
 
   return {
     install,
-    installSelfContained
+    installSelfContained,
+    __test: {
+      TOOL_FAILURE_LABELS,
+      makeAttemptDiagnostics,
+      describeDiagnostics,
+      rankSendButtonCandidate,
+      findSendButton,
+      runSuiteLocally
+    }
   };
 });

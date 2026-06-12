@@ -24,6 +24,20 @@ function unique(items) {
 }
 
 function classifyCaseResult(caseRecord) {
+  if (caseRecord.tool_failure_label) {
+    return {
+      label: caseRecord.tool_failure_label,
+      reasons: [caseRecord.notes || "Runner tool failure."]
+    };
+  }
+
+  if (caseRecord.case_status === "NOT_SENT") {
+    return {
+      label: "TOOL_FAIL_MESSAGE_NOT_SENT",
+      reasons: [caseRecord.notes || "Runner never submitted the case packet."]
+    };
+  }
+
   const assistantResponses = Array.isArray(caseRecord.assistant_responses)
     ? caseRecord.assistant_responses
     : [];

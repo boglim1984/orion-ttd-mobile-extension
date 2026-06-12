@@ -295,6 +295,30 @@ node scripts/orion-webkit-mcp-tether-probe.mjs
 - next action:
   verify that the manual Safari Web Inspector GUI can see the new witness evidence even if `iwdp` still cannot run arbitrary eval
 
+## Milestone 8.5E Manual Orion iPhone Validation
+
+- date/time:
+  `2026-06-12 02:58 PM EDT`
+- environment:
+  real Orion iPhone + ChatGPT page
+- extension version:
+  `0.1.3`
+- trigger:
+  `document.dispatchEvent(new CustomEvent("orion-ttd-run-insert-only-smoke"))`
+- console witness observed:
+  `[ORION_TTD] insert_only_smoke_started`
+  `[ORION_TTD] insert_only_smoke_result`
+- insert-only result:
+  `document.documentElement.dataset.orionTtdInsertOnlyLastResult = {"ok":true,"selectorUsed":"#prompt-textarea","blockedReason":null,"submitAttempted":false,"composerKind":"contenteditable"}`
+- last witness:
+  `document.documentElement.dataset.orionTtdLastWitness = {"kind":"insert_only_smoke_result","payload":{"ok":true,"selectorUsed":"#prompt-textarea","blockedReason":null,"submitAttempted":false,"composerKind":"contenteditable","packetPrefix":"TTD_ORION_POC_V1\n{\n  \"protocol\":","packetLength":1367},"at":"2026-06-12T18:56:42.054Z"}`
+- conclusion:
+  `PASS`
+  console, dataset, and witness-channel evidence are visible on real Orion iPhone even while `iwdp` Runtime.evaluate remains blocked
+  no submit occurred
+- next action:
+  continue the Orion bridge route through witness observation and manual GUI inspection rather than depending on arbitrary `Runtime.evaluate`
+
 ## Runtime Change Confirmation
 
 No runtime code changed in this milestone preparation job.

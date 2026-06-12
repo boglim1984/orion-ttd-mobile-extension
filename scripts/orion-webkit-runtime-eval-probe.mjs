@@ -2,6 +2,8 @@ import process from "node:process";
 
 const SAFE_EXPRESSIONS = [
   "1 + 1",
+  "1+1",
+  "2",
   "document.title",
   "document.readyState",
   "document.location.href",
@@ -10,18 +12,26 @@ const SAFE_EXPRESSIONS = [
   "document.documentElement.dataset.orionTtdInsertOnlyReady"
 ];
 
+const HANDSHAKE_STEPS = {
+  runtime: ["Runtime.enable"],
+  "inspector-runtime": ["Inspector.enable", "Runtime.enable"],
+  "page-runtime": ["Page.enable", "Runtime.enable"]
+};
+
 function printHelp() {
   console.log(`Usage: node scripts/orion-webkit-runtime-eval-probe.mjs --ws <websocket-url> [options]
 
-Low-noise WebKit Runtime.evaluate isolation probe for the Orion iPhone target.
+Low-noise WebKit protocol probe for the Orion iPhone target.
 
 Options:
-- --ws <url>                 WebSocket inspector target
-- --timeout-ms <n>           Per-command timeout in milliseconds (default: 5000)
-- --expression <js>          Run one safe one-off expression instead of the default ladder
-- --list-expressions         Print the built-in safe expression ladder and exit
-- --with-page-enable         Send Page.enable before Runtime.enable/evaluate
-- --help                     Show this help
+- --ws <url>                   WebSocket inspector target
+- --timeout-ms <n>             Per-command timeout in milliseconds (default: 5000)
+- --expression <js>            Run one safe one-off expression instead of the default ladder
+- --list-expressions           Print the built-in safe expression ladder and exit
+- --handshake <mode>           One of: runtime, inspector-runtime, page-runtime
+- --with-page-enable           Alias for --handshake page-runtime
+- --raw-log                    Print low-noise send/recv/close summary lines
+- --help                       Show this help
 
 Boundaries:
 - no DOM dumps
@@ -38,7 +48,8 @@ function parseArgs(argv) {
     timeoutMs: 5000,
     expression: "",
     listExpressions: false,
-    withPageEnable: false,
+    handshake: "runtime",
+    rawLog: false,
     help: false
   };
 
@@ -56,8 +67,13 @@ function parseArgs(argv) {
       continue;
     }
 
+    if (arg === "--raw-log") {
+      options.rawLog = true;
+      continue;
+    }
+
     if (arg === "--with-page-enable") {
-      options.withPageEnable = true;
+      options.handshake = "page-runtime";
       continue;
     }
 
@@ -75,6 +91,12 @@ function parseArgs(argv) {
 
     if (arg === "--expression" && next) {
       options.expression = next;
+      index += 1;
+      continue;
+    }
+
+    if (arg === "--handshake" && next) {
+      options.handshake = next;
       index += 1;
       continue;
     }
@@ -97,6 +119,25 @@ function summarizeValue(value) {
   }
 
   return JSON.stringify(value);
+}
+
+function summarizeError(error) {
+  if (!error) {
+    return "(unknown)";
+  }
+
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (typeof error.code !== "undefined" || typeof error.message !== "undefined") {
+    return JSON.stringify({
+      code: error.code,
+      message: error.message
+    });
+  }
+
+  return JSON.stringify(error);
 }
 
 async function main() {
@@ -126,29 +167,46 @@ async function main() {
     return;
   }
 
+  if (!HANDSHAKE_STEPS[options.handshake]) {
+    console.error("Invalid --handshake value.");
+    process.exitCode = 1;
+    return;
+  }
+
   if (typeof WebSocket !== "function") {
     console.error("Global WebSocket is not available in this Node runtime.");
     process.exitCode = 1;
     return;
   }
 
-  const expressions = options.expression ? [options.expression] : SAFE_EXPRESSIONS;
+  const expressions = options.expression ? [options.expression] : SAFE_EXPRESSIONS.filter((expression) => expression !== "1 + 1");
   if (options.expression && !isAllowedExpression(options.expression)) {
     console.error("Expression is outside the approved safe ladder.");
     process.exitCode = 1;
     return;
   }
 
+  const handshakeSteps = HANDSHAKE_STEPS[options.handshake];
   const eventMethods = new Map();
   const pending = new Map();
+  const rawLines = [];
+  const timedOutIds = [];
   let nextId = 1;
   let closed = false;
+  let closeInfo = { code: null, reason: "" };
+
+  function pushRaw(line) {
+    if (options.rawLog) {
+      rawLines.push(line);
+    }
+  }
 
   const socket = new WebSocket(options.ws);
   const openPromise = new Promise((resolve, reject) => {
     const openTimer = setTimeout(() => reject(new Error("WebSocket open timeout")), options.timeoutMs);
     socket.addEventListener("open", () => {
       clearTimeout(openTimer);
+      pushRaw("socket open");
       resolve();
     }, { once: true });
     socket.addEventListener("error", () => {
@@ -157,11 +215,14 @@ async function main() {
     }, { once: true });
   });
 
-  socket.addEventListener("close", () => {
+  socket.addEventListener("close", (event) => {
     closed = true;
-    for (const [, entry] of pending) {
+    closeInfo = { code: event.code, reason: event.reason || "" };
+    pushRaw(`socket close code=${event.code} reason=${event.reason || "(empty)"}`);
+    for (const [id, entry] of pending) {
       clearTimeout(entry.timer);
       entry.resolve({
+        id,
         ok: false,
         timeout: false,
         error: "socket closed before response"
@@ -178,11 +239,13 @@ async function main() {
       return;
     }
 
-    if (payload.id && pending.has(payload.id)) {
+    if (typeof payload.id !== "undefined" && pending.has(payload.id)) {
       const entry = pending.get(payload.id);
       pending.delete(payload.id);
       clearTimeout(entry.timer);
+      pushRaw(`recv id=${payload.id}${payload.error ? ` error=${summarizeError(payload.error)}` : " ok"}`);
       entry.resolve({
+        id: payload.id,
         ok: !payload.error,
         timeout: false,
         response: payload,
@@ -194,12 +257,14 @@ async function main() {
     if (payload.method) {
       const count = eventMethods.get(payload.method) || 0;
       eventMethods.set(payload.method, count + 1);
+      pushRaw(`event method=${payload.method}`);
     }
   });
 
   function sendCommand(method, params = {}) {
     if (closed) {
       return Promise.resolve({
+        id: null,
         ok: false,
         timeout: false,
         error: "socket already closed"
@@ -208,11 +273,15 @@ async function main() {
 
     const id = nextId;
     nextId += 1;
+    pushRaw(`send id=${id} method=${method}`);
 
     return new Promise((resolve) => {
       const timer = setTimeout(() => {
         pending.delete(id);
+        timedOutIds.push(id);
+        pushRaw(`timeout id=${id} method=${method}`);
         resolve({
+          id,
           ok: false,
           timeout: true,
           error: `timeout after ${options.timeoutMs}ms`
@@ -228,7 +297,8 @@ async function main() {
   console.log("");
   console.log(`WebSocket: ${options.ws}`);
   console.log(`Timeout: ${options.timeoutMs}ms`);
-  console.log(`Page.enable: ${options.withPageEnable ? "enabled" : "disabled"}`);
+  console.log(`Handshake: ${options.handshake}`);
+  console.log(`Expression count: ${expressions.length}`);
   console.log("");
 
   try {
@@ -245,17 +315,12 @@ async function main() {
 
   const commandResults = [];
 
-  if (options.withPageEnable) {
+  for (const method of handshakeSteps) {
     commandResults.push({
-      label: "Page.enable",
-      result: await sendCommand("Page.enable")
+      label: method,
+      result: await sendCommand(method)
     });
   }
-
-  commandResults.push({
-    label: "Runtime.enable",
-    result: await sendCommand("Runtime.enable")
-  });
 
   for (const expression of expressions) {
     commandResults.push({
@@ -271,27 +336,27 @@ async function main() {
     console.log(`Command: ${entry.label}`);
 
     if (entry.result.timeout) {
-      console.log(`  status: timeout`);
+      console.log("  status: timeout");
       console.log(`  detail: ${entry.result.error}`);
       continue;
     }
 
     if (!entry.result.ok) {
-      console.log(`  status: error`);
-      console.log(`  detail: ${JSON.stringify(entry.result.error)}`);
+      console.log("  status: error");
+      console.log(`  detail: ${summarizeError(entry.result.error)}`);
       continue;
     }
 
     if (entry.label.startsWith("Runtime.evaluate")) {
       const value = entry.result.response?.result?.result?.value;
       const type = entry.result.response?.result?.result?.type || "(unknown)";
-      console.log(`  status: ok`);
+      console.log("  status: ok");
       console.log(`  type: ${type}`);
       console.log(`  value: ${summarizeValue(value)}`);
       continue;
     }
 
-    console.log(`  status: ok`);
+    console.log("  status: ok");
   }
 
   console.log("");
@@ -304,8 +369,32 @@ async function main() {
     }
   }
 
+  console.log("");
+  console.log("Timed out ids:");
+  if (timedOutIds.length === 0) {
+    console.log("  none");
+  } else {
+    console.log(`  ${timedOutIds.join(", ")}`);
+  }
+
   if (!closed) {
     socket.close();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+
+  console.log("");
+  console.log("Socket close:");
+  console.log(`  code: ${closeInfo.code ?? "(none)"}`);
+  console.log(`  reason: ${closeInfo.reason || "(empty)"}`);
+
+  if (options.rawLog) {
+    console.log("");
+    console.log("Raw summary:");
+    if (rawLines.length === 0) {
+      console.log("  none");
+    } else {
+      rawLines.forEach((line) => console.log(`  - ${line}`));
+    }
   }
 }
 

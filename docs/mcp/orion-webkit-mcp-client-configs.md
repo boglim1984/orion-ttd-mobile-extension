@@ -111,4 +111,6 @@ node scripts/orion-webkit-mcp-tether-probe.mjs
 - target selection syntax for `iwdp-cli eval` is:
   `iwdp-cli eval '<expr>' <ws-url>`
 - the current Orion ChatGPT target accepts the WebSocket connection, but `Runtime.enable` and `Page.enable` are timing out without result payloads
+- `Inspector.enable` also times out on the Orion ChatGPT target
+- control sockets can return immediate protocol errors, so a silent timeout on the Orion target is a distinct target/session behavior
 - keep MCP and CLI usage scoped to tiny eval isolation until one expression returns

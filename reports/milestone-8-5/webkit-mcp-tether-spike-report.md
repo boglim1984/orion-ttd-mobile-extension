@@ -131,6 +131,51 @@ node scripts/orion-webkit-mcp-tether-probe.mjs
 - next action:
   protocol-level debugging of WebKit target responsiveness or alternate target-session handling, not browser automation
 
+## Milestone 8.5C — Protocol Attach/Eval Repair
+
+- date/time:
+  `2026-06-12 02:17 PM EDT`
+- active paint state confirmed:
+  partial yes
+  the Orion ChatGPT target remained visible enough to reappear at the same URL/websocket, but native Safari was not open so Safari comparison was not completed in this run
+- Orion target title/url/ws:
+  `Orion TTD Insert Test`
+  `https://chatgpt.com/c/6a2c4184-f104-83ea-8205-d9ad171904f7`
+  `ws://localhost:9222/devtools/page/3`
+- Safari target:
+  not tested in this run
+  `iwdp-cli eval --help` itself reported `no Safari tabs found`
+- proxy command:
+  `ios_webkit_debug_proxy --no-frontend > /tmp/orion-iwdp-8_5c.log 2>&1 &`
+- iwdp-cli devices/pages summary:
+  `devices` still found `iPhone (6)` on `localhost:9222`
+  `pages` still found the Orion ChatGPT target at page `3`
+- raw protocol sequences tested:
+  runtime handshake:
+  `Runtime.enable` -> `Runtime.evaluate("1+1")`
+  inspector-runtime handshake:
+  `Inspector.enable` -> `Runtime.enable` -> `Runtime.evaluate("1+1")`
+  page-runtime handshake:
+  `Page.enable` -> `Runtime.enable` -> `Runtime.evaluate("1+1")`
+  target-domain control checks:
+  `Target.getTargets`
+  `Target.setAutoAttach`
+- diagnostic script command outputs summarized:
+  on the Orion ChatGPT target, the socket opened cleanly and closed with code `1000`, but every handshake command timed out with no event traffic
+  on control targets `page/1`, `page/2`, and `page/4`, the socket returned immediate `-32601` protocol errors instead of blackholing
+- whether Inspector.enable changed behavior:
+  no
+  it also timed out on the Orion ChatGPT target
+- whether Safari differed from Orion:
+  not tested in this run because no native Safari page was open
+- whether eval path passed or remains blocked:
+  `BLOCKED`
+- likely next hypothesis:
+  the Orion ChatGPT target is exposing a discoverable page socket but not an actively commandable Runtime/Page/Target session through this bridge
+  the most likely branches now are Orion-specific WKWebView inspector limitation, claimed-session behavior, or a bridge mismatch for this target type
+- proxy stopped or left running:
+  stopped
+
 ## Runtime Change Confirmation
 
 No runtime code changed in this milestone preparation job.

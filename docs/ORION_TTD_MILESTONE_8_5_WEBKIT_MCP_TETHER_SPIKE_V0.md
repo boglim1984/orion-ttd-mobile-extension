@@ -244,6 +244,14 @@ Safe eval ladder for isolation:
 6. `document.documentElement.dataset.orionTtdLoaded`
 7. `document.documentElement.dataset.orionTtdInsertOnlyReady`
 
+## Milestone 8.5C Protocol Attach/Eval Repair
+
+- active paint state matters: keep the iPhone unlocked, Orion foregrounded, the target tab visible, and the screen awake during the probe
+- Orion vs native Safari remains the next clean isolation branch
+- test `Inspector.enable` before declaring Runtime/Page eval impossible
+- if non-target sockets return immediate protocol errors but the Orion ChatGPT socket only blackholes, treat that as a target/session behavior clue rather than proof that every message shape is wrong
+- do not attempt insert dispatch until `1+1` returns on the chosen target
+
 ## Next Expansion Ladder
 
 ### Phase 1

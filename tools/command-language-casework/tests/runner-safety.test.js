@@ -68,6 +68,48 @@ function createFakeButton({ ariaLabel = "", title = "", dataTestId = "", type = 
   };
 }
 
+function createContentEditableComposer() {
+  return {
+    disabled: false,
+    readOnly: false,
+    isContentEditable: true,
+    textContent: "",
+    innerText: "",
+    ownerDocument: null,
+    parentElement: {
+      contains() {
+        return false;
+      },
+      querySelectorAll() {
+        return [];
+      }
+    },
+    closest(selector) {
+      if (selector === "form") {
+        return {
+          querySelectorAll() {
+            return [];
+          }
+        };
+      }
+      return null;
+    },
+    focus() {},
+    getAttribute(name) {
+      if (name === "contenteditable") {
+        return "true";
+      }
+      return "";
+    },
+    dispatchEvent() {
+      return true;
+    },
+    getBoundingClientRect() {
+      return { width: 200, height: 40 };
+    }
+  };
+}
+
 test("send button ranking prefers visible send-like button and ignores disabled or non-send buttons", () => {
   const composer = {
     closest(selector) {
@@ -131,7 +173,7 @@ test("send button ranking prefers visible send-like button and ignores disabled 
   assert.match(diagnostics.sendCandidatesConsidered.join("\n"), /composer-send-button/);
 });
 
-test("tool failure run stops after first send-button failure and records NOT_SENT", async () => {
+test("tool failure run stops after first composer state-sync failure and records NOT_SENT", async () => {
   const composer = {
     value: "",
     disabled: false,
@@ -217,8 +259,106 @@ test("tool failure run stops after first send-button failure and records NOT_SEN
   assert.equal(runResult.status, "TOOL_FAILED");
   assert.equal(runResult.cases.length, 1);
   assert.equal(runResult.cases[0].case_status, "NOT_SENT");
-  assert.equal(runResult.cases[0].heuristic_classification, "TOOL_FAIL_SEND_BUTTON_NOT_FOUND");
+  assert.equal(runResult.cases[0].heuristic_classification, "TOOL_FAIL_COMPOSER_STATE_NOT_SYNCED");
   assert.match(runResult.warnings.join("\n"), /runner could not send messages/i);
-  assert.match(overlay.statuses.join("\n"), /Stopped: visible ChatGPT send button not found\./);
+  assert.match(overlay.statuses.join("\n"), /composer state-sync failure/i);
   assert.match(overlay.diagnostics.join("\n"), /send button found: no/);
+});
+
+test("contenteditable insertion records insertion method and state-sync failure when send control never appears", async () => {
+  const composer = createContentEditableComposer();
+  const documentRef = {
+    title: "Disposable ChatGPT Test",
+    defaultView: {
+      Event: class Event {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      },
+      InputEvent: class InputEvent {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      }
+    },
+    execCommand(_command, _showUi, value) {
+      composer.textContent = value;
+      composer.innerText = value;
+      return true;
+    },
+    getSelection() {
+      return {
+        removeAllRanges() {},
+        addRange() {}
+      };
+    },
+    createRange() {
+      return {
+        selectNodeContents() {}
+      };
+    },
+    querySelector(selector) {
+      if (selector === "#prompt-textarea") {
+        return composer;
+      }
+      return null;
+    },
+    querySelectorAll(selector) {
+      if (selector === "form button") {
+        return [
+          createFakeButton({ ariaLabel: "Add files and more", dataTestId: "composer-plus-btn" }),
+          createFakeButton({ ariaLabel: "Start Voice", text: "Start Voice" })
+        ];
+      }
+      return [];
+    }
+  };
+  composer.ownerDocument = documentRef;
+
+  const overlay = {
+    statuses: [],
+    diagnostics: [],
+    setStatus(text) {
+      this.statuses.push(text);
+    },
+    setDiagnostics(text) {
+      this.diagnostics.push(text);
+    }
+  };
+  const suite = {
+    suite_id: "desk-reset-v0",
+    run_config: {
+      stop_on_case_failure: false,
+      stop_after_each_case: false
+    },
+    cases: [
+      {
+        case_id: "case-001",
+        title: "First case",
+        research_question: "Question",
+        packet: "TTD_COMMAND_V1\n{\"active_chunk_id\":\"clear_trash\"}",
+        scripted_user_replies: []
+      }
+    ]
+  };
+
+  const runResult = await runner.__test.runSuiteLocally({
+    documentRef,
+    suite,
+    runId: "self-contained-contenteditable-test",
+    stopState: { stopRequested: false },
+    overlay,
+    browserContextNote: "Test"
+  });
+
+  assert.equal(runResult.status, "TOOL_FAILED");
+  assert.equal(runResult.cases[0].tool_failure_label, "TOOL_FAIL_COMPOSER_STATE_NOT_SYNCED");
+  assert.equal(runResult.cases[0].heuristic_classification, "TOOL_FAIL_COMPOSER_STATE_NOT_SYNCED");
+  assert.equal(runResult.cases[0].diagnostics.insertionMethodUsed, "contenteditable_execCommand_insertText");
+  assert.equal(runResult.cases[0].diagnostics.sendControlAppearedAfterWait, false);
+  assert.equal(runResult.cases[0].diagnostics.failureStage, "composer_state_sync");
+  assert.match(overlay.statuses.join("\n"), /composer state-sync failure/i);
+  assert.match(overlay.diagnostics.join("\n"), /insertion method used: contenteditable_execCommand_insertText/);
 });

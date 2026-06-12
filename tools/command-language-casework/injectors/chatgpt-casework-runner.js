@@ -13,6 +13,8 @@
   const TOOL_FAILURE_LABELS = {
     COMPOSER_NOT_FOUND: "TOOL_FAIL_COMPOSER_NOT_FOUND",
     COMPOSER_INSERT_VERIFY: "TOOL_FAIL_COMPOSER_INSERT_VERIFY",
+    COMPOSER_STATE_NOT_SYNCED: "TOOL_FAIL_COMPOSER_STATE_NOT_SYNCED",
+    SEND_CONTROL_NOT_ENABLED_AFTER_INSERT: "TOOL_FAIL_SEND_CONTROL_NOT_ENABLED_AFTER_INSERT",
     SEND_BUTTON_NOT_FOUND: "TOOL_FAIL_SEND_BUTTON_NOT_FOUND",
     MESSAGE_NOT_SENT: "TOOL_FAIL_MESSAGE_NOT_SENT",
     RESPONSE_NOT_OBSERVED: "TOOL_FAIL_RESPONSE_NOT_OBSERVED"
@@ -256,6 +258,15 @@
       sendButtonSelectorUsed: null,
       sendButtonDisabled: "unknown",
       sendButtonMeta: null,
+      insertionMethodUsed: "none",
+      eventsDispatched: [],
+      stateSyncWaitMs: 0,
+      sendControlAppearedAfterWait: false,
+      controlsBeforeInsert: [],
+      controlsAfterInsert: [],
+      controlsAfterWait: [],
+      failureStage: "composer_insert",
+      fallbackMethodUsed: "none",
       submitAttempted: false,
       lastError: null
     };
@@ -321,6 +332,13 @@
       `composer kind: ${diagnostics.composerKind || "unknown"}`,
       `composer text length after insert attempt: ${Number(diagnostics.composerTextLength || 0)}`,
       `composer text verified: ${diagnostics.composerTextVerified ? "yes" : "no"}`,
+      `insertion method used: ${diagnostics.insertionMethodUsed || "none"}`,
+      `events dispatched: ${(diagnostics.eventsDispatched || []).join(", ") || "none"}`,
+      `state sync wait ms: ${Number(diagnostics.stateSyncWaitMs || 0)}`,
+      `send control appeared after wait: ${diagnostics.sendControlAppearedAfterWait ? "yes" : "no"}`,
+      `controls before insert: ${(diagnostics.controlsBeforeInsert || []).join(", ") || "none"}`,
+      `controls after insert: ${(diagnostics.controlsAfterInsert || []).join(", ") || "none"}`,
+      `controls after wait: ${(diagnostics.controlsAfterWait || []).join(", ") || "none"}`,
       `send button selector candidates checked: ${(diagnostics.sendSelectorsChecked || []).join(", ") || "none"}`,
       `send candidates considered: ${(diagnostics.sendCandidatesConsidered || []).join(", ") || "none"}`,
       `send button found: ${diagnostics.sendButtonFound ? "yes" : "no"}`,
@@ -329,8 +347,26 @@
       `send button aria-label: ${sendMeta.ariaLabel || "none"}`,
       `send button title: ${sendMeta.title || "none"}`,
       `send button data-testid: ${sendMeta.dataTestId || "none"}`,
+      `fallback method used: ${diagnostics.fallbackMethodUsed || "none"}`,
+      `failure stage: ${diagnostics.failureStage || "unknown"}`,
       `last error: ${diagnostics.lastError || "none"}`
     ].join("\n");
+  }
+
+  function collectComposerControls(composer) {
+    const form = composer?.closest?.("form");
+    const scope = form || composer?.parentElement || composer?.ownerDocument;
+    if (!scope || typeof scope.querySelectorAll !== "function") {
+      return [];
+    }
+
+    return [...scope.querySelectorAll("button")]
+      .filter((node) => isVisible(node))
+      .map((node) => {
+        const label = textFromElement(node);
+        return label || "(unlabeled button)";
+      })
+      .slice(0, 12);
   }
 
   function isAllowedSendButtonText(text) {
@@ -483,33 +519,125 @@
           cancelable: true,
           composed: true
         });
+      },
+      paste() {
+        return new view.Event("paste", {
+          bubbles: true,
+          cancelable: true,
+          composed: true
+        });
       }
     };
+  }
+
+  function clearContentEditableSelection(documentRef, composer) {
+    const selection = documentRef.getSelection?.();
+    if (!selection || typeof selection.removeAllRanges !== "function") {
+      return false;
+    }
+
+    if (typeof documentRef.createRange !== "function") {
+      return false;
+    }
+
+    const range = documentRef.createRange();
+    range.selectNodeContents(composer);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    return true;
   }
 
   function setComposerText(composer, text) {
     if (typeof composer.value === "string") {
       composer.value = text;
       composer.setSelectionRange?.(text.length, text.length);
-      return "textarea";
+      return "textarea_value";
     }
 
     composer.textContent = text;
-    return "contenteditable";
+    return "contenteditable_textContent";
   }
 
-  function dispatchComposerEvents(composer, text, documentRef) {
+  function dispatchComposerEvents(composer, text, documentRef, diagnostics) {
     const events = createEventFactory(documentRef);
     composer.dispatchEvent(events.input("beforeinput", text));
+    diagnostics?.eventsDispatched.push("beforeinput");
     composer.dispatchEvent(events.input("input", text));
+    diagnostics?.eventsDispatched.push("input");
     composer.dispatchEvent(events.change());
+    diagnostics?.eventsDispatched.push("change");
   }
 
   function getComposerText(composer) {
     if (!composer) {
       return "";
     }
-    return typeof composer.value === "string" ? composer.value : composer.textContent || "";
+    return typeof composer.value === "string" ? composer.value : composer.innerText || composer.textContent || "";
+  }
+
+  function tryExecCommandInsert(documentRef, text) {
+    const command = documentRef.execCommand;
+    if (typeof command !== "function") {
+      return false;
+    }
+    try {
+      return command.call(documentRef, "insertText", false, text);
+    } catch (_error) {
+      return false;
+    }
+  }
+
+  function insertContentEditableText(documentRef, composer, text, diagnostics) {
+    clearContentEditableSelection(documentRef, composer);
+    composer.textContent = "";
+
+    const execInserted = tryExecCommandInsert(documentRef, text);
+    if (execInserted) {
+      diagnostics.insertionMethodUsed = "contenteditable_execCommand_insertText";
+    } else {
+      composer.textContent = text;
+      diagnostics.insertionMethodUsed = "contenteditable_textContent";
+    }
+
+    dispatchComposerEvents(composer, text, documentRef, diagnostics);
+    composer.dispatchEvent(createEventFactory(documentRef).paste());
+    diagnostics.eventsDispatched.push("paste");
+    return diagnostics.insertionMethodUsed;
+  }
+
+  async function syncComposerText(documentRef, composer, text, diagnostics) {
+    if (typeof composer.value === "string") {
+      diagnostics.insertionMethodUsed = setComposerText(composer, text);
+      dispatchComposerEvents(composer, text, documentRef, diagnostics);
+      return diagnostics.insertionMethodUsed;
+    }
+
+    return insertContentEditableText(documentRef, composer, text, diagnostics);
+  }
+
+  async function waitForSendControl(documentRef, composer, diagnostics, stopState, timeoutMs = 3500) {
+    const startedAt = Date.now();
+    while (Date.now() - startedAt < timeoutMs) {
+      if (stopState.stopRequested) {
+        diagnostics.failureStage = "send_activation";
+        diagnostics.lastError = "Runner stop requested before send.";
+        throw createToolFailure("MESSAGE_NOT_SENT", diagnostics.lastError, diagnostics);
+      }
+
+      const sendButton = findSendButton(documentRef, composer, diagnostics);
+      diagnostics.stateSyncWaitMs = Date.now() - startedAt;
+      diagnostics.controlsAfterWait = collectComposerControls(composer);
+      if (sendButton) {
+        diagnostics.sendControlAppearedAfterWait = diagnostics.stateSyncWaitMs > 0;
+        return sendButton;
+      }
+
+      await wait(150);
+    }
+
+    diagnostics.stateSyncWaitMs = Date.now() - startedAt;
+    diagnostics.controlsAfterWait = collectComposerControls(composer);
+    return null;
   }
 
   async function wait(ms) {
@@ -569,12 +697,14 @@
   async function sendMessage(documentRef, text, stopState) {
     const diagnostics = makeAttemptDiagnostics();
     if (stopState.stopRequested) {
+      diagnostics.failureStage = "send_activation";
       diagnostics.lastError = "Runner stop requested before send.";
       throw createToolFailure("MESSAGE_NOT_SENT", diagnostics.lastError, diagnostics);
     }
 
     const composerRecord = findComposer(documentRef, diagnostics);
     if (!composerRecord) {
+      diagnostics.failureStage = "composer_insert";
       diagnostics.lastError = "ChatGPT composer not found.";
       throw createToolFailure("COMPOSER_NOT_FOUND", diagnostics.lastError, diagnostics);
     }
@@ -582,26 +712,35 @@
     diagnostics.composerFound = true;
     diagnostics.composerSelectorUsed = composerRecord.selectorUsed;
     diagnostics.composerKind = composerRecord.composerKind;
+    diagnostics.controlsBeforeInsert = collectComposerControls(composer);
 
     composer.focus?.();
-    setComposerText(composer, text);
-    dispatchComposerEvents(composer, text, documentRef);
+    await syncComposerText(documentRef, composer, text, diagnostics);
     const composerText = getComposerText(composer);
     diagnostics.composerTextLength = composerText.length;
     diagnostics.composerTextVerified = composerText.includes(String(text || "").slice(0, Math.min(String(text || "").length, 24)));
+    diagnostics.controlsAfterInsert = collectComposerControls(composer);
 
     if (!diagnostics.composerTextVerified || !cleanText(composerText)) {
+      diagnostics.failureStage = "composer_insert";
       diagnostics.lastError = "Composer text verification failed.";
       throw createToolFailure("COMPOSER_INSERT_VERIFY", diagnostics.lastError, diagnostics);
     }
 
-    const sendButton = findSendButton(documentRef, composer, diagnostics);
+    diagnostics.failureStage = "composer_state_sync";
+    const sendButton = await waitForSendControl(documentRef, composer, diagnostics, stopState);
     if (!sendButton) {
       diagnostics.lastError = "Visible send button not found.";
       diagnostics.sendButtonFound = false;
+      if (diagnostics.composerTextVerified) {
+        diagnostics.failureStage = "composer_state_sync";
+        throw createToolFailure("COMPOSER_STATE_NOT_SYNCED", "Text was inserted and verified, but ChatGPT did not enable a Send button.", diagnostics);
+      }
+      diagnostics.failureStage = "send_control_find";
       throw createToolFailure("SEND_BUTTON_NOT_FOUND", diagnostics.lastError, diagnostics);
     }
 
+    diagnostics.failureStage = "send_activation";
     diagnostics.submitAttempted = true;
     sendButton.click();
     return diagnostics;
@@ -866,9 +1005,11 @@
         if (toolFailureLabel) {
           runResult.status = "TOOL_FAILED";
           runResult.warnings.push("Run stopped because runner could not send messages.");
-          const stopMessage = toolFailureLabel === TOOL_FAILURE_LABELS.SEND_BUTTON_NOT_FOUND
-            ? "Stopped: visible ChatGPT send button not found."
-            : `Stopped: ${error.message}`;
+          const stopMessage = toolFailureLabel === TOOL_FAILURE_LABELS.COMPOSER_STATE_NOT_SYNCED
+            ? "Text was inserted and verified, but ChatGPT did not enable a Send button. This is a composer state-sync failure."
+            : toolFailureLabel === TOOL_FAILURE_LABELS.SEND_BUTTON_NOT_FOUND
+              ? "Stopped: visible ChatGPT send button not found."
+              : `Stopped: ${error.message}`;
           overlay.setStatus(stopMessage);
           break;
         }

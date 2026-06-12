@@ -109,6 +109,7 @@ Rules:
 - It does not give the LLM commit authority.
 - Fail Gracefully is a legal recovery action, not a route reset.
 - Milestone 8 manual workflow trials must remain manual and visible. Do not add auto-submit, observer, repair insertion, task watcher, or Voice Mode during this milestone. The goal is to test whether the Milestone 7 packet transport can steer a real ChatGPT route boundary.
+- WebKit MCP tether tests must start with targeted dataset/composer probes only. Do not use cookies/storage/full DOM/screenshots/auto-submit unless a later explicit milestone authorizes it. The MCP is a test instrument, not state authority.
 - Reducer/scorer remains committed-state and test authority.
 - Reducer/scorer implementation remains the executable authority.
 - Treat the XLSX as the human-editable source artifact.

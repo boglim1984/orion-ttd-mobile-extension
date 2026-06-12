@@ -31,6 +31,7 @@ This is the real TTD Mobile Extension shell.
 - `docs/ORION_TTD_SMARTNESS_BUDGET_V0.md`
 - `docs/ORION_TTD_MILESTONE_7_INSERT_ONLY_SMOKE.md`
 - `docs/ORION_TTD_MILESTONE_8_MANUAL_WORKFLOW_TRIAL_V0.md`
+- `docs/ORION_TTD_MILESTONE_8_5_WEBKIT_MCP_TETHER_SPIKE_V0.md`
 - `legal-framework/README.md`
 - `legal-framework/v1/ORION_TTD_FAIL_GRACEFULLY_HUMAN_WITNESS_ESCALATION_V1.md`
 - `legal-framework/v1/ORION_TTD_STATE_HARNESS_CONSTITUTION_V1.md`
@@ -43,7 +44,10 @@ This is the real TTD Mobile Extension shell.
 - `test-fixtures/workflows/`
 - `reports/milestone-6b-pure-reducer-report.md`
 - `reports/milestone-8/manual-workflow-trial-report.md`
+- `docs/mcp/orion-webkit-mcp-client-configs.md`
+- `reports/milestone-8-5/webkit-mcp-tether-spike-report.md`
 - `scripts/run-workflow-fixtures.mjs`
+- `scripts/orion-webkit-mcp-tether-probe.mjs`
 - `reports/milestone-6c-scorer-fixture-runner-report.md`
 
 ## v0.1.2 behavior

@@ -2,7 +2,7 @@
 
 ## Status
 
-Implemented locally as an insert-only command packet smoke for the Orion extension. Phone-side update validation passed, but manual Web Inspector insertion validation remains pending.
+Implemented locally as an insert-only command packet smoke for the Orion extension. Phone-side update validation passed, and manual Web Inspector insertion validation now also passed on real Orion iPhone + ChatGPT.
 
 ## Files Added Or Changed
 
@@ -59,24 +59,28 @@ Implemented locally as an insert-only command packet smoke for the Orion extensi
 - Orion iOS update path: PASS
 - ChatGPT page use in Orion still worked after the update
 - a normal phone-side ChatGPT message still came through
-- this confirms update/install health only, not insert-only smoke success
-- the actual Milestone 7 insertion trigger remains pending:
-  `document.dispatchEvent(new CustomEvent("orion-ttd-run-insert-only-smoke"))`
+- this confirmed update/install health before the insert-only smoke test
+
+## Real Orion iPhone Insert Validation
+
+- manual Orion iPhone Web Inspector validation: PASS
+- observed:
+  - `document.documentElement.dataset.orionTtdBuild = "0.1.2"`
+  - `document.documentElement.dataset.orionTtdLoaded = "true"`
+  - `document.documentElement.dataset.orionTtdInsertOnlyReady = "true"`
+- trigger used:
+  - `document.dispatchEvent(new CustomEvent("orion-ttd-run-insert-only-smoke"))`
+- result:
+  - `document.documentElement.dataset.orionTtdInsertOnlyLastResult = {"ok":true,"selectorUsed":"#prompt-textarea","blockedReason":null,"submitAttempted":false,"composerKind":"contenteditable"}`
+  - `document.documentElement.dataset.orionTtdInsertOnlyLastError = undefined`
+- conclusion:
+  - visible packet insertion succeeded on the real Orion iOS ChatGPT composer
+  - no submit occurred
+  - this validates command-packet transport across the Orion / ChatGPT UI air gap at the insert-only boundary
 
 ## Manual Orion iPhone Test
 
-1. Plug iPhone into Mac.
-2. Open Orion on iPhone.
-3. Open ChatGPT in Orion.
-4. Open Safari Web Inspector for that Orion page.
-5. Confirm:
-   `document.documentElement.dataset.orionTtdInsertOnlyReady`
-6. Make sure the composer is empty.
-7. Run:
-   `document.dispatchEvent(new CustomEvent("orion-ttd-run-insert-only-smoke"))`
-8. Verify visible composer insertion of the `TTD_ORION_POC_V1` packet.
-9. Do not press send.
-10. Report pass/fail and any console errors.
+Completed successfully on real Orion iPhone + ChatGPT page.
 
 ## Rollback / Disable
 

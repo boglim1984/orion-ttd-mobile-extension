@@ -228,6 +228,37 @@ node scripts/orion-webkit-mcp-tether-probe.mjs
   if Safari static works, treat the blocker as Orion-specific WKWebView / inspector limitation or target-session behavior
   if Safari static also fails, treat the blocker as iwdp/WebKit attach-session behavior and consider alternate bridge logic
 
+## Safari Static Page Eval Comparison
+
+- date/time:
+  `2026-06-12 02:37 PM EDT`
+- target:
+  native Safari foregrounded on `https://example.com/`
+- iwdp-cli pages result:
+  Safari exposed one page target:
+  `Example Domain`
+  `https://example.com/`
+  `ws://localhost:9222/devtools/page/1`
+- eval probe results:
+  socket opened successfully on the Safari target
+  `Target.targetCreated` arrived
+  `Runtime.enable` returned immediate `-32601`
+  `Inspector.enable` returned immediate `-32601`
+  `Page.enable` returned immediate `-32601`
+  `Runtime.evaluate("1+1")` returned immediate `-32601`
+  `Runtime.evaluate("document.title")` returned immediate `-32601`
+  `Runtime.evaluate("document.readyState")` returned immediate `-32601`
+- comparison against Orion:
+  Orion ChatGPT target blackholes commands with no `Target.targetCreated`
+  Safari static target does not blackhole; it responds immediately, but reports the tested domains as unavailable on that socket
+- interpretation:
+  this is not a totally dead proxy/bridge
+  Safari and Orion differ
+  Orion appears to have a target/session attach problem or WKWebView-specific inspector limitation
+  Safari static still does not yet prove a working `Runtime.evaluate` route through the current socket shape
+- proxy stopped:
+  yes
+
 ## Runtime Change Confirmation
 
 No runtime code changed in this milestone preparation job.

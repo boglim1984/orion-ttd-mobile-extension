@@ -243,6 +243,22 @@ async function handleApi(request, response, url, port) {
     return;
   }
 
+  if (request.method === "GET" && url.pathname === "/api/study-status") {
+    const statusPath = path.resolve(__dirname, "../../study/CASEWORK_STUDY_STATUS.md");
+    if (!fs.existsSync(statusPath)) {
+      sendJson(response, 404, {
+        ok: false,
+        errors: ["Study status not found."]
+      });
+      return;
+    }
+    sendJson(response, 200, {
+      ok: true,
+      status_text: fs.readFileSync(statusPath, "utf8")
+    });
+    return;
+  }
+
   if (request.method === "POST" && url.pathname === "/api/runner/self-contained-payload") {
     const body = await readJsonBody(request);
     const validation = validateSuiteText(normalizeSuiteText(body));

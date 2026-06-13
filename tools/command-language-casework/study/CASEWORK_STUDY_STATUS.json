@@ -1,0 +1,36 @@
+{
+  "study_id": "command-language-casework-v1",
+  "status_schema_version": 1,
+  "manual_next_study": {
+    "next_study_needed": "scorer_keyword_extraction_v1",
+    "next_study_purpose": "Verify and/or patch recognition of canonical chunk ids and labels from visible_turn_text, latest_assistant_text_excerpt, and assistant response records.",
+    "recommended_next_cases": [
+      "collect_dishes exact id",
+      "collect dishes human label",
+      "New active chunk: collect_dishes",
+      "Advanced exactly one chunk to collect_dishes",
+      "collect_dishes mentioned in latest_assistant_text_excerpt only",
+      "collect_dishes mentioned in visible_turn_text only"
+    ],
+    "next_action_for_fresh_chat": "Do not design a new language-boundary suite until the scorer recognition issue is checked or Billy explicitly asks to move on. Design a small scorer-recognition suite or ask whether the scorer patch has already landed.",
+    "set_by": "Billy / ChatGPT review",
+    "set_at": "2026-06-12",
+    "source": "live done-vs-move_on result review"
+  },
+  "computed_summary": {
+    "last_tabulated_at": "2026-06-13T00:02:16.456Z",
+    "run_count": 0,
+    "case_count": 0,
+    "latest_suite_id": null,
+    "classification_counts": {},
+    "open_findings_count": 1
+  },
+  "open_findings": [
+    {
+      "finding_id": "scorer_collect_dishes_false_lost_route_001",
+      "status": "open",
+      "summary": "Heuristic/scorer keyword extraction may miss collect_dishes even when assistant visible text contains the correct transition, causing false FAIL_LOST_ROUTE.",
+      "recommended_next_study": "scorer_keyword_extraction_v1"
+    }
+  ]
+}

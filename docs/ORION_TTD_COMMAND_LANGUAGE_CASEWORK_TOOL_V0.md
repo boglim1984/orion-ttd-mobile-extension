@@ -234,3 +234,23 @@ Every casework run creates durable result files that can become:
 - next-batch design input
 
 That keeps the language research loop local, repeatable, and teachable without turning Codex into the ongoing experiment operator.
+
+## Study Progress Loop
+
+Casework research now operates as a continuous loop via local tabulation:
+
+- A fresh chat checks `CASEWORK_STUDY_STATUS.md`
+- The chat designs a suite based on the next-study pointer
+- The GUI validates the suite
+- A disposable ChatGPT runs the suite
+- The result JSON is imported locally (`import-casework-result.mjs`)
+- Tabulation rebuilding indexes/status (`tabulate-casework-study.mjs`)
+- The next chat reads the updated status
+
+Data relationships:
+- **raw result JSON** = evidence
+- **review Markdown** = human/LLM interpretation
+- **indexes** = generated map
+- `CASEWORK_STUDY_STATUS.md` = next-study pointer
+- **spreadsheets/matrices** = higher-order distillation into state laws and skill language (e.g., Fail/Recover Map, Pre-Collapse Steering Matrix, LLM Legal Deference Map)
+- **casework result indexes** = live empirical evidence feeding those maps

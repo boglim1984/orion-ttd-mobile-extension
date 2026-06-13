@@ -1,0 +1,45 @@
+name: Casework Study Tabulate
+
+on:
+  push:
+    paths:
+      - 'tools/command-language-casework/study/raw/**'
+      - 'tools/command-language-casework/study/reviews/**'
+      - 'tools/command-language-casework/scripts/import-casework-result.mjs'
+      - 'tools/command-language-casework/scripts/tabulate-casework-study.mjs'
+      - 'tools/command-language-casework/tests/**'
+  workflow_dispatch:
+
+jobs:
+  tabulate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Run Tests
+        run: node --test tools/command-language-casework/tests/*.test.js
+
+      - name: Tabulate Study
+        run: node tools/command-language-casework/scripts/tabulate-casework-study.mjs
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code tools/command-language-casework/study/index/ tools/command-language-casework/study/CASEWORK_STUDY_STATUS.json tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit generated indexes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add tools/command-language-casework/study/index/
+          git add tools/command-language-casework/study/CASEWORK_STUDY_STATUS.json
+          git add tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md
+          git commit -m "Auto-tabulate casework study [skip ci]"
+          git push

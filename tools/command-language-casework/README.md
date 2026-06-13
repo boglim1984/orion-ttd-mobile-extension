@@ -98,3 +98,21 @@ Each run includes:
 - The first successful send run exposed a new tool failure: ChatGPT accepts another send while the prior answer is still thinking.
 - `Stop answering` and `Thinking` must be treated as hard turn-boundary locks before any scripted follow-up reply is sent.
 - Result JSON now includes `dom_turn_trace` so timing, stop-button visibility, send visibility, and assistant/user DOM state are visible without screenshots.
+
+## Study Progress Loop
+
+- Fresh chat checks `CASEWORK_STUDY_STATUS.md`
+- Chat designs suite based on status
+- GUI validates suite
+- Disposable ChatGPT runs suite
+- Result JSON is imported locally via `import-casework-result.mjs`
+- Tabulation rebuilds indexes/status via `tabulate-casework-study.mjs`
+- Next chat reads the updated status
+
+Data relationships:
+- **raw result JSON** = evidence
+- **review Markdown** = human/LLM interpretation
+- **indexes** = generated map (run map, case map)
+- `CASEWORK_STUDY_STATUS.md` = next-study pointer
+- **spreadsheets/matrices** = higher-order distillation into state laws and skill language (e.g., Fail/Recover Map, Pre-Collapse Steering Matrix, LLM Legal Deference Map)
+- **casework result indexes** = live empirical evidence feeding those maps

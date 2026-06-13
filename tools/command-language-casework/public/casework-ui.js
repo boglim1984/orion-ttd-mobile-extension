@@ -262,6 +262,17 @@ copySkillPromptButton.addEventListener("click", () =>
   })
 );
 
+const copyStatusButton = document.getElementById("copy-status-button");
+if (copyStatusButton) {
+  copyStatusButton.addEventListener("click", () =>
+    withAction(async () => {
+      const response = await fetchJson("/api/study-status");
+      await copyToClipboard(response.status_text, "Copied Casework Study Status.");
+      setSkillSetupStatus("Status copied. Paste it into your fresh chat to guide the next suite design.");
+    })
+  );
+}
+
 skillHowToUseButton.addEventListener("click", () =>
   withAction(async () => {
     await copyToClipboard(CASEWORK_SKILL_USAGE, "Copied skill setup note.");

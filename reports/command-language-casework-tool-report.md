@@ -94,6 +94,15 @@ The tool now also includes a Casework Designer Skill bookmarklet helper for the 
 - The skill bookmarklet remains the dev/design chat setup surface.
 - The validation fix is separate from runner execution.
 
+## Study Progress Loop
+
+- A local import/tabulation loop now tracks study status.
+- `import-casework-result.mjs` consumes raw result JSON.
+- `tabulate-casework-study.mjs` rebuilds indexes and the `CASEWORK_STUDY_STATUS` file.
+- The status file contains a `manual_next_study` pointer that remains stable until human/LLM review overwrites it.
+- A GitHub Action commits updated indexes and status.
+- The `Command Language Casework Designer Skill` now requires a fresh chat to read the current status before designing suites.
+
 ## Next Action
 
-Use the dev-chat bookmarklet to design the next suite, run it through the GUI plus disposable ChatGPT support tab, then drop `run-summary.md` and `run-result.json` back into the dev chat for Mermaid review.
+Use the dev-chat bookmarklet to design the next suite, run it through the GUI plus disposable ChatGPT support tab, drop `run-summary.md` and `run-result.json` into the dev chat for Mermaid review, and run `import-casework-result.mjs` then `tabulate-casework-study.mjs` to advance the local study tracker.

@@ -1,5 +1,6 @@
 export const CASEWORK_SKILL_PROMPT = [
   "You are now acting as the Command Language Casework Designer Skill for Orion TTD.",
+  "Before designing a new suite, check the current Casework Study Status. If it is unavailable, ask Billy to paste CASEWORK_STUDY_STATUS.md or use GitHub connector to read tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md. Use that status to decide the next study needed. Do not guess the next batch from memory.",
   "Guide setup if needed, design compact command-language JSON suites for the local Casework tool, and review result JSON with a Mermaid diagram first.",
   "Do not claim to run the local GUI, server, or ChatGPT test runner yourself.",
   "When asked for the next batch, output one short purpose sentence and then a JSON suite block.",
@@ -7,7 +8,7 @@ export const CASEWORK_SKILL_PROMPT = [
 ].join("\n");
 
 export const CASEWORK_SKILL_WORKFLOW = [
-  "Dev chat: designs the test suite.",
+  "Dev chat: checks study status and designs the test suite.",
   "Casework GUI: validates JSON and copies the self-contained runner.",
   "Disposable ChatGPT: executes the test runner.",
   "Result JSON: comes back to the dev chat for Mermaid review."
@@ -106,6 +107,7 @@ export function buildSkillBookmarklet() {
 
     const lines = [
       "You are set up to design a command-language test in this chat.",
+      "Start by checking study status, then design the next suite.",
       "This chat will produce a JSON suite block.",
       "Use the Casework GUI tab to run it.",
       "After the run, paste the result JSON back here for Mermaid review.",

@@ -43,4 +43,18 @@ test("frontend UI logic has robust validate button wiring", async () => {
   // 9. Forbidden behaviors
   assert.doesNotMatch(uiCode, /localStorage|sessionStorage|cookie/, "JS must not use storage");
   assert.doesNotMatch(uiCode, /\/api\/runner\/bootstrap\.js/, "JS must not blindly request bootstrap.js in UI layer");
+
+  // 10. Duplicate declaration check
+  const copyStatusMatches = uiCode.match(/const\s+copyStatusButton\s*=/g) || [];
+  assert.strictEqual(copyStatusMatches.length, 1, "JS must declare copyStatusButton exactly once");
+
+  // 11. validateButton listener check
+  assert.match(uiCode, /validateButton\.addEventListener\("click"/, "JS must have validateButton click listener");
+
+  // 12. Parse check via node
+  import("node:child_process").then(({ execSync }) => {
+    assert.doesNotThrow(() => {
+      execSync(`node --check "${UI_JS_PATH}"`, { stdio: "pipe" });
+    }, "JS must pass node --check syntax validation");
+  });
 });

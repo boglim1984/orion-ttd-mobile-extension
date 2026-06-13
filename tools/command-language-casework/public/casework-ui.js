@@ -278,7 +278,6 @@ async function init() {
     })
   );
 
-  const copyStatusButton = document.getElementById("copy-status-button");
   if (copyStatusButton) {
     copyStatusButton.addEventListener("click", () =>
       withAction(async () => {

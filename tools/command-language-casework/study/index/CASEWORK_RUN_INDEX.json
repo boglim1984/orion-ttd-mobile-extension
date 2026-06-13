@@ -25,7 +25,14 @@
       "broken": 1
     },
     "legal_verdict": "FAIL",
-    "route_survival_outcome": "broken"
+    "route_survival_outcome": "broken",
+    "suite_case_count": 3,
+    "suite_design_type": "matrix",
+    "suite_context_risk": "medium",
+    "max_approximate_chat_turn_depth_before_case": 6,
+    "negative_control_positions": [],
+    "carryover_case_count": 2,
+    "isolated_case_count": 1
   },
   {
     "suite_id": "scorer_keyword_extraction_v1",
@@ -50,7 +57,14 @@
       "survived": 6
     },
     "legal_verdict": "PASS",
-    "route_survival_outcome": "survived"
+    "route_survival_outcome": "survived",
+    "suite_case_count": 6,
+    "suite_design_type": "matrix",
+    "suite_context_risk": "medium",
+    "max_approximate_chat_turn_depth_before_case": 15,
+    "negative_control_positions": [],
+    "carryover_case_count": 5,
+    "isolated_case_count": 1
   },
   {
     "suite_id": "route_law_language_expansion_v1",
@@ -75,7 +89,14 @@
       "survived": 4
     },
     "legal_verdict": "PASS",
-    "route_survival_outcome": "survived"
+    "route_survival_outcome": "survived",
+    "suite_case_count": 4,
+    "suite_design_type": "contrast",
+    "suite_context_risk": "medium",
+    "max_approximate_chat_turn_depth_before_case": 9,
+    "negative_control_positions": [],
+    "carryover_case_count": 3,
+    "isolated_case_count": 1
   },
   {
     "suite_id": "scorer_keyword_extraction_v2",
@@ -103,7 +124,16 @@
       "broken": 1
     },
     "legal_verdict": "FAIL",
-    "route_survival_outcome": "broken"
+    "route_survival_outcome": "broken",
+    "suite_case_count": 8,
+    "suite_design_type": "regression",
+    "suite_context_risk": "high",
+    "max_approximate_chat_turn_depth_before_case": 21,
+    "negative_control_positions": [
+      "late"
+    ],
+    "carryover_case_count": 7,
+    "isolated_case_count": 1
   },
   {
     "suite_id": "scorer_keyword_extraction_v2",
@@ -131,7 +161,16 @@
       "broken": 1
     },
     "legal_verdict": "FAIL",
-    "route_survival_outcome": "broken"
+    "route_survival_outcome": "broken",
+    "suite_case_count": 8,
+    "suite_design_type": "matrix",
+    "suite_context_risk": "high",
+    "max_approximate_chat_turn_depth_before_case": 21,
+    "negative_control_positions": [
+      "late"
+    ],
+    "carryover_case_count": 7,
+    "isolated_case_count": 1
   },
   {
     "suite_id": "scorer_keyword_extraction_v3_fresh_validation",
@@ -159,7 +198,16 @@
       "broken": 1
     },
     "legal_verdict": "FAIL",
-    "route_survival_outcome": "broken"
+    "route_survival_outcome": "broken",
+    "suite_case_count": 2,
+    "suite_design_type": "smoke",
+    "suite_context_risk": "low",
+    "max_approximate_chat_turn_depth_before_case": 3,
+    "negative_control_positions": [
+      "late"
+    ],
+    "carryover_case_count": 1,
+    "isolated_case_count": 1
   },
   {
     "suite_id": "scorer_keyword_extraction_v3_fresh_validation",
@@ -187,6 +235,15 @@
       "broken": 1
     },
     "legal_verdict": "FAIL",
-    "route_survival_outcome": "broken"
+    "route_survival_outcome": "broken",
+    "suite_case_count": 2,
+    "suite_design_type": "smoke",
+    "suite_context_risk": "low",
+    "max_approximate_chat_turn_depth_before_case": 3,
+    "negative_control_positions": [
+      "late"
+    ],
+    "carryover_case_count": 1,
+    "isolated_case_count": 1
   }
 ]

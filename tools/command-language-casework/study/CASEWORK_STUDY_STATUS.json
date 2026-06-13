@@ -2,20 +2,46 @@
   "study_id": "command-language-casework-v1",
   "status_schema_version": 1,
   "manual_next_study": {
-    "next_study_needed": "route_law_language_expansion_v1",
-    "next_study_purpose": "Resume command-language research after scorer v3 validation and pointer cleanup. Expand route-law wording tests so fresh suites can evaluate how packet language preserves active route state, handles legal movement, and returns from nearby side paths without depending on the completed scorer-validation agenda.",
-    "recommended_next_cases": [
-      "design a small validator-ready route_law_language_expansion_v1 suite using the current runner schema",
-      "test route preservation wording for continue/hold language without advancement",
-      "test legal move_on wording for exactly one chunk advancement from clear_trash to collect_dishes",
-      "test done/completion wording that marks the current chunk complete without inventing extra progress",
-      "include at least one side-question or repair-return wording case if it stays within a small focused batch",
-      "import meaningful result evidence before changing the next pointer again"
+    "next_study_needed": "route_law_contract_relaxation_matrix_v1",
+    "next_study_purpose": "Audit whether route_law_language_expansion_v1 proved durable route-law behavior or merely showed compliance with very explicit response_contract language. The next suite should compare strict versus relaxed command packets and preserve route-law guarantees when wording is less overfit.",
+    "evidence_reviewed": [
+      "scorer_keyword_extraction_v3_fresh_validation completed with zero open findings",
+      "route_law_language_expansion_v1 passed 4/4 and preserved continue, done, move_on, and side-question return behavior",
+      "current matrix now distinguishes case-level outcomes from suite/run shape"
     ],
-    "next_action_for_fresh_chat": "Design the next small route_law_language_expansion_v1 command-language suite. Do not return to scorer_keyword_extraction_v3_fresh_validation unless Billy explicitly asks for historical scorer review. Use the current runner schema, keep the batch small, and focus on route-law wording that preserves active route state and advances only on legal move_on intent.",
-    "set_by": "Billy / ChatGPT TTD TESTS cleanup run",
+    "current_confidence": "Confidence is medium for explicit contract packets and still limited for relaxed or less scripted packets.",
+    "open_gap": "The current evidence does not yet separate durable route-law behavior from overfit obedience to explicit response_contract wording, explicit chunk IDs, or over-specified next-step phrasing.",
+    "test_strategy": "Use a contrast/matrix suite, not another tiny smoke batch. Compare strict versus relaxed contract language, explicit IDs versus label-only references, completion phrasing with and without the next chunk named, and side-question return under lighter rescue wording.",
+    "recommended_cases": [
+      "strict continue hold with explicit clear_trash id, to confirm the prior pass remains stable",
+      "relaxed continue hold using label-only clear trash wording, to detect dependence on exact id fields",
+      "strict done boundary that acknowledges completion but does not advance without move_on",
+      "relaxed done boundary without the next chunk supplied, to test whether the model invents advancement",
+      "strict move_on that should advance exactly one chunk to collect_dishes",
+      "relaxed move_on using lighter wording, to detect whether advancement still stays one chunk",
+      "side-question return under reduced rescue language, then move_on, to test persistence after interruption",
+      "late negative control proving the route is still preserved after earlier route-law cases"
+    ],
+    "recommended_case_reasons": [
+      "Anchor one strict control so the suite can detect regression versus prior passing behavior.",
+      "Label-only and relaxed variants test whether route-law survives without over-specified protocol wording.",
+      "A late negative control checks for context drift instead of only isolated success."
+    ],
+    "avoid": [
+      "do not repeat another four-case all-strict smoke batch",
+      "do not treat next_study_needed as enough justification by itself",
+      "do not regenerate scorer-validation suites unless a scorer dispute reopens"
+    ],
+    "do_not_repeat": [
+      "the completed scorer_keyword_extraction_v3_fresh_validation agenda",
+      "a route_law_language_expansion_v1 clone that only restates explicit response_contract wording"
+    ],
+    "suite_shape_recommendation": "Use 6 to 8 cases in one disposable chat. Mark the suite as contrast/matrix, preserve case order, and include one late negative control so context carryover is observable rather than flattened away.",
+    "retirement_condition": "Retire this pointer after a meaningful imported result either shows relaxed packets still preserve route law or isolates the exact contract weakening that breaks preservation.",
+    "next_action_for_fresh_chat": "Enter research-planning mode first. Inspect status, recent reviews, the case-law matrix, and run/case indexes. Confirm that route_law_language_expansion_v1 already proved the strict contract path, then design a contrast suite that changes confidence rather than repeating that evidence. Only emit runnable JSON when Billy explicitly asks for the suite.",
+    "set_by": "Billy / Codex audit and study-loop redesign",
     "set_at": "2026-06-13",
-    "source": "casework_status_pointer_cleanup_v1 verified in TTD TESTS fresh-chat context; live JSON and generated MD were aligned on cleanup pointer; scorer_keyword_extraction_v3_fresh_validation remained recorded as imported/completed with zero open findings."
+    "source": "Audit of scorer_keyword_extraction_v3_fresh_validation plus route_law_language_expansion_v1 imported evidence, with matrix/index redesign to preserve suite size, case order, and context depth."
   },
   "manual_notes": {
     "follow_up_repair_note": "Current concern: messy tests pile up without enough reflection, planning, ownership of the next-test status, or cumulative analysis surface. Make the post-run digest mandatory before the next suite is designed.",
@@ -62,10 +88,11 @@
     "next_status"
   ],
   "computed_summary": {
-    "last_tabulated_at": "2026-06-13T18:57:37.361Z",
+    "last_tabulated_at": "2026-06-13T19:20:40.415Z",
     "run_count": 7,
     "case_count": 33,
     "latest_suite_id": "scorer_keyword_extraction_v3_fresh_validation",
+    "latest_run_id": "20260613-142922-scorer_keyword_extraction_v3_fresh_validation",
     "classification_counts": {
       "PASS_CANDIDATE": 28,
       "FAIL_INVENTED_PROGRESS": 1,

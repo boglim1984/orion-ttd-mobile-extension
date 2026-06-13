@@ -29,6 +29,18 @@ const MATRIX_FIELDS = [
   "case_id",
   "run_id",
   "run_date",
+  "suite_case_count",
+  "suite_design_type",
+  "suite_context_risk",
+  "case_index_in_suite",
+  "case_order",
+  "prior_cases_in_same_run",
+  "case_context_isolation",
+  "scripted_reply_count",
+  "assistant_turn_count_in_case",
+  "user_turn_count_in_case",
+  "approximate_chat_turn_depth_before_case",
+  "negative_control_position",
   "route_id",
   "active_chunk_id",
   "active_chunk_label",
@@ -236,6 +248,94 @@ function deriveBoundaryType(caseResult, packetPayload) {
   return "unknown";
 }
 
+function isNegativeControlCase(caseResult) {
+  const haystack = cleanText([
+    caseResult.case_id,
+    caseResult.title,
+    caseResult.research_question,
+    joinList(caseResult.forbidden_behavior)
+  ].join(" "));
+  return /negative|wrong next|wrong-next|must not|forbidden/i.test(haystack);
+}
+
+function deriveCaseOrder(index, total) {
+  if (total <= 2) {
+    return index === 0 ? "early" : "late";
+  }
+  const ratio = total <= 1 ? 0 : index / (total - 1);
+  if (ratio <= 0.34) {
+    return "early";
+  }
+  if (ratio >= 0.67) {
+    return "late";
+  }
+  return "middle";
+}
+
+function deriveSuiteDesignType(runData, cases) {
+  const suiteCaseCount = Array.isArray(cases) ? cases.length : 0;
+  const haystack = cleanText([
+    runData?.suite_id,
+    runData?.suite_title,
+    runData?.suite_goal,
+    runData?.notes,
+    Array.isArray(cases) ? cases.map((caseResult) => caseResult.title || caseResult.research_question || "").join(" ") : ""
+  ].join(" "));
+
+  if (/endurance|fatigue|carryover|long context|long-context|degradation/.test(haystack)) {
+    return "endurance";
+  }
+  if (/matrix|relaxation|contrast|compare|strict|relaxed|versus|\bvs\b/.test(haystack)) {
+    return "matrix";
+  }
+  if (/exploratory|mapping|survey/.test(haystack)) {
+    return "exploratory";
+  }
+  if (/regression|repair|fix/.test(haystack)) {
+    return "regression";
+  }
+  if (/smoke|validator|sanity|baseline/.test(haystack)) {
+    return "smoke";
+  }
+  if (suiteCaseCount <= 3) {
+    return "smoke";
+  }
+  if (suiteCaseCount <= 5) {
+    return "contrast";
+  }
+  if (suiteCaseCount <= 10) {
+    return "matrix";
+  }
+  return "endurance";
+}
+
+function deriveSuiteContextRisk(cases) {
+  const suiteCaseCount = Array.isArray(cases) ? cases.length : 0;
+  const totalScriptedReplies = (Array.isArray(cases) ? cases : []).reduce((sum, caseResult) => {
+    const replies = Array.isArray(caseResult.scripted_user_replies_sent)
+      ? caseResult.scripted_user_replies_sent
+      : Array.isArray(caseResult.scripted_user_replies)
+        ? caseResult.scripted_user_replies
+        : [];
+    return sum + replies.length;
+  }, 0);
+
+  if (suiteCaseCount <= 3 && totalScriptedReplies <= 3) {
+    return "low";
+  }
+  if (suiteCaseCount >= 8 || totalScriptedReplies >= 10) {
+    return "high";
+  }
+  return "medium";
+}
+
+function deriveNegativeControlPosition(caseResult, index, total) {
+  if (!isNegativeControlCase(caseResult)) {
+    return "none";
+  }
+  return deriveCaseOrder(index, total);
+}
+
 function getChunkAliases(routeId, chunkId, chunkLabel = "") {
   const aliasMap = ROUTE_CHUNK_ALIASES[routeId] || {};
   return unique([...(aliasMap[chunkId] || []), chunkId, chunkLabel]);
@@ -324,7 +424,7 @@ function deriveStatuses({ classification, failureLayer, routeBehaviorCorrectWith
   };
 }
 
-function buildCaseLawRow({ runData, caseResult, resultPath }) {
+function buildCaseLawRow({ runData, caseResult, resultPath, caseIndex, suiteCaseCount, suiteDesignType, suiteContextRisk, approximateChatTurnDepthBeforeCase }) {
   const deterministic = deriveDeterministicCaseSignals(caseResult);
   const classification = deterministic.classification || getCaseClassification(caseResult);
   const runDate = deriveRunDate(runData, runData.run_id);
@@ -373,12 +473,31 @@ function buildCaseLawRow({ runData, caseResult, resultPath }) {
   const assistantEvaluatedTransport = /send|button|transport|runner|overlay/i.test(observedBehavior);
   const assistantOverexplained = cleanText(observedBehavior).length > 220;
   const claimVsStateConflict = routeBehaviorCorrectWithoutKeyword ? "true" : "false";
+  const scriptedUserReplies = Array.isArray(caseResult.scripted_user_replies_sent)
+    ? caseResult.scripted_user_replies_sent
+    : Array.isArray(caseResult.scripted_user_replies)
+      ? caseResult.scripted_user_replies
+      : [];
+  const assistantResponses = Array.isArray(caseResult.assistant_responses) ? caseResult.assistant_responses : [];
+  const caseOrder = deriveCaseOrder(caseIndex, suiteCaseCount);
 
   return {
     suite_id: runData.suite_id || "",
     case_id: caseResult.case_id || "",
     run_id: runData.run_id || "",
     run_date: runDate,
+    suite_case_count: String(suiteCaseCount || 0),
+    suite_design_type: suiteDesignType,
+    suite_context_risk: suiteContextRisk,
+    case_index_in_suite: String(caseIndex + 1),
+    case_order: caseOrder,
+    prior_cases_in_same_run: String(caseIndex),
+    case_context_isolation: caseIndex === 0 ? "isolated_first_case" : "carryover_context_present",
+    scripted_reply_count: String(scriptedUserReplies.length),
+    assistant_turn_count_in_case: String(assistantResponses.length),
+    user_turn_count_in_case: String(scriptedUserReplies.length),
+    approximate_chat_turn_depth_before_case: String(approximateChatTurnDepthBeforeCase),
+    negative_control_position: deriveNegativeControlPosition(caseResult, caseIndex, suiteCaseCount),
     route_id: packetPayload?.route_id || "",
     active_chunk_id: packetPayload?.active_chunk_id || "",
     active_chunk_label: packetPayload?.active_chunk_label || "",
@@ -439,9 +558,32 @@ function buildCaseLawMatrixRows() {
     if (!runData?.suite_id || !runData?.run_id) {
       continue;
     }
-    for (const caseResult of Array.isArray(runData.cases) ? runData.cases : []) {
-      rows.push(buildCaseLawRow({ runData, caseResult, resultPath }));
-    }
+    const cases = Array.isArray(runData.cases) ? runData.cases : [];
+    const suiteCaseCount = cases.length;
+    const suiteDesignType = deriveSuiteDesignType(runData, cases);
+    const suiteContextRisk = deriveSuiteContextRisk(cases);
+    let approximateChatTurnDepthBeforeCase = 0;
+    cases.forEach((caseResult, caseIndex) => {
+      rows.push(
+        buildCaseLawRow({
+          runData,
+          caseResult,
+          resultPath,
+          caseIndex,
+          suiteCaseCount,
+          suiteDesignType,
+          suiteContextRisk,
+          approximateChatTurnDepthBeforeCase
+        })
+      );
+      const assistantTurns = Array.isArray(caseResult.assistant_responses) ? caseResult.assistant_responses.length : 0;
+      const userTurns = Array.isArray(caseResult.scripted_user_replies_sent)
+        ? caseResult.scripted_user_replies_sent.length
+        : Array.isArray(caseResult.scripted_user_replies)
+          ? caseResult.scripted_user_replies.length
+          : 0;
+      approximateChatTurnDepthBeforeCase += assistantTurns + userTurns;
+    });
   }
   return rows;
 }

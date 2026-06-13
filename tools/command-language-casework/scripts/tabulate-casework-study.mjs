@@ -122,34 +122,167 @@ const AUTO_RESOLVED_FINDINGS = {
     "The collect_dishes scorer repair landed and historical rows now recompute correctly."
 };
 
-function buildFreshValidationPointer() {
+function buildRouteLawContractRelaxationPointer() {
   return {
-    next_study_needed: "casework_status_pointer_cleanup_v1",
+    next_study_needed: "route_law_contract_relaxation_matrix_v1",
     next_study_purpose:
-      "Close the completed scorer_keyword_extraction_v3_fresh_validation agenda and harden the manual next-study workflow so satisfied manual pointers do not keep reappearing in fresh chats, launch bundles, or Command Center mirrored study-status context.",
-    recommended_next_cases: [
-      "confirm CASEWORK_STUDY_STATUS.md and CASEWORK_STUDY_STATUS.json no longer point to scorer_keyword_extraction_v3_fresh_validation as the active next study",
-      "confirm the v3 scorer validation result remains recorded as completed and durable",
-      "confirm CASEWORK_OPEN_FINDINGS.md still reports no open findings",
-      "confirm Casework Start / TTD TESTS launch context surfaces the updated pointer",
-      "confirm Command Center mirrored study-status skill is refreshed after the pointer change",
-      "document or patch the closeout rule: completed manual next-study agendas must be explicitly retired before the next fresh-chat design cycle",
-      "set the following research pointer to route_law_language_expansion_v1 once cleanup is verified"
+      "Audit whether route_law_language_expansion_v1 proved durable route-law behavior or merely showed compliance with very explicit response_contract language. The next suite should compare strict versus relaxed command packets and preserve route-law guarantees when wording is less overfit.",
+    evidence_reviewed: [
+      "scorer_keyword_extraction_v3_fresh_validation completed with zero open findings",
+      "route_law_language_expansion_v1 passed 4/4 and preserved continue, done, move_on, and side-question return behavior",
+      "current matrix now distinguishes case-level outcomes from suite/run shape"
     ],
+    current_confidence:
+      "Confidence is medium for explicit contract packets and still limited for relaxed or less scripted packets.",
+    open_gap:
+      "The current evidence does not yet separate durable route-law behavior from overfit obedience to explicit response_contract wording, explicit chunk IDs, or over-specified next-step phrasing.",
+    test_strategy:
+      "Use a contrast/matrix suite, not another tiny smoke batch. Compare strict versus relaxed contract language, explicit IDs versus label-only references, completion phrasing with and without the next chunk named, and side-question return under lighter rescue wording.",
+    recommended_cases: [
+      "strict continue hold with explicit clear_trash id, to confirm the prior pass remains stable",
+      "relaxed continue hold using label-only clear trash wording, to detect dependence on exact id fields",
+      "strict done boundary that acknowledges completion but does not advance without move_on",
+      "relaxed done boundary without the next chunk supplied, to test whether the model invents advancement",
+      "strict move_on that should advance exactly one chunk to collect_dishes",
+      "relaxed move_on using lighter wording, to detect whether advancement still stays one chunk",
+      "side-question return under reduced rescue language, then move_on, to test persistence after interruption",
+      "late negative control proving the route is still preserved after earlier route-law cases"
+    ],
+    recommended_case_reasons: [
+      "Anchor one strict control so the suite can detect regression versus prior passing behavior.",
+      "Label-only and relaxed variants test whether route-law survives without over-specified protocol wording.",
+      "A late negative control checks for context drift instead of only isolated success."
+    ],
+    avoid: [
+      "do not repeat another four-case all-strict smoke batch",
+      "do not treat next_study_needed as enough justification by itself",
+      "do not regenerate scorer-validation suites unless a scorer dispute reopens"
+    ],
+    do_not_repeat: [
+      "the completed scorer_keyword_extraction_v3_fresh_validation agenda",
+      "a route_law_language_expansion_v1 clone that only restates explicit response_contract wording"
+    ],
+    suite_shape_recommendation:
+      "Use 6 to 8 cases in one disposable chat. Mark the suite as contrast/matrix, preserve case order, and include one late negative control so context carryover is observable rather than flattened away.",
+    retirement_condition:
+      "Retire this pointer after a meaningful imported result either shows relaxed packets still preserve route law or isolates the exact contract weakening that breaks preservation.",
     next_action_for_fresh_chat:
-      "Do not design a new language suite yet. First confirm that the scorer v3 validation result is recorded as completed, then update the manual next-study pointer away from scorer validation. Verify that Casework Start / TTD TESTS fresh-chat context no longer routes back to the completed scorer v3 agenda. After this cleanup, resume command-language research with route_law_language_expansion_v1.",
-    set_by: "Billy / ChatGPT main dev-design review",
+      "Enter research-planning mode first. Inspect status, recent reviews, the case-law matrix, and run/case indexes. Confirm that route_law_language_expansion_v1 already proved the strict contract path, then design a contrast suite that changes confidence rather than repeating that evidence. Only emit runnable JSON when Billy explicitly asks for the suite.",
+    set_by: "Billy / Codex audit and study-loop redesign",
     set_at: new Date().toISOString().slice(0, 10),
     source:
-      "scorer_keyword_extraction_v3_fresh_validation imported result, run 20260613-142922-scorer_keyword_extraction_v3_fresh_validation; TTD TESTS post-run review; main dev/design closeout decision."
+      "Audit of scorer_keyword_extraction_v3_fresh_validation plus route_law_language_expansion_v1 imported evidence, with matrix/index redesign to preserve suite size, case order, and context depth."
   };
 }
 
 function maybeAdvanceManualNextStudy(statusObj) {
   const current = statusObj.manual_next_study?.next_study_needed || "";
-  if (!current || STALE_NEXT_STUDY_IDS.has(current)) {
-    statusObj.manual_next_study = buildFreshValidationPointer();
+  if (
+    !current ||
+    STALE_NEXT_STUDY_IDS.has(current) ||
+    current === "route_law_language_expansion_v1"
+  ) {
+    statusObj.manual_next_study = buildRouteLawContractRelaxationPointer();
   }
+}
+
+function deriveRunShapeSummary(runRows) {
+  const suiteCaseCount = runRows.length;
+  const suiteDesignType = runRows[0]?.suite_design_type || "unknown";
+  const suiteContextRisk = runRows[0]?.suite_context_risk || "unknown";
+  const maxApproximateDepth = runRows.reduce((max, row) => {
+    const value = Number(row.approximate_chat_turn_depth_before_case || 0);
+    return Number.isFinite(value) ? Math.max(max, value) : max;
+  }, 0);
+  const negativeControlPositions = [...new Set(
+    runRows
+      .map((row) => row.negative_control_position)
+      .filter((value) => value && value !== "none")
+  )];
+  const carryoverCaseCount = runRows.filter(
+    (row) => row.case_context_isolation === "carryover_context_present"
+  ).length;
+  return {
+    suite_case_count: suiteCaseCount,
+    suite_design_type: suiteDesignType,
+    suite_context_risk: suiteContextRisk,
+    max_approximate_chat_turn_depth_before_case: maxApproximateDepth,
+    negative_control_positions: negativeControlPositions,
+    carryover_case_count: carryoverCaseCount,
+    isolated_case_count: runRows.filter(
+      (row) => row.case_context_isolation === "isolated_first_case"
+    ).length
+  };
+}
+
+function buildEvidenceDigest({ statusObj, runs, recentReviews, matrixOutputs }) {
+  const manual = statusObj.manual_next_study || {};
+  const lines = [
+    "# Casework Evidence Digest",
+    "",
+    "*Generated convenience digest. Raw JSON, reviews, indexes, and matrix remain the source evidence surfaces.*",
+    "",
+    "## Why this exists",
+    "",
+    "- Fresh planning chats should not choose the next study from `next_study_needed` alone.",
+    "- Use this digest to orient quickly, then inspect linked reviews, indexes, and raw evidence when planning the next suite.",
+    "",
+    "## Active research brief",
+    "",
+    `- Next study: ${manual.next_study_needed || "not set"}`,
+    `- Purpose: ${manual.next_study_purpose || "not set"}`,
+    `- Current confidence: ${manual.current_confidence || "not set"}`,
+    `- Open gap: ${manual.open_gap || "not set"}`,
+    `- Suite shape recommendation: ${manual.suite_shape_recommendation || "not set"}`,
+    "",
+    "## Evidence summary",
+    "",
+    `- Imported run count: ${statusObj.computed_summary?.run_count || 0}`,
+    `- Imported case count: ${statusObj.computed_summary?.case_count || 0}`,
+    `- Matrix row count: ${matrixOutputs.rowCount}`,
+    `- Latest imported suite ID: ${statusObj.computed_summary?.latest_suite_id || "null"}`,
+    `- Latest imported run ID: ${statusObj.computed_summary?.latest_run_id || "null"}`,
+    "",
+    "## What appears proven",
+    "",
+    "- Scorer keyword extraction v3 validation is complete with no open findings.",
+    "- The explicit route_law_language_expansion_v1 packet family passed continue hold, done hold, move_on advance, and side-question return behaviors.",
+    "- Variable suite size is now treated as evidence shape, not noise to flatten away.",
+    "",
+    "## What remains fragile or under-tested",
+    "",
+    "- Relaxed route-law packets may still fail even though strict response_contract packets passed.",
+    "- Label-only references and lighter completion wording are under-tested relative to explicit chunk-id packets.",
+    "- Late-suite negative controls are still sparse, so drift under carryover context remains only partially observed.",
+    "",
+    "## Recent imported runs",
+    ""
+  ];
+
+  for (const run of runs.slice(-3).reverse()) {
+    lines.push(
+      `- ${run.suite_id} / ${run.run_id}: ${run.case_count} cases, legal=${run.legal_verdict}, route=${run.route_survival_outcome}, design=${run.suite_design_type || "unknown"}, context_risk=${run.suite_context_risk || "unknown"}`
+    );
+  }
+
+  if (recentReviews.length > 0) {
+    lines.push("", "## Recent review files", "");
+    for (const review of recentReviews) {
+      lines.push(`- ${review}`);
+    }
+  }
+
+  lines.push(
+    "",
+    "## Planning rule",
+    "",
+    "- Small means focused, not shallow.",
+    "- Use four cases only for smoke checks, validator checks, or narrow regressions.",
+    "- For research suites, use the smallest set that can answer the question, often six to ten cases.",
+    "- Suite size, case order, and chat turn depth are experimental variables. Compare evidence by run shape, not just pass/fail totals."
+  );
+
+  return `${lines.join("\n")}\n`;
 }
 
 function normalizeFindings(statusObj) {
@@ -316,6 +449,18 @@ function main() {
     caseRow.failure_layer = caseLawRow?.failure_layer || "none";
     caseRow.legal_verdict = caseLawRow?.legal_verdict || "HOLD";
     caseRow.route_survival_outcome = caseLawRow?.route_survival_outcome || "unknown";
+    caseRow.suite_case_count = caseLawRow?.suite_case_count || "";
+    caseRow.suite_design_type = caseLawRow?.suite_design_type || "";
+    caseRow.suite_context_risk = caseLawRow?.suite_context_risk || "";
+    caseRow.case_index_in_suite = caseLawRow?.case_index_in_suite || "";
+    caseRow.case_order = caseLawRow?.case_order || "";
+    caseRow.prior_cases_in_same_run = caseLawRow?.prior_cases_in_same_run || "";
+    caseRow.case_context_isolation = caseLawRow?.case_context_isolation || "";
+    caseRow.scripted_reply_count = caseLawRow?.scripted_reply_count || "";
+    caseRow.assistant_turn_count_in_case = caseLawRow?.assistant_turn_count_in_case || "";
+    caseRow.user_turn_count_in_case = caseLawRow?.user_turn_count_in_case || "";
+    caseRow.approximate_chat_turn_depth_before_case = caseLawRow?.approximate_chat_turn_depth_before_case || "";
+    caseRow.negative_control_position = caseLawRow?.negative_control_position || "";
   }
 
   for (const run of runs) {
@@ -324,6 +469,7 @@ function main() {
     run.route_survival_counts = countValues(runRows.map((row) => row.route_survival_outcome));
     run.legal_verdict = deriveRunLegalVerdict(runRows);
     run.route_survival_outcome = deriveRunRouteSurvivalOutcome(runRows);
+    Object.assign(run, deriveRunShapeSummary(runRows));
   }
 
   const runIndexPath = path.join(indexDir, "CASEWORK_RUN_INDEX.json");
@@ -333,10 +479,22 @@ function main() {
   const csvHeaders = [
     "suite_id",
     "run_id",
+    "suite_case_count",
+    "suite_design_type",
+    "suite_context_risk",
     "case_id",
+    "case_index_in_suite",
+    "case_order",
+    "prior_cases_in_same_run",
+    "case_context_isolation",
     "title",
     "language_feature",
     "scripted_user_replies",
+    "scripted_reply_count",
+    "assistant_turn_count_in_case",
+    "user_turn_count_in_case",
+    "approximate_chat_turn_depth_before_case",
+    "negative_control_position",
     "case_status",
     "classification",
     "failure_layer",
@@ -393,6 +551,7 @@ function main() {
     run_count: runs.length,
     case_count: casesIndex.length,
     latest_suite_id: runs.length > 0 ? runs[runs.length - 1].suite_id : null,
+    latest_run_id: runs.length > 0 ? runs[runs.length - 1].run_id : null,
     classification_counts: totalClassifications,
     open_findings_count: countOpenFindings(statusObj.open_findings),
     matrix_row_count: matrixOutputs.rowCount
@@ -419,6 +578,16 @@ function main() {
     "",
     `**Next Study Needed**: ${manual.next_study_needed || ""}`,
     `**Purpose**: ${manual.next_study_purpose || ""}`,
+    `**Evidence reviewed**: ${Array.isArray(manual.evidence_reviewed) ? manual.evidence_reviewed.join(" | ") : (manual.evidence_reviewed || "")}`,
+    `**Current confidence**: ${manual.current_confidence || ""}`,
+    `**Open gap**: ${manual.open_gap || ""}`,
+    `**Test strategy**: ${manual.test_strategy || ""}`,
+    `**Avoid / do not repeat**: ${[
+      ...(Array.isArray(manual.avoid) ? manual.avoid : []),
+      ...(Array.isArray(manual.do_not_repeat) ? manual.do_not_repeat : [])
+    ].join(" | ")}`,
+    `**Suite shape recommendation**: ${manual.suite_shape_recommendation || ""}`,
+    `**Retirement condition**: ${manual.retirement_condition || ""}`,
     `**Next action for fresh chat**: ${manual.next_action_for_fresh_chat || ""}`,
     `**Source**: ${manual.source || ""}`,
     `**Set by**: ${manual.set_by || ""}`,
@@ -432,6 +601,13 @@ function main() {
     }
   }
 
+  if (Array.isArray(manual.recommended_case_reasons) && manual.recommended_case_reasons.length > 0) {
+    mdLines.push("", "### Why these cases");
+    for (const item of manual.recommended_case_reasons) {
+      mdLines.push(`- ${item}`);
+    }
+  }
+
   mdLines.push(
     "",
     "## Artifact roles",
@@ -439,6 +615,7 @@ function main() {
     "- Raw result JSON = evidence",
     "- Reflection review = interpretation",
     "- Case-law matrix = cumulative analysis",
+    "- Evidence digest = planning convenience surface",
     "- Legal system = authority/evidence language",
     "- Study status = agenda",
     "- Rulebook = agent behavior",
@@ -454,6 +631,7 @@ function main() {
     `- Run count: ${statusObj.computed_summary.run_count}`,
     `- Case count: ${statusObj.computed_summary.case_count}`,
     `- Latest suite ID: ${statusObj.computed_summary.latest_suite_id || "null"}`,
+    `- Latest run ID: ${statusObj.computed_summary.latest_run_id || "null"}`,
     `- Classification counts: ${JSON.stringify(statusObj.computed_summary.classification_counts)}`,
     `- Open findings count: ${statusObj.computed_summary.open_findings_count}`,
     `- Case-law matrix rows: ${statusObj.computed_summary.matrix_row_count}`,
@@ -479,6 +657,22 @@ function main() {
   }
 
   fs.writeFileSync(statusMdPath, mdLines.join("\n"), "utf8");
+
+  const evidenceDigestPath = path.join(studyDir, "CASEWORK_EVIDENCE_DIGEST.md");
+  const recentReviewPaths = runs
+    .map((run) => run.review_path)
+    .filter(Boolean)
+    .slice(-3);
+  fs.writeFileSync(
+    evidenceDigestPath,
+    buildEvidenceDigest({
+      statusObj,
+      runs,
+      recentReviews: recentReviewPaths,
+      matrixOutputs
+    }),
+    "utf8"
+  );
 
   const languageMapPath = path.join(indexDir, "CASEWORK_LANGUAGE_MAP.md");
   if (!fs.existsSync(languageMapPath)) {

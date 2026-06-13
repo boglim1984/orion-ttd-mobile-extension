@@ -87,9 +87,26 @@ Use it as bundled context for the Casework Designer Skill.
 
 Do not design from memory if this source contains a next-study pointer.
 
+Treat the manual next-study pointer as an agenda launch brief, not as a research brain.
+
+If Billy asks what to test next, inspect the mirrored status, recent reviews, case-law matrix, case index, run index, and evidence digest before outputting runnable JSON.
+
 If this status says a scorer/tool issue is open, do not design a new language-boundary suite unless Billy explicitly asks.
 
 After meaningful result review, update this status source from Orion \`CASEWORK_STUDY_STATUS.md\` before the next Desktop launch.
+
+Fresh-chat rule:
+
+- Research-planning mode: inspect evidence, compare candidate next studies, recommend the strongest next brief, and do not output JSON unless Billy asks for a suite.
+- Runner-output mode: output validator-ready JSON only after the evidence review and pointer check are done.
+
+Helpful Orion study artifacts:
+
+- \`tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md\`
+- \`tools/command-language-casework/study/CASEWORK_EVIDENCE_DIGEST.md\`
+- \`tools/command-language-casework/study/index/CASEWORK_RUN_INDEX.json\`
+- \`tools/command-language-casework/study/index/CASEWORK_CASE_INDEX.csv\`
+- \`tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md\`
 
 ## Mirror source
 

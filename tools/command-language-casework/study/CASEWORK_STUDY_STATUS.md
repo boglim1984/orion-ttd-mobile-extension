@@ -5,26 +5,31 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_language_expansion_v1
-**Purpose**: Resume command-language research after scorer v3 validation and pointer cleanup. Expand route-law wording tests so fresh suites can evaluate how packet language preserves active route state, handles legal movement, and returns from nearby side paths without depending on the completed scorer-validation agenda.
-**Next action for fresh chat**: Design the next small route_law_language_expansion_v1 command-language suite. Do not return to scorer_keyword_extraction_v3_fresh_validation unless Billy explicitly asks for historical scorer review. Use the current runner schema, keep the batch small, and focus on route-law wording that preserves active route state and advances only on legal move_on intent.
-**Source**: casework_status_pointer_cleanup_v1 verified in TTD TESTS fresh-chat context; live JSON and generated MD were aligned on cleanup pointer; scorer_keyword_extraction_v3_fresh_validation remained recorded as imported/completed with zero open findings.
-**Set by**: Billy / ChatGPT TTD TESTS cleanup run
+**Next Study Needed**: route_law_contract_relaxation_matrix_v1
+**Purpose**: Audit whether route_law_language_expansion_v1 proved durable route-law behavior or merely showed compliance with very explicit response_contract language. The next suite should compare strict versus relaxed command packets and preserve route-law guarantees when wording is less overfit.
+**Evidence reviewed**: scorer_keyword_extraction_v3_fresh_validation completed with zero open findings | route_law_language_expansion_v1 passed 4/4 and preserved continue, done, move_on, and side-question return behavior | current matrix now distinguishes case-level outcomes from suite/run shape
+**Current confidence**: Confidence is medium for explicit contract packets and still limited for relaxed or less scripted packets.
+**Open gap**: The current evidence does not yet separate durable route-law behavior from overfit obedience to explicit response_contract wording, explicit chunk IDs, or over-specified next-step phrasing.
+**Test strategy**: Use a contrast/matrix suite, not another tiny smoke batch. Compare strict versus relaxed contract language, explicit IDs versus label-only references, completion phrasing with and without the next chunk named, and side-question return under lighter rescue wording.
+**Avoid / do not repeat**: do not repeat another four-case all-strict smoke batch | do not treat next_study_needed as enough justification by itself | do not regenerate scorer-validation suites unless a scorer dispute reopens | the completed scorer_keyword_extraction_v3_fresh_validation agenda | a route_law_language_expansion_v1 clone that only restates explicit response_contract wording
+**Suite shape recommendation**: Use 6 to 8 cases in one disposable chat. Mark the suite as contrast/matrix, preserve case order, and include one late negative control so context carryover is observable rather than flattened away.
+**Retirement condition**: Retire this pointer after a meaningful imported result either shows relaxed packets still preserve route law or isolates the exact contract weakening that breaks preservation.
+**Next action for fresh chat**: Enter research-planning mode first. Inspect status, recent reviews, the case-law matrix, and run/case indexes. Confirm that route_law_language_expansion_v1 already proved the strict contract path, then design a contrast suite that changes confidence rather than repeating that evidence. Only emit runnable JSON when Billy explicitly asks for the suite.
+**Source**: Audit of scorer_keyword_extraction_v3_fresh_validation plus route_law_language_expansion_v1 imported evidence, with matrix/index redesign to preserve suite size, case order, and context depth.
+**Set by**: Billy / Codex audit and study-loop redesign
 **Set at**: 2026-06-13
 
-### Recommended Next Cases
-- design a small validator-ready route_law_language_expansion_v1 suite using the current runner schema
-- test route preservation wording for continue/hold language without advancement
-- test legal move_on wording for exactly one chunk advancement from clear_trash to collect_dishes
-- test done/completion wording that marks the current chunk complete without inventing extra progress
-- include at least one side-question or repair-return wording case if it stays within a small focused batch
-- import meaningful result evidence before changing the next pointer again
+### Why these cases
+- Anchor one strict control so the suite can detect regression versus prior passing behavior.
+- Label-only and relaxed variants test whether route-law survives without over-specified protocol wording.
+- A late negative control checks for context drift instead of only isolated success.
 
 ## Artifact roles
 
 - Raw result JSON = evidence
 - Reflection review = interpretation
 - Case-law matrix = cumulative analysis
+- Evidence digest = planning convenience surface
 - Legal system = authority/evidence language
 - Study status = agenda
 - Rulebook = agent behavior
@@ -36,10 +41,11 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T18:57:37.361Z
+- Last tabulated at: 2026-06-13T19:20:40.415Z
 - Run count: 7
 - Case count: 33
 - Latest suite ID: scorer_keyword_extraction_v3_fresh_validation
+- Latest run ID: 20260613-142922-scorer_keyword_extraction_v3_fresh_validation
 - Classification counts: {"PASS_CANDIDATE":28,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":4}
 - Open findings count: 0
 - Case-law matrix rows: 33

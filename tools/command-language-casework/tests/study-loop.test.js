@@ -95,22 +95,40 @@ test("study loop - import and tabulate with various classification fields", (t) 
   const caseIndexCsv = fs.readFileSync(path.join(studyDir, "index", "CASEWORK_CASE_INDEX.csv"), "utf8");
   assert.match(caseIndexCsv, /legal_verdict/);
   assert.match(caseIndexCsv, /route_survival_outcome/);
+  assert.match(caseIndexCsv, /suite_case_count/);
+  assert.match(caseIndexCsv, /suite_design_type/);
+  assert.match(caseIndexCsv, /case_order/);
+  assert.match(caseIndexCsv, /approximate_chat_turn_depth_before_case/);
 
   // 6. Verify status preserves manual fields
   const statusObj = JSON.parse(fs.readFileSync(path.join(studyDir, "CASEWORK_STUDY_STATUS.json"), "utf8"));
-  assert.strictEqual(
-    statusObj.manual_next_study.next_study_needed,
-    expectedNextStudy,
-    "Tabulation should preserve the current manual next-study pointer"
-  );
+  if (expectedNextStudy === "route_law_language_expansion_v1") {
+    assert.strictEqual(
+      statusObj.manual_next_study.next_study_needed,
+      "route_law_contract_relaxation_matrix_v1",
+      "Tabulation should retire the weaker route-law expansion pointer into the stronger contrast brief"
+    );
+  } else {
+    assert.strictEqual(
+      statusObj.manual_next_study.next_study_needed,
+      expectedNextStudy,
+      "Tabulation should preserve the current manual next-study pointer"
+    );
+  }
   assert.strictEqual(statusObj.computed_summary.latest_suite_id, testSuiteId, "Computed summary should update latest_suite_id");
+  assert.strictEqual(statusObj.computed_summary.latest_run_id, testRunId, "Computed summary should update latest_run_id");
   assert.ok(
     !statusObj.open_findings.some((finding) => finding.finding_id === "scorer_collect_dishes_false_lost_route_001"),
     "Resolved scorer collect_dishes finding should not remain open"
   );
+  assert.ok(statusObj.manual_next_study.suite_shape_recommendation, "Manual next study should carry suite shape guidance");
 
   const openFindingsMd = fs.readFileSync(path.join(studyDir, "index", "CASEWORK_OPEN_FINDINGS.md"), "utf8");
   assert.doesNotMatch(openFindingsMd, /scorer_collect_dishes_false_lost_route_001/);
+
+  const evidenceDigest = fs.readFileSync(path.join(studyDir, "CASEWORK_EVIDENCE_DIGEST.md"), "utf8");
+  assert.match(evidenceDigest, /Casework Evidence Digest/);
+  assert.match(evidenceDigest, /Planning rule/);
 
   // Cleanup
   fs.unlinkSync(fakeResultPath);
@@ -203,4 +221,6 @@ test("tabulation status markdown no longer points at reflection-loop validation"
     /\*\*Next Study Needed\*\*: scorer_keyword_extraction_v3_fresh_validation/,
     "Completed scorer v3 agenda should not remain the active manual next-study pointer"
   );
+  assert.match(statusMd, /\*\*Suite shape recommendation\*\*:/);
+  assert.match(statusMd, /\*\*Open gap\*\*:/);
 });

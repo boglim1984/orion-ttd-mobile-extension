@@ -5,10 +5,13 @@
 - **Case Count**: 3
 
 ## Classification Summary
-- **UNKNOWN**: 3
+- **PASS_CANDIDATE**: 2
+- **FAIL_LOST_ROUTE**: 1
 
 ## Key Findings
-*(Add notes on the most important pass/fail observed here)*
+- Language behavior appears to pass for done/move_on boundaries.
+- One case is heuristically labeled FAIL_LOST_ROUTE even though the visible assistant text likely advanced correctly to collect_dishes.
+- Next study remains scorer_keyword_extraction_v1.
 
 ## Next Study Implication
 *(What should the next suite test?)*

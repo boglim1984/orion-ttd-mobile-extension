@@ -57,10 +57,28 @@ function safeFileName(str) {
   return str.replace(/[^a-zA-Z0-9_-]/g, "_");
 }
 
+function getCaseClassification(c) {
+  const fields = [
+    c.classification,
+    c.final_classification,
+    c.result_classification,
+    c.heuristic_classification,
+    c.tool_failure_label,
+    c.tool_classification,
+    c.assistant_classification
+  ];
+  for (const f of fields) {
+    if (f && typeof f === "string" && f.trim() !== "") {
+      return f;
+    }
+  }
+  return "UNKNOWN";
+}
+
 function summarizeClassifications(cases) {
   const counts = {};
   for (const c of cases) {
-    const cl = c.classification || "UNKNOWN";
+    const cl = getCaseClassification(c);
     counts[cl] = (counts[cl] || 0) + 1;
   }
   return counts;

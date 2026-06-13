@@ -49,6 +49,14 @@ test("study loop - import and tabulate with various classification fields", (t) 
   const importedFile = path.join(studyDir, "raw", "2026-06-13", `${testSuiteId}__${testRunId}.json`);
   assert.ok(fs.existsSync(importedFile), "Imported file should exist");
   
+  const reviewStubPath = path.join(studyDir, "reviews", "2026-06-13", `${testSuiteId}__${testRunId}.md`);
+  assert.ok(fs.existsSync(reviewStubPath), "Review stub should exist");
+  const reviewContent = fs.readFileSync(reviewStubPath, "utf8");
+  assert.match(reviewContent, /- \*\*explicit_class\*\*: 1/);
+  assert.match(reviewContent, /- \*\*heuristic_class\*\*: 1/);
+  assert.match(reviewContent, /- \*\*tool_fail_class\*\*: 1/);
+  assert.match(reviewContent, /- \*\*UNKNOWN\*\*: 1/);
+  
   // 4. Run tabulate
   const tabulateScript = path.join(caseworkRoot, "scripts", "tabulate-casework-study.mjs");
   try {

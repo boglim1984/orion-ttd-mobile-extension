@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_active_carrier_position_generalization_v1
+- Next study: route_law_next_chunk_latent_carrier_boundary_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-- Current confidence: medium
-- Open gap: The floor is proven for the first route transition, but not yet for non-start active positions. It is still unknown whether active_chunk_id-only or active_chunk_label-only can carry legal move_on when the active chunk is collect_dishes, stack_papers, or wipe_surface without route_sequence.
-- Suite shape recommendation: 15-case focused position-generalization suite: one clear_trash baseline, active_id-only and active_label-only at collect_dishes/stack_papers/wipe_surface, both-active non-start checks, route_sequence baselines, wrong-next conflicts, and one next-only negative control.
+- Current confidence: high
+- Open gap: The active carrier floor is now generalized across non-start positions, but next_chunk-only packets may still create inferred active state. It is unknown whether this requires both next_chunk_id and next_chunk_label, whether id-only or label-only are sufficient, whether it depends on non-start route positions, and whether the model is treating next_chunk as current state or as a legal preview target.
+- Suite shape recommendation: 15-case next-chunk latent-carrier boundary suite: next_chunk_id-only, next_chunk_label-only, and paired next fields across several route positions; no-field negative controls; explicit-active wrong-next dominance controls; classify whether next fields preview, seed active state, or cause unsafe advancement.
 
 ## Evidence summary
 
-- Imported run count: 18
-- Imported case count: 107
-- Matrix row count: 107
-- Latest imported suite ID: route_law_explicit_active_carrier_floor_confirmation_v1
-- Latest imported run ID: 20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1
+- Imported run count: 19
+- Imported case count: 122
+- Matrix row count: 122
+- Latest imported suite ID: route_law_active_carrier_position_generalization_v1
+- Latest imported run ID: 20260613-191805-route_law_active_carrier_position_generalization_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_active_carrier_position_generalization_v1 / 20260613-191805-route_law_active_carrier_position_generalization_v1: 15 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 - route_law_explicit_active_carrier_floor_confirmation_v1 / 20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1: 12 cases, legal=HOLD, route=unknown, design=endurance, context_risk=high
 - route_law_sequence_only_no_active_carrier_v1 / 20260613-185251-route_law_sequence_only_no_active_carrier_v1: 12 cases, legal=HOLD, route=unknown, design=endurance, context_risk=high
-- route_law_cold_first_active_label_route_sequence_wrong_next_v1 / 20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1: 8 cases, legal=HOLD, route=unknown, design=matrix, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_cold_first_active_label_route_sequence_wrong_next_v1__20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1.md
 - study/reviews/2026-06-13/route_law_sequence_only_no_active_carrier_v1__20260613-185251-route_law_sequence_only_no_active_carrier_v1.md
 - study/reviews/2026-06-13/route_law_explicit_active_carrier_floor_confirmation_v1__20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1.md
+- study/reviews/2026-06-13/route_law_active_carrier_position_generalization_v1__20260613-191805-route_law_active_carrier_position_generalization_v1.md
 
 ## Planning rule
 

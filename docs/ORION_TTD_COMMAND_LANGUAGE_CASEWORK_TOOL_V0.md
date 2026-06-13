@@ -159,7 +159,6 @@ Launcher:
 
 - starts the local server
 - opens the Casework GUI and a disposable ChatGPT support tab
-- copies a short setup note
 - tries to avoid stealing focus, but Chrome/macOS focus control is best effort only
 
 Dev chat:

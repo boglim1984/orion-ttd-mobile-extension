@@ -94,5 +94,4 @@ ${FOCUS_NOTE}
 EOF
 )
 
-printf "%s" "$SETUP_NOTE" | pbcopy
 printf "%s\n" "$SETUP_NOTE"

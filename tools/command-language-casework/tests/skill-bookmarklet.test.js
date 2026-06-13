@@ -13,13 +13,14 @@ async function loadBookmarkletModule() {
   return import(modulePath);
 }
 
-test("start bookmarklet triggers shortcut and popup", async () => {
+test("start bookmarklet triggers shortcut silently", async () => {
   const skillSetup = await loadBookmarkletModule();
   const bookmarklet = skillSetup.buildStartBookmarklet();
 
-  assert.match(bookmarklet, /shortcuts:\/\/run-shortcut\?name=Casework\%20Start/);
-  assert.match(bookmarklet, /Paste into this chat/i);
-  assert.match(bookmarklet, /Casework Start/);
+  assert.match(bookmarklet, /^javascript:\(\(\)=>\{location\.href="shortcuts:\/\/run-shortcut\?name=Casework\%20Start"\}\)\(\);$/);
+  assert.doesNotMatch(bookmarklet, /casework-start-popup/);
+  assert.doesNotMatch(bookmarklet, /Fresh skill is being copied/);
+  assert.doesNotMatch(bookmarklet, /Support tabs are opening/);
   assert.doesNotMatch(bookmarklet, /\/api\/runner\/bootstrap\.js/);
   assert.doesNotMatch(bookmarklet, /fetch\("http:\/\/127\.0\.0\.1/);
   assert.doesNotMatch(bookmarklet, /document\.cookie/);

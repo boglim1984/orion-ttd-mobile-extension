@@ -23,7 +23,7 @@ export const CASEWORK_SKILL_USAGE = [
 ].join("\n");
 
 export function buildStartBookmarklet() {
-  return `javascript:(()=>{const id="casework-start-popup";document.getElementById(id)?.remove();const d=document.createElement("div");d.id=id;d.style.cssText="position:fixed;right:20px;bottom:20px;z-index:2147483647;max-width:340px;padding:14px 16px;border-radius:14px;background:#f8f7f2;color:#171717;border:1px solid rgba(0,0,0,.14);box-shadow:0 16px 40px rgba(0,0,0,.18);font:14px/1.4 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif";d.innerHTML="<strong>Casework Start</strong><br>Fresh skill is being copied through Shortcuts.<br>When it finishes, paste into this chat.<br>Support tabs are opening.";document.body.appendChild(d);setTimeout(()=>{location.href="shortcuts://run-shortcut?name=Casework%20Start"},250);})();`;
+  return 'javascript:(()=>{location.href="shortcuts://run-shortcut?name=Casework%20Start"})();';
 }
 
 export function buildSnapshotBookmarklet() {

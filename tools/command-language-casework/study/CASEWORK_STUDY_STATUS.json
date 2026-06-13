@@ -18,11 +18,14 @@
     "source": "live done-vs-move_on result review"
   },
   "computed_summary": {
-    "last_tabulated_at": "2026-06-13T00:02:16.456Z",
-    "run_count": 0,
-    "case_count": 0,
-    "latest_suite_id": null,
-    "classification_counts": {},
+    "last_tabulated_at": "2026-06-13T00:15:09.218Z",
+    "run_count": 1,
+    "case_count": 3,
+    "latest_suite_id": "done-vs-move-on-small-v1",
+    "classification_counts": {
+      "PASS_CANDIDATE": 2,
+      "FAIL_LOST_ROUTE": 1
+    },
     "open_findings_count": 1
   },
   "open_findings": [

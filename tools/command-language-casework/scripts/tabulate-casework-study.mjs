@@ -29,6 +29,38 @@ function escapeCsv(str) {
   return s;
 }
 
+function getCaseClassification(c) {
+  const fields = [
+    c.classification,
+    c.final_classification,
+    c.result_classification,
+    c.heuristic_classification,
+    c.tool_failure_label,
+    c.tool_classification,
+    c.assistant_classification
+  ];
+  for (const f of fields) {
+    if (f && typeof f === "string" && f.trim() !== "") {
+      return f;
+    }
+  }
+  return "UNKNOWN";
+}
+
+function getCaseStatus(c) {
+  const fields = [
+    c.case_status,
+    c.status,
+    c.caseStatus
+  ];
+  for (const f of fields) {
+    if (f && typeof f === "string" && f.trim() !== "") {
+      return f;
+    }
+  }
+  return "UNKNOWN";
+}
+
 function main() {
   const projectRoot = path.resolve(__dirname, "../../..");
   const caseworkRoot = path.join(projectRoot, "tools/command-language-casework");
@@ -57,10 +89,10 @@ function main() {
       let hasDomTurnTrace = false;
 
       for (const c of cases) {
-        const cl = c.classification || "UNKNOWN";
+        const cl = getCaseClassification(c);
         classificationCounts[cl] = (classificationCounts[cl] || 0) + 1;
         
-        const st = c.case_status || "UNKNOWN";
+        const st = getCaseStatus(c);
         statusCounts[st] = (statusCounts[st] || 0) + 1;
         
         if (c.dom_turn_trace) hasDomTurnTrace = true;

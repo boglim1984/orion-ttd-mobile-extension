@@ -21,11 +21,11 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T00:02:16.456Z
-- Run count: 0
-- Case count: 0
-- Latest suite ID: null
-- Classification counts: {}
+- Last tabulated at: 2026-06-13T00:15:09.218Z
+- Run count: 1
+- Case count: 3
+- Latest suite ID: done-vs-move-on-small-v1
+- Classification counts: {"PASS_CANDIDATE":2,"FAIL_LOST_ROUTE":1}
 - Open findings count: 1
 
 ## Open findings

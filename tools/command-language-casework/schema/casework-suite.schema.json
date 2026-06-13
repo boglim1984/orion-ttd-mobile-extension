@@ -7,7 +7,6 @@
     "suite_id",
     "suite_title",
     "suite_goal",
-    "created_for_tool",
     "route_id",
     "run_config",
     "cases"
@@ -23,7 +22,8 @@
       "type": "string"
     },
     "created_for_tool": {
-      "const": "command-language-casework-runner-v1"
+      "type": "string",
+      "description": "Preferred value: command-language-casework-runner-v1. Treated as descriptive metadata by the validator."
     },
     "route_id": {
       "type": "string"
@@ -36,26 +36,28 @@
     },
     "run_config": {
       "type": "object",
+      "description": "Executable runner config. Keep research metadata out of this object.",
       "required": [
-        "target_chat",
         "send_mode",
         "turn_timeout_ms",
-        "stability_wait_ms",
-        "stop_on_case_failure",
-        "stop_after_each_case"
+        "stability_wait_ms"
       ],
       "properties": {
         "target_chat": {
-          "const": "visible_current_chatgpt_page"
+          "const": "visible_current_chatgpt_page",
+          "description": "Optional local-runner target hint. The validator does not require it."
         },
         "send_mode": {
-          "const": "explicit_casework_run_button"
+          "const": "explicit_casework_run_button",
+          "description": "Required exact value."
         },
         "turn_timeout_ms": {
-          "type": "number"
+          "type": "number",
+          "description": "Required finite number."
         },
         "stability_wait_ms": {
-          "type": "number"
+          "type": "number",
+          "description": "Required finite number."
         },
         "stop_on_case_failure": {
           "type": "boolean"
@@ -96,7 +98,9 @@
             "type": "string"
           },
           "packet": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1,
+            "description": "Must be a non-empty string beginning with TTD_COMMAND_V1\\n followed by the packet JSON/text body. Never use a nested object here."
           },
           "scripted_user_replies": {
             "type": "array",
@@ -117,7 +121,8 @@
             }
           },
           "expected_reducer_semantics": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "classification_targets": {
             "type": "array",

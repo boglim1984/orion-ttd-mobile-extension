@@ -10,6 +10,15 @@ const installerPath = path.resolve(
   "install-casework-start-command.sh"
 );
 const installerSource = fs.readFileSync(installerPath, "utf8");
+const schemaPath = path.resolve(
+  __dirname,
+  "..",
+  "schema",
+  "casework-suite.schema.json"
+);
+const schemaSource = fs.readFileSync(schemaPath, "utf8");
+const runnerSchemaSkillPath = "/Users/oflahertys/Desktop/Code Projects/ACTIVE/_worktrees/Billy-Project-Command-Center-main-for-skill-dump/library/skills/chatgpt/command-language-casework-runner-schema-skill.md";
+const designerSkillPath = "/Users/oflahertys/Desktop/Code Projects/ACTIVE/_worktrees/Billy-Project-Command-Center-main-for-skill-dump/library/skills/chatgpt/command-language-casework-designer-skill.md";
 
 test("installer references local mirror designer, schema, current-study skill, and study status sources", () => {
   assert.match(installerSource, /command-language-casework-designer-skill\.md/);
@@ -40,6 +49,19 @@ test("installer stays clipboard-only and does not touch private browser storage 
   assert.doesNotMatch(installerSource, /sessionStorage/);
   assert.doesNotMatch(installerSource, /indexedDB/);
   assert.doesNotMatch(installerSource, /navigator\.credentials/);
+});
+
+test("schema and bundled skill sources teach packet strings, not packet objects", () => {
+  const runnerSchemaSkill = fs.readFileSync(runnerSchemaSkillPath, "utf8");
+  const designerSkill = fs.readFileSync(designerSkillPath, "utf8");
+
+  assert.match(schemaSource, /"packet": \{/);
+  assert.match(schemaSource, /"type": "string"/);
+  assert.match(schemaSource, /Never use a nested object here/);
+  assert.match(runnerSchemaSkill, /`packet` must be a string, never an object/);
+  assert.match(runnerSchemaSkill, /TTD_COMMAND_V1\\n/);
+  assert.match(designerSkill, /`packet` must be a string, never an object/);
+  assert.match(designerSkill, /If the GUI says `packet must be a non-empty string`/);
 });
 
 test("sync script references study status and mirrored skill path without git mutation", () => {

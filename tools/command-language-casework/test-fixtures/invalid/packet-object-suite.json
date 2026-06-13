@@ -1,0 +1,37 @@
+{
+  "suite_id": "invalid-packet-object-suite-v1",
+  "suite_title": "Invalid Packet Object Suite",
+  "suite_goal": "Reproduce fresh-chat packet object drift.",
+  "created_for_tool": "command-language-casework-runner-v1",
+  "route_id": "desk-reset-v0",
+  "run_config": {
+    "send_mode": "explicit_casework_run_button",
+    "turn_timeout_ms": 1000,
+    "stability_wait_ms": 250
+  },
+  "cases": [
+    {
+      "case_id": "invalid_packet_object_001",
+      "title": "Packet object should fail",
+      "research_question": "Does the validator reject packet objects?",
+      "packet": {
+        "protocol": "TTD_COMMAND_V1",
+        "route_id": "desk-reset-v0",
+        "active_chunk_id": "clear_trash"
+      },
+      "scripted_user_replies": [
+        "move_on"
+      ],
+      "expected_behavior": [
+        "Assistant advances exactly one chunk."
+      ],
+      "forbidden_behavior": [
+        "Assistant skips chunks."
+      ],
+      "expected_reducer_semantics": "move_on advances exactly one chunk.",
+      "classification_targets": [
+        "PASS"
+      ]
+    }
+  ]
+}

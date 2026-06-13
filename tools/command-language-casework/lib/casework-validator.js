@@ -115,7 +115,11 @@ function validateCaseworkSuite(suite) {
       }
 
       if (typeof caseItem.packet !== "string" || !caseItem.packet.trim()) {
-        errors.push(`${prefix}.packet must be a non-empty string.`);
+        errors.push(`${prefix}.packet must be a non-empty string containing the TTD_COMMAND_V1 packet text, not a nested object.`);
+      }
+
+      if (typeof caseItem.expected_reducer_semantics !== "string" || !caseItem.expected_reducer_semantics.trim()) {
+        errors.push(`${prefix}.expected_reducer_semantics must be a non-empty string.`);
       }
 
       for (const listField of [

@@ -349,8 +349,12 @@ async function init() {
       renderStateStrip();
       await refreshState();
     } catch (error) {
-      setValidationSummary(`Validation failed: ${error.message}`, "danger");
-      appendStatusLine(`Validation failed: ${error.message}`);
+      let message = `Validation failed: ${error.message}`;
+      if (error.message.includes("packet must be a non-empty string")) {
+        message += " Packet must be a string like \"TTD_COMMAND_V1\\n{...}\", not a JSON object.";
+      }
+      setValidationSummary(message, "danger");
+      appendStatusLine(message);
       if (copySelfContainedButton) copySelfContainedButton.disabled = true;
     }
   });

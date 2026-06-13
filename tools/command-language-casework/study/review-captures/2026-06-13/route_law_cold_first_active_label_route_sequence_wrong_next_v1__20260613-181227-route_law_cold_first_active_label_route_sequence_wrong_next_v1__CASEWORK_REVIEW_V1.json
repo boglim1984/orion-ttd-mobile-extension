@@ -1,0 +1,62 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2dd435-a5b0-83ea-8d92-f4af6f8bee0a",
+    "suite_id": "route_law_cold_first_active_label_route_sequence_wrong_next_v1",
+    "run_id": "20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The label-only active carrier question is satisfied: active_chunk_label plus route_sequence, without active_chunk_id and without rescue contract wording, advanced legally to collect_dishes in cold wrong-next conflicts. The wrong-next-only negative control moved to stack_papers, confirming that wrong next fields can still pull behavior when no active/route carrier is present.",
+    "language_lesson": "A human-readable active_chunk_label can serve as the active route anchor when paired with route_sequence. The route_sequence plus label carrier beats conflicting next_chunk fields, but next_chunk fields remain unsafe when no active carrier and no route_sequence are present.",
+    "pointer_update": {
+      "next_study_needed": "route_law_sequence_only_no_active_carrier_v1",
+      "purpose": "Test the next lower boundary: whether route_sequence alone, with no active_chunk_id and no active_chunk_label, is enough to anchor the current chunk or whether it is under-specified and should not be credited as legal advancement.",
+      "evidence_reviewed": [
+        "route_law_label_sequence_wrong_next_001_cold_wrong_next_id advanced to collect_dishes despite next_chunk_id stack_papers.",
+        "route_law_label_sequence_wrong_next_004_cold_wrong_next_id_and_label advanced to collect_dishes despite both wrong next fields.",
+        "route_law_label_sequence_wrong_next_005_cold_base_no_next_fields showed active_chunk_label plus route_sequence works even without any next_chunk fields.",
+        "route_law_label_sequence_wrong_next_007_negative_wrong_next_only_no_route moved to stack_papers, showing wrong next fields are still dangerous when no route carrier is present.",
+        "route_law_label_sequence_wrong_next_008_final_retest_core_conflict repeated collect_dishes late in the suite."
+      ],
+      "current_confidence": "high",
+      "open_gap": "We still do not know whether route_sequence by itself implicitly anchors the active chunk to the first route item, or whether an explicit active carrier is required for legal move_on advancement.",
+      "test_strategy": "Run a focused cold-first suite centered on route_sequence-only packets with no active_chunk_id and no active_chunk_label. Include wrong next_chunk_id, wrong next_chunk_label, both wrong next fields, and no-next-field variants. Add controls showing that next_chunk-only movement is not legal route evidence. The suite should decide whether route_sequence alone produces reliable collect_dishes movement from the first listed chunk or should be treated as under-specified/repair-needed.",
+      "avoid": [
+        "do not include active_chunk_id",
+        "do not include active_chunk_label",
+        "do not include response_contract or route_law rescue wording",
+        "do not treat stack_papers movement from wrong-next-only packets as route survival",
+        "do not run the first route_sequence-only case in an already warmed chat"
+      ],
+      "suite_shape_recommendation": "8-case minimum cold-first boundary suite; prefer 12 to 15 cases if adding route_sequence-only endurance and late wrong-next carryover checks.",
+      "retirement_condition": "Retire this pointer when route_sequence-only cold packets are clearly characterized: either they reliably infer clear_trash as the first active route item and advance to collect_dishes, or they are shown to be under-specified and require an explicit active carrier.",
+      "next_action_for_fresh_chat": "Generate a validator-ready suite for route_law_sequence_only_no_active_carrier_v1 focused on route_sequence-only packets, wrong-next conflict behavior, and whether first-item route inference is reliable without active_chunk_id or active_chunk_label."
+    },
+    "reviewed_at": "2026-06-13T22:38:52.244Z"
+  },
+  "imported_result_path": "study/raw/2026-06-13/route_law_cold_first_active_label_route_sequence_wrong_next_v1__20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_sequence_only_no_active_carrier_v1",
+    "purpose": "Test the next lower boundary: whether route_sequence alone, with no active_chunk_id and no active_chunk_label, is enough to anchor the current chunk or whether it is under-specified and should not be credited as legal advancement.",
+    "evidence_reviewed": [
+      "route_law_label_sequence_wrong_next_001_cold_wrong_next_id advanced to collect_dishes despite next_chunk_id stack_papers.",
+      "route_law_label_sequence_wrong_next_004_cold_wrong_next_id_and_label advanced to collect_dishes despite both wrong next fields.",
+      "route_law_label_sequence_wrong_next_005_cold_base_no_next_fields showed active_chunk_label plus route_sequence works even without any next_chunk fields.",
+      "route_law_label_sequence_wrong_next_007_negative_wrong_next_only_no_route moved to stack_papers, showing wrong next fields are still dangerous when no route carrier is present.",
+      "route_law_label_sequence_wrong_next_008_final_retest_core_conflict repeated collect_dishes late in the suite."
+    ],
+    "current_confidence": "high",
+    "open_gap": "We still do not know whether route_sequence by itself implicitly anchors the active chunk to the first route item, or whether an explicit active carrier is required for legal move_on advancement.",
+    "test_strategy": "Run a focused cold-first suite centered on route_sequence-only packets with no active_chunk_id and no active_chunk_label. Include wrong next_chunk_id, wrong next_chunk_label, both wrong next fields, and no-next-field variants. Add controls showing that next_chunk-only movement is not legal route evidence. The suite should decide whether route_sequence alone produces reliable collect_dishes movement from the first listed chunk or should be treated as under-specified/repair-needed.",
+    "avoid": [
+      "do not include active_chunk_id",
+      "do not include active_chunk_label",
+      "do not include response_contract or route_law rescue wording",
+      "do not treat stack_papers movement from wrong-next-only packets as route survival",
+      "do not run the first route_sequence-only case in an already warmed chat"
+    ],
+    "suite_shape_recommendation": "8-case minimum cold-first boundary suite; prefer 12 to 15 cases if adding route_sequence-only endurance and late wrong-next carryover checks.",
+    "retirement_condition": "Retire this pointer when route_sequence-only cold packets are clearly characterized: either they reliably infer clear_trash as the first active route item and advance to collect_dishes, or they are shown to be under-specified and require an explicit active carrier.",
+    "next_action_for_fresh_chat": "Generate a validator-ready suite for route_law_sequence_only_no_active_carrier_v1 focused on route_sequence-only packets, wrong-next conflict behavior, and whether first-item route inference is reliable without active_chunk_id or active_chunk_label."
+  },
+  "applied_at": "2026-06-13T22:38:52.252Z"
+}

@@ -1,0 +1,42 @@
+const test = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const path = require("node:path");
+
+const installerPath = path.resolve(
+  __dirname,
+  "..",
+  "scripts",
+  "install-casework-start-command.sh"
+);
+const installerSource = fs.readFileSync(installerPath, "utf8");
+
+test("installer references local mirror designer, schema, and study status sources", () => {
+  assert.match(installerSource, /command-language-casework-designer-skill\.md/);
+  assert.match(installerSource, /command-language-casework-runner-schema-skill\.md/);
+  assert.match(installerSource, /CASEWORK_STUDY_STATUS\.md/);
+  assert.match(installerSource, /Casework Start\.command/);
+});
+
+test("installer builds a three-part bundle and strips frontmatter", () => {
+  assert.match(installerSource, /strip_frontmatter/);
+  assert.match(installerSource, /Part 1 — Casework Designer Skill/);
+  assert.match(installerSource, /Part 2 — Casework Runner Schema Skill/);
+  assert.match(installerSource, /Part 3 — Casework Study Status/);
+});
+
+test("installer opens launch-casework.command and avoids deprecated desktop dependencies", () => {
+  assert.match(installerSource, /launch-casework\.command/);
+  assert.doesNotMatch(installerSource, /shortcuts:\/\//);
+  assert.doesNotMatch(installerSource, /script\.google\.com/);
+  assert.doesNotMatch(installerSource, /doPost|Apps Script/);
+});
+
+test("installer stays clipboard-only and does not touch private browser storage APIs", () => {
+  assert.doesNotMatch(installerSource, /click Send|auto-send|submit/i);
+  assert.doesNotMatch(installerSource, /document\.cookie/);
+  assert.doesNotMatch(installerSource, /localStorage/);
+  assert.doesNotMatch(installerSource, /sessionStorage/);
+  assert.doesNotMatch(installerSource, /indexedDB/);
+  assert.doesNotMatch(installerSource, /navigator\.credentials/);
+});

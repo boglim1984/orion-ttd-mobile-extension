@@ -33,7 +33,7 @@ The tool is evidence capture and batch running only. It does not gain route auth
 
 Core loop:
 
-1. The dev chat gets the Command Language Casework Designer Skill via the `~/Desktop/Casework Start.command` local launcher (installed via `tools/command-language-casework/scripts/install-casework-start-command.sh`). (Note: The experimental `Casework Start` shortcut bookmarklet may fail silently).
+1. The dev chat gets the local mirror Casework bundle via `~/Desktop/Casework Start.command` (installed via `tools/command-language-casework/scripts/install-casework-start-command.sh`).
 2. Billy asks that dev chat for a JSON suite block.
 3. Billy pastes the suite into the local GUI.
 4. Billy installs the runner in a disposable ChatGPT test chat.
@@ -47,7 +47,7 @@ Core loop:
 
 The GUI includes:
 
-- Desktop launcher instructions (`~/Desktop/Casework Start.command`) and an experimental skill start bookmarklet
+- Desktop launcher instructions (`~/Desktop/Casework Start.command`) and an experimental static snapshot fallback
 - large suite JSON textarea
 - `Validate`
 - `Run`
@@ -142,20 +142,32 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 ## How To Paste Suite Data
 
 - use an example suite from `tools/command-language-casework/examples/`
-- or paste JSON from the current dev chat after using the Casework Start bookmarklet/shortcut
+- or paste JSON from the current dev chat after using the local mirror Casework bundle
 
-## Skill Bookmarklet Split
+## Local Mirror Bundle v1
 
-Skill bookmarklet / Shortcut:
+Supported launcher:
 
-- tiny bookmarklet triggers the macOS Casework Start Shortcut
-- Shortcut calls `router-payload-to-chatgpt` with the Apps Script payload URL (`action=chatgptPlainPayload&id=2060`)
-- Apps Script strips YAML/frontmatter with existing router logic
-- Shortcut copies the cleaned payload to the clipboard and launches support tabs
-- shows an alert to paste the skill into the current ChatGPT dev chat
-- does not run tests
-- does not click `Send`
-- does not use cookies, storage, or credential APIs
+- `~/Desktop/Casework Start.command`
+
+Installer:
+
+- `tools/command-language-casework/scripts/install-casework-start-command.sh`
+
+Payload parts:
+
+- Designer Skill
+- Runner Schema Skill
+- Study Status
+
+Desktop v1 behavior:
+
+- reads local Command Center mirror first
+- falls back to the main local Command Center repo for skill files
+- strips YAML/frontmatter from skill files
+- copies a clean runtime bundle to clipboard
+- opens `launch-casework.command`
+- does not depend on Apps Script, Shortcuts, or live GitHub fetches
 
 Launcher:
 
@@ -172,9 +184,14 @@ Disposable ChatGPT tab:
 
 - runs the actual test runner
 
+Experimental/demoted paths:
+
+- static skill snapshot bookmarklet may still exist as a fallback convenience
+- mobile/cloud router or Shortcut paths are separate experiments, not the supported desktop v1 path
+
 ## Supported Runner Path
 
-- first click the Casework Start bookmarklet in the dev chat, paste the copied fresh skill, and get the suite block there
+- first run `~/Desktop/Casework Start.command`, paste the copied bundle into the dev chat, and get the suite block there
 - primary path: open disposable ChatGPT test chat, validate suite, then `Copy Self-Contained Runner`
 - paste the payload into a disposable ChatGPT test-chat console
 - nothing sends until Billy clicks the visible overlay `Run` button
@@ -198,6 +215,17 @@ Recommended minimum:
 - `run-result.json`
 
 Those files preserve both a quick human summary and the raw per-case record.
+
+## Layer Boundaries
+
+- Designer Skill:
+  fresh-chat behavior and result-review method
+- Runner Schema Skill:
+  current executable suite-shape authority
+- Study Status:
+  next-study pointer and open findings
+- Casework GUI:
+  validation, runner copy, and local evidence capture
 
 ## How This Differs From Orion Transport Tests
 

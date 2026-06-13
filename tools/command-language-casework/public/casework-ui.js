@@ -1,7 +1,6 @@
 import {
   CASEWORK_SKILL_PROMPT,
   CASEWORK_SKILL_USAGE,
-  buildStartBookmarklet,
   buildSnapshotBookmarklet
 } from "./casework-skill-setup.js";
 
@@ -37,7 +36,7 @@ async function init() {
   const copySummaryButton = document.querySelector("#copy-summary-button");
   const copyLoaderButton = document.querySelector("#copy-loader-button");
   const copyResultInstructionsButton = document.querySelector("#copy-result-instructions-button");
-  const copyStartBookmarkletButton = document.querySelector("#copy-start-bookmarklet-button");
+  const copyStartNoteButton = document.querySelector("#copy-start-note-button");
   const copySkillSnapshotButton = document.querySelector("#copy-skill-snapshot-button");
   const copyStatusButton = document.getElementById("copy-status-button");
   const skillHowToUseButton = document.querySelector("#skill-how-to-use-button");
@@ -272,17 +271,28 @@ async function init() {
     })
   );
 
-  copyStartBookmarkletButton.addEventListener("click", () =>
+  copyStartNoteButton.addEventListener("click", () =>
     withAction(async () => {
-      await copyToClipboard(buildStartBookmarklet(), "Copied Start Bookmarklet.");
-      setSkillSetupStatus("Start bookmarklet copied. Save it in the browser bookmarks bar. Click it to fetch the fresh Casework Designer Skill and launch support tabs.");
+      await copyToClipboard(
+        [
+          "Casework Start local mirror bundle",
+          "1. Run ~/Desktop/Casework Start.command",
+          "2. Paste the copied bundle into a fresh ChatGPT dev chat.",
+          "3. Part 1 = Designer Skill",
+          "4. Part 2 = Runner Schema Skill",
+          "5. Part 3 = Study Status",
+          "6. Ask that chat to design the next suite."
+        ].join("\n"),
+        "Copied local mirror start note."
+      );
+      setSkillSetupStatus("Start note copied. The supported desktop v1 path is ~/Desktop/Casework Start.command, not Shortcuts or live GitHub fetch.");
     })
   );
 
   copySkillSnapshotButton.addEventListener("click", () =>
     withAction(async () => {
       await copyToClipboard(buildSnapshotBookmarklet(), "Copied skill snapshot bookmarklet.");
-      setSkillSetupStatus("Skill snapshot copied. This contains a static version of the prompt and may become stale.");
+      setSkillSetupStatus("Skill snapshot copied. This is an experimental static fallback and may become stale.");
     })
   );
 
@@ -291,7 +301,7 @@ async function init() {
       withAction(async () => {
         const response = await fetchJson("/api/study-status");
         await copyToClipboard(response.status_text, "Copied Casework Study Status.");
-        setSkillSetupStatus("Status copied. Paste it into your fresh chat to guide the next suite design.");
+        setSkillSetupStatus("Status copied. This is Part 3 of the local mirror bundle and can guide the next suite design.");
       })
     );
   }
@@ -420,7 +430,7 @@ async function init() {
   renderStateStrip();
   setValidationSummary("Load or paste a suite, then validate it.", "muted");
   setOverlayStatus("Open a disposable ChatGPT chat to begin.");
-  setSkillSetupStatus("Dev chat designs the suite. Casework GUI validates JSON. Disposable ChatGPT runs the test. Result JSON comes back here for Mermaid review.");
+  setSkillSetupStatus("Dev chat uses the bundled Designer Skill, Runner Schema, and Study Status. Casework GUI validates JSON. Disposable ChatGPT runs the test.");
   await refreshState();
 
 }

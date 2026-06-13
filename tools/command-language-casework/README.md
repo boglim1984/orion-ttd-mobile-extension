@@ -6,7 +6,7 @@ It exists so Billy and ChatGPT can design, run, and analyze `TTD_COMMAND_V1` lan
 
 ## What It Does
 
-- injects a Casework Designer Skill prompt into the current ChatGPT dev chat by a "Casework Start" macOS Shortcut bridge (via tiny bookmarklet)
+- copies a local mirror Casework bundle into the clipboard for a fresh ChatGPT dev chat
 - serves a local GUI for pasted suite JSON
 - validates suite structure before a run
 - provides a console-injected ChatGPT runner
@@ -39,7 +39,7 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 ## First Run
 
 1. Open a new, disposable ChatGPT chat window to serve as your dev environment.
-2. Run `~/Desktop/Casework Start.command`. This is the supported v1 launcher. It will fetch the skill and launch the support tabs. Paste the clipboard payload into your ChatGPT dev chat. (If you don't have the launcher installed, run `tools/command-language-casework/scripts/install-casework-start-command.sh`).
+2. Run `~/Desktop/Casework Start.command`. This is the supported v1 launcher. It copies the local mirror bundle and launches the support tabs. Paste the clipboard payload into your ChatGPT dev chat. If you do not have it installed, run `tools/command-language-casework/scripts/install-casework-start-command.sh`.
 3. Keep the newly-opened Casework GUI and support tabs visible.
 4. Ask the dev chat to design the next suite JSON block.
 5. Use the GUI step lane to load/paste that suite and validate it.
@@ -76,8 +76,10 @@ Each run includes:
 
 ## Notes
 
-- The Casework Start bookmarklet triggers the macOS Shortcut. The Shortcut reads the fresh skill from disk and opens support tabs. The bookmarklet itself is tiny and does not contain the skill body.
+- Desktop v1 uses the local mirror bundle launcher, not Apps Script, Shortcuts, or live GitHub fetches.
+- The payload parts are Designer Skill, Runner Schema Skill, and Study Status.
 - The `launch-casework.command` launcher starts the local server and opens the support tabs quietly when macOS/Chrome allow it.
+- The static skill-snapshot bookmarklet remains experimental and may become stale.
 - The supported path is the self-contained payload, not the legacy localhost bootstrap.
 - The legacy loader and server-run buttons remain available as secondary tooling only.
 - Use this only in dedicated test chats.
@@ -117,3 +119,15 @@ Data relationships:
 - `CASEWORK_STUDY_STATUS.md` = next-study pointer
 - **spreadsheets/matrices** = higher-order distillation into state laws and skill language (e.g., Fail/Recover Map, Pre-Collapse Steering Matrix, LLM Legal Deference Map)
 - **casework result indexes** = live empirical evidence feeding those maps
+
+## Local Mirror Bundle v1
+
+- Supported launcher:
+  `~/Desktop/Casework Start.command`
+- Installer:
+  `tools/command-language-casework/scripts/install-casework-start-command.sh`
+- Payload parts:
+  Designer Skill, Runner Schema Skill, Study Status
+- Desktop v1 does not depend on Apps Script, Shortcuts, or live GitHub.
+- Mobile/cloud routes may still use separate experimental router paths if Billy chooses them later.
+- Shortcut/bookmarklet start paths are experimental or demoted, not the supported desktop v1 path.

@@ -10,81 +10,133 @@ cat << 'EOF' > "$DEST"
 set -e
 
 LOG="/tmp/orion-casework-start.log"
-SKILL="/Users/oflahertys/Desktop/Code Projects/ACTIVE/_worktrees/Billy-Project-Command-Center-main-for-skill-dump/library/skills/chatgpt/command-language-casework-designer-skill.md"
-FALLBACK_SKILL="/Users/oflahertys/Desktop/Code Projects/ACTIVE/Billy-Project-Command-Center/library/skills/chatgpt/command-language-casework-designer-skill.md"
+PRIMARY_CC_ROOT="/Users/oflahertys/Desktop/Code Projects/ACTIVE/_worktrees/Billy-Project-Command-Center-main-for-skill-dump"
+FALLBACK_CC_ROOT="/Users/oflahertys/Desktop/Code Projects/ACTIVE/Billy-Project-Command-Center"
+DESIGNER_REL="library/skills/chatgpt/command-language-casework-designer-skill.md"
+SCHEMA_REL="library/skills/chatgpt/command-language-casework-runner-schema-skill.md"
+STUDY_STATUS="/Users/oflahertys/Code Projects/ACTIVE/orion-ios-ttd-injector/ttd-mobile-extension/tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md"
 LAUNCHER="/Users/oflahertys/Code Projects/ACTIVE/orion-ios-ttd-injector/ttd-mobile-extension/tools/command-language-casework/launch-casework.command"
 
 {
   echo "Casework Start local mirror $(date)"
 
-  if [ ! -f "$SKILL" ]; then
-    SKILL="$FALLBACK_SKILL"
+  DESIGNER="$PRIMARY_CC_ROOT/$DESIGNER_REL"
+  if [ ! -f "$DESIGNER" ]; then
+    DESIGNER="$FALLBACK_CC_ROOT/$DESIGNER_REL"
   fi
 
-  if [ ! -f "$SKILL" ]; then
-    echo "ERROR: skill file not found"
-    echo "Tried primary and fallback paths."
+  SCHEMA="$PRIMARY_CC_ROOT/$SCHEMA_REL"
+  if [ ! -f "$SCHEMA" ]; then
+    SCHEMA="$FALLBACK_CC_ROOT/$SCHEMA_REL"
+  fi
+
+  if [ ! -f "$DESIGNER" ]; then
+    echo "ERROR: designer skill file not found"
+    echo "Tried primary and fallback Command Center paths."
     exit 1
   fi
 
-  PAYLOAD="$(/usr/bin/python3 - "$SKILL" <<'PY'
+  PAYLOAD="$(/usr/bin/python3 - "$DESIGNER" "$SCHEMA" "$STUDY_STATUS" <<'PY'
 import sys
 from pathlib import Path
 
-path = Path(sys.argv[1])
-text = path.read_text(encoding="utf-8", errors="replace")
+designer_path = Path(sys.argv[1])
+schema_path = Path(sys.argv[2])
+study_path = Path(sys.argv[3])
 
-if text.startswith("\ufeff"):
-    text = text[1:]
 
-text = text.replace("\r\n", "\n")
+def clean_text(text: str) -> str:
+    if text.startswith("\ufeff"):
+        text = text[1:]
+    text = text.replace("\r\n", "\n")
+    return (
+        text.replace("‚Üí", "→")
+            .replace("‚Äôs", "’s")
+            .replace("‚Äú", "“")
+            .replace("‚Äù", "”")
+    )
 
-lines = text.split("\n")
-if lines and lines[0].strip() == "---":
-    end = None
-    for i in range(1, len(lines)):
-        if lines[i].strip() == "---":
-            end = i
-            break
-    if end is not None:
-        text = "\n".join(lines[end + 1:]).lstrip()
 
-text = (
-    text.replace("‚Üí", "→")
-        .replace("‚Äôs", "’s")
-        .replace("‚Äú", "“")
-        .replace("‚Äù", "”")
-)
+def strip_frontmatter(text: str) -> str:
+    lines = text.split("\n")
+    if lines and lines[0].strip() == "---":
+        end = None
+        for i in range(1, len(lines)):
+            if lines[i].strip() == "---":
+                end = i
+                break
+        if end is not None:
+            text = "\n".join(lines[end + 1:]).lstrip()
+    return text
 
-header = f"""Billy is launching this skill from his local Command Center mirror.
+
+def load_skill_body(path: Path) -> str:
+    return strip_frontmatter(clean_text(path.read_text(encoding="utf-8", errors="replace"))).strip()
+
+
+designer_body = load_skill_body(designer_path)
+parts = []
+warnings = []
+
+parts.append("# Part 1 — Casework Designer Skill\n\n" + designer_body)
+
+if schema_path.exists():
+    schema_body = load_skill_body(schema_path)
+    parts.append("# Part 2 — Casework Runner Schema Skill\n\n" + schema_body)
+else:
+    warnings.append(f"WARNING: schema skill file missing at {schema_path}")
+    parts.append("# Part 2 — Casework Runner Schema Skill\n\n" + warnings[-1])
+
+if study_path.exists():
+    study_body = clean_text(study_path.read_text(encoding="utf-8", errors="replace")).strip()
+    parts.append("# Part 3 — Casework Study Status\n\n" + study_body)
+else:
+    warnings.append(f"WARNING: study status file missing at {study_path}")
+    parts.append("# Part 3 — Casework Study Status\n\n" + warnings[-1])
+
+header = f"""Billy is launching Casework from the local Command Center mirror.
 
 This is a skill activation message, not a capture event.
 Do not output the receipt format yet.
-Just confirm the skill is loaded, then ask Billy what he wants to do with it.
+Use the bundled Designer Skill, Runner Schema, and Study Status as active context for this chat.
 
-Skill source: {path}
+Part 1 is the operating skill.
+Part 2 is the current executable schema.
+Part 3 is the current study status.
 
-Treat the skill text below as the active skill for this chat.
+Ask Billy what he wants to do next after confirming the bundle is loaded.
 
 """
 
-print(header + text.strip())
+payload = header + "\n\n".join(parts).strip() + "\n"
+
+for warning in warnings:
+    print(f"[bundle-warning] {warning}", file=sys.stderr)
+
+print(payload)
 PY
 )"
 
-  if printf "%s" "$PAYLOAD" | /usr/bin/grep -q "^---"; then
-    echo "ERROR: payload still has YAML frontmatter"
+  if ! printf "%s" "$PAYLOAD" | /usr/bin/grep -q "Part 1 — Casework Designer Skill"; then
+    echo "ERROR: payload missing Part 1"
     exit 1
   fi
 
-  if ! printf "%s" "$PAYLOAD" | /usr/bin/grep -q "Command Language Casework Designer Skill"; then
-    echo "ERROR: payload missing Casework skill marker"
+  if ! printf "%s" "$PAYLOAD" | /usr/bin/grep -q "Part 2 — Casework Runner Schema Skill"; then
+    echo "ERROR: payload missing Part 2"
+    exit 1
+  fi
+
+  if ! printf "%s" "$PAYLOAD" | /usr/bin/grep -q "Part 3 — Casework Study Status"; then
+    echo "ERROR: payload missing Part 3"
     exit 1
   fi
 
   printf "%s" "$PAYLOAD" | /usr/bin/pbcopy
   echo "Copied local mirror payload bytes: $(printf "%s" "$PAYLOAD" | /usr/bin/wc -c)"
-  echo "Skill source: $SKILL"
+  echo "Designer source: $DESIGNER"
+  echo "Schema source: $SCHEMA"
+  echo "Study status source: $STUDY_STATUS"
 
   /usr/bin/open "$LAUNCHER"
   echo "Launcher opened"

@@ -15,16 +15,12 @@ export const CASEWORK_SKILL_WORKFLOW = [
 ].join("\n");
 
 export const CASEWORK_SKILL_USAGE = [
-  "1. In your ChatGPT dev/design chat, click the Casework Start bookmarklet.",
-  "2. This triggers the macOS Shortcut which fetches the fresh skill and copies it.",
-  "3. Paste the fresh Casework Designer Skill prompt into the composer.",
-  "4. Use the automatically opened Casework GUI and support tabs.",
-  "5. Ask this chat to design the next casework suite."
+  "1. Run ~/Desktop/Casework Start.command.",
+  "2. Paste the copied local mirror bundle into a fresh ChatGPT dev chat.",
+  "3. Let that chat use Part 1, Part 2, and Part 3 as active context.",
+  "4. Use the opened Casework GUI and disposable ChatGPT support tabs.",
+  "5. Ask the dev chat to design the next casework suite."
 ].join("\n");
-
-export function buildStartBookmarklet() {
-  return 'javascript:(()=>{location.href="shortcuts://run-shortcut?name=Casework%20Start"})();';
-}
 
 export function buildSnapshotBookmarklet() {
   const source = `

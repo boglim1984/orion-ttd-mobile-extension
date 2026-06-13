@@ -149,7 +149,10 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 Skill bookmarklet / Shortcut:
 
 - tiny bookmarklet triggers the macOS Casework Start Shortcut
-- Shortcut fetches the fresh skill from disk and copies it to clipboard
+- Shortcut runs a local helper script to fetch the fresh cleaned runtime payload from Apps Script (`action=chatgptPlainPayload&id=2060`)
+- Apps Script strips YAML/frontmatter with existing router logic
+- local file fallback strips YAML if Apps Script is unavailable
+- Shortcut copies payload to clipboard and launches support tabs
 - shows an alert to paste the skill into the current ChatGPT dev chat
 - does not run tests
 - does not click `Send`

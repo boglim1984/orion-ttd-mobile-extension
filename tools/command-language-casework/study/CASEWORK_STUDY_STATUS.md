@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_next_chunk_latent_carrier_boundary_v1
+**Next Study Needed**: route_law_minimal_activation_scaffold_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: route_law_position_generalization_002 through 010 showed active_chunk_id-only, active_chunk_label-only, and paired active fields all advanced legally at collect_dishes, stack_papers, and wipe_surface. | route_law_position_generalization_011 through 013 showed route_sequence baselines preserved legal one-step movement from non-start positions. | route_law_position_generalization_014 showed a wrong next_chunk target did not override an explicit active carrier. | route_law_position_generalization_015 showed next_chunk_id/label stack_papers without any active carrier or route_sequence produced Ready on stack papers and then move_on advanced to wipe_surface, creating a HOLD_NEEDS_REVIEW latent-carrier finding.
-**Current confidence**: high
-**Open gap**: The active carrier floor is now generalized across non-start positions, but next_chunk-only packets may still create inferred active state. It is unknown whether this requires both next_chunk_id and next_chunk_label, whether id-only or label-only are sufficient, whether it depends on non-start route positions, and whether the model is treating next_chunk as current state or as a legal preview target.
-**Test strategy**: Run a focused next-chunk latent-carrier boundary suite. Use no active_chunk fields and no route_sequence in the core cases. Test next_chunk_id-only, next_chunk_label-only, and both next fields for collect_dishes, stack_papers, wipe_surface, and choose_next. Include one or two explicit-active controls showing that active carrier still dominates wrong next fields. Include no-field and allowed_intents-only negatives to confirm the model is not advancing from generic route memory alone.
-**Avoid / do not repeat**: do not repeat active carrier position-generalization cases except as minimal controls | do not include response_contract | do not include route_law rescue wording | do not include route_sequence in the core next-only cases | do not treat next_chunk-only advancement as a PASS without separate legal interpretation | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 15-case next-chunk latent-carrier boundary suite: next_chunk_id-only, next_chunk_label-only, and paired next fields across several route positions; no-field negative controls; explicit-active wrong-next dominance controls; classify whether next fields preview, seed active state, or cause unsafe advancement.
-**Retirement condition**: Retire this pointer when next_chunk_id-only, next_chunk_label-only, and paired next_chunk fields are clearly classified as inert, preview-only, or latent-active carriers across route positions, and when explicit active fields are confirmed to dominate conflicting next fields.
-**Next action for fresh chat**: Generate a validator-ready suite for route_law_next_chunk_latent_carrier_boundary_v1 focused on next_chunk-only packets with no active_chunk and no route_sequence, plus minimal explicit-active controls.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_active_carrier_position_generalization_v1 result 20260613-191805-route_law_active_carrier_position_generalization_v1.
+**Evidence reviewed**: route_law_next_chunk_latent_001 and 002 showed no-field and allowed_intents-only packets stayed at pause and did not invent route movement. | route_law_next_chunk_latent_003 through 014 showed next_chunk_id-only, next_chunk_label-only, and paired next_chunk fields across collect_dishes, stack_papers, wipe_surface, and choose_next stayed at pause after move_on, so next_chunk-only was inert in this stripped packet style. | route_law_next_chunk_latent_015 showed explicit active_chunk clear_trash plus conflicting next_chunk stack_papers did not legally advance to collect_dishes and was classified FAIL_LOST_ROUTE, revealing an activation-scaffold gap.
+**Current confidence**: medium
+**Open gap**: It is now unclear what minimum wording or field scaffold is required for active_chunk_id and active_chunk_label to become actionable in a stripped packet. Prior suites showed active carriers working when other scaffolding or context was present, but this suite showed explicit active fields alone can fail after a heavily pause-oriented reduced-packet sequence.
+**Test strategy**: Run a focused minimal activation scaffold suite. Keep active_chunk_id and active_chunk_label as the core carrier. Do not include route_sequence. Vary only small activation fields or phrases such as command intent, commit_policy, expected reducer semantics wording inside packet, active/current wording, and one minimal move_on rule. Include controls with active fields only, active plus wrong next, active plus next omitted, and next-only inert controls. Put explicit-active positive controls early and late to separate true scaffold effect from long-context pause contamination.
+**Avoid / do not repeat**: do not repeat the full 12-case next_chunk-only matrix unless needed as a small control | do not include route_sequence in core activation-scaffold cases | do not use broad route_law rescue wording that makes the minimum field carrier ambiguous | do not treat pause-only next_chunk results as PASS without recording them as inert/non-activating | do not overinterpret case 015 as disproving active carriers globally because earlier position-generalization runs already showed active carriers can work with other scaffolding | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 15-case activation-scaffold boundary suite: early active-only baseline, minimal scaffold variants, explicit active plus wrong-next dominance probes, next-only inert controls, and late active-only retest to check context/carryover.
+**Retirement condition**: Retire this pointer when one or more minimal non-route_sequence scaffolds reliably make active_chunk fields actionable for exact one-step move_on advancement, and when the suite distinguishes scaffold necessity from next_chunk latent-carrier behavior.
+**Next action for fresh chat**: Generate a validator-ready route_law_minimal_activation_scaffold_v1 suite focused on explicit active_chunk carriers with no route_sequence, varying only minimal activation wording or fields, with next_chunk-only inert controls and early/late active retests.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_next_chunk_latent_carrier_boundary_v1 result 20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-13
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T23:23:59.684Z
-- Run count: 19
-- Case count: 122
-- Latest suite ID: route_law_active_carrier_position_generalization_v1
-- Latest run ID: 20260613-191805-route_law_active_carrier_position_generalization_v1
-- Classification counts: {"PASS_CANDIDATE":93,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":5,"HOLD_NEEDS_REVIEW":23}
+- Last tabulated at: 2026-06-13T23:36:58.185Z
+- Run count: 20
+- Case count: 137
+- Latest suite ID: route_law_next_chunk_latent_carrier_boundary_v1
+- Latest run ID: 20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1
+- Classification counts: {"PASS_CANDIDATE":93,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":6,"HOLD_NEEDS_REVIEW":37}
 - Open findings count: 0
-- Case-law matrix rows: 122
+- Case-law matrix rows: 137
 
 ## Open findings
 Generated and/or manually curated.

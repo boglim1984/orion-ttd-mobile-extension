@@ -39,7 +39,7 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 ## First Run
 
 1. Open a new, disposable ChatGPT chat window to serve as your dev environment.
-2. If Shortcuts fails silently, run `~/Desktop/Casework Start.command` instead. This is the supported v1 launcher. It will fetch the skill and launch the support tabs. Paste the clipboard payload into your ChatGPT dev chat.
+2. Run `~/Desktop/Casework Start.command`. This is the supported v1 launcher. It will fetch the skill and launch the support tabs. Paste the clipboard payload into your ChatGPT dev chat. (If you don't have the launcher installed, run `tools/command-language-casework/scripts/install-casework-start-command.sh`).
 3. Keep the newly-opened Casework GUI and support tabs visible.
 4. Ask the dev chat to design the next suite JSON block.
 5. Use the GUI step lane to load/paste that suite and validate it.

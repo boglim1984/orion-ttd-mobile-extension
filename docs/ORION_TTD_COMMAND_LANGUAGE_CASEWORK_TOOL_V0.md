@@ -33,7 +33,7 @@ The tool is evidence capture and batch running only. It does not gain route auth
 
 Core loop:
 
-1. The dev chat gets the Command Language Casework Designer Skill via the `~/Desktop/Casework Start.command` local launcher. (Note: The experimental `Casework Start` shortcut bookmarklet may fail silently).
+1. The dev chat gets the Command Language Casework Designer Skill via the `~/Desktop/Casework Start.command` local launcher (installed via `tools/command-language-casework/scripts/install-casework-start-command.sh`). (Note: The experimental `Casework Start` shortcut bookmarklet may fail silently).
 2. Billy asks that dev chat for a JSON suite block.
 3. Billy pastes the suite into the local GUI.
 4. Billy installs the runner in a disposable ChatGPT test chat.

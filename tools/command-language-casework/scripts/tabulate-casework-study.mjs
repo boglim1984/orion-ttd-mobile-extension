@@ -5,6 +5,10 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { updateCaseworkCaseLawMatrix } from "./update-casework-case-law-matrix.mjs";
 import {
+  deriveRunLegalVerdict,
+  deriveRunRouteSurvivalOutcome
+} from "../lib/casework-legal-fields.mjs";
+import {
   ensureReviewForResult,
   findPlaceholderReviews
 } from "../lib/casework-reflection.mjs";
@@ -97,43 +101,6 @@ function countValues(values) {
   return counts;
 }
 
-function deriveRunLegalVerdict(runRows) {
-  const legalVerdicts = runRows.map((row) => row.legal_verdict).filter(Boolean);
-  if (legalVerdicts.includes("FAIL")) {
-    return "FAIL";
-  }
-  if (legalVerdicts.includes("REPAIR")) {
-    return "REPAIR";
-  }
-  if (legalVerdicts.includes("HOLD")) {
-    return "HOLD";
-  }
-  if (legalVerdicts.includes("PASS_WITH_REPAIR")) {
-    return "PASS_WITH_REPAIR";
-  }
-  if (legalVerdicts.includes("PASS")) {
-    return "PASS";
-  }
-  return legalVerdicts[0] || "HOLD";
-}
-
-function deriveRunRouteSurvivalOutcome(runRows) {
-  const outcomes = runRows.map((row) => row.route_survival_outcome).filter(Boolean);
-  if (outcomes.includes("broken")) {
-    return "broken";
-  }
-  if (outcomes.includes("unknown")) {
-    return "unknown";
-  }
-  if (outcomes.includes("survived_with_repair")) {
-    return "survived_with_repair";
-  }
-  if (outcomes.includes("survived")) {
-    return "survived";
-  }
-  return outcomes[0] || "unknown";
-}
-
 const STALE_NEXT_STUDY_IDS = new Set([
   "casework_reflection_loop_v1_validation",
   "scorer_keyword_extraction_v1_after_reflection_repair"
@@ -213,6 +180,8 @@ function normalizeFindings(statusObj) {
 function renderOpenFindingsMd(statusObj) {
   const lines = [
     "# Casework Open Findings",
+    "",
+    "*Generated artifact. Do not hand-edit; regenerate via casework tabulation.*",
     "",
     "*This file is generated automatically by tabulate-casework-study.mjs.*",
     ""
@@ -437,6 +406,8 @@ function main() {
   const manual = statusObj.manual_next_study || {};
   const mdLines = [
     "# Casework Study Status",
+    "",
+    "*Generated artifact. Do not hand-edit; regenerate via casework tabulation.*",
     "",
     "## Manual next-study pointer",
     "This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.",

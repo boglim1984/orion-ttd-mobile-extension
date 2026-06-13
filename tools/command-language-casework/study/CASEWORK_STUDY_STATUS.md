@@ -1,5 +1,7 @@
 # Casework Study Status
 
+*Generated artifact. Do not hand-edit; regenerate via casework tabulation.*
+
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
@@ -32,7 +34,7 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T17:53:45.163Z
+- Last tabulated at: 2026-06-13T18:02:54.463Z
 - Run count: 4
 - Case count: 25
 - Latest suite ID: scorer_keyword_extraction_v2

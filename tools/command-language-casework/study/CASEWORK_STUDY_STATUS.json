@@ -60,7 +60,7 @@
     "next_status"
   ],
   "computed_summary": {
-    "last_tabulated_at": "2026-06-13T17:53:45.163Z",
+    "last_tabulated_at": "2026-06-13T18:02:54.463Z",
     "run_count": 4,
     "case_count": 25,
     "latest_suite_id": "scorer_keyword_extraction_v2",

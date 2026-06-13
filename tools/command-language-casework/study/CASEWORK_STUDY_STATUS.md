@@ -5,21 +5,20 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: casework_status_pointer_cleanup_v1
-**Purpose**: Close the completed scorer_keyword_extraction_v3_fresh_validation agenda and harden the manual next-study workflow so satisfied manual pointers do not keep reappearing in fresh chats, launch bundles, or Command Center mirrored study-status context.
-**Next action for fresh chat**: Do not design a new language suite yet. First confirm that the scorer v3 validation result is recorded as completed, then update the manual next-study pointer away from scorer validation. Verify that Casework Start / TTD TESTS fresh-chat context no longer routes back to the completed scorer v3 agenda. After this cleanup, resume command-language research with route_law_language_expansion_v1.
-**Source**: scorer_keyword_extraction_v3_fresh_validation imported result, run 20260613-142922-scorer_keyword_extraction_v3_fresh_validation; TTD TESTS post-run review; main dev/design closeout decision.
-**Set by**: Billy / ChatGPT main dev-design review
+**Next Study Needed**: route_law_language_expansion_v1
+**Purpose**: Resume command-language research after scorer v3 validation and pointer cleanup. Expand route-law wording tests so fresh suites can evaluate how packet language preserves active route state, handles legal movement, and returns from nearby side paths without depending on the completed scorer-validation agenda.
+**Next action for fresh chat**: Design the next small route_law_language_expansion_v1 command-language suite. Do not return to scorer_keyword_extraction_v3_fresh_validation unless Billy explicitly asks for historical scorer review. Use the current runner schema, keep the batch small, and focus on route-law wording that preserves active route state and advances only on legal move_on intent.
+**Source**: casework_status_pointer_cleanup_v1 verified in TTD TESTS fresh-chat context; live JSON and generated MD were aligned on cleanup pointer; scorer_keyword_extraction_v3_fresh_validation remained recorded as imported/completed with zero open findings.
+**Set by**: Billy / ChatGPT TTD TESTS cleanup run
 **Set at**: 2026-06-13
 
 ### Recommended Next Cases
-- confirm CASEWORK_STUDY_STATUS.md and CASEWORK_STUDY_STATUS.json no longer point to scorer_keyword_extraction_v3_fresh_validation as the active next study
-- confirm the v3 scorer validation result remains recorded as completed and durable
-- confirm CASEWORK_OPEN_FINDINGS.md still reports no open findings
-- confirm Casework Start / TTD TESTS launch context surfaces the updated pointer
-- confirm Command Center mirrored study-status skill is refreshed after the pointer change
-- document or patch the closeout rule: completed manual next-study agendas must be explicitly retired before the next fresh-chat design cycle
-- set the following research pointer to route_law_language_expansion_v1 once cleanup is verified
+- design a small validator-ready route_law_language_expansion_v1 suite using the current runner schema
+- test route preservation wording for continue/hold language without advancement
+- test legal move_on wording for exactly one chunk advancement from clear_trash to collect_dishes
+- test done/completion wording that marks the current chunk complete without inventing extra progress
+- include at least one side-question or repair-return wording case if it stays within a small focused batch
+- import meaningful result evidence before changing the next pointer again
 
 ## Artifact roles
 
@@ -37,13 +36,13 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T18:38:14.347Z
-- Run count: 6
-- Case count: 29
+- Last tabulated at: 2026-06-13T18:57:37.361Z
+- Run count: 7
+- Case count: 33
 - Latest suite ID: scorer_keyword_extraction_v3_fresh_validation
-- Classification counts: {"PASS_CANDIDATE":24,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":4}
+- Classification counts: {"PASS_CANDIDATE":28,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":4}
 - Open findings count: 0
-- Case-law matrix rows: 29
+- Case-law matrix rows: 33
 
 ## Open findings
 Generated and/or manually curated.

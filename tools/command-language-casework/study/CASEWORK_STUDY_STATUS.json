@@ -62,17 +62,17 @@
     "next_status"
   ],
   "computed_summary": {
-    "last_tabulated_at": "2026-06-13T18:38:14.347Z",
-    "run_count": 6,
-    "case_count": 29,
+    "last_tabulated_at": "2026-06-13T18:57:37.361Z",
+    "run_count": 7,
+    "case_count": 33,
     "latest_suite_id": "scorer_keyword_extraction_v3_fresh_validation",
     "classification_counts": {
-      "PASS_CANDIDATE": 24,
+      "PASS_CANDIDATE": 28,
       "FAIL_INVENTED_PROGRESS": 1,
       "FAIL_LOST_ROUTE": 4
     },
     "open_findings_count": 0,
-    "matrix_row_count": 29
+    "matrix_row_count": 33
   },
   "open_findings": [],
   "artifact_roles": {

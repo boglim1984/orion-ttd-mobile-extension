@@ -53,6 +53,31 @@
     "route_survival_outcome": "survived"
   },
   {
+    "suite_id": "route_law_language_expansion_v1",
+    "run_id": "20260613-145410-route_law_language_expansion_v1",
+    "imported_at": "2026-06-13T18:54:37.755Z",
+    "raw_result_path": "study/raw/2026-06-13/route_law_language_expansion_v1__20260613-145410-route_law_language_expansion_v1.json",
+    "review_path": "study/reviews/2026-06-13/route_law_language_expansion_v1__20260613-145410-route_law_language_expansion_v1.md",
+    "case_count": 4,
+    "classification_counts": {
+      "PASS_CANDIDATE": 4
+    },
+    "status_counts": {
+      "RESPONDED": 4
+    },
+    "has_dom_turn_trace": true,
+    "warnings_errors_count": 0,
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "PASS": 4
+    },
+    "route_survival_counts": {
+      "survived": 4
+    },
+    "legal_verdict": "PASS",
+    "route_survival_outcome": "survived"
+  },
+  {
     "suite_id": "scorer_keyword_extraction_v2",
     "run_id": "20260613-001420-scorer_keyword_extraction_v2",
     "imported_at": "2026-06-13T04:14:36.910Z",

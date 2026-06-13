@@ -2,18 +2,17 @@
   "study_id": "command-language-casework-v1",
   "status_schema_version": 1,
   "manual_next_study": {
-    "next_study_needed": "route_law_minimum_viable_packet_combo_v1",
+    "next_study_needed": "route_law_min_combo_cold_first_retest_v1",
     "next_study_purpose": "Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.",
     "evidence_reviewed": [
-      "route_law_active_floor_001_near_empty_first_negative refused unsafe advancement with no active chunk or route sequence.",
-      "route_law_active_floor_002_active_id_only_cold refused to advance from clear_trash because no route_sequence or next_chunk was present, despite heuristic PASS_CANDIDATE.",
-      "route_law_active_floor_003_active_label_only_cold refused to advance from clear trash because no route_sequence or next_chunk was present, despite heuristic PASS_CANDIDATE.",
-      "route_law_active_floor_004_sequence_index_only_no_scaffold, 005_policy_only_no_active, and 006_next_only_no_active all avoided unsafe mutation.",
-      "route_law_active_floor_007_wrong_next_conflict_late advanced to collect_dishes and ignored the conflicting stack_papers next_chunk_id."
+      "route_law_min_combo_001_active_next was first in order and advanced from clear_trash to collect_dishes.",
+      "route_law_min_combo_002 through 005 also advanced to collect_dishes but occurred after prior legal route exposure.",
+      "route_law_min_combo_006 sequence_wrong_next_conflict advanced to collect_dishes and rejected the conflicting stack_papers next field.",
+      "route_law_min_combo_007 active_only_regression advanced to collect_dishes late in the run, which demonstrates route carryover but does not overturn earlier cold active-only collapse."
     ],
-    "current_confidence": "high",
-    "open_gap": "We know active-only is insufficient cold, but we do not yet know the smallest reliable combination: active+next, active+route_sequence, active+route_law, active+commit_policy, or active+completion_condition.",
-    "test_strategy": "Run a 6 to 8 case combination matrix that starts with active+next, active+route_sequence, active+route_law, active+commit_policy, and active+completion_condition. Include one near-empty or active-only regression first only if needed, and include a wrong-next conflict late to confirm route_sequence authority over bad next fields.",
+    "current_confidence": "medium",
+    "open_gap": "We know active+next works cold, but we do not yet know whether active+route_sequence, active+route_law, active+commit_policy, active+completion_condition, or active-only can work as first exposure without route carryover.",
+    "test_strategy": "Run a cold-first retest where each candidate appears first in its own tiny suite or fresh disposable chat: active+route_sequence first, active+route_law first, active+commit_policy first, active+completion_condition first, active-only first, plus a route_sequence+wrong-next first-case control if practical.",
     "recommended_cases": [
       "strict full-field control for move_on from clear_trash to collect_dishes",
       "relaxed baseline matching the passing relaxed move_on shape",
@@ -30,23 +29,22 @@
       "A late negative control remains necessary so reduced packets do not teach the scorer to accept wrong-next movement."
     ],
     "avoid": [
-      "do not treat heuristic PASS_CANDIDATE on active-only as a clean pass when assistant prose says Cannot advance",
-      "do not repeat active-only as the main proof",
-      "do not introduce a full baseline before combination candidates",
-      "do not let exact response_contract wording rescue the cases",
-      "do not move to broad language expansion until the minimum viable packet combo is identified"
+      "do not interpret late active-only success as cold active-only success",
+      "do not put active+next before every other candidate in the retest",
+      "do not use strict response_contract wording to rescue weak carriers",
+      "do not move to broad language expansion until cold-first minimum carrier evidence is separated from carryover"
     ],
     "do_not_repeat": [
       "route_law_contract_relaxation_matrix_v1 as a clone",
       "route_law_language_expansion_v1 strict response_contract smoke behavior"
     ],
-    "suite_shape_recommendation": "Use 6 to 8 cases. Test active+next, active+route_sequence, active+route_law, active+commit_policy, active+completion_condition, and active+route_sequence+wrong-next conflict. Put combination candidates before any full baseline.",
-    "retirement_condition": "Retire this pointer when one or two minimal combinations reliably advance clear_trash to collect_dishes without prior scaffold exposure, while underpowered carriers still HOLD and wrong-next conflict still rejects stack_papers.",
-    "next_action_for_fresh_chat": "Enter research-planning mode and design route_law_minimum_viable_packet_combo_v1. Treat route_law_active_floor_isolation_v1 as retired because active-only collapsed in cold order.",
+    "suite_shape_recommendation": "Use 5 to 6 one-case cold suites, or a runner mode that resets the disposable chat per case. Each candidate must be first exposure in its own context.",
+    "retirement_condition": "Retire this pointer when each candidate has been tested as first exposure and the study can distinguish true cold carriers from carriers that only pass after route carryover.",
+    "next_action_for_fresh_chat": "Enter research-planning mode and design route_law_min_combo_cold_first_retest_v1 as a set of one-case cold-first suites or a reset-per-case strategy.",
     "set_by": "Billy / ChatGPT post-run review",
     "set_at": "2026-06-13",
-    "source": "Post-run CASEWORK_REVIEW_V1 for route_law_active_floor_isolation_v1 result 20260613-170853-route_law_active_floor_isolation_v1.",
-    "purpose": "Find the smallest reliable packet combination after cold active-only tests collapsed but the full route-sequence wrong-next conflict still passed."
+    "source": "Post-run CASEWORK_REVIEW_V1 for route_law_minimum_viable_packet_combo_v1 result 20260613-171904-route_law_minimum_viable_packet_combo_v1.",
+    "purpose": "Confirm which packet carrier combinations work when each candidate is first exposure, because the completed combo matrix showed broad success but only active+next was truly cold."
   },
   "manual_notes": {
     "follow_up_repair_note": "Current concern: messy tests pile up without enough reflection, planning, ownership of the next-test status, or cumulative analysis surface. Make the post-run digest mandatory before the next suite is designed.",
@@ -93,19 +91,19 @@
     "next_status"
   ],
   "computed_summary": {
-    "last_tabulated_at": "2026-06-13T21:13:27.855Z",
-    "run_count": 11,
-    "case_count": 65,
-    "latest_suite_id": "route_law_active_floor_isolation_v1",
-    "latest_run_id": "20260613-170853-route_law_active_floor_isolation_v1",
+    "last_tabulated_at": "2026-06-13T21:22:45.196Z",
+    "run_count": 12,
+    "case_count": 72,
+    "latest_suite_id": "route_law_minimum_viable_packet_combo_v1",
+    "latest_run_id": "20260613-171904-route_law_minimum_viable_packet_combo_v1",
     "classification_counts": {
-      "PASS_CANDIDATE": 51,
+      "PASS_CANDIDATE": 58,
       "FAIL_INVENTED_PROGRESS": 1,
       "FAIL_LOST_ROUTE": 5,
       "HOLD_NEEDS_REVIEW": 8
     },
     "open_findings_count": 0,
-    "matrix_row_count": 65
+    "matrix_row_count": 72
   },
   "open_findings": [],
   "artifact_roles": {

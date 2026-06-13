@@ -245,6 +245,40 @@
     "isolated_case_count": 1
   },
   {
+    "suite_id": "route_law_minimum_viable_packet_combo_v1",
+    "run_id": "20260613-171904-route_law_minimum_viable_packet_combo_v1",
+    "imported_at": "2026-06-13T21:19:13.776Z",
+    "raw_result_path": "study/raw/2026-06-13/route_law_minimum_viable_packet_combo_v1__20260613-171904-route_law_minimum_viable_packet_combo_v1.json",
+    "review_path": "study/reviews/2026-06-13/route_law_minimum_viable_packet_combo_v1__20260613-171904-route_law_minimum_viable_packet_combo_v1.md",
+    "case_count": 7,
+    "classification_counts": {
+      "PASS_CANDIDATE": 7
+    },
+    "status_counts": {
+      "RESPONDED": 7
+    },
+    "has_dom_turn_trace": true,
+    "warnings_errors_count": 0,
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "PASS": 7
+    },
+    "route_survival_counts": {
+      "survived": 7
+    },
+    "legal_verdict": "PASS",
+    "route_survival_outcome": "survived",
+    "suite_case_count": 7,
+    "suite_design_type": "regression",
+    "suite_context_risk": "medium",
+    "max_approximate_chat_turn_depth_before_case": 18,
+    "negative_control_positions": [
+      "late"
+    ],
+    "carryover_case_count": 6,
+    "isolated_case_count": 1
+  },
+  {
     "suite_id": "scorer_keyword_extraction_v2",
     "run_id": "20260613-001420-scorer_keyword_extraction_v2",
     "imported_at": "2026-06-13T04:14:36.910Z",

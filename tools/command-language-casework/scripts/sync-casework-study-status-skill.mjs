@@ -126,12 +126,66 @@ ${statusText.trim()}
 `;
 }
 
+function validatePointerAgainstDesignerSkill(statusText, ccRoot) {
+  const designerSkillPath = path.join(ccRoot, "library", "skills", "chatgpt", "command-language-casework-designer-skill.md");
+  if (!fs.existsSync(designerSkillPath)) {
+    return;
+  }
+  
+  const designerSkillText = fs.readFileSync(designerSkillPath, "utf8");
+  
+  // Detect if Designer Skill enforces a minimum floor
+  const floorMatch = designerSkillText.match(/minimum absolute floor:\s*(\d+)/i);
+  if (!floorMatch) {
+    return;
+  }
+  
+  const minimumFloor = parseInt(floorMatch[1], 10);
+  if (minimumFloor < 8) {
+    return; // No strict 8+ rule found
+  }
+  
+  // Extract pointer fields to check
+  const shapeMatch = statusText.match(/\*\*Suite shape recommendation\*\*:\s*(.+)$/m);
+  const actionMatch = statusText.match(/\*\*Next action for fresh chat\*\*:\s*(.+)$/m);
+  
+  const shapeText = shapeMatch ? shapeMatch[1] : "";
+  const actionText = actionMatch ? actionMatch[1] : "";
+  const combinedText = (shapeText + " " + actionText).toLowerCase();
+  
+  // Detect stale "small case" wording
+  const staleRegex = /\b(?:one|1|single|two|2|three|3|four|4|five|5|six|6|seven|7)\b\s*-?\s*cases?/i;
+  
+  if (staleRegex.test(combinedText)) {
+    const pointerMatch = statusText.match(/\*\*Next Study Needed\*\*:\s*(.+)$/m);
+    const pointerId = pointerMatch ? pointerMatch[1] : "unknown";
+    
+    throw new Error(`
+Casework Study Status Validation Failed:
+The active Designer Skill enforces a minimum suite floor of ${minimumFloor} cases.
+However, the current manual pointer text contains stale shape recommendations (e.g., "one-case", "< 8 cases").
+
+Pointer ID: ${pointerId}
+Stale text detected in shape/action fields:
+  Shape:  ${shapeText}
+  Action: ${actionText}
+
+The pointer target itself may still be valid, but you must update the suite_shape_recommendation
+and next_action_for_fresh_chat in CASEWORK_STUDY_STATUS.json to respect the active ${minimumFloor}-case rule before bundling.
+`);
+  }
+}
+
 if (!fs.existsSync(SOURCE_PATH)) {
   throw new Error(`Study status source not found: ${SOURCE_PATH}`);
 }
 
 const sourceText = cleanText(fs.readFileSync(SOURCE_PATH, "utf8"));
 const destination = resolveDestinationRoot();
+
+// Run validation against Designer Skill
+validatePointerAgainstDesignerSkill(sourceText, destination.root);
+
 const existingText = cleanText(fs.readFileSync(destination.path, "utf8"));
 const { frontmatter } = splitFrontmatter(existingText);
 const nextStudy = extractNextStudyLine(sourceText);

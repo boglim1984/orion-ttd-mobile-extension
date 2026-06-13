@@ -12,9 +12,9 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 **Open gap**: We still do not know whether a human-readable active_chunk_label plus route_sequence can replace canonical active_chunk_id in a fresh cold wrong-next conflict.
 **Test strategy**: Run one fresh disposable chat with a single cold case containing active_chunk_label, allowed_intents, route_sequence, and a conflicting next_chunk_id/next_chunk_label pointing to stack_papers. Omit active_chunk_id. The legal result should be collect_dishes.
 **Avoid / do not repeat**: do not run the next control in an already warmed chat | do not include active_chunk_id in the next packet | do not add response_contract wording that rescues the route | do not bundle multiple cold carrier split cards into one warmed suite | do not treat label-only cold route survival as proven until the no-active-id wrong-next conflict passes | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: One-case cold-first suite in a fresh disposable chat.
+**Suite shape recommendation**: 8-case minimum cold/warmed contrast suite centered on active_chunk_label plus route_sequence without active_chunk_id; prefer 15 cases if expanding to research-grade contrast/endurance.
 **Retirement condition**: Retire this pointer when a cold packet with active_chunk_label plus route_sequence, no active_chunk_id, and conflicting wrong next_chunk_id advances to collect_dishes rather than stack_papers.
-**Next action for fresh chat**: Generate only the validator-ready one-case JSON suite for route_law_cold_first_active_label_route_sequence_wrong_next_v1.
+**Next action for fresh chat**: Generate a validator-ready suite with at least 8 cases for route_law_cold_first_active_label_route_sequence_wrong_next_v1, all focused on the label-only/no-active-id carrier question and wrong-next conflict behavior.
 **Source**: Post-run CASEWORK_REVIEW_V1 for route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1 result 20260613-174530-route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-13
@@ -41,7 +41,7 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T21:49:19.724Z
+- Last tabulated at: 2026-06-13T21:57:56.581Z
 - Run count: 15
 - Case count: 75
 - Latest suite ID: route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1

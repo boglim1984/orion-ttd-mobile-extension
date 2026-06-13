@@ -8,8 +8,10 @@ import {
   ensureReviewForResult,
   findPlaceholderReviews
 } from "../lib/casework-reflection.mjs";
+import heuristicsApi from "../lib/casework-heuristics.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const { deriveDeterministicCaseSignals } = heuristicsApi;
 
 function findJsonFiles(dir, fileList = []) {
   if (!fs.existsSync(dir)) {
@@ -39,6 +41,10 @@ function escapeCsv(str) {
 }
 
 function getCaseClassification(caseResult) {
+  const deterministic = deriveDeterministicCaseSignals(caseResult);
+  if (deterministic.classification) {
+    return deterministic.classification;
+  }
   const fields = [
     caseResult.classification,
     caseResult.final_classification,
@@ -156,7 +162,8 @@ function main() {
       let hasDomTurnTrace = false;
 
       for (const caseResult of cases) {
-        const classification = getCaseClassification(caseResult);
+        const deterministic = deriveDeterministicCaseSignals(caseResult);
+        const classification = deterministic.classification || getCaseClassification(caseResult);
         const caseStatus = getCaseStatus(caseResult);
         classificationCounts[classification] = (classificationCounts[classification] || 0) + 1;
         statusCounts[caseStatus] = (statusCounts[caseStatus] || 0) + 1;
@@ -177,7 +184,7 @@ function main() {
           forbidden_behavior_hit_count: Array.isArray(caseResult.forbidden_behavior)
             ? caseResult.forbidden_behavior.length
             : 0,
-          observed_chunks_or_keywords: (caseResult.observed_chunks_or_keywords || []).join(" | "),
+          observed_chunks_or_keywords: deterministic.observed_chunks_or_keywords.join(" | "),
           has_dom_turn_trace: Boolean(caseResult.dom_turn_trace),
           raw_result_path: path.relative(caseworkRoot, file)
         });

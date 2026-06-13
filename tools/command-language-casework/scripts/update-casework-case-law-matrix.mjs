@@ -3,6 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import heuristicsApi from "../lib/casework-heuristics.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, "../../..");
@@ -11,6 +12,7 @@ const studyDir = path.join(caseworkRoot, "study");
 const rawDir = path.join(studyDir, "raw");
 const reviewsDir = path.join(studyDir, "reviews");
 const caseLawDir = path.join(studyDir, "case-law");
+const { deriveDeterministicCaseSignals } = heuristicsApi;
 
 const MATRIX_FIELDS = [
   "suite_id",
@@ -108,6 +110,10 @@ function readJson(jsonPath) {
 }
 
 function getCaseClassification(caseResult) {
+  const deterministic = deriveDeterministicCaseSignals(caseResult);
+  if (deterministic.classification) {
+    return deterministic.classification;
+  }
   const fields = [
     caseResult.classification,
     caseResult.final_classification,
@@ -361,7 +367,8 @@ function deriveLegalFields({ classification, failureLayer, routeBehaviorCorrectW
 }
 
 function buildCaseLawRow({ runData, caseResult, resultPath }) {
-  const classification = getCaseClassification(caseResult);
+  const deterministic = deriveDeterministicCaseSignals(caseResult);
+  const classification = deterministic.classification || getCaseClassification(caseResult);
   const runDate = deriveRunDate(runData, runData.run_id);
   const reviewPath = getReviewPathForResult(resultPath);
   const resultRelativePath = path.relative(caseworkRoot, resultPath);
@@ -370,7 +377,10 @@ function buildCaseLawRow({ runData, caseResult, resultPath }) {
   const observedBehavior = joinList(caseResult.assistant_responses);
   const visibleTurnExcerpt = cleanText(caseResult.visible_turn_text);
   const latestAssistantExcerpt = lastAssistantExcerpt(caseResult);
-  const evidenceText = deriveEvidenceText(caseResult);
+  const evidenceText = deriveEvidenceText({
+    ...caseResult,
+    observed_chunks_or_keywords: deterministic.observed_chunks_or_keywords
+  });
   const chunkSignals = extractChunkSignals(caseResult, packetPayload);
   const routeBehaviorCorrectWithoutKeyword =
     Boolean(chunkSignals.exactChunkIdSeen || chunkSignals.humanLabelSeen) &&
@@ -435,7 +445,7 @@ function buildCaseLawRow({ runData, caseResult, resultPath }) {
     important_excerpt: evidenceText,
     visible_turn_excerpt: visibleTurnExcerpt,
     latest_assistant_excerpt: latestAssistantExcerpt,
-    observed_chunks_or_keywords: joinList(caseResult.observed_chunks_or_keywords),
+    observed_chunks_or_keywords: joinList(deterministic.observed_chunks_or_keywords),
     exact_chunk_id_seen: chunkSignals.exactChunkIdSeen ? "true" : "false",
     human_label_seen: chunkSignals.humanLabelSeen ? "true" : "false",
     semantic_alias_seen: chunkSignals.semanticAliasSeen ? "true" : "false",

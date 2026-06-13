@@ -62,13 +62,14 @@
     "next_status"
   ],
   "computed_summary": {
-    "last_tabulated_at": "2026-06-13T17:32:50.857Z",
+    "last_tabulated_at": "2026-06-13T17:43:47.561Z",
     "run_count": 4,
     "case_count": 25,
     "latest_suite_id": "scorer_keyword_extraction_v2",
     "classification_counts": {
-      "PASS_CANDIDATE": 13,
-      "FAIL_LOST_ROUTE": 12
+      "PASS_CANDIDATE": 22,
+      "FAIL_INVENTED_PROGRESS": 1,
+      "FAIL_LOST_ROUTE": 2
     },
     "open_findings_count": 6,
     "matrix_row_count": 25

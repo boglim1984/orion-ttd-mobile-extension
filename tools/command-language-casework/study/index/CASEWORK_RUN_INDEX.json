@@ -8,7 +8,7 @@
     "case_count": 3,
     "classification_counts": {
       "PASS_CANDIDATE": 2,
-      "FAIL_LOST_ROUTE": 1
+      "FAIL_INVENTED_PROGRESS": 1
     },
     "status_counts": {
       "RESPONDED": 3
@@ -21,10 +21,11 @@
       "HOLD": 1
     },
     "route_survival_counts": {
-      "survived": 3
+      "survived": 2,
+      "unknown": 1
     },
     "legal_verdict": "HOLD",
-    "route_survival_outcome": "survived"
+    "route_survival_outcome": "unknown"
   },
   {
     "suite_id": "scorer_keyword_extraction_v1",
@@ -34,8 +35,7 @@
     "review_path": "study/reviews/2026-06-12/scorer_keyword_extraction_v1__20260612-230453-scorer_keyword_extraction_v1.md",
     "case_count": 6,
     "classification_counts": {
-      "FAIL_LOST_ROUTE": 5,
-      "PASS_CANDIDATE": 1
+      "PASS_CANDIDATE": 6
     },
     "status_counts": {
       "RESPONDED": 6
@@ -44,13 +44,12 @@
     "warnings_errors_count": 0,
     "suspected_tool_findings": 0,
     "legal_verdict_counts": {
-      "HOLD": 5,
-      "PASS": 1
+      "PASS": 6
     },
     "route_survival_counts": {
       "survived": 6
     },
-    "legal_verdict": "HOLD",
+    "legal_verdict": "PASS",
     "route_survival_outcome": "survived"
   },
   {
@@ -61,8 +60,8 @@
     "review_path": "study/reviews/2026-06-13/scorer_keyword_extraction_v2__20260613-001420-scorer_keyword_extraction_v2.md",
     "case_count": 8,
     "classification_counts": {
-      "FAIL_LOST_ROUTE": 5,
-      "PASS_CANDIDATE": 3
+      "PASS_CANDIDATE": 7,
+      "FAIL_LOST_ROUTE": 1
     },
     "status_counts": {
       "RESPONDED": 8
@@ -71,8 +70,8 @@
     "warnings_errors_count": 0,
     "suspected_tool_findings": 0,
     "legal_verdict_counts": {
-      "HOLD": 5,
-      "PASS": 3
+      "PASS": 7,
+      "HOLD": 1
     },
     "route_survival_counts": {
       "survived": 8

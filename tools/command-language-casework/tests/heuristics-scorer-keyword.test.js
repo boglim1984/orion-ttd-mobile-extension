@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 
 const {
   classifyCaseResult,
+  deriveDeterministicCaseSignals,
   extractObservedKeywords,
   findChunkIdForText
 } = require("../lib/casework-heuristics.js");
@@ -106,4 +107,38 @@ test("stack_papers canonical id passes when it is the expected next chunk", () =
 
   assert.ok(observed.includes("stack_papers"));
   assert.equal(result.label, "PASS_CANDIDATE");
+});
+
+test("legacy underscore-only collect_dishes evidence recomputes as PASS_CANDIDATE", () => {
+  const caseRecord = makeCaseRecord({
+    activeChunkId: "clear_trash",
+    activeChunkLabel: "clear trash",
+    assistantResponses: [
+      "State transition acknowledged. Neutral filler. New active chunk: collect_dishes"
+    ],
+    scriptedUserRepliesSent: ["move_on"]
+  });
+  caseRecord.visible_turn_text =
+    "State transition acknowledged. Neutral filler. New active chunk: collect_dishes";
+  caseRecord.observed_chunks_or_keywords = ["move_on"];
+  caseRecord.classification = "FAIL_LOST_ROUTE";
+
+  const deterministic = deriveDeterministicCaseSignals(caseRecord);
+
+  assert.ok(deterministic.observed_chunks_or_keywords.includes("collect_dishes"));
+  assert.equal(deterministic.classification, "PASS_CANDIDATE");
+});
+
+test("punctuation boundary around collect_dishes still counts as expected next chunk", () => {
+  const caseRecord = makeCaseRecord({
+    activeChunkId: "clear_trash",
+    activeChunkLabel: "clear trash",
+    assistantResponses: ["New active chunk: (collect_dishes)."],
+    scriptedUserRepliesSent: ["move_on"]
+  });
+
+  const deterministic = deriveDeterministicCaseSignals(caseRecord);
+
+  assert.ok(deterministic.observed_chunks_or_keywords.includes("collect_dishes"));
+  assert.equal(deterministic.classification, "PASS_CANDIDATE");
 });

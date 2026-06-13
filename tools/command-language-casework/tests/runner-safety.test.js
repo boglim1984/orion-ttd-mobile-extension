@@ -52,7 +52,7 @@ test("attempt diagnostics separate last stage from failure stage", () => {
 });
 
 test("runner test export exposes heuristics version marker", () => {
-  assert.equal(runner.__test.HEURISTICS_VERSION, "heuristics-route-alias-boundary-v2");
+  assert.equal(runner.__test.HEURISTICS_VERSION, "heuristics-route-alias-boundary-v3");
 });
 
 function createFakeButton({ ariaLabel = "", title = "", dataTestId = "", type = "", text = "", disabled = false, visible = true, formId = "form-a" } = {}) {
@@ -480,7 +480,7 @@ test("tool failure run stops after first composer state-sync failure and records
   assert.equal(runResult.cases.length, 1);
   assert.equal(runResult.cases[0].case_status, "NOT_SENT");
   assert.equal(runResult.cases[0].heuristic_classification, "TOOL_FAIL_COMPOSER_STATE_NOT_SYNCED");
-  assert.equal(runResult.heuristics_version, "heuristics-route-alias-boundary-v2");
+  assert.equal(runResult.heuristics_version, "heuristics-route-alias-boundary-v3");
   assert.match(runResult.warnings.join("\n"), /runner could not send messages/i);
   assert.match(overlay.statuses.join("\n"), /composer state-sync failure/i);
   assert.match(overlay.diagnostics.join("\n"), /send button found: no/);

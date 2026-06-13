@@ -1,4 +1,4 @@
-const CASEWORK_HEURISTICS_VERSION = "heuristics-route-alias-boundary-v2";
+const CASEWORK_HEURISTICS_VERSION = "heuristics-route-alias-boundary-v3";
 
 function normalizeText(value) {
   return String(value || "")
@@ -302,10 +302,25 @@ function extractObservedKeywords(caseRecord) {
   return unique(tokens);
 }
 
+function deriveDeterministicCaseSignals(caseRecord) {
+  const observedChunksOrKeywords = extractObservedKeywords(caseRecord);
+  const heuristic = classifyCaseResult({
+    ...caseRecord,
+    observed_chunks_or_keywords: observedChunksOrKeywords
+  });
+
+  return {
+    classification: heuristic.label,
+    reasons: Array.isArray(heuristic.reasons) ? heuristic.reasons : [],
+    observed_chunks_or_keywords: observedChunksOrKeywords
+  };
+}
+
 const api = {
   CASEWORK_HEURISTICS_VERSION,
   ROUTE_CHUNK_ALIASES,
   classifyCaseResult,
+  deriveDeterministicCaseSignals,
   escapeRegExp,
   extractObservedKeywords,
   findChunkIdForText,

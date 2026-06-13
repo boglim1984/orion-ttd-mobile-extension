@@ -13,7 +13,7 @@ Generated from `study/raw/` and review presence in `study/reviews/`.
 
 - Row count: 25
 - Source run count: 4
-- Classification counts: {"PASS_CANDIDATE":13,"FAIL_LOST_ROUTE":12}
+- Classification counts: {"PASS_CANDIDATE":22,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":2}
 
 ## Legal Mapping
 

@@ -73,11 +73,10 @@ test("study loop - import and tabulate with various classification fields", (t) 
   const foundRun = runIndex.find(r => r.suite_id === testSuiteId && r.run_id === testRunId);
   assert.ok(foundRun, "Tabulated run index should contain the test run");
 
-  // Check classification counts
-  assert.strictEqual(foundRun.classification_counts["explicit_class"], 1);
-  assert.strictEqual(foundRun.classification_counts["heuristic_class"], 1);
+  // Check classification counts under deterministic recompute
+  const classificationTotal = Object.values(foundRun.classification_counts).reduce((sum, value) => sum + value, 0);
+  assert.strictEqual(classificationTotal, 4);
   assert.strictEqual(foundRun.classification_counts["tool_fail_class"], 1);
-  assert.strictEqual(foundRun.classification_counts["UNKNOWN"], 1);
 
   // Check status counts
   assert.strictEqual(foundRun.status_counts["st1"], 1);
@@ -108,4 +107,60 @@ test("study loop - import and tabulate with various classification fields", (t) 
   
   // Tabulate again to clean index
   execSync(`node "${tabulateScript}"`, { stdio: "ignore" });
+});
+
+test("tabulation recomputes legacy scorer rows from current heuristics", () => {
+  const testSuiteId = "legacy-scorer-recompute";
+  const testRunId = "20260613-121500";
+  const fakeResultPath = path.join(__dirname, "legacy-scorer-recompute.json");
+  const importedFile = path.join(studyDir, "raw", "2026-06-13", `${testSuiteId}__${testRunId}.json`);
+  const reviewStubPath = path.join(studyDir, "reviews", "2026-06-13", `${testSuiteId}__${testRunId}.md`);
+  const tabulateScript = path.join(caseworkRoot, "scripts", "tabulate-casework-study.mjs");
+
+  const legacyCase = {
+    case_id: "legacy_collect_dishes_only",
+    title: "Legacy underscore-only collect dishes",
+    classification: "FAIL_LOST_ROUTE",
+    case_status: "RESPONDED",
+    packet_sent: `TTD_COMMAND_V1\n${JSON.stringify({
+      route_id: "desk-reset-v0",
+      active_chunk_id: "clear_trash",
+      active_chunk_label: "clear trash"
+    })}`,
+    assistant_responses: ["New active chunk: collect_dishes."],
+    visible_turn_text: "New active chunk: collect_dishes.",
+    scripted_user_replies_sent: ["move_on"],
+    observed_chunks_or_keywords: ["move_on"],
+    expected_behavior: [
+      "Assistant advances exactly one chunk and visible text contains collect_dishes."
+    ],
+    forbidden_behavior: [
+      "Assistant names stack_papers as the next chunk."
+    ]
+  };
+
+  fs.writeFileSync(fakeResultPath, JSON.stringify(makeFakeResult(testSuiteId, testRunId, [legacyCase])), "utf8");
+
+  try {
+    execSync(`node "${path.join(caseworkRoot, "scripts", "import-casework-result.mjs")}" "${fakeResultPath}"`, { stdio: "ignore" });
+    execSync(`node "${tabulateScript}"`, { stdio: "ignore" });
+
+    const caseIndexCsv = fs.readFileSync(path.join(studyDir, "index", "CASEWORK_CASE_INDEX.csv"), "utf8");
+    assert.match(caseIndexCsv, /legacy-scorer-recompute/);
+    assert.match(caseIndexCsv, /collect_dishes/);
+    assert.match(caseIndexCsv, /PASS_CANDIDATE/);
+  } finally {
+    fs.unlinkSync(fakeResultPath);
+    if (fs.existsSync(importedFile)) {
+      fs.unlinkSync(importedFile);
+    }
+    if (fs.existsSync(reviewStubPath)) {
+      fs.unlinkSync(reviewStubPath);
+    }
+    try {
+      fs.rmdirSync(path.join(studyDir, "raw", "2026-06-13"));
+      fs.rmdirSync(path.join(studyDir, "reviews", "2026-06-13"));
+    } catch (_error) {}
+    execSync(`node "${tabulateScript}"`, { stdio: "ignore" });
+  }
 });

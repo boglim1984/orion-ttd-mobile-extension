@@ -121,6 +121,24 @@ Rules:
 - Use the map to choose test cases, failure classes, recovery mechanisms, and metrics.
 - When real tests reveal new failures, update the map or create a new version instead of burying discoveries in chat only.
 
+## Casework reflection-loop rule
+
+Before modifying Casework study/status/review flows, agents must read:
+- `tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md`
+- `tools/command-language-casework/study/CASEWORK_REFLECTION_LOOP_V1.md`
+- `tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md`
+- `legal-framework/README.md`, if legal-system fields are touched
+
+Rules:
+- Do not design new suites before checking the current manual next-study pointer.
+- Raw result JSON is evidence.
+- Reflection review is interpretation.
+- Case-law matrix is cumulative analysis.
+- Study status is agenda.
+- Do not let tabulation overwrite the manual next-study pointer by default.
+- Legal-system fields are interpretation aids, not runtime reducer authority.
+- Collapse or redesign overlapping artifacts rather than creating a second source of truth.
+
 ## Architecture boundary
 - Orion project is the product/integration home.
 - Orion iOS is the source-of-truth runtime.

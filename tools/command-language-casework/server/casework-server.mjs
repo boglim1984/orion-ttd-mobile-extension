@@ -4,6 +4,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createRequire } from "node:module";
 import { execFileSync } from "node:child_process";
+import { updateCaseworkCaseLawMatrix } from "../scripts/update-casework-case-law-matrix.mjs";
 
 const require = createRequire(import.meta.url);
 const {
@@ -265,6 +266,36 @@ async function handleApi(request, response, url, port) {
     sendJson(response, 200, {
       ok: true,
       status_text: fs.readFileSync(statusPath, "utf8")
+    });
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/update-case-law-matrix") {
+    const outputs = updateCaseworkCaseLawMatrix();
+    logStatus(`Updated case-law matrix with ${outputs.rowCount} rows.`);
+    sendJson(response, 200, {
+      ok: true,
+      row_count: outputs.rowCount,
+      csv_path: path.relative(TOOL_ROOT, outputs.csvPath),
+      jsonl_path: path.relative(TOOL_ROOT, outputs.jsonlPath),
+      md_path: path.relative(TOOL_ROOT, outputs.mdPath)
+    });
+    return;
+  }
+
+  if (request.method === "POST" && url.pathname === "/api/open-study-status") {
+    const statusPath = path.resolve(__dirname, "../../study/CASEWORK_STUDY_STATUS.md");
+    if (!fs.existsSync(statusPath)) {
+      sendJson(response, 404, {
+        ok: false,
+        errors: ["Study status not found."]
+      });
+      return;
+    }
+    const revealed = revealInFinder(statusPath);
+    sendJson(response, revealed ? 200 : 500, {
+      ok: revealed,
+      errors: revealed ? [] : ["Finder reveal failed."]
     });
     return;
   }

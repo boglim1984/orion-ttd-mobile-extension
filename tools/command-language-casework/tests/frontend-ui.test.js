@@ -17,12 +17,15 @@ test("frontend UI logic has robust validate button wiring", async () => {
   // 1. Stable selectors exist in HTML
   assert.match(htmlCode, /id="validate-button"/, "HTML must have #validate-button");
   assert.match(htmlCode, /id="suite-input"/, "HTML must have #suite-input");
+  assert.match(htmlCode, /id="update-case-law-matrix-button"/, "HTML must have #update-case-law-matrix-button");
+  assert.match(htmlCode, /id="copy-reflection-checklist-button"/, "HTML must have #copy-reflection-checklist-button");
 
   // 2. JS attaches listeners after DOMContentLoaded
   assert.match(uiCode, /document\.addEventListener\("DOMContentLoaded"/, "JS must attach initialization to DOMContentLoaded");
 
   // 3. Validation sends to /api/validate
   assert.match(uiCode, /postJson\("\/api\/validate"/, "JS must send suite to /api/validate");
+  assert.match(uiCode, /postJson\("\/api\/update-case-law-matrix"/, "JS must support matrix refresh");
 
   // 4. Validation sends suite_text explicitly
   assert.match(uiCode, /suite_text:/, "JS must send suite_text in body");
@@ -43,7 +46,7 @@ test("frontend UI logic has robust validate button wiring", async () => {
   assert.match(uiCode, /const missingControls = \[/, "JS must check for core controls existence");
 
   // 9. Forbidden behaviors
-  assert.doesNotMatch(uiCode, /localStorage|sessionStorage|cookie/, "JS must not use storage");
+  assert.doesNotMatch(uiCode, /localStorage|sessionStorage|cookie|indexedDB|navigator\.credentials|chrome\.cookies/, "JS must not use storage or credential APIs");
   assert.doesNotMatch(uiCode, /\/api\/runner\/bootstrap\.js/, "JS must not blindly request bootstrap.js in UI layer");
 
   // 10. Duplicate declaration check

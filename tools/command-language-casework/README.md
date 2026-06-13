@@ -47,9 +47,13 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 7. Paste it into the disposable ChatGPT page console once per page load, then use the overlay `Run` button.
 8. Use the copied result text as the main handoff if the browser allows clipboard access. Use the downloaded `orion-casework-result-*.json` file as backup.
 
-## Mental Model
+## Three-Surface Workflow
 
-Dev chat designs the test suite. Casework GUI validates JSON and copies the runner. Disposable ChatGPT executes the test. Result JSON comes back to the dev chat for Mermaid review.
+- Design chat designs the suite, reviews result JSON, and decides the next study.
+- Casework GUI validates suite JSON, copies the runner, and exposes reflection-loop affordances.
+- Disposable ChatGPT executes the self-contained runner in a visible test tab.
+
+The launcher opens the GUI and a disposable ChatGPT tab. The design chat is this current chat or a separate chat Billy opens manually.
 
 ## Example Suites
 
@@ -109,6 +113,8 @@ Each run includes:
 - GUI validates suite
 - Disposable ChatGPT runs suite
 - Result JSON is imported locally via `import-casework-result.mjs`
+- Reflection review is completed via `CASEWORK_REFLECTION_LOOP_V1.md`
+- Case-law matrix is regenerated via `update-casework-case-law-matrix.mjs`
 - Tabulation rebuilds indexes/status via `tabulate-casework-study.mjs`
 - Meaningful reviewed results should normally go through `tools/command-language-casework/scripts/import-tabulate-sync-casework-result.sh`
 - Next chat reads the updated status
@@ -118,8 +124,37 @@ Data relationships:
 - **review Markdown** = human/LLM interpretation
 - **indexes** = generated map (run map, case map)
 - `CASEWORK_STUDY_STATUS.md` = next-study pointer
+- `study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.*` = cumulative normalized case-law analysis
 - **spreadsheets/matrices** = higher-order distillation into state laws and skill language (e.g., Fail/Recover Map, Pre-Collapse Steering Matrix, LLM Legal Deference Map)
 - **casework result indexes** = live empirical evidence feeding those maps
+
+## Casework Reflection Loop v1
+
+Required order:
+
+1. Preserve raw result JSON.
+2. Import/save it into `study/raw/` and `study/reviews/`.
+3. Complete Mermaid-first review.
+4. Identify most important pass/failure and classify tool vs scorer vs language vs transport.
+5. Regenerate the cumulative case-law matrix.
+6. Apply legal-system interpretation fields.
+7. Update `CASEWORK_STUDY_STATUS.*`.
+8. Only then design the next suite.
+
+Key references:
+
+- `tools/command-language-casework/study/CASEWORK_REFLECTION_LOOP_V1.md`
+- `tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md`
+
+Run the post-run scripts with:
+
+```bash
+node tools/command-language-casework/scripts/import-casework-result.mjs <path-to-result.json>
+node tools/command-language-casework/scripts/update-casework-case-law-matrix.mjs
+node tools/command-language-casework/scripts/tabulate-casework-study.mjs
+```
+
+The next suite is allowed only after the manual next-study pointer has been checked and the reflection loop is complete.
 
 ## Local Mirror Bundle v1
 

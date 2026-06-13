@@ -122,6 +122,23 @@
           </div>
           <div id="result-links-panel" class="result-panel">No server-side result available.</div>
         </article>
+
+        <article class="step-card card">
+          <div class="step-meta">Post-run Reflection</div>
+          <h2>Reflection Loop</h2>
+          <p class="step-copy">
+            After a run, preserve the raw JSON, complete the Mermaid-first review, regenerate the case-law matrix, then update study status before designing the next suite.
+          </p>
+          <div class="step-actions">
+            <button id="copy-import-command-button" type="button" class="secondary">Import Result</button>
+            <button id="update-case-law-matrix-button" type="button" class="secondary">Update Case-Law Matrix</button>
+            <button id="open-study-status-button" type="button" class="secondary">Open Study Status</button>
+            <button id="copy-reflection-checklist-button" type="button" class="secondary">Copy Reflection Checklist</button>
+          </div>
+          <div id="reflection-status" class="instruction-box">
+            Design chat reviews JSON and sets agenda. Casework GUI handles validation/import affordances. Disposable ChatGPT runs the self-contained runner.
+          </div>
+        </article>
       </section>
 
       <details class="advanced card">

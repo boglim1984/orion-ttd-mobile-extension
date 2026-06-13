@@ -99,10 +99,32 @@ The tool now also includes a Casework Designer Skill bookmarklet helper for the 
 
 - A local import/tabulation loop now tracks study status.
 - `import-casework-result.mjs` consumes raw result JSON.
+- `CASEWORK_REFLECTION_LOOP_V1.md` defines the required post-run review order.
+- `update-casework-case-law-matrix.mjs` regenerates cumulative matrix rows from imported raw results.
 - `tabulate-casework-study.mjs` rebuilds indexes and the `CASEWORK_STUDY_STATUS` file.
 - The status file contains a `manual_next_study` pointer that remains stable until human/LLM review overwrites it.
 - A GitHub Action commits updated indexes and status.
 - The `Command Language Casework Designer Skill` now requires a fresh chat to read the current status before designing suites.
+
+## Casework Reflection Loop v1
+
+- raw result JSON remains evidence
+- review Markdown remains interpretation
+- case-law matrix artifacts are cumulative normalized analysis
+- legal-system fields provide authority/evidence language for interpretation, not runtime Judge logic
+- the next suite is blocked until import, Mermaid-first review, matrix regeneration, legal interpretation, and study-status review are complete
+
+Matrix artifacts:
+
+- `tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md`
+- `tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.csv`
+- `tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.jsonl`
+
+Three-surface workflow:
+
+- design chat creates suites and reviews results
+- Casework GUI validates and exposes reflection-loop affordances
+- disposable ChatGPT executes the self-contained runner
 
 ## Next Action
 

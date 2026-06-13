@@ -16,6 +16,7 @@ async function init() {
   const validationSummary = document.querySelector("#validation-summary");
   const overlayStatus = document.querySelector("#overlay-status");
   const skillSetupStatus = document.querySelector("#skill-setup-status");
+  const reflectionStatus = document.querySelector("#reflection-status");
 
   const serverStateLabel = document.querySelector("#server-state");
   const suiteStateLabel = document.querySelector("#suite-state");
@@ -40,6 +41,10 @@ async function init() {
   const copySkillSnapshotButton = document.querySelector("#copy-skill-snapshot-button");
   const copyStatusButton = document.getElementById("copy-status-button");
   const skillHowToUseButton = document.querySelector("#skill-how-to-use-button");
+  const copyImportCommandButton = document.querySelector("#copy-import-command-button");
+  const updateCaseLawMatrixButton = document.querySelector("#update-case-law-matrix-button");
+  const openStudyStatusButton = document.querySelector("#open-study-status-button");
+  const copyReflectionChecklistButton = document.querySelector("#copy-reflection-checklist-button");
 
   const missingControls = [
     ["suiteInput", suiteInput],
@@ -83,6 +88,10 @@ async function init() {
 
   function setSkillSetupStatus(message) {
     skillSetupStatus.textContent = message;
+  }
+
+  function setReflectionStatus(message) {
+    reflectionStatus.textContent = message;
   }
 
   function markSuiteDirty() {
@@ -383,11 +392,61 @@ async function init() {
         [
           "Casework result handling",
           "1. After the self-contained run finishes, use the JSON downloaded by the ChatGPT tab.",
-          "2. Drag that JSON result back into ChatGPT for analysis.",
-          "3. Server result buttons in the GUI apply only to the legacy server-run path."
+          "2. Import it into study/raw and create the paired review stub.",
+          "3. Complete the Mermaid-first review.",
+          "4. Regenerate the case-law matrix and tabulate study status.",
+          "5. Only then design the next suite."
         ].join("\n"),
         "Copied result instructions."
       );
+    })
+  );
+
+  copyImportCommandButton.addEventListener("click", () =>
+    withAction(async () => {
+      const resultPath = uiState.serverState?.last_result?.result_json_path;
+      const command = resultPath
+        ? `node tools/command-language-casework/scripts/import-casework-result.mjs "${resultPath}"`
+        : "node tools/command-language-casework/scripts/import-casework-result.mjs <path-to-downloaded-result.json>";
+      await copyToClipboard(command, "Copied import command.");
+      setReflectionStatus("Import command copied. Raw result JSON stays evidence; the review stub is interpretation.");
+    })
+  );
+
+  updateCaseLawMatrixButton.addEventListener("click", () =>
+    withAction(async () => {
+      const response = await postJson("/api/update-case-law-matrix", {});
+      appendStatusLine(`Updated case-law matrix: ${response.row_count} rows`);
+      setReflectionStatus(`Case-law matrix updated. Rows: ${response.row_count}. Update study status only after review decisions are made.`);
+    })
+  );
+
+  openStudyStatusButton.addEventListener("click", () =>
+    withAction(async () => {
+      await postJson("/api/open-study-status", {});
+      setReflectionStatus("Study status opened. Check the manual next-study pointer before designing another suite.");
+    })
+  );
+
+  copyReflectionChecklistButton.addEventListener("click", () =>
+    withAction(async () => {
+      await copyToClipboard(
+        [
+          "Casework Reflection Loop v1",
+          "1. Preserve raw result JSON.",
+          "2. Import/save result into study/raw and study/reviews.",
+          "3. Add Mermaid-first review.",
+          "4. Name most important pass and failure.",
+          "5. Classify tool vs scorer vs language vs transport.",
+          "6. Decide whether the run is usable evidence.",
+          "7. Regenerate the case-law matrix.",
+          "8. Apply legal interpretation fields.",
+          "9. Update CASEWORK_STUDY_STATUS.",
+          "10. Only then design the next suite."
+        ].join("\n"),
+        "Copied reflection checklist."
+      );
+      setReflectionStatus("Reflection checklist copied. Keep raw JSON separate from matrix rows.");
     })
   );
 
@@ -438,6 +497,7 @@ async function init() {
   setValidationSummary("Load or paste a suite, then validate it.", "muted");
   setOverlayStatus("Open a disposable ChatGPT chat to begin.");
   setSkillSetupStatus("Dev chat uses the bundled Designer Skill, Runner Schema, and Study Status. Casework GUI validates JSON. Disposable ChatGPT runs the test.");
+  setReflectionStatus("Design chat reviews JSON and sets agenda. Casework GUI handles validation/import affordances. Disposable ChatGPT runs the self-contained runner.");
   await refreshState();
 
 }

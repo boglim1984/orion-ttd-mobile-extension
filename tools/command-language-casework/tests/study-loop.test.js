@@ -84,7 +84,7 @@ test("study loop - import and tabulate with various classification fields", (t) 
 
   // 6. Verify status preserves manual fields
   const statusObj = JSON.parse(fs.readFileSync(path.join(studyDir, "CASEWORK_STUDY_STATUS.json"), "utf8"));
-  assert.strictEqual(statusObj.manual_next_study.next_study_needed, "scorer_keyword_extraction_v1", "Manual next study should be preserved");
+  assert.strictEqual(statusObj.manual_next_study.next_study_needed, "casework_reflection_loop_v1_validation", "Manual next study should be preserved");
   assert.strictEqual(statusObj.computed_summary.latest_suite_id, testSuiteId, "Computed summary should update latest_suite_id");
 
   // Cleanup

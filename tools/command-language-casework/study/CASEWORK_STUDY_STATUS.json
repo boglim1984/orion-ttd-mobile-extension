@@ -2,30 +2,27 @@
   "study_id": "command-language-casework-v1",
   "status_schema_version": 1,
   "manual_next_study": {
-    "next_study_needed": "casework_reflection_loop_v1",
-    "next_study_purpose": "Fix the post-run follow-up loop before designing more scorer or language suites. The Casework system must reliably turn a result JSON into reflection, classification, study-status update, cumulative case-law mapping, and a next-test recommendation.",
+    "next_study_needed": "casework_reflection_loop_v1_validation",
+    "next_study_purpose": "Validate the reflection loop, case-law matrix regeneration, legal interpretation fields, and GUI/server affordances before new suite design resumes.",
     "recommended_next_cases": [
-      "Verify the launcher/window model opens or clearly instructs the three required surfaces: design chat, Casework GUI, disposable ChatGPT test tab.",
-      "Add or document a required post-run review step: Mermaid first, most important pass, most important failure, tool/scorer/language classification, next-study recommendation.",
-      "Add a cumulative case-law/rule-design matrix target, likely CASEWORK_CASE_LAW_MATRIX_V1, with high-detail fields for later pattern mining.",
-      "Preserve raw result JSON separately; the matrix should normalize and append rows, not replace raw evidence.",
-      "Include legal-system fields such as legal_verdict, legal_evidence_type, claim_vs_state_conflict, smallest_legal_reduction, and route_survival_outcome.",
-      "Confirm import/tabulation updates or preserves the manual next-study pointer correctly.",
-      "Confirm fresh skill-loaded chats refuse to design a new suite when the status says follow-up repair comes first.",
-      "During integration, explicitly check for overlap: status file = agenda, raw result JSON = evidence, reflection review = interpretation, case-law matrix = cumulative analysis, legal system = authority/evidence language, rulebook = agent behavior. Collapse or redesign any part that duplicates another role.",
-      "Add a tomorrow task to update ttdmobile_coding_rulebook.md so agents know how to use the reflection loop, cumulative case-law matrix, and legal-system test interpretation."
+      "import an existing downloaded result JSON through the reflection path",
+      "confirm Mermaid-first review completion before agenda change",
+      "confirm case-law matrix backfill rows from existing imported runs",
+      "confirm legal_verdict and route_survival_outcome fields stay deterministic",
+      "confirm manual next-study pointer survives tabulation",
+      "confirm GUI reflection affordances remain low-noise"
     ],
-    "next_action_for_fresh_chat": "Do not design another scorer/language suite first. Help Billy define or implement Casework Reflection Loop v1: after every run, import/save the result, review with Mermaid first, classify tool vs scorer vs language failure, append detailed normalized rows to a cumulative case-law matrix, apply the Orion TTD legal-system frame where relevant, update CASEWORK_STUDY_STATUS.md/json, check whether new artifacts overlap or should collapse, and only then design the next suite.",
+    "next_action_for_fresh_chat": "Do not design a new scorer/language suite yet. Validate Reflection Loop v1 against current imported runs and one fresh result import, then decide whether the workflow is stable enough to resume suite design.",
     "set_by": "Billy / ChatGPT review",
     "set_at": "2026-06-13",
-    "source": "Billy / ChatGPT review after scorer keyword extraction v2 and Casework workflow critique"
+    "source": "Casework Reflection Loop v1 implementation"
   },
   "manual_notes": {
     "follow_up_repair_note": "Current concern: messy tests pile up without enough reflection, planning, ownership of the next-test status, or cumulative analysis surface. Make the post-run digest mandatory before the next suite is designed.",
     "ownership_rule": "The design/review chat proposes the next study from the result; the import/tabulation/status layer records the current next-study pointer; fresh chats must read this status before creating new suites.",
     "window_model": "Design chat creates/reviews JSON, Casework GUI validates/runs setup, disposable ChatGPT test tab executes the runner.",
     "cumulative_map_rule": "One-off result reviews should guide the immediate next move, but every case should also append high-detail normalized data to a single case-law/rule-design matrix for later analysis.",
-    "legal_integration_rule": "Tomorrow's follow-up should weave the Orion TTD legal system into the test pipeline so results can be read through committed state, evidence, prose-as-claim, signals, smallest legal reduction, HOLD/REPAIR/REANCHOR, and PASS/FAIL route-survival language.",
+    "legal_integration_rule": "The Orion TTD legal system should stay woven into the test pipeline so results can be read through committed state, evidence, prose-as-claim, signals, smallest legal reduction, HOLD/REPAIR/REANCHOR, and PASS/FAIL route-survival language.",
     "integration_simplification_question": "As these parts are connected, decide whether each part should stay separate, collapse into another artifact, or be redesigned because it overlaps or adds too much maintenance. Keep pieces that reduce confusion; simplify anything that becomes a second source of truth.",
     "rulebook_update_needed": "Add a concise rule to ttdmobile_coding_rulebook.md so agents know how to use the reflection loop, cumulative case-law matrix, and legal-system test interpretation before modifying Casework study/status/review flows."
   },
@@ -65,7 +62,7 @@
     "next_status"
   ],
   "computed_summary": {
-    "last_tabulated_at": "2026-06-13T05:06:52.170Z",
+    "last_tabulated_at": "2026-06-13T07:59:18.497Z",
     "run_count": 4,
     "case_count": 25,
     "latest_suite_id": "scorer_keyword_extraction_v2",
@@ -73,38 +70,39 @@
       "PASS_CANDIDATE": 13,
       "FAIL_LOST_ROUTE": 12
     },
-    "open_findings_count": 5
+    "open_findings_count": 6,
+    "matrix_row_count": 25
   },
   "open_findings": [
     {
       "finding_id": "casework_reflection_loop_missing_001",
       "status": "open",
       "summary": "Post-run follow-up is weak. Result JSON should be digested into Mermaid review, pass/failure summary, tool/scorer/language classification, an explicit next-study status update, and a cumulative case-law matrix append before any new suite is designed.",
-      "recommended_next_study": "casework_reflection_loop_v1"
+      "recommended_next_study": "casework_reflection_loop_v1_validation"
     },
     {
       "finding_id": "casework_window_model_miscount_001",
       "status": "open",
       "summary": "The real workflow needs three surfaces: design chat, Casework GUI, and disposable ChatGPT test tab. Startup/launcher behavior and docs should make this obvious.",
-      "recommended_next_study": "casework_reflection_loop_v1"
+      "recommended_next_study": "casework_reflection_loop_v1_validation"
     },
     {
       "finding_id": "casework_case_law_matrix_missing_001",
       "status": "open",
       "summary": "One-off test results should also accumulate into a single high-detail case-law/rule-design matrix for later large-scale analysis and strong rule design.",
-      "recommended_next_study": "casework_reflection_loop_v1"
+      "recommended_next_study": "casework_reflection_loop_v1_validation"
     },
     {
       "finding_id": "casework_legal_system_not_integrated_001",
       "status": "open",
       "summary": "The Orion TTD legal system exists but is not yet woven into the Casework test pipeline; future reflection/scoring should map evidence, claims, committed state, legal verdicts, and route-survival outcomes explicitly.",
-      "recommended_next_study": "casework_reflection_loop_v1"
+      "recommended_next_study": "casework_reflection_loop_v1_validation"
     },
     {
       "finding_id": "casework_artifact_overlap_risk_001",
       "status": "open",
       "summary": "Reflection loop integration may create overlapping sources of truth. During integration, test whether each artifact reduces confusion or adds maintenance; collapse/redesign overlaps before adding more machinery.",
-      "recommended_next_study": "casework_reflection_loop_v1"
+      "recommended_next_study": "casework_reflection_loop_v1_validation"
     },
     {
       "finding_id": "scorer_collect_dishes_false_lost_route_001",
@@ -112,5 +110,14 @@
       "summary": "Heuristic/scorer keyword extraction may miss collect_dishes even when assistant visible text contains the correct transition, causing false FAIL_LOST_ROUTE.",
       "recommended_next_study": "scorer_keyword_extraction_v1_after_reflection_repair"
     }
-  ]
+  ],
+  "artifact_roles": {
+    "raw_result_json": "evidence",
+    "reflection_review": "interpretation",
+    "case_law_matrix": "cumulative analysis",
+    "legal_system": "authority/evidence language",
+    "study_status": "agenda",
+    "coding_rulebook": "agent behavior"
+  },
+  "integration_open_question": "Collapse or redesign overlapping artifacts if they become duplicate sources of truth."
 }

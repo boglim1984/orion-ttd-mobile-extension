@@ -41,7 +41,7 @@ Core loop:
 6. The runner sends the packet and scripted replies in explicit casework mode.
 7. The runner records visible assistant replies and sends them back to the local server.
 8. The server writes result files and reveals them in Finder.
-9. Billy drops the result files back into the dev chat for Mermaid review and the next batch.
+9. Billy drops the result files back into the design chat for Mermaid-first review, case-law matrix update, legal interpretation, and only then the next batch.
 
 ## GUI Workflow
 
@@ -180,7 +180,7 @@ Launcher:
 Dev chat:
 
 - designs suites
-- reviews result JSON with Mermaid
+- reviews result JSON with Mermaid-first reflection and proposes next study
 
 Disposable ChatGPT tab:
 
@@ -196,6 +196,43 @@ After meaningful result review, use:
 `tools/command-language-casework/scripts/import-tabulate-sync-casework-result.sh`
 
 This imports the result, tabulates Orion study status, mirrors the current study-status skill, and lets the next Desktop bundle carry the updated next-study pointer.
+
+## Casework Reflection Loop v1
+
+The post-run flow is now explicit infrastructure:
+
+1. raw result JSON is preserved as evidence
+2. review Markdown is created in `study/reviews/`
+3. Mermaid-first review identifies the most important pass/failure and usable-evidence status
+4. deterministic layer classification names tool vs scorer vs language vs transport
+5. the cumulative case-law matrix is regenerated
+6. legal-system interpretation fields are applied
+7. `CASEWORK_STUDY_STATUS.*` is updated without overwriting the manual next-study pointer by default
+8. only then is a new suite allowed
+
+Matrix artifacts:
+
+- `tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md`
+- `tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.csv`
+- `tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.jsonl`
+
+Commands:
+
+```bash
+node tools/command-language-casework/scripts/import-casework-result.mjs <path-to-result.json>
+node tools/command-language-casework/scripts/update-casework-case-law-matrix.mjs
+node tools/command-language-casework/scripts/tabulate-casework-study.mjs
+```
+
+Legal interpretation language:
+
+- committed state is law
+- logs/evidence are admissible evidence
+- assistant prose is a claim
+- signals are not state
+- ambiguous cases HOLD
+- choose the smallest legal reduction
+- PASS/FAIL describes route survival, not wording perfection
 
 ## Supported Runner Path
 

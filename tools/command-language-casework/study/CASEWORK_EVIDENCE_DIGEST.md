@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_sequence_only_no_active_carrier_v1
+- Next study: route_law_explicit_active_carrier_floor_confirmation_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
 - Current confidence: high
-- Open gap: We still do not know whether route_sequence by itself implicitly anchors the active chunk to the first route item, or whether an explicit active carrier is required for legal move_on advancement.
-- Suite shape recommendation: 8-case minimum cold-first boundary suite; prefer 12 to 15 cases if adding route_sequence-only endurance and late wrong-next carryover checks.
+- Open gap: We now know route_sequence alone is not enough. The remaining minimum-carrier question is which explicit active carrier is sufficient and stable: active_chunk_id, active_chunk_label, both together, and whether route_sequence is still required when an active carrier is present.
+- Suite shape recommendation: 12-case focused confirmation suite: cold active_id-only, cold active_label-only, both-active, active plus route_sequence, wrong-next conflicts, next-only negative control, and late retests.
 
 ## Evidence summary
 
-- Imported run count: 16
-- Imported case count: 83
-- Matrix row count: 83
-- Latest imported suite ID: route_law_cold_first_active_label_route_sequence_wrong_next_v1
-- Latest imported run ID: 20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1
+- Imported run count: 17
+- Imported case count: 95
+- Matrix row count: 95
+- Latest imported suite ID: route_law_sequence_only_no_active_carrier_v1
+- Latest imported run ID: 20260613-185251-route_law_sequence_only_no_active_carrier_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_sequence_only_no_active_carrier_v1 / 20260613-185251-route_law_sequence_only_no_active_carrier_v1: 12 cases, legal=HOLD, route=unknown, design=endurance, context_risk=high
 - route_law_cold_first_active_label_route_sequence_wrong_next_v1 / 20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1: 8 cases, legal=HOLD, route=unknown, design=matrix, context_risk=high
 - route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1 / 20260613-174530-route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1: 1 cases, legal=PASS, route=survived, design=smoke, context_risk=low
-- route_law_min_combo_cold_first_sequence_wrong_next_control_v1 / 20260613-173658-route_law_min_combo_cold_first_sequence_wrong_next_control_v1: 1 cases, legal=PASS, route=survived, design=smoke, context_risk=low
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_min_combo_cold_first_sequence_wrong_next_control_v1__20260613-173658-route_law_min_combo_cold_first_sequence_wrong_next_control_v1.md
 - study/reviews/2026-06-13/route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1__20260613-174530-route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1.md
 - study/reviews/2026-06-13/route_law_cold_first_active_label_route_sequence_wrong_next_v1__20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1.md
+- study/reviews/2026-06-13/route_law_sequence_only_no_active_carrier_v1__20260613-185251-route_law_sequence_only_no_active_carrier_v1.md
 
 ## Planning rule
 

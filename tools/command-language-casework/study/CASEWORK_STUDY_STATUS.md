@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_sequence_only_no_active_carrier_v1
+**Next Study Needed**: route_law_explicit_active_carrier_floor_confirmation_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: route_law_label_sequence_wrong_next_001_cold_wrong_next_id advanced to collect_dishes despite next_chunk_id stack_papers. | route_law_label_sequence_wrong_next_004_cold_wrong_next_id_and_label advanced to collect_dishes despite both wrong next fields. | route_law_label_sequence_wrong_next_005_cold_base_no_next_fields showed active_chunk_label plus route_sequence works even without any next_chunk fields. | route_law_label_sequence_wrong_next_007_negative_wrong_next_only_no_route moved to stack_papers, showing wrong next fields are still dangerous when no route carrier is present. | route_law_label_sequence_wrong_next_008_final_retest_core_conflict repeated collect_dishes late in the suite.
+**Evidence reviewed**: route_law_sequence_only_no_active_001_cold_sequence_only held with no active chunk instead of inferring clear_trash from the first route_sequence item. | route_law_sequence_only_no_active_002 through 004 showed wrong next_chunk_id and next_chunk_label did not produce legal movement when no active carrier existed. | route_law_sequence_only_no_active_005 through 007 showed next_chunk-only packets are not sufficient route-law evidence and also held without active state. | route_law_sequence_only_no_active_008 through 012 repeated the no-active-chunk result late in the suite, including rotated and shortened route_sequence probes.
 **Current confidence**: high
-**Open gap**: We still do not know whether route_sequence by itself implicitly anchors the active chunk to the first route item, or whether an explicit active carrier is required for legal move_on advancement.
-**Test strategy**: Run a focused cold-first suite centered on route_sequence-only packets with no active_chunk_id and no active_chunk_label. Include wrong next_chunk_id, wrong next_chunk_label, both wrong next fields, and no-next-field variants. Add controls showing that next_chunk-only movement is not legal route evidence. The suite should decide whether route_sequence alone produces reliable collect_dishes movement from the first listed chunk or should be treated as under-specified/repair-needed.
-**Avoid / do not repeat**: do not include active_chunk_id | do not include active_chunk_label | do not include response_contract or route_law rescue wording | do not treat stack_papers movement from wrong-next-only packets as route survival | do not run the first route_sequence-only case in an already warmed chat | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 8-case minimum cold-first boundary suite; prefer 12 to 15 cases if adding route_sequence-only endurance and late wrong-next carryover checks.
-**Retirement condition**: Retire this pointer when route_sequence-only cold packets are clearly characterized: either they reliably infer clear_trash as the first active route item and advance to collect_dishes, or they are shown to be under-specified and require an explicit active carrier.
-**Next action for fresh chat**: Generate a validator-ready suite for route_law_sequence_only_no_active_carrier_v1 focused on route_sequence-only packets, wrong-next conflict behavior, and whether first-item route inference is reliable without active_chunk_id or active_chunk_label.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_cold_first_active_label_route_sequence_wrong_next_v1 result 20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1.
+**Open gap**: We now know route_sequence alone is not enough. The remaining minimum-carrier question is which explicit active carrier is sufficient and stable: active_chunk_id, active_chunk_label, both together, and whether route_sequence is still required when an active carrier is present.
+**Test strategy**: Run a focused cold-first confirmation suite using explicit active carriers and no response_contract or route_law rescue wording. Include active_chunk_id-only, active_chunk_label-only, both active fields, active plus route_sequence, and wrong-next conflicts. Add late retests to detect carryover drift.
+**Avoid / do not repeat**: do not repeat route_sequence-only no-active packets except as a single negative control if needed | do not include response_contract | do not include route_law rescue wording | do not treat next_chunk-only collect_dishes as proof of route-law survival | do not mix this with broad language expansion | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 12-case focused confirmation suite: cold active_id-only, cold active_label-only, both-active, active plus route_sequence, wrong-next conflicts, next-only negative control, and late retests.
+**Retirement condition**: Retire this pointer when the explicit active carrier floor is characterized: active_chunk_id-only, active_chunk_label-only, both-active, and active-plus-route_sequence variants are clearly classified for legal move_on under cold and late wrong-next conditions.
+**Next action for fresh chat**: Generate a validator-ready suite for route_law_explicit_active_carrier_floor_confirmation_v1 focused on explicit active carriers as the minimum legal move_on anchor after route_sequence-only failed to infer active state.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_sequence_only_no_active_carrier_v1 result 20260613-185251-route_law_sequence_only_no_active_carrier_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-13
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T22:38:52.484Z
-- Run count: 16
-- Case count: 83
-- Latest suite ID: route_law_cold_first_active_label_route_sequence_wrong_next_v1
-- Latest run ID: 20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1
-- Classification counts: {"PASS_CANDIDATE":68,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":5,"HOLD_NEEDS_REVIEW":9}
+- Last tabulated at: 2026-06-13T22:58:34.736Z
+- Run count: 17
+- Case count: 95
+- Latest suite ID: route_law_sequence_only_no_active_carrier_v1
+- Latest run ID: 20260613-185251-route_law_sequence_only_no_active_carrier_v1
+- Classification counts: {"PASS_CANDIDATE":68,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":5,"HOLD_NEEDS_REVIEW":21}
 - Open findings count: 0
-- Case-law matrix rows: 83
+- Case-law matrix rows: 95
 
 ## Open findings
 Generated and/or manually curated.

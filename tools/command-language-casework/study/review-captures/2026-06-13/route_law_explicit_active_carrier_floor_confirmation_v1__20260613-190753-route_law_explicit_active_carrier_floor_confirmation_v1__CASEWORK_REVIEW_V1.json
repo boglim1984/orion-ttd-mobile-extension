@@ -1,0 +1,66 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2de21a-53a0-83ea-9027-f5e3bbb5f1cf",
+    "suite_id": "route_law_explicit_active_carrier_floor_confirmation_v1",
+    "run_id": "20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The explicit active carrier floor is characterized for the first route transition: active_chunk_id-only, active_chunk_label-only, both active fields, active plus route_sequence, wrong-next conflicts, and a late active_id retest all advanced from clear_trash to collect_dishes. The next-only no-active negative control refused legal movement instead of inventing active state.",
+    "language_lesson": "Explicit active carrier is the minimum legal move_on anchor for the clear_trash starting position. route_sequence alone does not create active state, and next_chunk_id/next_chunk_label alone do not create active state. When an explicit active carrier is present, wrong next_chunk fields do not override the legal clear_trash to collect_dishes movement.",
+    "pointer_update": {
+      "next_study_needed": "route_law_active_carrier_position_generalization_v1",
+      "purpose": "Test whether the active carrier floor found at clear_trash generalizes across non-start route positions, especially collect_dishes to stack_papers, stack_papers to wipe_surface, and wipe_surface to choose_next, with and without route_sequence.",
+      "evidence_reviewed": [
+        "route_law_active_carrier_floor_001 showed cold active_chunk_id-only advanced from clear_trash to collect_dishes.",
+        "route_law_active_carrier_floor_002 showed cold active_chunk_label-only advanced from clear trash to collect_dishes.",
+        "route_law_active_carrier_floor_003 showed paired active fields without route_sequence advanced to collect_dishes.",
+        "route_law_active_carrier_floor_004 through 006 showed active carrier plus route_sequence advanced to collect_dishes.",
+        "route_law_active_carrier_floor_007 showed next_chunk_id/next_chunk_label alone did not establish active state.",
+        "route_law_active_carrier_floor_008 through 011 showed wrong next_chunk_id/label stack_papers did not override active carrier and did not cause a skip.",
+        "route_law_active_carrier_floor_012 showed a late active_chunk_id-only retest still advanced to collect_dishes."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "The floor is proven for the first route transition, but not yet for non-start active positions. It is still unknown whether active_chunk_id-only or active_chunk_label-only can carry legal move_on when the active chunk is collect_dishes, stack_papers, or wipe_surface without route_sequence.",
+      "test_strategy": "Run a focused position-generalization suite using sparse packets and no response_contract or route_law rescue wording. Test active_chunk_id-only, active_chunk_label-only, and both-active fields at collect_dishes, stack_papers, and wipe_surface. Include route_sequence baselines and wrong-next conflicts at non-start positions, plus one no-active negative control.",
+      "avoid": [
+        "do not repeat broad clear_trash-only floor tests except as a single baseline",
+        "do not include response_contract",
+        "do not include route_law rescue wording",
+        "do not treat first-transition success as proof that the whole route map is carried",
+        "do not mix this with language expansion or side-question recovery"
+      ],
+      "suite_shape_recommendation": "15-case focused position-generalization suite: one clear_trash baseline, active_id-only and active_label-only at collect_dishes/stack_papers/wipe_surface, both-active non-start checks, route_sequence baselines, wrong-next conflicts, and one next-only negative control.",
+      "retirement_condition": "Retire this pointer when active_chunk_id-only, active_chunk_label-only, and both-active packets are clearly classified across non-start route positions and compared against route_sequence baselines and wrong-next conflicts.",
+      "next_action_for_fresh_chat": "Generate a validator-ready suite for route_law_active_carrier_position_generalization_v1 focused on non-start active carrier movement across the desk-reset-v0 route."
+    },
+    "reviewed_at": "2026-06-13T23:13:10.584Z"
+  },
+  "imported_result_path": "study/raw/2026-06-13/route_law_explicit_active_carrier_floor_confirmation_v1__20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_active_carrier_position_generalization_v1",
+    "purpose": "Test whether the active carrier floor found at clear_trash generalizes across non-start route positions, especially collect_dishes to stack_papers, stack_papers to wipe_surface, and wipe_surface to choose_next, with and without route_sequence.",
+    "evidence_reviewed": [
+      "route_law_active_carrier_floor_001 showed cold active_chunk_id-only advanced from clear_trash to collect_dishes.",
+      "route_law_active_carrier_floor_002 showed cold active_chunk_label-only advanced from clear trash to collect_dishes.",
+      "route_law_active_carrier_floor_003 showed paired active fields without route_sequence advanced to collect_dishes.",
+      "route_law_active_carrier_floor_004 through 006 showed active carrier plus route_sequence advanced to collect_dishes.",
+      "route_law_active_carrier_floor_007 showed next_chunk_id/next_chunk_label alone did not establish active state.",
+      "route_law_active_carrier_floor_008 through 011 showed wrong next_chunk_id/label stack_papers did not override active carrier and did not cause a skip.",
+      "route_law_active_carrier_floor_012 showed a late active_chunk_id-only retest still advanced to collect_dishes."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "The floor is proven for the first route transition, but not yet for non-start active positions. It is still unknown whether active_chunk_id-only or active_chunk_label-only can carry legal move_on when the active chunk is collect_dishes, stack_papers, or wipe_surface without route_sequence.",
+    "test_strategy": "Run a focused position-generalization suite using sparse packets and no response_contract or route_law rescue wording. Test active_chunk_id-only, active_chunk_label-only, and both-active fields at collect_dishes, stack_papers, and wipe_surface. Include route_sequence baselines and wrong-next conflicts at non-start positions, plus one no-active negative control.",
+    "avoid": [
+      "do not repeat broad clear_trash-only floor tests except as a single baseline",
+      "do not include response_contract",
+      "do not include route_law rescue wording",
+      "do not treat first-transition success as proof that the whole route map is carried",
+      "do not mix this with language expansion or side-question recovery"
+    ],
+    "suite_shape_recommendation": "15-case focused position-generalization suite: one clear_trash baseline, active_id-only and active_label-only at collect_dishes/stack_papers/wipe_surface, both-active non-start checks, route_sequence baselines, wrong-next conflicts, and one next-only negative control.",
+    "retirement_condition": "Retire this pointer when active_chunk_id-only, active_chunk_label-only, and both-active packets are clearly classified across non-start route positions and compared against route_sequence baselines and wrong-next conflicts.",
+    "next_action_for_fresh_chat": "Generate a validator-ready suite for route_law_active_carrier_position_generalization_v1 focused on non-start active carrier movement across the desk-reset-v0 route."
+  },
+  "applied_at": "2026-06-13T23:13:10.586Z"
+}

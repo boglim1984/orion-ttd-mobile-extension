@@ -181,6 +181,45 @@
     "isolated_case_count": 1
   },
   {
+    "suite_id": "route_law_explicit_active_carrier_floor_confirmation_v1",
+    "run_id": "20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1",
+    "imported_at": "2026-06-13T23:08:03.290Z",
+    "raw_result_path": "study/raw/2026-06-13/route_law_explicit_active_carrier_floor_confirmation_v1__20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1.json",
+    "review_path": "study/reviews/2026-06-13/route_law_explicit_active_carrier_floor_confirmation_v1__20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1.md",
+    "case_count": 12,
+    "classification_counts": {
+      "PASS_CANDIDATE": 11,
+      "HOLD_NEEDS_REVIEW": 1
+    },
+    "status_counts": {
+      "RESPONDED": 12
+    },
+    "has_dom_turn_trace": true,
+    "warnings_errors_count": 0,
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "PASS": 11,
+      "HOLD": 1
+    },
+    "route_survival_counts": {
+      "survived": 11,
+      "unknown": 1
+    },
+    "legal_verdict": "HOLD",
+    "route_survival_outcome": "unknown",
+    "suite_case_count": 12,
+    "suite_design_type": "endurance",
+    "suite_context_risk": "high",
+    "max_approximate_chat_turn_depth_before_case": 33,
+    "negative_control_positions": [
+      "early",
+      "middle",
+      "late"
+    ],
+    "carryover_case_count": 11,
+    "isolated_case_count": 1
+  },
+  {
     "suite_id": "route_law_field_floor_v2",
     "run_id": "20260613-165714-route_law_field_floor_v2",
     "imported_at": "2026-06-13T20:57:23.286Z",

@@ -107,5 +107,33 @@
     },
     "legal_verdict": "FAIL",
     "route_survival_outcome": "broken"
+  },
+  {
+    "suite_id": "scorer_keyword_extraction_v3_fresh_validation",
+    "run_id": "20260613-140918-scorer_keyword_extraction_v3_fresh_validation",
+    "imported_at": "2026-06-13T18:09:28.232Z",
+    "raw_result_path": "study/raw/2026-06-13/scorer_keyword_extraction_v3_fresh_validation__20260613-140918-scorer_keyword_extraction_v3_fresh_validation.json",
+    "review_path": "study/reviews/2026-06-13/scorer_keyword_extraction_v3_fresh_validation__20260613-140918-scorer_keyword_extraction_v3_fresh_validation.md",
+    "case_count": 2,
+    "classification_counts": {
+      "PASS_CANDIDATE": 1,
+      "FAIL_LOST_ROUTE": 1
+    },
+    "status_counts": {
+      "RESPONDED": 2
+    },
+    "has_dom_turn_trace": true,
+    "warnings_errors_count": 0,
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "PASS": 1,
+      "FAIL": 1
+    },
+    "route_survival_counts": {
+      "survived": 1,
+      "broken": 1
+    },
+    "legal_verdict": "FAIL",
+    "route_survival_outcome": "broken"
   }
 ]

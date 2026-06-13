@@ -34,13 +34,13 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T18:05:34.063Z
-- Run count: 4
-- Case count: 25
-- Latest suite ID: scorer_keyword_extraction_v2
-- Classification counts: {"PASS_CANDIDATE":22,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":2}
+- Last tabulated at: 2026-06-13T18:11:38.114Z
+- Run count: 5
+- Case count: 27
+- Latest suite ID: scorer_keyword_extraction_v3_fresh_validation
+- Classification counts: {"PASS_CANDIDATE":23,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":3}
 - Open findings count: 0
-- Case-law matrix rows: 25
+- Case-law matrix rows: 27
 
 ## Open findings
 Generated and/or manually curated.

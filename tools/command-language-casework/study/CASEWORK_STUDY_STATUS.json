@@ -60,17 +60,17 @@
     "next_status"
   ],
   "computed_summary": {
-    "last_tabulated_at": "2026-06-13T18:05:34.063Z",
-    "run_count": 4,
-    "case_count": 25,
-    "latest_suite_id": "scorer_keyword_extraction_v2",
+    "last_tabulated_at": "2026-06-13T18:11:38.114Z",
+    "run_count": 5,
+    "case_count": 27,
+    "latest_suite_id": "scorer_keyword_extraction_v3_fresh_validation",
     "classification_counts": {
-      "PASS_CANDIDATE": 22,
+      "PASS_CANDIDATE": 23,
       "FAIL_INVENTED_PROGRESS": 1,
-      "FAIL_LOST_ROUTE": 2
+      "FAIL_LOST_ROUTE": 3
     },
     "open_findings_count": 0,
-    "matrix_row_count": 25
+    "matrix_row_count": 27
   },
   "open_findings": [],
   "artifact_roles": {

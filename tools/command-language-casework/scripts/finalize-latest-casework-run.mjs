@@ -274,6 +274,7 @@ console.log(`Latest Pointer:     ${currentPointer}`);
 console.log(`Latest Run Visible: ${statusObj2?.computed_summary?.latest_run_id}`);
 
 // 9. Git Operations
+const orionRepoRoot = runCmd("git rev-parse --show-toplevel", caseworkRoot);
 let githubSynced = false;
 let orionCommitted = false;
 let ccCommitted = false;
@@ -282,11 +283,11 @@ if (FLAG_COMMIT) {
   console.log("\n--> Staging and committing changes...");
   try {
     const gitAddCmd = `git add tools/command-language-casework/study/CASEWORK_EVIDENCE_DIGEST.md tools/command-language-casework/study/CASEWORK_STUDY_STATUS.json tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.csv tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.jsonl tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md tools/command-language-casework/study/index/CASEWORK_CASE_INDEX.csv tools/command-language-casework/study/index/CASEWORK_RUN_INDEX.json tools/command-language-casework/study/raw/ tools/command-language-casework/study/reviews/ tools/command-language-casework/study/review-captures/ tools/command-language-casework/injectors/chatgpt-casework-runner.js tools/command-language-casework/public/casework-ui.js tools/command-language-casework/scripts/finalize-latest-casework-run.mjs tools/command-language-casework/scripts/finalize-latest-casework-run.sh tools/command-language-casework/docs/`;
-    runCmd(gitAddCmd, path.dirname(caseworkRoot));
+    runCmd(gitAddCmd, orionRepoRoot);
     
-    const status = runCmd(`git status --porcelain`, path.dirname(caseworkRoot));
+    const status = runCmd(`git status --porcelain`, orionRepoRoot);
     if (status.length > 0) {
-      runCmd(`git commit -m "Finalize casework run ${resultData.suite_id}"`, path.dirname(caseworkRoot));
+      runCmd(`git commit -m "Finalize casework run ${resultData.suite_id}"`, orionRepoRoot);
       console.log("Committed local Orion repository.");
       orionCommitted = true;
     } else {
@@ -310,12 +311,24 @@ if (FLAG_COMMIT) {
 if (FLAG_PUSH) {
   console.log("\n--> Pushing to GitHub...");
   try {
+    let orionPushed = true;
+    let ccPushed = true;
+    
     if (orionCommitted) {
-      runCmd(`git push`, path.dirname(caseworkRoot));
+      runCmd(`git push`, orionRepoRoot);
+    } else {
+      // Ensure we push even if there are unpushed commits but no new ones created
+      const unpushed = runCmd("git cherry -v", orionRepoRoot);
+      if (unpushed) runCmd(`git push`, orionRepoRoot);
     }
+    
     if (ccCommitted && fs.existsSync(commandCenterRoot)) {
       runCmd(`git push`, commandCenterRoot);
+    } else if (fs.existsSync(commandCenterRoot)) {
+      const unpushedCC = runCmd("git cherry -v", commandCenterRoot);
+      if (unpushedCC) runCmd(`git push`, commandCenterRoot);
     }
+    
     githubSynced = true;
     console.log("GitHub synced: yes");
   } catch (err) {

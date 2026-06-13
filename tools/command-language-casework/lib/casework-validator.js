@@ -7,7 +7,6 @@ const REQUIRED_SUITE_FIELDS = [
   "suite_id",
   "suite_title",
   "suite_goal",
-  "created_for_tool",
   "route_id",
   "run_config",
   "cases"
@@ -70,10 +69,15 @@ function validateCaseworkSuite(suite) {
     errors.push("suite_id must be a non-empty string.");
   }
 
-  if (suite.created_for_tool && suite.created_for_tool !== CASEWORK_TOOL_VERSION) {
-    errors.push(
-      `created_for_tool must equal ${CASEWORK_TOOL_VERSION}. Received: ${suite.created_for_tool}`
-    );
+  const warnings = [];
+  if (!suite.created_for_tool) {
+    warnings.push(`created_for_tool was missing. Normalized to ${CASEWORK_TOOL_VERSION}.`);
+    suite.created_for_tool = CASEWORK_TOOL_VERSION;
+  } else if (suite.created_for_tool === "command-language-casework") {
+    warnings.push(`created_for_tool was legacy "command-language-casework". Normalized to ${CASEWORK_TOOL_VERSION}.`);
+    suite.created_for_tool = CASEWORK_TOOL_VERSION;
+  } else if (suite.created_for_tool !== CASEWORK_TOOL_VERSION) {
+    warnings.push(`created_for_tool does not match ${CASEWORK_TOOL_VERSION}. Received: ${suite.created_for_tool}. Treated as metadata.`);
   }
 
   if (!isPlainObject(suite.run_config)) {
@@ -133,7 +137,8 @@ function validateCaseworkSuite(suite) {
 
   return {
     ok: errors.length === 0,
-    errors
+    errors,
+    warnings
   };
 }
 
@@ -147,6 +152,7 @@ function validateSuiteText(suiteText) {
   return {
     ok: validation.ok,
     errors: validation.errors || [],
+    warnings: validation.warnings || [],
     suite: parsed.suite
   };
 }

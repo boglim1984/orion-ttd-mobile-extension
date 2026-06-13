@@ -359,3 +359,60 @@ test("/api/validate accepts various normalized shapes", async () => {
   }
 });
 
+
+test("/api/validate handles created_for_tool relaxation", async () => {
+  const serverModule = await loadServerModule();
+  const started = await serverModule.startServer({
+    host: "127.0.0.1",
+    port: 0
+  });
+  const serverUrl = started.guiUrl;
+  
+  try {
+    const baseSuite = {
+    suite_id: "test-metadata-relax",
+    suite_title: "Test",
+    suite_goal: "Test",
+    route_id: "test",
+    run_config: { send_mode: "explicit_casework_run_button", turn_timeout_ms: 1000, stability_wait_ms: 250 },
+    cases: [{
+      case_id: "1", title: "1", research_question: "1", packet: "1",
+      scripted_user_replies: [], expected_behavior: [], forbidden_behavior: [],
+      expected_reducer_semantics: "1", classification_targets: []
+    }]
+  };
+
+  // Missing
+  const missingSuite = { ...baseSuite };
+  delete missingSuite.created_for_tool;
+  let res = await fetch(`${serverUrl}/api/validate`, { method: "POST", body: JSON.stringify(missingSuite) });
+  let data = await res.json();
+  assert.strictEqual(data.ok, true);
+  assert.ok(data.warnings.some(w => w.includes("was missing")));
+  assert.strictEqual(data.suite.created_for_tool, "command-language-casework-runner-v1");
+
+  // Legacy
+  const legacySuite = { ...baseSuite, created_for_tool: "command-language-casework" };
+  res = await fetch(`${serverUrl}/api/validate`, { method: "POST", body: JSON.stringify(legacySuite) });
+  data = await res.json();
+  assert.strictEqual(data.ok, true);
+  assert.ok(data.warnings.some(w => w.includes("legacy")));
+  assert.strictEqual(data.suite.created_for_tool, "command-language-casework-runner-v1");
+
+  // Unknown
+  const unknownSuite = { ...baseSuite, created_for_tool: "some-other-tool" };
+  res = await fetch(`${serverUrl}/api/validate`, { method: "POST", body: JSON.stringify(unknownSuite) });
+  data = await res.json();
+  assert.strictEqual(data.ok, true);
+  assert.ok(data.warnings.some(w => w.includes("does not match")));
+  assert.strictEqual(data.suite.created_for_tool, "some-other-tool");
+  
+  // Broken run_config still fails
+  const badConfig = { ...baseSuite, created_for_tool: "command-language-casework-runner-v1", run_config: {} };
+  res = await fetch(`${serverUrl}/api/validate`, { method: "POST", body: JSON.stringify(badConfig) });
+  data = await res.json();
+  assert.strictEqual(data.ok, false);
+  } finally {
+    started.server.close();
+  }
+});

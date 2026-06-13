@@ -330,7 +330,11 @@ async function init() {
       uiState.suiteId = response.suite.suite_id;
       uiState.caseCount = Array.isArray(response.suite.cases) ? response.suite.cases.length : 0;
       if (copySelfContainedButton) copySelfContainedButton.disabled = false;
-      setValidationSummary(`Valid suite: ${uiState.suiteId} (${uiState.caseCount} cases).`, "success");
+      let summaryText = `Valid suite: ${uiState.suiteId} (${uiState.caseCount} cases).`;
+      if (response.warnings && response.warnings.length) {
+        summaryText += ` Warnings: ${response.warnings.join(" ")}`;
+      }
+      setValidationSummary(summaryText, response.warnings && response.warnings.length ? "warning" : "success");
       setOverlayStatus("Suite valid. Copy the self-contained runner next.");
       renderStateStrip();
       await refreshState();

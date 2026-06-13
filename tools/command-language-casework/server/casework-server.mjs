@@ -286,6 +286,7 @@ async function handleApi(request, response, url, port) {
     sendJson(response, validation.ok ? 200 : 400, {
       ok: validation.ok,
       errors: validation.errors || [],
+      warnings: validation.warnings || [],
       suite: validation.ok ? validation.suite : null
     });
     if (validation.ok) {

@@ -41,11 +41,11 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T19:38:31.184Z
+- Last tabulated at: 2026-06-13T19:42:52.828Z
 - Run count: 8
 - Case count: 41
-- Latest suite ID: scorer_keyword_extraction_v3_fresh_validation
-- Latest run ID: 20260613-142922-scorer_keyword_extraction_v3_fresh_validation
+- Latest suite ID: route_law_contract_relaxation_matrix_v1
+- Latest run ID: 20260613-153256-route_law_contract_relaxation_matrix_v1
 - Classification counts: {"PASS_CANDIDATE":35,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":5}
 - Open findings count: 0
 - Case-law matrix rows: 41

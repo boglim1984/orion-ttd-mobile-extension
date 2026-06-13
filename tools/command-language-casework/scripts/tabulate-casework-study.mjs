@@ -527,6 +527,17 @@ function main() {
   maybeAdvanceManualNextStudy(statusObj);
   normalizeFindings(statusObj);
 
+  // Sort runs chronologically so latest_suite_id/latest_run_id selection is deterministic.
+  // Precedence: imported_at (timestamp/started_at fallback) then run_id string.
+  runs.sort((a, b) => {
+    const timeA = a.imported_at || "";
+    const timeB = b.imported_at || "";
+    if (timeA !== timeB) {
+      return timeA.localeCompare(timeB);
+    }
+    return (a.run_id || "").localeCompare(b.run_id || "");
+  });
+
   const totalClassifications = {};
   for (const run of runs) {
     for (const [key, value] of Object.entries(run.classification_counts)) {

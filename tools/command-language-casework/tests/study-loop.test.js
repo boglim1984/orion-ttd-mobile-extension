@@ -224,3 +224,49 @@ test("tabulation status markdown no longer points at reflection-loop validation"
   assert.match(statusMd, /\*\*Suite shape recommendation\*\*:/);
   assert.match(statusMd, /\*\*Open gap\*\*:/);
 });
+
+test("tabulation latest run ordering respects chronological imported_at", () => {
+  const tabulateScript = path.join(caseworkRoot, "scripts", "tabulate-casework-study.mjs");
+  const importScript = path.join(caseworkRoot, "scripts", "import-casework-result.mjs");
+  
+  const olderSuiteId = "older_suite";
+  const olderRunId = "20260613-140000";
+  const newerSuiteId = "newer_suite";
+  const newerRunId = "20260613-150000";
+  const alphabeticallyLateSuiteId = "z_alpha_late_suite";
+  const alphabeticallyLateRunId = "20260613-130000";
+
+  const olderResultPath = path.join(__dirname, "older-result.json");
+  const newerResultPath = path.join(__dirname, "newer-result.json");
+  const alphaResultPath = path.join(__dirname, "alpha-result.json");
+
+  fs.writeFileSync(olderResultPath, JSON.stringify(makeFakeResult(olderSuiteId, olderRunId, [])), "utf8");
+  fs.writeFileSync(newerResultPath, JSON.stringify(makeFakeResult(newerSuiteId, newerRunId, [])), "utf8");
+  fs.writeFileSync(alphaResultPath, JSON.stringify(makeFakeResult(alphabeticallyLateSuiteId, alphabeticallyLateRunId, [])), "utf8");
+
+  try {
+    execSync(`node "${importScript}" "${olderResultPath}"`, { stdio: "ignore" });
+    execSync(`node "${importScript}" "${newerResultPath}"`, { stdio: "ignore" });
+    execSync(`node "${importScript}" "${alphaResultPath}"`, { stdio: "ignore" });
+
+    execSync(`node "${tabulateScript}"`, { stdio: "ignore" });
+
+    const statusObj = JSON.parse(fs.readFileSync(path.join(studyDir, "CASEWORK_STUDY_STATUS.json"), "utf8"));
+    
+    assert.strictEqual(statusObj.computed_summary.latest_suite_id, newerSuiteId, "Latest suite should be the newest by timestamp, not alphabetically");
+    assert.strictEqual(statusObj.computed_summary.latest_run_id, newerRunId, "Latest run should be the newest by timestamp, not alphabetically");
+  } finally {
+    if (fs.existsSync(olderResultPath)) fs.unlinkSync(olderResultPath);
+    if (fs.existsSync(newerResultPath)) fs.unlinkSync(newerResultPath);
+    if (fs.existsSync(alphaResultPath)) fs.unlinkSync(alphaResultPath);
+    
+    try { fs.unlinkSync(path.join(studyDir, "raw", "2026-06-13", `${olderSuiteId}__${olderRunId}.json`)); } catch(e) {}
+    try { fs.unlinkSync(path.join(studyDir, "raw", "2026-06-13", `${newerSuiteId}__${newerRunId}.json`)); } catch(e) {}
+    try { fs.unlinkSync(path.join(studyDir, "raw", "2026-06-13", `${alphabeticallyLateSuiteId}__${alphabeticallyLateRunId}.json`)); } catch(e) {}
+    try { fs.unlinkSync(path.join(studyDir, "reviews", "2026-06-13", `${olderSuiteId}__${olderRunId}.md`)); } catch(e) {}
+    try { fs.unlinkSync(path.join(studyDir, "reviews", "2026-06-13", `${newerSuiteId}__${newerRunId}.md`)); } catch(e) {}
+    try { fs.unlinkSync(path.join(studyDir, "reviews", "2026-06-13", `${alphabeticallyLateSuiteId}__${alphabeticallyLateRunId}.md`)); } catch(e) {}
+    
+    execSync(`node "${tabulateScript}"`, { stdio: "ignore" });
+  }
+});

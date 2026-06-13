@@ -26,6 +26,7 @@ Implemented as local tooling only.
 The server, GUI, suite validator, heuristic classifier, result writer, and console-injected runner are all present.
 
 The tool now also includes a Casework Designer Skill bookmarklet helper for the current ChatGPT dev chat and a quieter launcher for the support tabs.
+The launcher now opens a dedicated TTD TESTS Project chat for design/review context while keeping the disposable runner tab generic and source-free.
 
 ## How It Was Tested
 
@@ -54,7 +55,7 @@ The tool now also includes a Casework Designer Skill bookmarklet helper for the 
 - the GUI now defaults to a calm step-lane flow instead of a wrapped pile of buttons
 - the supported self-contained path is the only prominent lane
 - legacy server-run controls, loader snippet, and raw diagnostics moved behind `Advanced / Legacy / Diagnostics`
-- the GUI now exposes an example-suite loader and a launcher script for opening the GUI plus a disposable ChatGPT tab
+- the GUI now exposes an example-suite loader and a launcher script for opening the TTD TESTS Project chat, the GUI, and a disposable ChatGPT test tab
 
 ## Skill Bookmarklet And Launcher Split
 
@@ -106,6 +107,16 @@ The tool now also includes a Casework Designer Skill bookmarklet helper for the 
 - A GitHub Action commits updated indexes and status.
 - The `Command Language Casework Designer Skill` now requires a fresh chat to read the current status before designing suites.
 
+## TTD TESTS Project Source Lane
+
+- TTD TESTS Project chat is now the default design/review lane with curated testing sources.
+- Casework GUI remains the local validation and runner-copy surface.
+- Disposable ChatGPT test tab remains generic and source-free and executes the runner only.
+- Orion repo study files remain the evidence and generated-interpretation store.
+- Command Center remains a mirror/cache/status source for fresh chats, not runtime authority.
+- Launcher config now exposes `CASEWORK_DESIGN_PROJECT_URL` and `CASEWORK_TEST_CHAT_URL`.
+- The current source-curation rule lives in `docs/ORION_TTD_CASEWORK_TESTING_PROJECT_SOURCE_RULE_V0.md`.
+
 ## Casework Reflection Loop v1
 
 - raw result JSON remains evidence
@@ -128,4 +139,4 @@ Three-surface workflow:
 
 ## Next Action
 
-Use the dev-chat bookmarklet to design the next suite, run it through the GUI plus disposable ChatGPT support tab, drop `run-summary.md` and `run-result.json` into the dev chat for Mermaid review, and run `import-casework-result.mjs` then `tabulate-casework-study.mjs` to advance the local study tracker.
+Use the TTD TESTS Project chat to design the next suite, run it through the GUI plus disposable generic ChatGPT test tab, drop `run-summary.md` and `run-result.json` back into the TTD TESTS Project chat for Mermaid review, and run `import-casework-result.mjs` then `tabulate-casework-study.mjs` to advance the local study tracker.

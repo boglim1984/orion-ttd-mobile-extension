@@ -55,6 +55,7 @@ test("root route, index route, and api/state are served on the selected port", a
     assert.match(rootResponse.body, /Copy Start Note/);
     assert.match(rootResponse.body, /Copy Skill Snapshot \(Experimental\)/);
     assert.match(rootResponse.body, /Casework Start.command/);
+    assert.match(rootResponse.body, /TTD TESTS Project/);
     assert.match(rootResponse.body, /How To Use/);
     assert.match(rootResponse.body, /Update Case-Law Matrix/);
     assert.match(rootResponse.body, /Copy Reflection Checklist/);

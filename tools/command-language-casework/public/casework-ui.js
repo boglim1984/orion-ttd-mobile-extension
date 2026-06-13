@@ -261,7 +261,7 @@ async function init() {
 
   openTestChatButton.addEventListener("click", () => {
     window.open("https://chatgpt.com/", "_blank", "noopener");
-    appendStatusLine("Opened ChatGPT in a new tab.");
+    appendStatusLine("Opened disposable generic ChatGPT in a new tab.");
   });
 
   copyConsoleStepsButton.addEventListener("click", () =>
@@ -269,7 +269,7 @@ async function init() {
       await copyToClipboard(
         [
           "Command Language Casework setup",
-          "1. Open a disposable ChatGPT test chat.",
+          "1. Open a disposable generic ChatGPT test tab.",
           "2. Open DevTools with Option + Command + I.",
           "3. Validate the suite and copy the self-contained runner.",
           "4. Paste the runner into the ChatGPT console.",
@@ -286,7 +286,7 @@ async function init() {
         [
           "Casework Start local mirror bundle",
           "1. Run ~/Desktop/Casework Start.command",
-          "2. Paste the copied bundle into a fresh ChatGPT dev chat.",
+          "2. Paste the copied bundle into the TTD TESTS Project chat.",
           "3. Part 1 = Designer Skill",
           "4. Part 2 = Runner Schema Skill",
           "5. Part 3 = Study Status",
@@ -294,7 +294,7 @@ async function init() {
         ].join("\n"),
         "Copied local mirror start note."
       );
-      setSkillSetupStatus("Start note copied. The supported desktop v1 path is ~/Desktop/Casework Start.command, not Shortcuts or live GitHub fetch.");
+      setSkillSetupStatus("Start note copied. Use the TTD TESTS Project chat for design/review, not a broad Orion chat or the disposable runner tab.");
     })
   );
 
@@ -310,7 +310,7 @@ async function init() {
       withAction(async () => {
         const response = await fetchJson("/api/study-status");
         await copyToClipboard(response.status_text, "Copied Casework Study Status.");
-        setSkillSetupStatus("Status copied. This is Part 3 of the local mirror bundle and can guide the next suite design.");
+        setSkillSetupStatus("Status copied. Study status guides the next suite inside the TTD TESTS Project chat.");
       })
     );
   }
@@ -409,7 +409,7 @@ async function init() {
         ? `node tools/command-language-casework/scripts/import-casework-result.mjs "${resultPath}"`
         : "node tools/command-language-casework/scripts/import-casework-result.mjs <path-to-downloaded-result.json>";
       await copyToClipboard(command, "Copied import command.");
-      setReflectionStatus("Import command copied. Raw result JSON stays evidence; the review stub is interpretation.");
+      setReflectionStatus("Import command copied. Raw result JSON stays evidence; review and next-suite selection belong back in the TTD TESTS Project chat.");
     })
   );
 
@@ -495,9 +495,9 @@ async function init() {
   await refreshLoader();
   renderStateStrip();
   setValidationSummary("Load or paste a suite, then validate it.", "muted");
-  setOverlayStatus("Open a disposable ChatGPT chat to begin.");
-  setSkillSetupStatus("Dev chat uses the bundled Designer Skill, Runner Schema, and Study Status. Casework GUI validates JSON. Disposable ChatGPT runs the test.");
-  setReflectionStatus("Design chat reviews JSON and sets agenda. Casework GUI handles validation/import affordances. Disposable ChatGPT runs the self-contained runner.");
+  setOverlayStatus("Open a disposable generic ChatGPT test tab to begin.");
+  setSkillSetupStatus("Use the TTD TESTS Project chat to design and review suites. Use this GUI only to validate JSON and copy the runner. Use the disposable ChatGPT test tab only to execute the runner.");
+  setReflectionStatus("TTD TESTS Project chat reviews JSON and sets agenda. Casework GUI handles validation/import affordances. Disposable ChatGPT test tab runs the self-contained runner.");
   await refreshState();
 
 }

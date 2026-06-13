@@ -27,6 +27,7 @@ test("installer references local mirror designer, schema, current-study skill, a
   assert.match(installerSource, /CASEWORK_STUDY_STATUS\.md/);
   assert.match(installerSource, /Current study source: live Orion status/);
   assert.match(installerSource, /Casework Start\.command/);
+  assert.match(installerSource, /TTD TESTS Project chat/);
 });
 
 test("installer builds a three-part bundle and strips frontmatter", () => {

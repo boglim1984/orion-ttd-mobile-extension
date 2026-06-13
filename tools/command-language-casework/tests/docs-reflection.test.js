@@ -16,7 +16,7 @@ test("casework docs mention the three-surface workflow and reflection loop", () 
 
   for (const filePath of files) {
     const text = fs.readFileSync(filePath, "utf8");
-    assert.match(text, /Design chat/i, `${path.basename(filePath)} should mention design chat`);
+    assert.match(text, /TTD TESTS Project|Design chat/i, `${path.basename(filePath)} should mention the design/review chat lane`);
     assert.match(text, /Casework GUI/i, `${path.basename(filePath)} should mention Casework GUI`);
     assert.match(text, /Disposable ChatGPT/i, `${path.basename(filePath)} should mention Disposable ChatGPT`);
   }

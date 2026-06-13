@@ -131,6 +131,7 @@ header = f"""Billy is launching Casework from the local Command Center mirror.
 This is a skill activation message, not a capture event.
 Do not output the receipt format yet.
 Use the bundled Designer Skill, Runner Schema, and Current Study Status as active context for this chat.
+This bundle is meant for the dedicated TTD TESTS Project chat, not the disposable runner tab.
 
 Part 1 is the operating skill.
 Part 2 is the current executable schema.
@@ -203,6 +204,8 @@ PY
   echo "Current study source: live Orion status $STUDY_STATUS"
   echo "Mirror study skill (non-authoritative): $CURRENT_STUDY_MIRROR"
   echo "Next Study Needed: $LIVE_NEXT_STUDY"
+  echo "Design/review target: TTD TESTS Project chat"
+  echo "Disposable runner target: generic ChatGPT test tab"
 
   /usr/bin/open "$LAUNCHER"
   echo "Launcher opened"

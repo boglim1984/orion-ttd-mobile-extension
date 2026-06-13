@@ -38,10 +38,10 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 
 ## First Run
 
-1. Open a new, disposable ChatGPT chat window to serve as your dev environment.
-2. Run `~/Desktop/Casework Start.command`. This is the supported v1 launcher. It copies the local mirror bundle and launches the support tabs. Paste the clipboard payload into your ChatGPT dev chat. If you do not have it installed, run `tools/command-language-casework/scripts/install-casework-start-command.sh`.
-3. Keep the newly-opened Casework GUI and support tabs visible.
-4. Ask the dev chat to design the next suite JSON block.
+1. Use the dedicated TTD TESTS Project chat as the design/review context.
+2. Run `~/Desktop/Casework Start.command`. This is the supported v1 launcher. It copies the local mirror bundle and launches the TTD TESTS Project chat, Casework GUI, and disposable generic ChatGPT test tab. Paste the clipboard payload into the TTD TESTS Project chat. If you do not have it installed, run `tools/command-language-casework/scripts/install-casework-start-command.sh`.
+3. Keep the newly-opened Casework GUI and disposable runner tab visible.
+4. Ask the TTD TESTS Project chat to design the next suite JSON block.
 5. Use the GUI step lane to load/paste that suite and validate it.
 6. Copy the self-contained runner for the current suite.
 7. Paste it into the disposable ChatGPT page console once per page load, then use the overlay `Run` button.
@@ -49,11 +49,18 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 
 ## Three-Surface Workflow
 
-- Design chat designs the suite, reviews result JSON, and decides the next study.
+- TTD TESTS Project chat designs the suite, reviews result JSON, and decides the next study.
 - Casework GUI validates suite JSON, copies the runner, and exposes reflection-loop affordances.
-- Disposable ChatGPT executes the self-contained runner in a visible test tab.
+- Disposable ChatGPT test tab executes the self-contained runner in a visible generic test tab.
 
-The launcher opens the GUI and a disposable ChatGPT tab. The design chat is this current chat or a separate chat Billy opens manually.
+The launcher opens the TTD TESTS Project chat, the GUI, and a disposable generic ChatGPT test tab.
+
+## Config
+
+- `CASEWORK_DESIGN_PROJECT_URL`: design/review ChatGPT Project URL override
+- `CASEWORK_TEST_CHAT_URL`: disposable generic ChatGPT test-tab override
+
+The current default design-project target is defined once in `tools/command-language-casework/scripts/launch-casework.sh`. Change `CASEWORK_DESIGN_PROJECT_URL` if ChatGPT Project links change.
 
 ## Example Suites
 
@@ -108,10 +115,10 @@ Each run includes:
 
 ## Study Progress Loop
 
-- Fresh chat checks `CASEWORK_STUDY_STATUS.md`
-- Chat designs suite based on status
+- TTD TESTS Project chat checks `CASEWORK_STUDY_STATUS.md`
+- TTD TESTS Project chat designs suite based on status
 - GUI validates suite
-- Disposable ChatGPT runs suite
+- Disposable ChatGPT test tab runs suite
 - Result JSON is imported locally via `import-casework-result.mjs`
 - Reflection review is completed via `CASEWORK_REFLECTION_LOOP_V1.md`
 - Case-law matrix is regenerated via `update-casework-case-law-matrix.mjs`
@@ -174,5 +181,7 @@ The next suite is allowed only after the manual next-study pointer has been chec
 - That refreshes the live study artifacts and may also regenerate the mirrored current-study skill.
 - The Desktop launcher now refuses to copy a bundle when the injected `Next Study Needed` pointer does not match the live Orion status file.
 - Desktop v1 does not depend on Apps Script, Shortcuts, or live GitHub.
+- Launcher config:
+  `CASEWORK_DESIGN_PROJECT_URL` and `CASEWORK_TEST_CHAT_URL`
 - Mobile/cloud routes may still use separate experimental router paths if Billy chooses them later.
 - Shortcut/bookmarklet start paths are experimental or demoted, not the supported desktop v1 path.

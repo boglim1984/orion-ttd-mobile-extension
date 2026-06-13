@@ -37,7 +37,9 @@ test("skill prompt and usage point at the supported local mirror workflow", asyn
 
   assert.match(skillSetup.CASEWORK_SKILL_PROMPT, /Command Language Casework Designer/);
   assert.match(skillSetup.CASEWORK_SKILL_PROMPT, /review result JSON with a Mermaid diagram/i);
+  assert.match(skillSetup.CASEWORK_SKILL_PROMPT, /TTD TESTS Project/i);
   assert.match(skillSetup.CASEWORK_SKILL_USAGE, /Casework Start\.command/);
+  assert.match(skillSetup.CASEWORK_SKILL_USAGE, /TTD TESTS Project/i);
   assert.doesNotMatch(skillSetup.CASEWORK_SKILL_USAGE, /Shortcut/);
   assert.doesNotMatch(skillSetup.CASEWORK_SKILL_USAGE, /shortcuts:\/\//);
 });
@@ -51,7 +53,11 @@ test("launcher script prints GUI URL and quiet-focus limitation", () => {
   );
   const launcherSource = fs.readFileSync(launcherPath, "utf8");
 
+  assert.match(launcherSource, /CASEWORK_DESIGN_PROJECT_URL_DEFAULT=/);
+  assert.match(launcherSource, /CASEWORK_DESIGN_PROJECT_URL="\$\{CASEWORK_DESIGN_PROJECT_URL:-\$CASEWORK_DESIGN_PROJECT_URL_DEFAULT\}"/);
+  assert.match(launcherSource, /CASEWORK_TEST_CHAT_URL="\$\{CASEWORK_TEST_CHAT_URL:-https:\/\/chatgpt\.com\/\}"/);
+  assert.match(launcherSource, /TTD TESTS Project: \$\{CASEWORK_DESIGN_PROJECT_URL\}/);
   assert.match(launcherSource, /GUI: \$\{GUI_URL\}/);
-  assert.match(launcherSource, /ChatGPT: \$\{CHATGPT_URL\}/);
-  assert.match(launcherSource, /Chrome may bring the new tabs forward\. Return to your dev chat after launch\./);
+  assert.match(launcherSource, /Disposable ChatGPT test tab: \$\{CASEWORK_TEST_CHAT_URL\}/);
+  assert.match(launcherSource, /Chrome may bring the new tabs forward\. Return to the TTD TESTS Project chat after launch\./);
 });

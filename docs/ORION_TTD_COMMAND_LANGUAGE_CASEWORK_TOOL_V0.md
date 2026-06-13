@@ -26,6 +26,8 @@ The command-language layer should not require Codex for every research turn.
   local batch runner for language/protocol research
 - reducer/scorer:
   executable legal authority
+- TTD TESTS Project chat:
+  curated design/review source lane
 
 The tool is evidence capture and batch running only. It does not gain route authority.
 
@@ -33,15 +35,15 @@ The tool is evidence capture and batch running only. It does not gain route auth
 
 Core loop:
 
-1. The dev chat gets the local mirror Casework bundle via `~/Desktop/Casework Start.command` (installed via `tools/command-language-casework/scripts/install-casework-start-command.sh`).
-2. Billy asks that dev chat for a JSON suite block.
+1. The TTD TESTS Project chat gets the local mirror Casework bundle via `~/Desktop/Casework Start.command` (installed via `tools/command-language-casework/scripts/install-casework-start-command.sh`).
+2. Billy asks that TTD TESTS Project chat for a JSON suite block.
 3. Billy pastes the suite into the local GUI.
-4. Billy installs the runner in a disposable ChatGPT test chat.
+4. Billy installs the runner in a disposable generic ChatGPT test tab.
 5. Billy clicks `Run`.
 6. The runner sends the packet and scripted replies in explicit casework mode.
 7. The runner records visible assistant replies and sends them back to the local server.
 8. The server writes result files and reveals them in Finder.
-9. Billy drops the result files back into the design chat for Mermaid-first review, case-law matrix update, legal interpretation, and only then the next batch.
+9. Billy drops the result files back into the TTD TESTS Project chat for Mermaid-first review, case-law matrix update, legal interpretation, and only then the next batch.
 
 ## GUI Workflow
 
@@ -142,7 +144,7 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 ## How To Paste Suite Data
 
 - use an example suite from `tools/command-language-casework/examples/`
-- or paste JSON from the current dev chat after using the local mirror Casework bundle
+- or paste JSON from the TTD TESTS Project chat after using the local mirror Casework bundle
 
 ## Local Mirror Bundle v1
 
@@ -177,15 +179,16 @@ Desktop v1 behavior:
 Launcher:
 
 - starts the local server
-- opens the Casework GUI and a disposable ChatGPT support tab
+- opens the TTD TESTS Project chat, Casework GUI, and a disposable generic ChatGPT test tab
 - tries to avoid stealing focus, but Chrome/macOS focus control is best effort only
+- supports `CASEWORK_DESIGN_PROJECT_URL` and `CASEWORK_TEST_CHAT_URL` overrides if ChatGPT project links change
 
-Dev chat:
+TTD TESTS Project chat:
 
 - designs suites
 - reviews result JSON with Mermaid-first reflection and proposes next study
 
-Disposable ChatGPT tab:
+Disposable ChatGPT test tab:
 
 - runs the actual test runner
 
@@ -201,6 +204,10 @@ After meaningful result review, use:
 This imports the result, tabulates Orion study status, mirrors the current study-status skill, and lets the next Desktop bundle carry the updated next-study pointer.
 
 Fresh skill-loaded chats and Desktop bundles must treat the live Orion `CASEWORK_STUDY_STATUS.md` file as the agenda authority. If the injected bundle reports a different `Next Study Needed` pointer, the bundle path is broken and should be rejected rather than trusted.
+
+See also:
+
+- `docs/ORION_TTD_CASEWORK_TESTING_PROJECT_SOURCE_RULE_V0.md`
 
 ## Casework Reflection Loop v1
 
@@ -241,8 +248,8 @@ Legal interpretation language:
 
 ## Supported Runner Path
 
-- first run `~/Desktop/Casework Start.command`, paste the copied bundle into the dev chat, and get the suite block there
-- primary path: open disposable ChatGPT test chat, validate suite, then `Copy Self-Contained Runner`
+- first run `~/Desktop/Casework Start.command`, paste the copied bundle into the TTD TESTS Project chat, and get the suite block there
+- primary path: open the disposable generic ChatGPT test tab, validate suite, then `Copy Self-Contained Runner`
 - paste the payload into a disposable ChatGPT test-chat console
 - nothing sends until Billy clicks the visible overlay `Run` button
 - clipboard handoff is preferred when the browser allows it; downloaded JSON remains the backup path
@@ -276,6 +283,10 @@ Those files preserve both a quick human summary and the raw per-case record.
   next-study pointer and open findings
 - Casework GUI:
   validation, runner copy, and local evidence capture
+- TTD TESTS Project chat:
+  curated source lane for design/review only
+- disposable generic ChatGPT test tab:
+  runner execution only
 
 ## How This Differs From Orion Transport Tests
 

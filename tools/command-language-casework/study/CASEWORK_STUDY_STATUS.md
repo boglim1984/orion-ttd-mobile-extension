@@ -5,24 +5,24 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_contract_relaxation_matrix_v1
-**Purpose**: Audit whether route_law_language_expansion_v1 proved durable route-law behavior or merely showed compliance with very explicit response_contract language. The next suite should compare strict versus relaxed command packets and preserve route-law guarantees when wording is less overfit.
-**Evidence reviewed**: scorer_keyword_extraction_v3_fresh_validation completed with zero open findings | route_law_language_expansion_v1 passed 4/4 and preserved continue, done, move_on, and side-question return behavior | current matrix now distinguishes case-level outcomes from suite/run shape
-**Current confidence**: Confidence is medium for explicit contract packets and still limited for relaxed or less scripted packets.
-**Open gap**: The current evidence does not yet separate durable route-law behavior from overfit obedience to explicit response_contract wording, explicit chunk IDs, or over-specified next-step phrasing.
-**Test strategy**: Use a contrast/matrix suite, not another tiny smoke batch. Compare strict versus relaxed contract language, explicit IDs versus label-only references, completion phrasing with and without the next chunk named, and side-question return under lighter rescue wording.
-**Avoid / do not repeat**: do not repeat another four-case all-strict smoke batch | do not treat next_study_needed as enough justification by itself | do not regenerate scorer-validation suites unless a scorer dispute reopens | the completed scorer_keyword_extraction_v3_fresh_validation agenda | a route_law_language_expansion_v1 clone that only restates explicit response_contract wording
-**Suite shape recommendation**: Use 6 to 8 cases in one disposable chat. Mark the suite as contrast/matrix, preserve case order, and include one late negative control so context carryover is observable rather than flattened away.
-**Retirement condition**: Retire this pointer after a meaningful imported result either shows relaxed packets still preserve route law or isolates the exact contract weakening that breaks preservation.
-**Next action for fresh chat**: Enter research-planning mode first. Inspect status, recent reviews, the case-law matrix, and run/case indexes. Confirm that route_law_language_expansion_v1 already proved the strict contract path, then design a contrast suite that changes confidence rather than repeating that evidence. Only emit runnable JSON when Billy explicitly asks for the suite.
-**Source**: Audit of scorer_keyword_extraction_v3_fresh_validation plus route_law_language_expansion_v1 imported evidence, with matrix/index redesign to preserve suite size, case order, and context depth.
-**Set by**: Billy / Codex audit and study-loop redesign
+**Next Study Needed**: route_law_minimal_field_ablation_v1
+**Purpose**: Find the smallest command packet field set that still preserves route law after route_law_contract_relaxation_matrix_v1 showed relaxed packets can preserve continue, done, move_on, and side-question return behavior.
+**Evidence reviewed**: route_law_contract_relaxation_matrix_v1 imported result showed relaxed route-law packets preserved continue, done, move_on, and side-question return behavior | the relaxed move_on case advanced exactly one chunk to collect_dishes without exact response_contract transition wording | the late wrong-next stack_papers negative control remained protective and was not flattened into a false pass
+**Current confidence**: Confidence is now high that route law can survive relaxed response_contract wording, but medium/limited on which packet fields are actually carrying that behavior.
+**Open gap**: The current evidence does not yet isolate whether route survival depends on active_chunk_id, active_chunk_label, next_chunk_id, next_chunk_label, route_sequence, allowed_intents, or free-text route_law wording.
+**Test strategy**: Use a focused ablation matrix. Remove or weaken one field family at a time while keeping the route behavior observable. Preserve a strict control, relaxed baseline, minimal active-chunk-only variant, next-chunk removal variant, label-only variant, route_sequence-only variant, side-question variant, and late wrong-next negative control.
+**Avoid / do not repeat**: do not repeat strict-versus-relaxed response_contract testing as the main agenda | do not run another scorer-validation suite unless a scorer dispute reopens | do not remove multiple field families in the same case before a baseline ablation is established | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: Use 6 to 8 cases in one disposable chat. Mark the suite as ablation/matrix, preserve case order, and keep one late negative control.
+**Retirement condition**: Retire this pointer after an imported result identifies the smallest packet field set that still preserves legal continue/done/move_on behavior, or isolates the first removed field family that breaks route survival.
+**Next action for fresh chat**: Enter research-planning mode first. Inspect the imported route_law_contract_relaxation_matrix_v1 result, confirm the strict-versus-relaxed agenda is satisfied, then design a minimal-field ablation suite. Only emit runnable JSON when Billy explicitly asks for the suite.
+**Source**: Post-import review of route_law_contract_relaxation_matrix_v1 result 20260613-153256.
+**Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-13
 
 ### Why these cases
-- Anchor one strict control so the suite can detect regression versus prior passing behavior.
-- Label-only and relaxed variants test whether route-law survives without over-specified protocol wording.
-- A late negative control checks for context drift instead of only isolated success.
+- The previous pointer is satisfied because relaxed contracts preserved route law.
+- The next uncertainty is the minimal field carrier, not strict versus relaxed wording.
+- A late negative control remains necessary so reduced packets do not teach the scorer to accept wrong-next movement.
 
 ## Artifact roles
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T19:20:40.415Z
-- Run count: 7
-- Case count: 33
+- Last tabulated at: 2026-06-13T19:38:31.184Z
+- Run count: 8
+- Case count: 41
 - Latest suite ID: scorer_keyword_extraction_v3_fresh_validation
 - Latest run ID: 20260613-142922-scorer_keyword_extraction_v3_fresh_validation
-- Classification counts: {"PASS_CANDIDATE":28,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":4}
+- Classification counts: {"PASS_CANDIDATE":35,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":5}
 - Open findings count: 0
-- Case-law matrix rows: 33
+- Case-law matrix rows: 41
 
 ## Open findings
 Generated and/or manually curated.

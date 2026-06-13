@@ -9,17 +9,17 @@
 
 ## Active research brief
 
-- Next study: route_law_contract_relaxation_matrix_v1
-- Purpose: Audit whether route_law_language_expansion_v1 proved durable route-law behavior or merely showed compliance with very explicit response_contract language. The next suite should compare strict versus relaxed command packets and preserve route-law guarantees when wording is less overfit.
-- Current confidence: Confidence is medium for explicit contract packets and still limited for relaxed or less scripted packets.
-- Open gap: The current evidence does not yet separate durable route-law behavior from overfit obedience to explicit response_contract wording, explicit chunk IDs, or over-specified next-step phrasing.
-- Suite shape recommendation: Use 6 to 8 cases in one disposable chat. Mark the suite as contrast/matrix, preserve case order, and include one late negative control so context carryover is observable rather than flattened away.
+- Next study: route_law_minimal_field_ablation_v1
+- Purpose: Find the smallest command packet field set that still preserves route law after route_law_contract_relaxation_matrix_v1 showed relaxed packets can preserve continue, done, move_on, and side-question return behavior.
+- Current confidence: Confidence is now high that route law can survive relaxed response_contract wording, but medium/limited on which packet fields are actually carrying that behavior.
+- Open gap: The current evidence does not yet isolate whether route survival depends on active_chunk_id, active_chunk_label, next_chunk_id, next_chunk_label, route_sequence, allowed_intents, or free-text route_law wording.
+- Suite shape recommendation: Use 6 to 8 cases in one disposable chat. Mark the suite as ablation/matrix, preserve case order, and keep one late negative control.
 
 ## Evidence summary
 
-- Imported run count: 7
-- Imported case count: 33
-- Matrix row count: 33
+- Imported run count: 8
+- Imported case count: 41
+- Matrix row count: 41
 - Latest imported suite ID: scorer_keyword_extraction_v3_fresh_validation
 - Latest imported run ID: 20260613-142922-scorer_keyword_extraction_v3_fresh_validation
 

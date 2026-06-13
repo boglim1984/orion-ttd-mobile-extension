@@ -20,8 +20,8 @@
 - Imported run count: 8
 - Imported case count: 41
 - Matrix row count: 41
-- Latest imported suite ID: scorer_keyword_extraction_v3_fresh_validation
-- Latest imported run ID: 20260613-142922-scorer_keyword_extraction_v3_fresh_validation
+- Latest imported suite ID: route_law_contract_relaxation_matrix_v1
+- Latest imported run ID: 20260613-153256-route_law_contract_relaxation_matrix_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_contract_relaxation_matrix_v1 / 20260613-153256-route_law_contract_relaxation_matrix_v1: 8 cases, legal=FAIL, route=broken, design=matrix, context_risk=high
+- route_law_language_expansion_v1 / 20260613-145410-route_law_language_expansion_v1: 4 cases, legal=PASS, route=survived, design=contrast, context_risk=medium
 - scorer_keyword_extraction_v3_fresh_validation / 20260613-142922-scorer_keyword_extraction_v3_fresh_validation: 2 cases, legal=FAIL, route=broken, design=smoke, context_risk=low
-- scorer_keyword_extraction_v3_fresh_validation / 20260613-140918-scorer_keyword_extraction_v3_fresh_validation: 2 cases, legal=FAIL, route=broken, design=smoke, context_risk=low
-- scorer_keyword_extraction_v2 / 20260613-010214-scorer_keyword_extraction_v2: 8 cases, legal=FAIL, route=broken, design=matrix, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/scorer_keyword_extraction_v2__20260613-010214-scorer_keyword_extraction_v2.md
-- study/reviews/2026-06-13/scorer_keyword_extraction_v3_fresh_validation__20260613-140918-scorer_keyword_extraction_v3_fresh_validation.md
 - study/reviews/2026-06-13/scorer_keyword_extraction_v3_fresh_validation__20260613-142922-scorer_keyword_extraction_v3_fresh_validation.md
+- study/reviews/2026-06-13/route_law_language_expansion_v1__20260613-145410-route_law_language_expansion_v1.md
+- study/reviews/2026-06-13/route_law_contract_relaxation_matrix_v1__20260613-153256-route_law_contract_relaxation_matrix_v1.md
 
 ## Planning rule
 

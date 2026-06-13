@@ -41,7 +41,7 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T19:42:52.828Z
+- Last tabulated at: 2026-06-13T19:44:10.901Z
 - Run count: 8
 - Case count: 41
 - Latest suite ID: route_law_contract_relaxation_matrix_v1

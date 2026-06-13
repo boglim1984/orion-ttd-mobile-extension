@@ -1,0 +1,58 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2dcd19-62a4-83ea-9373-fc455d16ba21",
+    "suite_id": "route_law_min_combo_cold_first_sequence_wrong_next_control_v1",
+    "run_id": "20260613-173658-route_law_min_combo_cold_first_sequence_wrong_next_control_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "Cold-first active_chunk_id plus active_chunk_label plus route_sequence defeated a conflicting wrong next_chunk_id. After move_on, the assistant advanced to collect_dishes rather than stack_papers and the run was classified PASS_CANDIDATE.",
+    "language_lesson": "The ordered route_sequence can act as the authoritative legal route even when packet-level next_chunk fields conflict, as long as the packet includes active chunk identity and the sequence. This retires the active+label+route_sequence wrong-next control and shifts the minimum-carrier question to whether the active label is still necessary.",
+    "pointer_update": {
+      "next_study_needed": "route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1",
+      "purpose": "Test whether active_chunk_id plus route_sequence, without active_chunk_label, is enough to carry legal move_on advancement and defeat a conflicting wrong next_chunk_id in a fresh cold-first chat.",
+      "evidence_reviewed": [
+        "route_law_min_combo_cold_first_active_route_sequence_v1 showed active_chunk_id plus active_chunk_label plus route_sequence can advance cold to collect_dishes.",
+        "route_law_min_combo_cold_first_sequence_wrong_next_control_v1 showed the same carrier set defeats a conflicting next_chunk_id pointing to stack_papers.",
+        "The latest run completed with no tool failure, no warnings, and assistant response New active chunk: collect_dishes."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "The passing cold wrong-next packet still included active_chunk_label, so we do not yet know whether active_chunk_id plus route_sequence alone is sufficient.",
+      "test_strategy": "Run one fresh disposable chat with a single cold case containing active_chunk_id, allowed_intents, route_sequence, and a conflicting next_chunk_id/next_chunk_label pointing to stack_papers. Omit active_chunk_label. The legal result should still be collect_dishes.",
+      "avoid": [
+        "do not run the next control in the already warmed chat",
+        "do not include active_chunk_label in the next packet",
+        "do not add response_contract wording that rescues the route",
+        "do not bundle multiple cold cards into one warmed suite",
+        "do not treat active_id plus route_sequence as proven until the wrong-next conflict control passes without active_chunk_label"
+      ],
+      "suite_shape_recommendation": "One-case cold-first suite in a fresh disposable chat.",
+      "retirement_condition": "Retire this pointer when a cold packet with active_chunk_id plus route_sequence, no active_chunk_label, and conflicting wrong next_chunk_id advances to collect_dishes rather than stack_papers.",
+      "next_action_for_fresh_chat": "Generate only the validator-ready one-case JSON suite for route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1."
+    },
+    "reviewed_at": "2026-06-13T21:38:49.308Z"
+  },
+  "imported_result_path": "study/raw/2026-06-13/route_law_min_combo_cold_first_sequence_wrong_next_control_v1__20260613-173658-route_law_min_combo_cold_first_sequence_wrong_next_control_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1",
+    "purpose": "Test whether active_chunk_id plus route_sequence, without active_chunk_label, is enough to carry legal move_on advancement and defeat a conflicting wrong next_chunk_id in a fresh cold-first chat.",
+    "evidence_reviewed": [
+      "route_law_min_combo_cold_first_active_route_sequence_v1 showed active_chunk_id plus active_chunk_label plus route_sequence can advance cold to collect_dishes.",
+      "route_law_min_combo_cold_first_sequence_wrong_next_control_v1 showed the same carrier set defeats a conflicting next_chunk_id pointing to stack_papers.",
+      "The latest run completed with no tool failure, no warnings, and assistant response New active chunk: collect_dishes."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "The passing cold wrong-next packet still included active_chunk_label, so we do not yet know whether active_chunk_id plus route_sequence alone is sufficient.",
+    "test_strategy": "Run one fresh disposable chat with a single cold case containing active_chunk_id, allowed_intents, route_sequence, and a conflicting next_chunk_id/next_chunk_label pointing to stack_papers. Omit active_chunk_label. The legal result should still be collect_dishes.",
+    "avoid": [
+      "do not run the next control in the already warmed chat",
+      "do not include active_chunk_label in the next packet",
+      "do not add response_contract wording that rescues the route",
+      "do not bundle multiple cold cards into one warmed suite",
+      "do not treat active_id plus route_sequence as proven until the wrong-next conflict control passes without active_chunk_label"
+    ],
+    "suite_shape_recommendation": "One-case cold-first suite in a fresh disposable chat.",
+    "retirement_condition": "Retire this pointer when a cold packet with active_chunk_id plus route_sequence, no active_chunk_label, and conflicting wrong next_chunk_id advances to collect_dishes rather than stack_papers.",
+    "next_action_for_fresh_chat": "Generate only the validator-ready one-case JSON suite for route_law_min_combo_cold_first_active_id_route_sequence_wrong_next_v1."
+  },
+  "applied_at": "2026-06-13T21:38:49.310Z"
+}

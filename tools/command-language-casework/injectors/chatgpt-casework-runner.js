@@ -1311,12 +1311,12 @@
       await root.navigator?.clipboard?.writeText?.(text);
       return {
         ok: true,
-        message: "Test done.\nResult downloaded.\nNow run:\ntools/command-language-casework/scripts/finalize-latest-casework-run.sh --commit --push"
+        message: "Test done.\nResult downloaded.\nCasework End should open automatically.\nIf not, run ~/Desktop/Casework End.command\nPaste CASEWORK_REVIEW_V1 block when prompted."
       };
     } catch (_error) {
       return {
         ok: false,
-        message: "Test done.\nResult downloaded.\nNow run:\ntools/command-language-casework/scripts/finalize-latest-casework-run.sh --commit --push"
+        message: "Test done.\nResult downloaded.\nCasework End should open automatically.\nIf not, run ~/Desktop/Casework End.command\nPaste CASEWORK_REVIEW_V1 block when prompted."
       };
     }
   }

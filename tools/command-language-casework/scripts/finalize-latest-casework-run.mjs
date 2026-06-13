@@ -10,6 +10,47 @@ const __dirname = path.dirname(__filename);
 const caseworkRoot = path.resolve(__dirname, "..");
 const studyDir = path.join(caseworkRoot, "study");
 const runIndexJsonPath = path.join(studyDir, "index", "CASEWORK_RUN_INDEX.json");
+const statePath = path.join(studyDir, ".finalizer-watch-state.json");
+const lockfilePath = path.join(studyDir, ".casework-finalizer.lock");
+
+// Lockfile logic
+if (fs.existsSync(lockfilePath)) {
+  try {
+    const pidStr = fs.readFileSync(lockfilePath, "utf8").trim();
+    if (pidStr) {
+      const pid = parseInt(pidStr, 10);
+      try {
+        process.kill(pid, 0); // Check if process is alive
+        console.log(`Finalizer already running (PID ${pid}). Exiting to prevent parallel execution.`);
+        process.exit(0);
+      } catch (err) {
+        console.log(`Stale lockfile detected (PID ${pid} is dead). Clearing lock.`);
+        fs.unlinkSync(lockfilePath);
+      }
+    }
+  } catch (err) {
+    console.log("Could not read/clear lockfile safely. Ignoring error.");
+  }
+}
+try { fs.writeFileSync(lockfilePath, String(process.pid)); } catch(e) {}
+
+function cleanupLock() {
+  try {
+    if (fs.existsSync(lockfilePath)) {
+      const current = fs.readFileSync(lockfilePath, "utf8").trim();
+      if (current === String(process.pid)) {
+        fs.unlinkSync(lockfilePath);
+      }
+    }
+  } catch (err) {}
+}
+process.on("exit", cleanupLock);
+process.on("SIGINT", () => process.exit(1));
+process.on("SIGTERM", () => process.exit(1));
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught exception:", err);
+  process.exit(1);
+});
 
 const ARGS = process.argv.slice(2);
 const FLAG_COMMIT = ARGS.includes("--commit");
@@ -52,6 +93,22 @@ function extractJson(text) {
     if (rawMatch) cleaned = rawMatch[0];
   }
   return cleaned;
+}
+
+function markStateCompleted(suite_id, run_id) {
+  let state = {};
+  if (fs.existsSync(statePath)) {
+    try { state = JSON.parse(fs.readFileSync(statePath, "utf8")); } catch(err) {}
+  }
+  const key = `${suite_id}__${run_id}`;
+  state[key] = {
+    ...state[key],
+    suite_id,
+    run_id,
+    state: "completed",
+    completed_at: new Date().toISOString()
+  };
+  try { fs.writeFileSync(statePath, JSON.stringify(state, null, 2)); } catch(e) {}
 }
 
 // 1. Locate Latest Result
@@ -122,6 +179,7 @@ if (isAlreadyImported && captureExists) {
   console.log(" RESULT & REVIEW ALREADY IMPORTED");
   console.log("=============================\n");
   console.log("This run has already been imported and has a review capture. Exiting cleanly.");
+  markStateCompleted(resultData.suite_id, resultData.run_id);
   process.exit(0);
 }
 
@@ -273,6 +331,8 @@ if (reviewObj) console.log(`Review Capture:     ${path.relative(caseworkRoot, ca
 console.log(`Latest Pointer:     ${currentPointer}`);
 console.log(`Latest Run Visible: ${statusObj2?.computed_summary?.latest_run_id}`);
 
+markStateCompleted(resultData.suite_id, resultData.run_id);
+
 // 9. Git Operations
 const orionRepoRoot = runCmd("git rev-parse --show-toplevel", caseworkRoot);
 let githubSynced = false;
@@ -282,7 +342,7 @@ let ccCommitted = false;
 if (FLAG_COMMIT) {
   console.log("\n--> Staging and committing changes...");
   try {
-    const gitAddCmd = `git add tools/command-language-casework/study/CASEWORK_EVIDENCE_DIGEST.md tools/command-language-casework/study/CASEWORK_STUDY_STATUS.json tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.csv tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.jsonl tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md tools/command-language-casework/study/index/CASEWORK_CASE_INDEX.csv tools/command-language-casework/study/index/CASEWORK_RUN_INDEX.json tools/command-language-casework/study/raw/ tools/command-language-casework/study/reviews/ tools/command-language-casework/study/review-captures/ tools/command-language-casework/injectors/chatgpt-casework-runner.js tools/command-language-casework/public/casework-ui.js tools/command-language-casework/scripts/finalize-latest-casework-run.mjs tools/command-language-casework/scripts/finalize-latest-casework-run.sh tools/command-language-casework/docs/`;
+    const gitAddCmd = `git add tools/command-language-casework/study/CASEWORK_EVIDENCE_DIGEST.md tools/command-language-casework/study/CASEWORK_STUDY_STATUS.json tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.csv tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.jsonl tools/command-language-casework/study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md tools/command-language-casework/study/index/CASEWORK_CASE_INDEX.csv tools/command-language-casework/study/index/CASEWORK_RUN_INDEX.json tools/command-language-casework/study/raw/ tools/command-language-casework/study/reviews/ tools/command-language-casework/study/review-captures/ tools/command-language-casework/study/.finalizer-watch-state.json tools/command-language-casework/injectors/chatgpt-casework-runner.js tools/command-language-casework/public/casework-ui.js tools/command-language-casework/scripts/finalize-latest-casework-run.mjs tools/command-language-casework/scripts/finalize-latest-casework-run.sh tools/command-language-casework/scripts/install-casework-end-command.sh tools/command-language-casework/scripts/install-casework-end-watcher.sh tools/command-language-casework/scripts/uninstall-casework-end-watcher.sh tools/command-language-casework/scripts/casework-end-watch-loop.sh tools/command-language-casework/docs/`;
     runCmd(gitAddCmd, orionRepoRoot);
     
     const status = runCmd(`git status --porcelain`, orionRepoRoot);
@@ -317,7 +377,6 @@ if (FLAG_PUSH) {
     if (orionCommitted) {
       runCmd(`git push`, orionRepoRoot);
     } else {
-      // Ensure we push even if there are unpushed commits but no new ones created
       const unpushed = runCmd("git cherry -v", orionRepoRoot);
       if (unpushed) runCmd(`git push`, orionRepoRoot);
     }

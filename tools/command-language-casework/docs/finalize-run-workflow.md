@@ -1,53 +1,36 @@
 # Casework Finalization Workflow
 
 ## Overview
-The casework runner executes in a disposable ChatGPT tab. Due to browser security (CSP) restrictions, it cannot directly POST results to the local casework server or save to a specific directory. Instead, the runner automatically downloads the `orion-casework-result-*.json` file to your `~/Downloads` or `~/Desktop` directory.
+The finalizer automation processes completed browser results, ensuring durable records, study tabulation, Command Center skill synchronization, and Git lifecycle.
 
-The **Finalizer Script** automates the entire process of bringing that downloaded evidence into the permanent study record.
+## Expected Final Workflow
+1. Run a Casework test in ChatGPT using the disposable GUI.
+2. The browser automatically downloads `orion-casework-result-*.json`.
+3. The background watcher detects the new file, ensures it is fully downloaded, and automatically opens a Terminal window running `Casework End`.
+4. The test chat output presents a `CASEWORK_REVIEW_V1` block containing the analysis and new pointer direction.
+5. Paste this review block into the paused Casework End terminal.
+6. The finalizer completes import, validation, pointer updates, bundle generation, scoped commits, and push to GitHub.
 
-## 1. Run the Suite
-Use the Casework Start bookmarklet or desktop command to open the launcher and start the suite in ChatGPT. When the suite finishes, the runner overlay will say:
-```
-Test done.
-Result downloaded.
-Now run:
-tools/command-language-casework/scripts/finalize-latest-casework-run.sh --commit --push
-```
+## Fallback / Manual Launch
+If the automatic watcher does not launch or you accidentally closed the Terminal before pasting the review block, simply double-click the Desktop launcher:
+`~/Desktop/Casework End.command`
 
-## 2. Finalize the Record
-From the `orion-ios-ttd-injector/ttd-mobile-extension` root, run:
+The script will re-detect the latest downloaded result or gracefully handle an already-imported result by resuming the review capture phase.
+
+## Installation
+The automation consists of a LaunchAgent watcher and a Desktop command.
 ```bash
-tools/command-language-casework/scripts/finalize-latest-casework-run.sh --commit --push
+tools/command-language-casework/scripts/install-casework-end-command.sh
+tools/command-language-casework/scripts/install-casework-end-watcher.sh
 ```
 
-This single command will:
-1. Auto-discover the latest `orion-casework-result-*.json` in `~/Downloads` or `~/Desktop`.
-2. Skip if the run is already imported.
-3. Import the raw result and generate the review stub.
-4. Regenerate all case-law matrix files, indices, and study status.
-5. Sync the Command Center mirrored status skill.
-6. Rebuild the Command Center skill index (if needed).
-7. Refresh the Casework Start bundle payload.
-8. Stage and commit ONLY the specific Casework evidence files (protecting unrelated untracked work).
-9. Push the updates to GitHub.
-10. Print a clear pointer and GitHub sync report.
-
-### Diagnostics are Built-in
-**Do not manually copy diagnostics for successful runs.** 
-The downloaded `orion-casework-result-*.json` file already contains the full `dom_turn_trace`, send activation details, and runner diagnostics. The finalizer script permanently stores them in the `study/raw/` evidence folder.
-
-## Troubleshooting
-
-### Finalizer can't find the result
-If you downloaded the file to a custom folder instead of `~/Downloads` or `~/Desktop`, you can pass it explicitly:
+## Disabling the Watcher
+If you want to stop automatic pop-ups, unload the LaunchAgent:
 ```bash
-tools/command-language-casework/scripts/finalize-latest-casework-run.sh --result path/to/my/downloaded-result.json --commit --push
+tools/command-language-casework/scripts/uninstall-casework-end-watcher.sh
 ```
 
-### GitHub out of sync
-If you omit the `--push` flag, the finalizer report will warn you:
-```
-LOCAL UPDATED BUT NOT PUSHED TO GITHUB
-Fresh chats that inspect GitHub may see stale status.
-```
-Simply run `git push` manually in both the Orion and Command Center repos to align them.
+## Logs and State
+- **Logs:** `study/logs/casework-end-watcher.log` records file detection and Terminal spawns.
+- **State:** `study/.finalizer-watch-state.json` tracks whether a specific suite/run has been launched or completed. This debounces launchd events.
+- **Lockfile:** `study/.casework-finalizer.lock` ensures multiple Terminal processes don't race to finalize the same records concurrently.

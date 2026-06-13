@@ -391,10 +391,10 @@ async function init() {
       await copyToClipboard(
         [
           "Casework result handling",
-          "1. After the self-contained run finishes, the result JSON is downloaded automatically.",
-          "2. Diagnostics are already in the result JSON; no manual copy needed for completed runs.",
-          "3. Finalize the run:",
-          "tools/command-language-casework/scripts/finalize-latest-casework-run.sh --commit --push"
+          "1. Test done. Result downloaded.",
+          "2. Casework End should open automatically.",
+          "3. If it does not, double-click: ~/Desktop/Casework End.command",
+          "4. When prompted, paste the CASEWORK_REVIEW_V1 block from the test chat."
         ].join("\n"),
         "Copied result instructions."
       );

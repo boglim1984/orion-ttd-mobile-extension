@@ -13,14 +13,27 @@ async function loadBookmarkletModule() {
   return import(modulePath);
 }
 
-test("skill bookmarklet keeps the Casework Designer Skill boundaries", async () => {
+test("start bookmarklet triggers shortcut and popup", async () => {
   const skillSetup = await loadBookmarkletModule();
-  const bookmarklet = skillSetup.buildSkillBookmarklet();
+  const bookmarklet = skillSetup.buildStartBookmarklet();
+
+  assert.match(bookmarklet, /shortcuts:\/\/run-shortcut\?name=Casework\%20Start/);
+  assert.match(bookmarklet, /Paste into this chat/i);
+  assert.match(bookmarklet, /Casework Start/);
+  assert.doesNotMatch(bookmarklet, /\/api\/runner\/bootstrap\.js/);
+  assert.doesNotMatch(bookmarklet, /fetch\("http:\/\/127\.0\.0\.1/);
+  assert.doesNotMatch(bookmarklet, /document\.cookie/);
+  assert.doesNotMatch(bookmarklet, /localStorage/);
+  assert.doesNotMatch(bookmarklet, /sessionStorage/);
+});
+
+test("snapshot bookmarklet keeps the Casework Designer Skill boundaries", async () => {
+  const skillSetup = await loadBookmarkletModule();
+  const bookmarklet = skillSetup.buildSnapshotBookmarklet();
 
   assert.match(bookmarklet, /^javascript:/);
   assert.match(bookmarklet, /Casework Skill Ready/);
   assert.match(bookmarklet, /design the next casework suite/i);
-  assert.match(bookmarklet, /Use the Casework GUI tab to run it\./);
   assert.doesNotMatch(bookmarklet, /\/api\/runner\/bootstrap\.js/);
   assert.doesNotMatch(bookmarklet, /fetch\("http:\/\/127\.0\.0\.1/);
   assert.doesNotMatch(bookmarklet, /document\.cookie/);
@@ -34,9 +47,8 @@ test("skill bookmarklet keeps the Casework Designer Skill boundaries", async () 
 test("skill prompt stays compact and points at the supported local workflow", async () => {
   const skillSetup = await loadBookmarkletModule();
 
-  assert.match(skillSetup.CASEWORK_SKILL_PROMPT, /Command Language Casework Designer Skill/);
-  assert.match(skillSetup.CASEWORK_SKILL_PROMPT, /review result JSON with a Mermaid diagram first/i);
-  assert.match(skillSetup.CASEWORK_SKILL_PROMPT, /Load example -> Validate -> Copy Runner -> paste in ChatGPT console -> click Run -> paste result back here\./);
+  assert.match(skillSetup.CASEWORK_SKILL_PROMPT, /Command Language Casework Designer/);
+  assert.match(skillSetup.CASEWORK_SKILL_PROMPT, /review result JSON with a Mermaid diagram/i);
 });
 
 test("launcher script prints GUI URL and quiet-focus limitation", () => {

@@ -46,9 +46,16 @@ The launcher now opens a dedicated TTD TESTS Project chat for design/review cont
 ## Known Limitations
 
 - the current runner is console-injected, not a full cross-tab browser controller
-- live localhost communication may depend on browser allowance for loopback requests from the ChatGPT page
+- ChatGPT CSP can block localhost calls from inside the page, so self-contained runners must not depend on localhost postback
 - conservative selectors are used, but ChatGPT DOM changes can still break composer or send detection
 - heuristic classifications are advisory only and do not replace reducer/scorer or human review
+
+## Localhost CSP Boundary Update
+
+- local server / GUI: before-run setup, validation, runner generation/copy
+- disposable ChatGPT tab: self-contained execution plus in-page result download/copy
+- not allowed as required behavior: ChatGPT page POSTing result to localhost
+- `/api/runner/self-contained-result` may still exist for legacy/server-assisted tooling, but the default self-contained path must not call it
 
 ## GUI Simplification Update
 

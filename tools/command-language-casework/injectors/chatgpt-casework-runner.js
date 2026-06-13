@@ -14,6 +14,7 @@
     typeof require === "function" ? require("../lib/casework-heuristics.js") : null
   );
   const HEURISTICS_VERSION = HEURISTICS_API?.CASEWORK_HEURISTICS_VERSION || "heuristics-unavailable";
+  const SELF_CONTAINED_RESULT_PATH = ["/api/runner", "self-contained-result"].join("/");
   const TOOL_FAILURE_LABELS = {
     COMPOSER_NOT_FOUND: "TOOL_FAIL_COMPOSER_NOT_FOUND",
     COMPOSER_INSERT_VERIFY: "TOOL_FAIL_COMPOSER_INSERT_VERIFY",
@@ -1336,17 +1337,27 @@
     root.setTimeout(() => root.URL.revokeObjectURL(objectUrl), 1000);
   }
 
-  async function bestEffortUploadResult(serverBaseUrl, suite, runResult) {
+  async function bestEffortUploadResult(serverBaseUrl, suite, runResult, allowLocalResultUpload) {
+    if (!allowLocalResultUpload) {
+      return {
+        ok: false,
+        blocked: true,
+        skipped: true,
+        message: "Local result upload disabled for self-contained mode. Use the downloaded or copied result."
+      };
+    }
+
     if (!serverBaseUrl || typeof root.fetch !== "function") {
       return {
         ok: false,
         blocked: true,
+        skipped: true,
         message: "No upload target configured."
       };
     }
 
     try {
-      const response = await sendJson(serverBaseUrl, "/api/runner/self-contained-result", {
+      const response = await sendJson(serverBaseUrl, SELF_CONTAINED_RESULT_PATH, {
         suite,
         runResult
       });
@@ -1496,6 +1507,7 @@
     const suite = options.suite;
     const runId = options.runId;
     const serverBaseUrl = options.serverBaseUrl || null;
+    const allowLocalResultUpload = options.allowLocalResultUpload === true;
 
     if (!isAllowedChatGptPage(locationRef)) {
       throw new Error("This runner must be used on a visible ChatGPT test chat for live execution.");
@@ -1517,13 +1529,18 @@
     const resultFilename = `orion-casework-result-${runId}.json`;
     triggerDownload(resultFilename, resultJson, "application/json", documentRef);
 
-    const uploadOutcome = await bestEffortUploadResult(serverBaseUrl, suite, runResult);
+    const uploadOutcome = await bestEffortUploadResult(
+      serverBaseUrl,
+      suite,
+      runResult,
+      allowLocalResultUpload
+    );
     const clipboardOutcome = await bestEffortCopyRunResult(runResult, resultFilename);
     const latestCaseDiagnostics = runResult.cases[runResult.cases.length - 1]?.diagnostics || null;
     if (latestCaseDiagnostics) {
       overlay.setDiagnostics(describeDiagnostics(latestCaseDiagnostics));
     }
-    if (!uploadOutcome.ok) {
+    if (!uploadOutcome.ok && !uploadOutcome.skipped) {
       runResult.warnings.push(uploadOutcome.message);
       overlay.setStatus(`${clipboardOutcome.message}\n${uploadOutcome.message}`);
     } else {
@@ -1664,6 +1681,7 @@
     };
     const runId = options.runId || `self-contained-${Date.now()}`;
     const serverBaseUrl = options.serverBaseUrl || null;
+    const allowLocalResultUpload = options.allowLocalResultUpload === true;
     const stopState = {
       stopRequested: false
     };
@@ -1706,6 +1724,7 @@
           suite,
           runId: rerunCount === 1 ? runId : `${runId}-r${rerunCount}`,
           serverBaseUrl,
+          allowLocalResultUpload,
           overlay,
           stopState
         });

@@ -136,7 +136,6 @@ function getSelfContainedPayload({ suite, runId, port }) {
 ${source}
 window.OrionCommandLanguageCaseworkRunner.installSelfContained({
   runId: ${JSON.stringify(runId)},
-  serverBaseUrl: ${JSON.stringify(`http://127.0.0.1:${port}`)},
   suite: ${JSON.stringify(suite, null, 2)}
 });
 `;

@@ -53,6 +53,12 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 - Casework GUI validates suite JSON, copies the runner, and exposes reflection-loop affordances.
 - Disposable ChatGPT test tab executes the self-contained runner in a visible generic test tab.
 
+Boundary:
+
+- local server / GUI: before-run setup, validation, runner generation/copy
+- disposable ChatGPT tab: self-contained execution and in-page result download/copy
+- not allowed as required behavior: ChatGPT page POSTing result to localhost
+
 The launcher opens the TTD TESTS Project chat, the GUI, and a disposable generic ChatGPT test tab.
 
 ## Config
@@ -92,11 +98,13 @@ Each run includes:
 - The `launch-casework.command` launcher starts the local server and opens the support tabs quietly when macOS/Chrome allow it.
 - The static skill-snapshot bookmarklet remains experimental and may become stale.
 - The supported path is the self-contained payload, not the legacy localhost bootstrap.
+- ChatGPT CSP can block localhost calls from inside the page; self-contained runners must not depend on localhost postback.
 - The legacy loader and server-run buttons remain available as secondary tooling only.
 - Use this only in dedicated test chats.
 - The GUI now hides legacy/server-run controls under `Advanced / Legacy / Diagnostics`.
 - Draft/save and setup-note controls are also secondary and live in `Advanced / Legacy / Diagnostics`.
 - The self-contained runner embeds the current suite JSON, so copy it after validating the suite you intend to run.
+- Blob download and clipboard/copy fallback are the supported self-contained result recovery path.
 
 ## First Live Self-Contained Run Finding
 

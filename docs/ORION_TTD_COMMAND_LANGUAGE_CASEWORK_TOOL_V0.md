@@ -41,9 +41,9 @@ Core loop:
 4. Billy installs the runner in a disposable generic ChatGPT test tab.
 5. Billy clicks `Run`.
 6. The runner sends the packet and scripted replies in explicit casework mode.
-7. The runner records visible assistant replies and sends them back to the local server.
-8. The server writes result files and reveals them in Finder.
-9. Billy drops the result files back into the TTD TESTS Project chat for Mermaid-first review, case-law matrix update, legal interpretation, and only then the next batch.
+7. The runner records visible assistant replies and recovers results in-page via download/copy.
+8. Billy drops the result files back into the TTD TESTS Project chat for Mermaid-first review, case-law matrix update, legal interpretation, and only then the next batch.
+9. Local server result writing remains a separate legacy/server-assisted path, not a required self-contained postback.
 
 ## GUI Workflow
 
@@ -61,6 +61,22 @@ The GUI includes:
 - status log
 - current case panel
 - result links panel
+
+## Localhost CSP Boundary
+
+The local GUI/server is a before-run setup surface.
+
+The self-contained runner executes inside `chatgpt.com`.
+
+ChatGPT CSP can block localhost calls from inside the page, so self-contained runners must not depend on localhost postback.
+
+Required self-contained recovery path:
+
+- Blob download
+- clipboard/copy fallback
+- visible overlay completion message
+
+Legacy/server-assisted localhost result writing may remain, but only as a separate mode.
 
 ## Suite Schema
 

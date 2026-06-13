@@ -38,14 +38,14 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 
 ## First Run
 
-1. In the current ChatGPT dev chat, use the GUI `Copy Start Bookmarklet` helper and save that bookmarklet.
-2. Click the bookmarklet. It triggers the macOS Shortcut which reads the fresh skill, copies it, and opens the Casework GUI plus a disposable ChatGPT support tab.
-3. Paste the copied skill into the composer.
-3. Ask the dev chat to design the next suite JSON block.
-4. Use the GUI step lane to load/paste that suite and validate it.
-5. Copy the self-contained runner for the current suite.
-6. Paste it into the disposable ChatGPT page console once per page load, then use the overlay `Run` button.
-7. Use the copied result text as the main handoff if the browser allows clipboard access. Use the downloaded `orion-casework-result-*.json` file as backup.
+1. Open a new, disposable ChatGPT chat window to serve as your dev environment.
+2. If Shortcuts fails silently, run `~/Desktop/Casework Start.command` instead. This is the supported v1 launcher. It will fetch the skill and launch the support tabs. Paste the clipboard payload into your ChatGPT dev chat.
+3. Keep the newly-opened Casework GUI and support tabs visible.
+4. Ask the dev chat to design the next suite JSON block.
+5. Use the GUI step lane to load/paste that suite and validate it.
+6. Copy the self-contained runner for the current suite.
+7. Paste it into the disposable ChatGPT page console once per page load, then use the overlay `Run` button.
+8. Use the copied result text as the main handoff if the browser allows clipboard access. Use the downloaded `orion-casework-result-*.json` file as backup.
 
 ## Mental Model
 

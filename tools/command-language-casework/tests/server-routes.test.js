@@ -53,7 +53,8 @@ test("root route, index route, and api/state are served on the selected port", a
   const rootRes = await fetch(`${started.guiUrl}/`);
   const rootHtml = await rootRes.text();
   assert.match(rootHtml, /Command Language Casework Runner/);
-  assert.match(rootHtml, /Copy Start Bookmarklet/);
+  assert.match(rootHtml, /Copy Start Bookmarklet \(Experimental\)/);
+  assert.match(rootHtml, /Casework Start.command/);
   assert.match(rootHtml, /How To Use/);
   assert.match(rootHtml, /Load example → Validate → Copy Runner → paste in ChatGPT console → click Run → paste result back here\./);
   assert.doesNotMatch(rootHtml, /Copy Console Setup Note/);

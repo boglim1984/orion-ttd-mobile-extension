@@ -12,6 +12,15 @@ const matrixScript = path.join(caseworkRoot, "scripts", "update-casework-case-la
 const csvPath = path.join(studyDir, "case-law", "CASEWORK_CASE_LAW_MATRIX_V1.csv");
 const jsonlPath = path.join(studyDir, "case-law", "CASEWORK_CASE_LAW_MATRIX_V1.jsonl");
 
+function loadJsonlRows() {
+  return fs
+    .readFileSync(jsonlPath, "utf8")
+    .trim()
+    .split("\n")
+    .filter(Boolean)
+    .map((line) => JSON.parse(line));
+}
+
 test("case-law matrix script writes headers, jsonl rows, and tolerates sparse results", () => {
   const tempDateDir = path.join(rawDir, "2026-06-14");
   const tempResultPath = path.join(tempDateDir, "matrix_sparse_suite__20260614-010101-matrix_sparse_suite.json");
@@ -64,5 +73,24 @@ test("case-law matrix script writes headers, jsonl rows, and tolerates sparse re
       fs.rmdirSync(tempDateDir);
     } catch (_error) {}
     execSync(`node "${matrixScript}"`, { stdio: "ignore" });
+  }
+});
+
+test("case-law matrix keeps collect_dishes repair survived and wrong-next negative control unsatisfied", () => {
+  execSync(`node "${matrixScript}"`, { stdio: "ignore" });
+  const rows = loadJsonlRows();
+
+  const repairedRows = rows.filter((row) => row.case_id === "scorer_keyword_v2_006_early_visible_position");
+  assert.ok(repairedRows.length > 0, "Expected repaired collect_dishes rows to exist");
+  for (const row of repairedRows) {
+    assert.strictEqual(row.classification, "PASS_CANDIDATE");
+    assert.strictEqual(row.route_survival_outcome, "survived");
+  }
+
+  const wrongNextRows = rows.filter((row) => row.case_id === "scorer_keyword_v2_008_negative_wrong_next_chunk");
+  assert.ok(wrongNextRows.length > 0, "Expected wrong-next negative rows to exist");
+  for (const row of wrongNextRows) {
+    assert.strictEqual(row.classification, "FAIL_LOST_ROUTE");
+    assert.notStrictEqual(row.route_survival_outcome, "survived");
   }
 });

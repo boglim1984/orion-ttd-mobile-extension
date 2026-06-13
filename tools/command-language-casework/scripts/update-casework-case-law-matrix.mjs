@@ -12,7 +12,13 @@ const studyDir = path.join(caseworkRoot, "study");
 const rawDir = path.join(studyDir, "raw");
 const reviewsDir = path.join(studyDir, "reviews");
 const caseLawDir = path.join(studyDir, "case-law");
-const { deriveDeterministicCaseSignals } = heuristicsApi;
+const {
+  ROUTE_CHUNK_ALIASES,
+  deriveDeterministicCaseSignals,
+  findChunkIdForText,
+  getExpectedNextChunkId,
+  hasPhraseBoundary
+} = heuristicsApi;
 
 const MATRIX_FIELDS = [
   "suite_id",
@@ -103,6 +109,10 @@ function cleanText(value) {
 
 function joinList(value) {
   return Array.isArray(value) ? value.map((item) => cleanText(item)).filter(Boolean).join(" | ") : "";
+}
+
+function unique(items) {
+  return [...new Set(items.filter(Boolean))];
 }
 
 function readJson(jsonPath) {
@@ -222,42 +232,48 @@ function deriveBoundaryType(caseResult, packetPayload) {
   return "unknown";
 }
 
-function extractChunkSignals(caseResult, packetPayload) {
+function getChunkAliases(routeId, chunkId, chunkLabel = "") {
+  const aliasMap = ROUTE_CHUNK_ALIASES[routeId] || {};
+  return unique([...(aliasMap[chunkId] || []), chunkId, chunkLabel]);
+}
+
+function hasAnyAlias(text, aliases) {
+  return aliases.some((alias) => hasPhraseBoundary(text, alias));
+}
+
+function extractChunkSignals(caseResult, packetPayload, deterministic) {
   const observedText = cleanText([
     caseResult.visible_turn_text,
     joinList(caseResult.assistant_responses),
     joinList(caseResult.observed_chunks_or_keywords)
   ].join(" "));
-  const expectedBehaviorText = joinList(caseResult.expected_behavior);
-  const routePayloadText = cleanText([
-    packetPayload?.active_chunk_id,
-    packetPayload?.active_chunk_label,
-    joinList(packetPayload?.response_contract)
-  ].join(" "));
-
-  const idMatches = [...expectedBehaviorText.matchAll(/\b[a-z0-9]+(?:_[a-z0-9]+)+\b/gi)].map((match) => match[0]);
-  const canonicalId =
-    idMatches.find((value) => value !== packetPayload?.active_chunk_id) ||
-    idMatches[0] ||
+  const routeId = packetPayload?.route_id || "desk-reset-v0";
+  const activeChunkCanonicalId =
+    findChunkIdForText(routeId, packetPayload?.active_chunk_id || packetPayload?.active_chunk_label || "") ||
+    packetPayload?.active_chunk_id ||
     "";
-
-  const labelMatch = expectedBehaviorText.match(/contains\s+([a-z][a-z ]+[a-z])\./i);
-  const humanLabel = cleanText(
-    labelMatch?.[1] ||
-      canonicalId.replace(/_/g, " ") ||
-      routePayloadText.replace(/_/g, " ")
+  const expectedNextChunkId = getExpectedNextChunkId(routeId, activeChunkCanonicalId) || "";
+  const expectedAliases = getChunkAliases(routeId, expectedNextChunkId);
+  const observedChunkIds = unique(
+    (Array.isArray(deterministic?.observed_chunks_or_keywords) ? deterministic.observed_chunks_or_keywords : []).filter(
+      (token) => Boolean((ROUTE_CHUNK_ALIASES[routeId] || {})[token])
+    )
+  );
+  const humanLabel = expectedNextChunkId.replace(/_/g, " ");
+  const exactChunkIdSeen = expectedNextChunkId ? observedChunkIds.includes(expectedNextChunkId) : false;
+  const humanLabelSeen = expectedAliases.length > 0 ? hasAnyAlias(observedText, expectedAliases) : false;
+  const semanticAliasSeen = humanLabelSeen && expectedNextChunkId ? !exactChunkIdSeen : humanLabelSeen;
+  const observedWrongNextChunk = observedChunkIds.some(
+    (chunkId) => chunkId !== activeChunkCanonicalId && chunkId !== expectedNextChunkId
   );
 
-  const exactChunkIdSeen = canonicalId ? observedText.toLowerCase().includes(canonicalId.toLowerCase()) : false;
-  const humanLabelSeen = humanLabel ? observedText.toLowerCase().includes(humanLabel.toLowerCase()) : false;
-  const semanticAliasSeen = humanLabelSeen && canonicalId ? !exactChunkIdSeen : humanLabelSeen;
-
   return {
-    canonicalId,
+    canonicalId: expectedNextChunkId,
     humanLabel,
     exactChunkIdSeen,
     humanLabelSeen,
-    semanticAliasSeen
+    semanticAliasSeen,
+    observedWrongNextChunk
   };
 }
 
@@ -350,6 +366,22 @@ function deriveLegalFields({ classification, failureLayer, routeBehaviorCorrectW
       routeSurvivalOutcome: "survived"
     };
   }
+  if (/FAIL_ADVANCED_WITHOUT_PERMISSION/.test(classification)) {
+    return {
+      legalVerdict: "FAIL",
+      legalEvidenceType: "visible_dom_text",
+      smallestLegalReduction: "preserve_state",
+      routeSurvivalOutcome: "broken"
+    };
+  }
+  if (/FAIL_INVENTED_PROGRESS|FAIL_INVENTED_STATE/.test(classification)) {
+    return {
+      legalVerdict: "FAIL",
+      legalEvidenceType: "visible_dom_text",
+      smallestLegalReduction: "preserve_state",
+      routeSurvivalOutcome: "broken"
+    };
+  }
   if (/FAIL_LOST_ROUTE/.test(classification)) {
     return {
       legalVerdict: "FAIL",
@@ -381,9 +413,10 @@ function buildCaseLawRow({ runData, caseResult, resultPath }) {
     ...caseResult,
     observed_chunks_or_keywords: deterministic.observed_chunks_or_keywords
   });
-  const chunkSignals = extractChunkSignals(caseResult, packetPayload);
+  const chunkSignals = extractChunkSignals(caseResult, packetPayload, deterministic);
   const routeBehaviorCorrectWithoutKeyword =
     Boolean(chunkSignals.exactChunkIdSeen || chunkSignals.humanLabelSeen) &&
+    !chunkSignals.observedWrongNextChunk &&
     /FAIL_LOST_ROUTE/.test(classification);
   const diagnostics = caseResult.diagnostics || {};
   const failureLayer = deriveFailureLayer({

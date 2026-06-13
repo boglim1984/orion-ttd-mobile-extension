@@ -92,8 +92,19 @@ test("study loop - import and tabulate with various classification fields", (t) 
 
   // 6. Verify status preserves manual fields
   const statusObj = JSON.parse(fs.readFileSync(path.join(studyDir, "CASEWORK_STUDY_STATUS.json"), "utf8"));
-  assert.strictEqual(statusObj.manual_next_study.next_study_needed, "casework_reflection_loop_v1_validation", "Manual next study should be preserved");
+  assert.strictEqual(
+    statusObj.manual_next_study.next_study_needed,
+    "scorer_keyword_extraction_v3_fresh_validation",
+    "Stale manual next study should advance to the fresh scorer validation pointer"
+  );
   assert.strictEqual(statusObj.computed_summary.latest_suite_id, testSuiteId, "Computed summary should update latest_suite_id");
+  assert.ok(
+    !statusObj.open_findings.some((finding) => finding.finding_id === "scorer_collect_dishes_false_lost_route_001"),
+    "Resolved scorer collect_dishes finding should not remain open"
+  );
+
+  const openFindingsMd = fs.readFileSync(path.join(studyDir, "index", "CASEWORK_OPEN_FINDINGS.md"), "utf8");
+  assert.doesNotMatch(openFindingsMd, /scorer_collect_dishes_false_lost_route_001/);
 
   // Cleanup
   fs.unlinkSync(fakeResultPath);
@@ -163,4 +174,18 @@ test("tabulation recomputes legacy scorer rows from current heuristics", () => {
     } catch (_error) {}
     execSync(`node "${tabulateScript}"`, { stdio: "ignore" });
   }
+});
+
+test("tabulation status markdown no longer points at reflection-loop validation", () => {
+  const tabulateScript = path.join(caseworkRoot, "scripts", "tabulate-casework-study.mjs");
+  execSync(`node "${tabulateScript}"`, { stdio: "ignore" });
+
+  const statusMd = fs.readFileSync(path.join(studyDir, "CASEWORK_STUDY_STATUS.md"), "utf8");
+  assert.match(statusMd, /Next Study Needed\*\*: scorer_keyword_extraction_v3_fresh_validation/);
+  assert.doesNotMatch(statusMd, /casework_reflection_loop_v1_validation/);
+  assert.doesNotMatch(
+    statusMd,
+    /\*\*scorer_collect_dishes_false_lost_route_001\*\* \(open\)/,
+    "Resolved scorer finding should not remain open in status markdown"
+  );
 });

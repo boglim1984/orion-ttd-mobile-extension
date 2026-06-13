@@ -134,6 +134,105 @@ function deriveRunRouteSurvivalOutcome(runRows) {
   return outcomes[0] || "unknown";
 }
 
+const STALE_NEXT_STUDY_IDS = new Set([
+  "casework_reflection_loop_v1_validation",
+  "scorer_keyword_extraction_v1_after_reflection_repair"
+]);
+
+const AUTO_RESOLVED_FINDINGS = {
+  casework_reflection_loop_missing_001:
+    "Reflection loop validation and derived-artifact regeneration are now in place.",
+  casework_window_model_miscount_001:
+    "Casework docs and runner flow now treat design chat, local GUI, and disposable ChatGPT test tab as distinct surfaces.",
+  casework_case_law_matrix_missing_001:
+    "The cumulative case-law matrix is now generated from imported runs.",
+  casework_legal_system_not_integrated_001:
+    "Legal verdict and route-survival fields are now part of derived casework outputs.",
+  casework_artifact_overlap_risk_001:
+    "Status, matrix, review, and raw evidence roles are now explicitly separated in the study artifacts.",
+  scorer_collect_dishes_false_lost_route_001:
+    "The collect_dishes scorer repair landed and historical rows now recompute correctly."
+};
+
+function buildFreshValidationPointer() {
+  return {
+    next_study_needed: "scorer_keyword_extraction_v3_fresh_validation",
+    next_study_purpose:
+      "Run a small fresh scorer keyword validation suite against the real ChatGPT browser surface to prove the repaired v3 scorer classifies new evidence correctly, while preserving the stack_papers negative control.",
+    recommended_next_cases: [
+      "run one fresh collect_dishes advancement case on the real browser surface",
+      "run one wrong-next stack_papers negative control on the real browser surface",
+      "confirm repaired scorer rows still produce deterministic legal_verdict and route_survival_outcome values",
+      "confirm imported fresh runs leave wrong-next negatives classified as lost-route rather than survived"
+    ],
+    next_action_for_fresh_chat:
+      "Do not redesign the scorer yet. Run a small fresh browser-surface validation of the repaired scorer, import the result, and confirm the negative stack_papers control still fails cleanly.",
+    set_by: "Codex tabulation repair",
+    set_at: new Date().toISOString().slice(0, 10),
+    source: "Post-scorer-repair status cleanup"
+  };
+}
+
+function maybeAdvanceManualNextStudy(statusObj) {
+  const current = statusObj.manual_next_study?.next_study_needed || "";
+  if (!current || STALE_NEXT_STUDY_IDS.has(current)) {
+    statusObj.manual_next_study = buildFreshValidationPointer();
+  }
+}
+
+function normalizeFindings(statusObj) {
+  const currentOpenFindings = Array.isArray(statusObj.open_findings) ? statusObj.open_findings : [];
+  const resolvedFindings = Array.isArray(statusObj.resolved_findings) ? statusObj.resolved_findings.slice() : [];
+  const resolvedById = new Map(resolvedFindings.map((finding) => [finding.finding_id, finding]));
+  const nextOpenFindings = [];
+
+  for (const finding of currentOpenFindings) {
+    const resolution = AUTO_RESOLVED_FINDINGS[finding.finding_id];
+    if (!resolution) {
+      if (finding.status === "open") {
+        nextOpenFindings.push(finding);
+      }
+      continue;
+    }
+
+    if (!resolvedById.has(finding.finding_id)) {
+      resolvedById.set(finding.finding_id, {
+        finding_id: finding.finding_id,
+        status: "resolved",
+        summary: finding.summary,
+        resolution_note: resolution,
+        resolved_at: new Date().toISOString().slice(0, 10)
+      });
+    }
+  }
+
+  statusObj.open_findings = nextOpenFindings;
+  statusObj.resolved_findings = [...resolvedById.values()];
+}
+
+function renderOpenFindingsMd(statusObj) {
+  const lines = [
+    "# Casework Open Findings",
+    "",
+    "*This file is generated automatically by tabulate-casework-study.mjs.*",
+    ""
+  ];
+
+  if (Array.isArray(statusObj.open_findings) && statusObj.open_findings.length > 0) {
+    for (const finding of statusObj.open_findings) {
+      lines.push(`## Open Issue: ${finding.finding_id}`);
+      lines.push(`**Summary:** ${finding.summary}`);
+      lines.push("");
+      lines.push(`**Recommended Next Study:** ${finding.recommended_next_study || "none"}`);
+      lines.push("");
+    }
+  } else {
+    lines.push("No open findings are currently recorded.");
+  }
+
+  return `${lines.join("\n")}\n`;
+}
+
 function main() {
   const projectRoot = path.resolve(__dirname, "../../..");
   const caseworkRoot = path.join(projectRoot, "tools/command-language-casework");
@@ -293,6 +392,9 @@ function main() {
     }
   }
 
+  maybeAdvanceManualNextStudy(statusObj);
+  normalizeFindings(statusObj);
+
   const totalClassifications = {};
   for (const run of runs) {
     for (const [key, value] of Object.entries(run.classification_counts)) {
@@ -393,6 +495,13 @@ function main() {
     mdLines.push("*(No open findings)*");
   }
 
+  if (Array.isArray(statusObj.resolved_findings) && statusObj.resolved_findings.length > 0) {
+    mdLines.push("", "## Recently resolved findings", "Generated from casework status cleanup.", "");
+    for (const finding of statusObj.resolved_findings) {
+      mdLines.push(`- **${finding.finding_id}** (${finding.status}): ${finding.resolution_note || finding.summary}`);
+    }
+  }
+
   fs.writeFileSync(statusMdPath, mdLines.join("\n"), "utf8");
 
   const languageMapPath = path.join(indexDir, "CASEWORK_LANGUAGE_MAP.md");
@@ -405,13 +514,7 @@ function main() {
   }
 
   const openFindingsPath = path.join(indexDir, "CASEWORK_OPEN_FINDINGS.md");
-  if (!fs.existsSync(openFindingsPath)) {
-    fs.writeFileSync(
-      openFindingsPath,
-      "# Casework Open Findings\n\n*This file is generated automatically by tabulate-casework-study.mjs.*\n",
-      "utf8"
-    );
-  }
+  fs.writeFileSync(openFindingsPath, renderOpenFindingsMd(statusObj), "utf8");
 
   const placeholderReviews = findPlaceholderReviews(path.join(studyDir, "reviews"));
   if (placeholderReviews.length > 0) {

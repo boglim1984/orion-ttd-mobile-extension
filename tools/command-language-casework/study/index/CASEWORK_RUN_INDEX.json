@@ -18,14 +18,14 @@
     "suspected_tool_findings": 0,
     "legal_verdict_counts": {
       "PASS": 2,
-      "HOLD": 1
+      "FAIL": 1
     },
     "route_survival_counts": {
       "survived": 2,
-      "unknown": 1
+      "broken": 1
     },
-    "legal_verdict": "HOLD",
-    "route_survival_outcome": "unknown"
+    "legal_verdict": "FAIL",
+    "route_survival_outcome": "broken"
   },
   {
     "suite_id": "scorer_keyword_extraction_v1",
@@ -71,13 +71,14 @@
     "suspected_tool_findings": 0,
     "legal_verdict_counts": {
       "PASS": 7,
-      "HOLD": 1
+      "FAIL": 1
     },
     "route_survival_counts": {
-      "survived": 8
+      "survived": 7,
+      "broken": 1
     },
-    "legal_verdict": "HOLD",
-    "route_survival_outcome": "survived"
+    "legal_verdict": "FAIL",
+    "route_survival_outcome": "broken"
   },
   {
     "suite_id": "scorer_keyword_extraction_v2",
@@ -98,12 +99,13 @@
     "suspected_tool_findings": 0,
     "legal_verdict_counts": {
       "PASS": 7,
-      "HOLD": 1
+      "FAIL": 1
     },
     "route_survival_counts": {
-      "survived": 8
+      "survived": 7,
+      "broken": 1
     },
-    "legal_verdict": "HOLD",
-    "route_survival_outcome": "survived"
+    "legal_verdict": "FAIL",
+    "route_survival_outcome": "broken"
   }
 ]

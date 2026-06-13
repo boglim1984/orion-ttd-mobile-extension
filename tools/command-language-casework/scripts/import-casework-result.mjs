@@ -4,6 +4,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import {
+  ensureReviewForResult,
+  summarizeClassifications
+} from "../lib/casework-reflection.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -55,33 +59,6 @@ function parseArgs() {
 
 function safeFileName(str) {
   return str.replace(/[^a-zA-Z0-9_-]/g, "_");
-}
-
-function getCaseClassification(c) {
-  const fields = [
-    c.classification,
-    c.final_classification,
-    c.result_classification,
-    c.heuristic_classification,
-    c.tool_failure_label,
-    c.tool_classification,
-    c.assistant_classification
-  ];
-  for (const f of fields) {
-    if (f && typeof f === "string" && f.trim() !== "") {
-      return f;
-    }
-  }
-  return "UNKNOWN";
-}
-
-function summarizeClassifications(cases) {
-  const counts = {};
-  for (const c of cases) {
-    const cl = getCaseClassification(c);
-    counts[cl] = (counts[cl] || 0) + 1;
-  }
-  return counts;
 }
 
 function main() {
@@ -139,79 +116,22 @@ function main() {
   fs.copyFileSync(absolutePath, destJsonPath);
 
   const cases = Array.isArray(resultData.cases) ? resultData.cases : [];
-  const caseCount = cases.length;
   const classificationSummary = summarizeClassifications(cases);
+  const importedAt = new Date().toISOString();
+  const reviewResult = ensureReviewForResult({
+    resultData,
+    caseworkRoot,
+    destJsonPath,
+    destReviewPath,
+    importedAt
+  });
 
-  let summaryLines = [];
-  for (const [cl, count] of Object.entries(classificationSummary)) {
-    summaryLines.push(`- **${cl}**: ${count}`);
-  }
-
-  const reviewContent = [
-    `# Casework Review: ${resultData.suite_id}`,
-    ``,
-    `- **Run ID**: \`${resultData.run_id}\``,
-    `- **Imported At**: ${new Date().toISOString()}`,
-    `- **Raw Result JSON**: \`${path.relative(caseworkRoot, destJsonPath)}\``,
-    `- **Case Count**: ${caseCount}`,
-    ``,
-    `## Reflection Checklist`,
-    `- [ ] Mermaid-first review added`,
-    `- [ ] Most important pass identified`,
-    `- [ ] Most important failure identified`,
-    `- [ ] Tool vs scorer vs language vs transport layer named`,
-    `- [ ] Evidence usability decided`,
-    `- [ ] Study status update decision made`,
-    `- [ ] Case-law matrix regenerated after review`,
-    ``,
-    `## Mermaid-first Review`,
-    `\`\`\`mermaid`,
-    `flowchart TD`,
-    `  A[Raw Result JSON] --> B[Review This Run]`,
-    `  B --> C[Identify Pass And Failure]`,
-    `  C --> D[Classify Layer]`,
-    `  D --> E[Update Case-law Matrix]`,
-    `  E --> F[Apply Legal Frame]`,
-    `  F --> G[Update Study Status]`,
-    `  G --> H[Decide Next Study]`,
-    `\`\`\``,
-    ``,
-    `## Classification Summary`,
-    summaryLines.length ? summaryLines.join("\n") : "- None",
-    ``,
-    `## Key Findings`,
-    reviewNote ? reviewNote : "*(Add notes on the most important pass, the most important failure, and whether the result is usable evidence.)*",
-    ``,
-    `## Layer Classification`,
-    `- Tool: *(setup/send/runner failure?)*`,
-    `- Scorer: *(did visible route survive but classification say otherwise?)*`,
-    `- Language: *(did the assistant lose or unlawfully advance the route?)*`,
-    `- Transport: *(did insertion/submission mechanics fail?)*`,
-    ``,
-    `## Legal-system Interpretation`,
-    `- Committed state is law.`,
-    `- Logs and visible DOM text are admissible evidence.`,
-    `- Assistant prose is a claim, not state.`,
-    `- If evidence is ambiguous, HOLD and choose the smallest legal reduction.`,
-    `- PASS/FAIL describes route survival, not wording perfection.`,
-    ``,
-    `## Next Study Implication`,
-    nextStudy ? nextStudy : "*(Only propose the next suite after matrix/status/legal interpretation are updated.)*",
-    ``,
-    `## Artifact Paths`,
-    `- Raw evidence: \`${path.relative(caseworkRoot, destJsonPath)}\``,
-    `- Review: \`${path.relative(caseworkRoot, destReviewPath)}\``,
-    `- Reflection loop: \`study/CASEWORK_REFLECTION_LOOP_V1.md\``,
-    `- Case-law matrix: \`study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md\``,
-    ``,
-    `> Note: Human/LLM review may refine the language lesson. Update the classification in the index if the heuristic/scorer was wrong.`
-  ].join("\n");
-
-  if (!fs.existsSync(destReviewPath)) {
-    fs.writeFileSync(destReviewPath, reviewContent, "utf8");
-    console.log(`Created review stub: ${path.relative(caseworkRoot, destReviewPath)}`);
+  if (reviewResult.action === "created") {
+    console.log(`Created review: ${path.relative(caseworkRoot, destReviewPath)}`);
+  } else if (reviewResult.action === "repaired") {
+    console.log(`Repaired placeholder review: ${path.relative(caseworkRoot, destReviewPath)}`);
   } else {
-    console.log(`Review stub already exists: ${path.relative(caseworkRoot, destReviewPath)}`);
+    console.log(`Review kept: ${path.relative(caseworkRoot, destReviewPath)}`);
   }
 
   console.log(`Saved raw result: ${path.relative(caseworkRoot, destJsonPath)}`);

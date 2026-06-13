@@ -56,6 +56,9 @@ test("study loop - import and tabulate with various classification fields", (t) 
   assert.match(reviewContent, /- \*\*heuristic_class\*\*: 1/);
   assert.match(reviewContent, /- \*\*tool_fail_class\*\*: 1/);
   assert.match(reviewContent, /- \*\*UNKNOWN\*\*: 1/);
+  assert.match(reviewContent, /## Mermaid-first Review/);
+  assert.doesNotMatch(reviewContent, /Add notes on the most important pass/i);
+  assert.doesNotMatch(reviewContent, /What should the next suite test/i);
   
   // 4. Run tabulate
   const tabulateScript = path.join(caseworkRoot, "scripts", "tabulate-casework-study.mjs");
@@ -81,6 +84,12 @@ test("study loop - import and tabulate with various classification fields", (t) 
   assert.strictEqual(foundRun.status_counts["st2"], 1);
   assert.strictEqual(foundRun.status_counts["st3"], 1);
   assert.strictEqual(foundRun.status_counts["UNKNOWN"], 1);
+  assert.ok(foundRun.legal_verdict, "Run index should include legal_verdict");
+  assert.ok(foundRun.route_survival_outcome, "Run index should include route_survival_outcome");
+
+  const caseIndexCsv = fs.readFileSync(path.join(studyDir, "index", "CASEWORK_CASE_INDEX.csv"), "utf8");
+  assert.match(caseIndexCsv, /legal_verdict/);
+  assert.match(caseIndexCsv, /route_survival_outcome/);
 
   // 6. Verify status preserves manual fields
   const statusObj = JSON.parse(fs.readFileSync(path.join(studyDir, "CASEWORK_STUDY_STATUS.json"), "utf8"));

@@ -1,17 +1,62 @@
 # Casework Review: scorer_keyword_extraction_v2
 
 - **Run ID**: `20260613-010214-scorer_keyword_extraction_v2`
-- **Imported At**: 2026-06-13T05:06:52.110Z
+- **Imported At**: 2026-06-13T05:02:24.178Z
+- **Raw Result JSON**: `study/raw/2026-06-13/scorer_keyword_extraction_v2__20260613-010214-scorer_keyword_extraction_v2.json`
 - **Case Count**: 8
+
+## Reflection Checklist
+- [x] Mermaid-first review generated
+- [x] Most important pass identified: Exact canonical chunk id (PASS_CANDIDATE)
+- [x] Most important failure identified: Wrong-next negative control (FAIL_LOST_ROUTE)
+- [x] Tool vs scorer vs language vs transport layer summarized deterministically
+- [x] Evidence usability noted: This run is usable evidence because it contains both successful and disputed/failing boundaries.
+- [x] Study status change remains gated by reflection and matrix review
+- [ ] Human review may still refine the generated interpretation
+
+## Mermaid-first Review
+```mermaid
+flowchart TD
+  A["Run 20260613-010214-scorer_keyword_extraction_v2"] --> B["Pass cases: 7"]
+  A --> C["Fail cases: 1"]
+  A --> D["Tool failures: 0"]
+  B --> E["Preserve usable route-law evidence"]
+  C --> F["Classify failure layer and legal verdict"]
+  D --> G["Repair tooling before trusting route judgment"]
+  E --> H["Update matrix and keep manual next-study pointer under review"]
+  F --> H
+  G --> H
+```
 
 ## Classification Summary
 - **PASS_CANDIDATE**: 7
 - **FAIL_LOST_ROUTE**: 1
 
 ## Key Findings
-*(Add notes on the most important pass/fail observed here)*
+- Most important pass: Exact canonical chunk id (PASS_CANDIDATE).
+- Most important failure: Wrong-next negative control (FAIL_LOST_ROUTE).
+- Evidence usability: This run is usable evidence because it contains both successful and disputed/failing boundaries.
+
+## Layer Classification
+- Tool: No dominant tool failure pattern was recorded in this run.
+- Scorer: Mixed pass/fail evidence suggests at least one scorer or interpretation boundary is disputed.
+- Language: Route-law failure labels appeared in 1 case(s).
+- Transport: Transport was not the dominant issue in this run.
+
+## Legal-system Interpretation
+- Committed state is law.
+- Logs and visible DOM text are admissible evidence.
+- Assistant prose is a claim, not state.
+- If evidence is ambiguous, HOLD and choose the smallest legal reduction.
+- PASS/FAIL describes route survival, not wording perfection.
 
 ## Next Study Implication
-*(What should the next suite test?)*
+Keep the manual next-study pointer unchanged until the reflection loop and legal matrix settle the pass/fail dispute.
+
+## Artifact Paths
+- Raw evidence: `study/raw/2026-06-13/scorer_keyword_extraction_v2__20260613-010214-scorer_keyword_extraction_v2.json`
+- Review: `study/reviews/2026-06-13/scorer_keyword_extraction_v2__20260613-010214-scorer_keyword_extraction_v2.md`
+- Reflection loop: `study/CASEWORK_REFLECTION_LOOP_V1.md`
+- Case-law matrix: `study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md`
 
 > Note: Human/LLM review may refine the language lesson. Update the classification in the index if the heuristic/scorer was wrong.

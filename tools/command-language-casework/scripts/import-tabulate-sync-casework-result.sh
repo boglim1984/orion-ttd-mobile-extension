@@ -28,6 +28,13 @@ node tools/command-language-casework/scripts/sync-casework-study-status-skill.mj
 cd "$CC_WORKTREE"
 python3 scripts/build_skill_index.py >/dev/null
 
+PLACEHOLDER_MATCHES="$(grep -R -n "Add notes\|What should the next suite test\|Only propose the next suite" "$REPO_ROOT/tools/command-language-casework/study/reviews" || true)"
+if [ -n "$PLACEHOLDER_MATCHES" ]; then
+  echo "ERROR: Placeholder reflection text still present after import/tabulate sync."
+  echo "$PLACEHOLDER_MATCHES"
+  exit 1
+fi
+
 echo "Imported result path: $RESULT_PATH"
 echo "Tabulation complete"
 echo "Mirrored study-status skill path: $CC_WORKTREE/library/skills/chatgpt/command-language-casework-current-study-status-skill.md"

@@ -4,6 +4,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { updateCaseworkCaseLawMatrix } from "./update-casework-case-law-matrix.mjs";
+import {
+  ensureReviewForResult,
+  findPlaceholderReviews
+} from "../lib/casework-reflection.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -72,6 +76,58 @@ function countOpenFindings(openFindings) {
     : 0;
 }
 
+function makeCaseKey(suiteId, runId, caseId) {
+  return `${suiteId}::${runId}::${caseId}`;
+}
+
+function countValues(values) {
+  const counts = {};
+  for (const value of values) {
+    if (!value) {
+      continue;
+    }
+    counts[value] = (counts[value] || 0) + 1;
+  }
+  return counts;
+}
+
+function deriveRunLegalVerdict(runRows) {
+  const legalVerdicts = runRows.map((row) => row.legal_verdict).filter(Boolean);
+  if (legalVerdicts.includes("FAIL")) {
+    return "FAIL";
+  }
+  if (legalVerdicts.includes("REPAIR")) {
+    return "REPAIR";
+  }
+  if (legalVerdicts.includes("HOLD")) {
+    return "HOLD";
+  }
+  if (legalVerdicts.includes("PASS_WITH_REPAIR")) {
+    return "PASS_WITH_REPAIR";
+  }
+  if (legalVerdicts.includes("PASS")) {
+    return "PASS";
+  }
+  return legalVerdicts[0] || "HOLD";
+}
+
+function deriveRunRouteSurvivalOutcome(runRows) {
+  const outcomes = runRows.map((row) => row.route_survival_outcome).filter(Boolean);
+  if (outcomes.includes("broken")) {
+    return "broken";
+  }
+  if (outcomes.includes("unknown")) {
+    return "unknown";
+  }
+  if (outcomes.includes("survived_with_repair")) {
+    return "survived_with_repair";
+  }
+  if (outcomes.includes("survived")) {
+    return "survived";
+  }
+  return outcomes[0] || "unknown";
+}
+
 function main() {
   const projectRoot = path.resolve(__dirname, "../../..");
   const caseworkRoot = path.join(projectRoot, "tools/command-language-casework");
@@ -84,6 +140,7 @@ function main() {
   const rawFiles = findJsonFiles(rawDir).sort();
   const runs = [];
   const casesIndex = [];
+  const reviewRepairActions = [];
 
   for (const file of rawFiles) {
     try {
@@ -132,6 +189,17 @@ function main() {
         path.basename(path.dirname(file)),
         `${path.basename(file, ".json")}.md`
       );
+      const reviewSync = ensureReviewForResult({
+        resultData: data,
+        caseworkRoot,
+        destJsonPath: file,
+        destReviewPath: reviewPath,
+        importedAt: data.timestamp || data.started_at || data.completed_at || new Date().toISOString()
+      });
+      reviewRepairActions.push({
+        reviewPath,
+        action: reviewSync.action
+      });
 
       runs.push({
         suite_id: data.suite_id,
@@ -151,6 +219,33 @@ function main() {
     }
   }
 
+  const matrixOutputs = updateCaseworkCaseLawMatrix();
+  const caseLawByKey = new Map(
+    matrixOutputs.rows.map((row) => [makeCaseKey(row.suite_id, row.run_id, row.case_id), row])
+  );
+  const caseLawByRun = new Map();
+  for (const row of matrixOutputs.rows) {
+    const runKey = `${row.suite_id}::${row.run_id}`;
+    const items = caseLawByRun.get(runKey) || [];
+    items.push(row);
+    caseLawByRun.set(runKey, items);
+  }
+
+  for (const caseRow of casesIndex) {
+    const caseLawRow = caseLawByKey.get(makeCaseKey(caseRow.suite_id, caseRow.run_id, caseRow.case_id));
+    caseRow.failure_layer = caseLawRow?.failure_layer || "none";
+    caseRow.legal_verdict = caseLawRow?.legal_verdict || "HOLD";
+    caseRow.route_survival_outcome = caseLawRow?.route_survival_outcome || "unknown";
+  }
+
+  for (const run of runs) {
+    const runRows = caseLawByRun.get(`${run.suite_id}::${run.run_id}`) || [];
+    run.legal_verdict_counts = countValues(runRows.map((row) => row.legal_verdict));
+    run.route_survival_counts = countValues(runRows.map((row) => row.route_survival_outcome));
+    run.legal_verdict = deriveRunLegalVerdict(runRows);
+    run.route_survival_outcome = deriveRunRouteSurvivalOutcome(runRows);
+  }
+
   const runIndexPath = path.join(indexDir, "CASEWORK_RUN_INDEX.json");
   fs.writeFileSync(runIndexPath, JSON.stringify(runs, null, 2), "utf8");
 
@@ -164,6 +259,9 @@ function main() {
     "scripted_user_replies",
     "case_status",
     "classification",
+    "failure_layer",
+    "legal_verdict",
+    "route_survival_outcome",
     "expected_behavior_hit_count",
     "forbidden_behavior_hit_count",
     "observed_chunks_or_keywords",
@@ -175,8 +273,6 @@ function main() {
     csvLines.push(csvHeaders.map((header) => escapeCsv(caseRow[header])).join(","));
   }
   fs.writeFileSync(caseIndexPath, csvLines.join("\n"), "utf8");
-
-  const matrixOutputs = updateCaseworkCaseLawMatrix();
 
   const statusJsonPath = path.join(studyDir, "CASEWORK_STUDY_STATUS.json");
   const statusMdPath = path.join(studyDir, "CASEWORK_STUDY_STATUS.md");
@@ -310,6 +406,19 @@ function main() {
     );
   }
 
+  const placeholderReviews = findPlaceholderReviews(path.join(studyDir, "reviews"));
+  if (placeholderReviews.length > 0) {
+    console.warn("Placeholder review text still present:");
+    for (const reviewPath of placeholderReviews) {
+      console.warn(path.relative(caseworkRoot, reviewPath));
+    }
+  }
+
+  const repairedCount = reviewRepairActions.filter((item) => item.action === "repaired").length;
+  const createdCount = reviewRepairActions.filter((item) => item.action === "created").length;
+  if (repairedCount > 0 || createdCount > 0) {
+    console.log(`Review sync: created=${createdCount} repaired=${repairedCount}`);
+  }
   console.log("Tabulation complete.");
 }
 

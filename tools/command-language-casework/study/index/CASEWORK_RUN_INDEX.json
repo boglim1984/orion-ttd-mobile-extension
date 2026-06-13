@@ -15,7 +15,16 @@
     },
     "has_dom_turn_trace": true,
     "warnings_errors_count": 0,
-    "suspected_tool_findings": 0
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "PASS": 2,
+      "HOLD": 1
+    },
+    "route_survival_counts": {
+      "survived": 3
+    },
+    "legal_verdict": "HOLD",
+    "route_survival_outcome": "survived"
   },
   {
     "suite_id": "scorer_keyword_extraction_v1",
@@ -33,7 +42,16 @@
     },
     "has_dom_turn_trace": true,
     "warnings_errors_count": 0,
-    "suspected_tool_findings": 0
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "HOLD": 5,
+      "PASS": 1
+    },
+    "route_survival_counts": {
+      "survived": 6
+    },
+    "legal_verdict": "HOLD",
+    "route_survival_outcome": "survived"
   },
   {
     "suite_id": "scorer_keyword_extraction_v2",
@@ -51,7 +69,16 @@
     },
     "has_dom_turn_trace": true,
     "warnings_errors_count": 0,
-    "suspected_tool_findings": 0
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "HOLD": 5,
+      "PASS": 3
+    },
+    "route_survival_counts": {
+      "survived": 8
+    },
+    "legal_verdict": "HOLD",
+    "route_survival_outcome": "survived"
   },
   {
     "suite_id": "scorer_keyword_extraction_v2",
@@ -69,6 +96,15 @@
     },
     "has_dom_turn_trace": true,
     "warnings_errors_count": 0,
-    "suspected_tool_findings": 0
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "PASS": 7,
+      "HOLD": 1
+    },
+    "route_survival_counts": {
+      "survived": 8
+    },
+    "legal_verdict": "HOLD",
+    "route_survival_outcome": "survived"
   }
 ]

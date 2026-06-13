@@ -240,8 +240,16 @@ async function init() {
     await navigator.clipboard.writeText(payload.payload);
     uiState.runnerCopied = true;
     uiState.copiedRunId = payload.run_id;
-    setOverlayStatus("Runner copied. Paste it into the ChatGPT console, then click Run in the overlay.");
-    appendStatusLine(`Copied self-contained runner for ${payload.run_id}`);
+    setOverlayStatus(
+      `Fresh no-localhost runner copied at ${payload.generated_at}. Paste it into the ChatGPT console, then click Run in the overlay.`
+    );
+    setValidationSummary(
+      `Fresh runner copied: ${payload.payload_version} (${payload.run_id}). Re-copy after any suite or tool change.`,
+      "valid"
+    );
+    appendStatusLine(
+      `Copied fresh self-contained runner for ${payload.run_id} (${payload.payload_version}, localhost upload ${payload.localhost_upload_default}).`
+    );
     renderStateStrip();
   }
 

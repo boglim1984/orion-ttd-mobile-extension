@@ -161,7 +161,13 @@ test("self-contained payload endpoint returns inline suite data without bootstra
     assert.equal(response.statusCode, 200);
     const payload = JSON.parse(response.body);
     assert.equal(payload.ok, true);
+    assert.equal(payload.payload_version, "casework-self-contained-no-localhost-v1");
+    assert.equal(payload.localhost_upload_default, "disabled");
+    assert.match(payload.generated_at, /^\d{4}-\d{2}-\d{2}T/);
     assert.match(payload.payload, /installSelfContained/);
+    assert.match(payload.payload, /CASEWORK_SELF_CONTAINED_PAYLOAD_VERSION=casework-self-contained-no-localhost-v1/);
+    assert.match(payload.payload, /localhost_upload_default=disabled/);
+    assert.match(payload.payload, /payloadVersion:\s*"casework-self-contained-no-localhost-v1"/);
     assert.match(payload.payload, /self-contained-suite/);
     assert.match(payload.payload, /heuristics-route-alias-boundary-v3/);
     assert.match(payload.payload, /collect_dishes: \["collect_dishes", "collect dishes"\]/);

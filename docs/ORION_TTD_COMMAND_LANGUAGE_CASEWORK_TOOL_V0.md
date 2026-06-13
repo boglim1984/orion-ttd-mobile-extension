@@ -78,6 +78,17 @@ Required self-contained recovery path:
 
 Legacy/server-assisted localhost result writing may remain, but only as a separate mode.
 
+## Stale Payload Guardrail
+
+Old copied runner payloads cannot be revoked once they are already in clipboard history, notes, or console history.
+
+The practical guardrail is:
+
+- every GUI copy generates a fresh self-contained payload
+- fresh payloads carry a visible no-localhost payload stamp and generated time
+- GUI copy confirmation tells Billy to re-copy after any suite or tool change
+- fresh overlays show payload version and localhost-upload-default state in diagnostics
+
 ## Suite Schema
 
 Canonical schema file:

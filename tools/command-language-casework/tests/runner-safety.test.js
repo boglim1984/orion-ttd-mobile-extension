@@ -39,6 +39,8 @@ test("runner source supports self-contained payload without auto-run and with do
   assert.match(runnerSource, /Paste CASEWORK_REVIEW_V1 block when prompted\./);
   assert.match(runnerSource, /Local result upload was blocked by ChatGPT CSP/);
   assert.match(runnerSource, /Local result upload disabled for self-contained mode/);
+  assert.match(runnerSource, /payload_version:/);
+  assert.match(runnerSource, /localhost_upload_default:/);
   assert.match(runnerSource, /HEURISTICS_VERSION/);
   assert.match(runnerSource, /OrionCaseworkHeuristics/);
 });
@@ -47,6 +49,7 @@ test("runner source disables localhost upload by default in self-contained mode"
   assert.match(runnerSource, /const allowLocalResultUpload = options\.allowLocalResultUpload === true;/);
   assert.match(runnerSource, /if \(!allowLocalResultUpload\)/);
   assert.match(runnerSource, /skipped: true/);
+  assert.match(runnerSource, /Stale or legacy payload detected: serverBaseUrl is present/);
 });
 
 test("attempt diagnostics separate last stage from failure stage", () => {

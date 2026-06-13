@@ -10,6 +10,7 @@
   const HEARTBEAT_INTERVAL_MS = 3000;
   const OVERLAY_ID = "orion-command-language-casework-overlay";
   const TOOL_VERSION = "command-language-casework-runner-v1";
+  const SELF_CONTAINED_PAYLOAD_FALLBACK_VERSION = "casework-self-contained-legacy-unknown";
   const HEURISTICS_API = root.OrionCaseworkHeuristics || (
     typeof require === "function" ? require("../lib/casework-heuristics.js") : null
   );
@@ -1680,6 +1681,9 @@
       cases: []
     };
     const runId = options.runId || `self-contained-${Date.now()}`;
+    const payloadVersion = options.payloadVersion || SELF_CONTAINED_PAYLOAD_FALLBACK_VERSION;
+    const generatedAt = options.generatedAt || "unknown";
+    const localhostUploadDefault = options.localhostUploadDefault || "unknown";
     const serverBaseUrl = options.serverBaseUrl || null;
     const allowLocalResultUpload = options.allowLocalResultUpload === true;
     const stopState = {
@@ -1687,8 +1691,8 @@
     };
 
     const overlay = createOverlay(documentRef, {
-      metaText: `suite_id: ${suite.suite_id}\ncase_count: ${(suite.cases || []).length}`,
-      diagnosticsText: `runner_version: ${TOOL_VERSION}\nheuristics_version: ${HEURISTICS_VERSION}`,
+      metaText: `suite_id: ${suite.suite_id}\ncase_count: ${(suite.cases || []).length}\npayload_version: ${payloadVersion}`,
+      diagnosticsText: `runner_version: ${TOOL_VERSION}\nheuristics_version: ${HEURISTICS_VERSION}\npayload_version: ${payloadVersion}\ngenerated_at: ${generatedAt}\nlocalhost_upload_default: ${localhostUploadDefault}`,
       statusText: isAllowedChatGptPage(locationRef)
         ? "Ready. Nothing will send until you click Run."
         : "Installed. For live execution, switch to a visible disposable ChatGPT test chat before clicking Run.",
@@ -1713,6 +1717,12 @@
       overlay.setRunDisabled(false);
       overlay.setRunLabel("Re-run");
     });
+
+    if (serverBaseUrl && !allowLocalResultUpload) {
+      overlay.setWarning(
+        "Stale or legacy payload detected: serverBaseUrl is present, but localhost upload remains disabled. Re-copy a fresh self-contained runner from the GUI."
+      );
+    }
 
     overlay.runButton.addEventListener("click", async () => {
       stopState.stopRequested = false;

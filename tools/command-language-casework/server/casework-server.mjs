@@ -39,6 +39,7 @@ const HEURISTICS_PATH = path.join(TOOL_ROOT, "lib", "casework-heuristics.js");
 const DEFAULT_PORT = 4317;
 const DEFAULT_HOST = "127.0.0.1";
 const INDEX_HTML_PATH = path.join(PUBLIC_DIR, "index.html");
+const SELF_CONTAINED_PAYLOAD_VERSION = "casework-self-contained-no-localhost-v1";
 
 const state = {
   tool_version: CASEWORK_TOOL_VERSION,
@@ -129,13 +130,19 @@ function getBootstrapScript(port) {
   return `${heuristicsSource}\n${source}\nwindow.OrionCommandLanguageCaseworkRunner.install({ serverBaseUrl: "http://127.0.0.1:${port}" });\n`;
 }
 
-function getSelfContainedPayload({ suite, runId, port }) {
+function getSelfContainedPayload({ suite, runId, generatedAt }) {
   const heuristicsSource = fs.readFileSync(HEURISTICS_PATH, "utf8");
   const source = fs.readFileSync(INJECTOR_PATH, "utf8");
-  return `${heuristicsSource}
+  return `/* CASEWORK_SELF_CONTAINED_PAYLOAD_VERSION=${SELF_CONTAINED_PAYLOAD_VERSION} */
+/* generated_at=${generatedAt} */
+/* localhost_upload_default=disabled */
+${heuristicsSource}
 ${source}
 window.OrionCommandLanguageCaseworkRunner.installSelfContained({
   runId: ${JSON.stringify(runId)},
+  payloadVersion: ${JSON.stringify(SELF_CONTAINED_PAYLOAD_VERSION)},
+  generatedAt: ${JSON.stringify(generatedAt)},
+  localhostUploadDefault: "disabled",
   suite: ${JSON.stringify(suite, null, 2)}
 });
 `;
@@ -308,13 +315,17 @@ async function handleApi(request, response, url, port) {
     }
 
     const runId = createRunId(validation.suite.suite_id);
+    const generatedAt = new Date().toISOString();
     sendJson(response, 200, {
       ok: true,
       run_id: runId,
+      payload_version: SELF_CONTAINED_PAYLOAD_VERSION,
+      generated_at: generatedAt,
+      localhost_upload_default: "disabled",
       payload: getSelfContainedPayload({
         suite: validation.suite,
         runId,
-        port
+        generatedAt
       })
     });
     return;

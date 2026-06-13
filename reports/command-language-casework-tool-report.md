@@ -57,6 +57,13 @@ The launcher now opens a dedicated TTD TESTS Project chat for design/review cont
 - not allowed as required behavior: ChatGPT page POSTing result to localhost
 - `/api/runner/self-contained-result` may still exist for legacy/server-assisted tooling, but the default self-contained path must not call it
 
+## Stale Payload Prevention Update
+
+- fresh self-contained payloads now carry a visible no-localhost payload version stamp and generated timestamp
+- GUI copy status tells Billy that the copied runner is fresh and should be re-copied after any suite or tool change
+- fresh overlay diagnostics show payload version and localhost-upload-default state
+- old payloads already saved elsewhere still can be pasted manually, so the guardrail is visibility and re-copy discipline, not retroactive revocation
+
 ## GUI Simplification Update
 
 - the GUI now defaults to a calm step-lane flow instead of a wrapped pile of buttons

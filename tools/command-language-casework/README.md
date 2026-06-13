@@ -105,6 +105,8 @@ Each run includes:
 - Draft/save and setup-note controls are also secondary and live in `Advanced / Legacy / Diagnostics`.
 - The self-contained runner embeds the current suite JSON, so copy it after validating the suite you intend to run.
 - Blob download and clipboard/copy fallback are the supported self-contained result recovery path.
+- After any runner/tool patch, discard old clipboard, console-history, or saved payload text and click `Copy Self-Contained Runner` again.
+- Fresh payloads now include a visible no-localhost stamp and copy-time status message so stale payload reuse is easier to spot.
 
 ## First Live Self-Contained Run Finding
 

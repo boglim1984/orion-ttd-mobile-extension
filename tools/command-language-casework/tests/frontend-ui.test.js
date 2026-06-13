@@ -41,6 +41,8 @@ test("frontend UI logic has robust validate button wiring", async () => {
   // 7. Copy Runner disabled management exists
   assert.match(uiCode, /copySelfContainedButton\.disabled\s*=\s*true/, "JS must disable copy button initially or on edit");
   assert.match(uiCode, /copySelfContainedButton\.disabled\s*=\s*false/, "JS must enable copy button after valid suite");
+  assert.match(uiCode, /Fresh no-localhost runner copied at/, "JS must show fresh runner copy status");
+  assert.match(uiCode, /Re-copy after any suite or tool change/, "JS must warn against stale runner reuse");
 
   // 8. Defensive check exists
   assert.match(uiCode, /const missingControls = \[/, "JS must check for core controls existence");

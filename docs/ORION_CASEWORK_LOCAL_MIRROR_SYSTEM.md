@@ -14,7 +14,7 @@ Define the supported desktop v1 Casework start path from local mirrored sources.
 
 1. Casework Designer Skill
 2. Casework Runner Schema Skill
-3. Casework Study Status
+3. Casework Current Study Status Skill
 
 ## Layer boundaries
 
@@ -44,6 +44,12 @@ Define the supported desktop v1 Casework start path from local mirrored sources.
 ## Study loop
 
 Fresh dev chat → bundle load → next suite design → GUI validation → disposable ChatGPT run → result JSON → study import/tabulation → updated study status.
+
+After meaningful result review, run:
+
+`tools/command-language-casework/scripts/import-tabulate-sync-casework-result.sh`
+
+This imports the result, tabulates Orion study status, mirrors the current study-status skill, and lets the next Desktop bundle carry the updated next-study pointer.
 
 ## Safety boundaries
 

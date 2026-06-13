@@ -77,7 +77,7 @@ Each run includes:
 ## Notes
 
 - Desktop v1 uses the local mirror bundle launcher, not Apps Script, Shortcuts, or live GitHub fetches.
-- The payload parts are Designer Skill, Runner Schema Skill, and Study Status.
+- The payload parts are Designer Skill, Runner Schema Skill, and Current Study Status Skill.
 - The `launch-casework.command` launcher starts the local server and opens the support tabs quietly when macOS/Chrome allow it.
 - The static skill-snapshot bookmarklet remains experimental and may become stale.
 - The supported path is the self-contained payload, not the legacy localhost bootstrap.
@@ -110,6 +110,7 @@ Each run includes:
 - Disposable ChatGPT runs suite
 - Result JSON is imported locally via `import-casework-result.mjs`
 - Tabulation rebuilds indexes/status via `tabulate-casework-study.mjs`
+- Meaningful reviewed results should normally go through `tools/command-language-casework/scripts/import-tabulate-sync-casework-result.sh`
 - Next chat reads the updated status
 
 Data relationships:
@@ -127,7 +128,12 @@ Data relationships:
 - Installer:
   `tools/command-language-casework/scripts/install-casework-start-command.sh`
 - Payload parts:
-  Designer Skill, Runner Schema Skill, Study Status
+  Designer Skill, Runner Schema Skill, Current Study Status Skill
+- Current study status is mirrored as a Command Center skill/source:
+  `library/skills/chatgpt/command-language-casework-current-study-status-skill.md`
+- After meaningful result review, use:
+  `tools/command-language-casework/scripts/import-tabulate-sync-casework-result.sh`
+- That syncs the next-study pointer into the next clipboard bundle.
 - Desktop v1 does not depend on Apps Script, Shortcuts, or live GitHub.
 - Mobile/cloud routes may still use separate experimental router paths if Billy chooses them later.
 - Shortcut/bookmarklet start paths are experimental or demoted, not the supported desktop v1 path.

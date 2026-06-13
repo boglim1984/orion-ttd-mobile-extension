@@ -14,6 +14,7 @@ PRIMARY_CC_ROOT="/Users/oflahertys/Desktop/Code Projects/ACTIVE/_worktrees/Billy
 FALLBACK_CC_ROOT="/Users/oflahertys/Desktop/Code Projects/ACTIVE/Billy-Project-Command-Center"
 DESIGNER_REL="library/skills/chatgpt/command-language-casework-designer-skill.md"
 SCHEMA_REL="library/skills/chatgpt/command-language-casework-runner-schema-skill.md"
+CURRENT_STUDY_REL="library/skills/chatgpt/command-language-casework-current-study-status-skill.md"
 STUDY_STATUS="/Users/oflahertys/Code Projects/ACTIVE/orion-ios-ttd-injector/ttd-mobile-extension/tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md"
 LAUNCHER="/Users/oflahertys/Code Projects/ACTIVE/orion-ios-ttd-injector/ttd-mobile-extension/tools/command-language-casework/launch-casework.command"
 
@@ -30,19 +31,25 @@ LAUNCHER="/Users/oflahertys/Code Projects/ACTIVE/orion-ios-ttd-injector/ttd-mobi
     SCHEMA="$FALLBACK_CC_ROOT/$SCHEMA_REL"
   fi
 
+  CURRENT_STUDY="$PRIMARY_CC_ROOT/$CURRENT_STUDY_REL"
+  if [ ! -f "$CURRENT_STUDY" ]; then
+    CURRENT_STUDY="$FALLBACK_CC_ROOT/$CURRENT_STUDY_REL"
+  fi
+
   if [ ! -f "$DESIGNER" ]; then
     echo "ERROR: designer skill file not found"
     echo "Tried primary and fallback Command Center paths."
     exit 1
   fi
 
-  PAYLOAD="$(/usr/bin/python3 - "$DESIGNER" "$SCHEMA" "$STUDY_STATUS" <<'PY'
+  PAYLOAD="$(/usr/bin/python3 - "$DESIGNER" "$SCHEMA" "$CURRENT_STUDY" "$STUDY_STATUS" <<'PY'
 import sys
 from pathlib import Path
 
 designer_path = Path(sys.argv[1])
 schema_path = Path(sys.argv[2])
-study_path = Path(sys.argv[3])
+current_study_path = Path(sys.argv[3])
+study_path = Path(sys.argv[4])
 
 
 def clean_text(text: str) -> str:
@@ -87,18 +94,31 @@ else:
     warnings.append(f"WARNING: schema skill file missing at {schema_path}")
     parts.append("# Part 2 — Casework Runner Schema Skill\n\n" + warnings[-1])
 
-if study_path.exists():
-    study_body = clean_text(study_path.read_text(encoding="utf-8", errors="replace")).strip()
-    parts.append("# Part 3 — Casework Study Status\n\n" + study_body)
+if current_study_path.exists():
+    current_study_body = load_skill_body(current_study_path)
+    parts.append("# Part 3 — Casework Current Study Status Skill\n\n" + current_study_body)
 else:
-    warnings.append(f"WARNING: study status file missing at {study_path}")
-    parts.append("# Part 3 — Casework Study Status\n\n" + warnings[-1])
+    warnings.append(f"WARNING: current study status skill missing at {current_study_path}")
+    if study_path.exists():
+        study_body = clean_text(study_path.read_text(encoding="utf-8", errors="replace")).strip()
+        warnings.append(f"FALLBACK: bundling raw Orion study status from {study_path}")
+        parts.append(
+            "# Part 3 — Casework Current Study Status Skill\n\n"
+            + warnings[-2]
+            + "\n\n"
+            + warnings[-1]
+            + "\n\n"
+            + study_body
+        )
+    else:
+        warnings.append(f"WARNING: study status file missing at {study_path}")
+        parts.append("# Part 3 — Casework Current Study Status Skill\n\n" + warnings[-2] + "\n\n" + warnings[-1])
 
 header = f"""Billy is launching Casework from the local Command Center mirror.
 
 This is a skill activation message, not a capture event.
 Do not output the receipt format yet.
-Use the bundled Designer Skill, Runner Schema, and Study Status as active context for this chat.
+Use the bundled Designer Skill, Runner Schema, and Current Study Status as active context for this chat.
 
 Part 1 is the operating skill.
 Part 2 is the current executable schema.
@@ -127,7 +147,7 @@ PY
     exit 1
   fi
 
-  if ! printf "%s" "$PAYLOAD" | /usr/bin/grep -q "Part 3 — Casework Study Status"; then
+  if ! printf "%s" "$PAYLOAD" | /usr/bin/grep -q "Part 3 — Casework Current Study Status Skill"; then
     echo "ERROR: payload missing Part 3"
     exit 1
   fi
@@ -136,6 +156,7 @@ PY
   echo "Copied local mirror payload bytes: $(printf "%s" "$PAYLOAD" | /usr/bin/wc -c)"
   echo "Designer source: $DESIGNER"
   echo "Schema source: $SCHEMA"
+  echo "Current study source: $CURRENT_STUDY"
   echo "Study status source: $STUDY_STATUS"
 
   /usr/bin/open "$LAUNCHER"

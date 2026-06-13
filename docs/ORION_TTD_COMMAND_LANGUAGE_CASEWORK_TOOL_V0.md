@@ -158,7 +158,7 @@ Payload parts:
 
 - Designer Skill
 - Runner Schema Skill
-- Study Status
+- Current Study Status Skill
 
 Desktop v1 behavior:
 
@@ -168,6 +168,8 @@ Desktop v1 behavior:
 - copies a clean runtime bundle to clipboard
 - opens `launch-casework.command`
 - does not depend on Apps Script, Shortcuts, or live GitHub fetches
+- mirrors current study status as:
+  `library/skills/chatgpt/command-language-casework-current-study-status-skill.md`
 
 Launcher:
 
@@ -188,6 +190,12 @@ Experimental/demoted paths:
 
 - static skill snapshot bookmarklet may still exist as a fallback convenience
 - mobile/cloud router or Shortcut paths are separate experiments, not the supported desktop v1 path
+
+After meaningful result review, use:
+
+`tools/command-language-casework/scripts/import-tabulate-sync-casework-result.sh`
+
+This imports the result, tabulates Orion study status, mirrors the current study-status skill, and lets the next Desktop bundle carry the updated next-study pointer.
 
 ## Supported Runner Path
 

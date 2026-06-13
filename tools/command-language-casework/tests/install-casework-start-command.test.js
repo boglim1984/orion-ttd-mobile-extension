@@ -11,9 +11,10 @@ const installerPath = path.resolve(
 );
 const installerSource = fs.readFileSync(installerPath, "utf8");
 
-test("installer references local mirror designer, schema, and study status sources", () => {
+test("installer references local mirror designer, schema, current-study skill, and study status sources", () => {
   assert.match(installerSource, /command-language-casework-designer-skill\.md/);
   assert.match(installerSource, /command-language-casework-runner-schema-skill\.md/);
+  assert.match(installerSource, /command-language-casework-current-study-status-skill\.md/);
   assert.match(installerSource, /CASEWORK_STUDY_STATUS\.md/);
   assert.match(installerSource, /Casework Start\.command/);
 });
@@ -22,7 +23,7 @@ test("installer builds a three-part bundle and strips frontmatter", () => {
   assert.match(installerSource, /strip_frontmatter/);
   assert.match(installerSource, /Part 1 — Casework Designer Skill/);
   assert.match(installerSource, /Part 2 — Casework Runner Schema Skill/);
-  assert.match(installerSource, /Part 3 — Casework Study Status/);
+  assert.match(installerSource, /Part 3 — Casework Current Study Status Skill/);
 });
 
 test("installer opens launch-casework.command and avoids deprecated desktop dependencies", () => {
@@ -39,4 +40,19 @@ test("installer stays clipboard-only and does not touch private browser storage 
   assert.doesNotMatch(installerSource, /sessionStorage/);
   assert.doesNotMatch(installerSource, /indexedDB/);
   assert.doesNotMatch(installerSource, /navigator\.credentials/);
+});
+
+test("sync script references study status and mirrored skill path without git mutation", () => {
+  const syncPath = path.resolve(
+    __dirname,
+    "..",
+    "scripts",
+    "sync-casework-study-status-skill.mjs"
+  );
+  const syncSource = fs.readFileSync(syncPath, "utf8");
+
+  assert.match(syncSource, /CASEWORK_STUDY_STATUS\.md/);
+  assert.match(syncSource, /command-language-casework-current-study-status-skill\.md/);
+  assert.match(syncSource, /splitFrontmatter/);
+  assert.doesNotMatch(syncSource, /git add|git commit/);
 });

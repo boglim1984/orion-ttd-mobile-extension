@@ -21,7 +21,7 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T03:09:40.669Z
+- Last tabulated at: 2026-06-13T03:24:25.890Z
 - Run count: 2
 - Case count: 9
 - Latest suite ID: scorer_keyword_extraction_v1

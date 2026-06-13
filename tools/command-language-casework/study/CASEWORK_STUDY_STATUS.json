@@ -18,7 +18,7 @@
     "source": "live done-vs-move_on result review"
   },
   "computed_summary": {
-    "last_tabulated_at": "2026-06-13T03:09:40.669Z",
+    "last_tabulated_at": "2026-06-13T03:24:25.890Z",
     "run_count": 2,
     "case_count": 9,
     "latest_suite_id": "scorer_keyword_extraction_v1",

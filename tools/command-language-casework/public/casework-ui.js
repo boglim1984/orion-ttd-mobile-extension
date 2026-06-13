@@ -391,11 +391,10 @@ async function init() {
       await copyToClipboard(
         [
           "Casework result handling",
-          "1. After the self-contained run finishes, use the JSON downloaded by the ChatGPT tab.",
-          "2. Import it into study/raw and create the paired review stub.",
-          "3. Complete the Mermaid-first review.",
-          "4. Regenerate the case-law matrix and tabulate study status.",
-          "5. Only then design the next suite."
+          "1. After the self-contained run finishes, the result JSON is downloaded automatically.",
+          "2. Diagnostics are already in the result JSON; no manual copy needed for completed runs.",
+          "3. Finalize the run:",
+          "tools/command-language-casework/scripts/finalize-latest-casework-run.sh --commit --push"
         ].join("\n"),
         "Copied result instructions."
       );

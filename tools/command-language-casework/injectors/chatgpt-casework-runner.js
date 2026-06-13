@@ -1311,12 +1311,12 @@
       await root.navigator?.clipboard?.writeText?.(text);
       return {
         ok: true,
-        message: "Test done.\nResult copied to clipboard if allowed.\nPaste the result back into ChatGPT."
+        message: "Test done.\nResult downloaded.\nNow run:\ntools/command-language-casework/scripts/finalize-latest-casework-run.sh --commit --push"
       };
     } catch (_error) {
       return {
         ok: false,
-        message: "Test done.\nResult downloaded.\nClipboard copy was blocked, so drag the result JSON back into ChatGPT."
+        message: "Test done.\nResult downloaded.\nNow run:\ntools/command-language-casework/scripts/finalize-latest-casework-run.sh --commit --push"
       };
     }
   }

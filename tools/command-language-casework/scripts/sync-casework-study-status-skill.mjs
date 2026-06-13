@@ -146,15 +146,17 @@ function validatePointerAgainstDesignerSkill(statusText, ccRoot) {
   }
   
   // Extract pointer fields to check
+  const strategyMatch = statusText.match(/\*\*Test strategy\*\*:\s*(.+)$/m);
   const shapeMatch = statusText.match(/\*\*Suite shape recommendation\*\*:\s*(.+)$/m);
   const actionMatch = statusText.match(/\*\*Next action for fresh chat\*\*:\s*(.+)$/m);
   
+  const strategyText = strategyMatch ? strategyMatch[1] : "";
   const shapeText = shapeMatch ? shapeMatch[1] : "";
   const actionText = actionMatch ? actionMatch[1] : "";
-  const combinedText = (shapeText + " " + actionText).toLowerCase();
+  const combinedText = (strategyText + " " + shapeText + " " + actionText).toLowerCase();
   
   // Detect stale "small case" wording
-  const staleRegex = /\b(?:one|1|single|two|2|three|3|four|4|five|5|six|6|seven|7)\b\s*-?\s*cases?/i;
+  const staleRegex = /\b(?:one|1|single|two|2|three|3|four|4|five|5|six|6|seven|7)\b\s*(?:[a-z0-9-]+\s+){0,2}cases?/i;
   
   if (staleRegex.test(combinedText)) {
     const pointerMatch = statusText.match(/\*\*Next Study Needed\*\*:\s*(.+)$/m);
@@ -166,11 +168,12 @@ The active Designer Skill enforces a minimum suite floor of ${minimumFloor} case
 However, the current manual pointer text contains stale shape recommendations (e.g., "one-case", "< 8 cases").
 
 Pointer ID: ${pointerId}
-Stale text detected in shape/action fields:
-  Shape:  ${shapeText}
-  Action: ${actionText}
+Stale text detected in strategy/shape/action fields:
+  Strategy: ${strategyText}
+  Shape:    ${shapeText}
+  Action:   ${actionText}
 
-The pointer target itself may still be valid, but you must update the suite_shape_recommendation
+The pointer target itself may still be valid, but you must update the test_strategy, suite_shape_recommendation,
 and next_action_for_fresh_chat in CASEWORK_STUDY_STATUS.json to respect the active ${minimumFloor}-case rule before bundling.
 `);
   }

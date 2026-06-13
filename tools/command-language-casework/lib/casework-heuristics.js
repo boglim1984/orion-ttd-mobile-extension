@@ -1,3 +1,5 @@
+const CASEWORK_HEURISTICS_VERSION = "heuristics-route-alias-boundary-v2";
+
 function normalizeText(value) {
   return String(value || "")
     .toLowerCase()
@@ -300,7 +302,8 @@ function extractObservedKeywords(caseRecord) {
   return unique(tokens);
 }
 
-module.exports = {
+const api = {
+  CASEWORK_HEURISTICS_VERSION,
   ROUTE_CHUNK_ALIASES,
   classifyCaseResult,
   escapeRegExp,
@@ -313,3 +316,11 @@ module.exports = {
   parsePacket,
   phraseBoundaryRegex
 };
+
+if (typeof module === "object" && module.exports) {
+  module.exports = api;
+}
+
+if (typeof globalThis !== "undefined") {
+  globalThis.OrionCaseworkHeuristics = api;
+}

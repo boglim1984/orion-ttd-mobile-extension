@@ -160,6 +160,9 @@ test("self-contained payload endpoint returns inline suite data without bootstra
     assert.equal(payload.ok, true);
     assert.match(payload.payload, /installSelfContained/);
     assert.match(payload.payload, /self-contained-suite/);
+    assert.match(payload.payload, /heuristics-route-alias-boundary-v2/);
+    assert.match(payload.payload, /collect_dishes: \["collect_dishes", "collect dishes"\]/);
+    assert.match(payload.payload, /function normalizeRouteText/);
     assert.doesNotMatch(payload.payload, /\/api\/runner\/bootstrap\.js/);
     assert.doesNotMatch(payload.payload, /fetch\("http:\/\/127\.0\.0\.1/);
     assert.match(payload.payload, /orion-casework-result-/);

@@ -75,6 +75,7 @@ function buildRunSummaryMarkdown(runResult, outputPaths) {
     `- completed_at: ${runResult.completed_at}`,
     `- browser_context_note: ${runResult.browser_context_note}`,
     `- tool_version: ${runResult.tool_version}`,
+    `- heuristics_version: ${runResult.heuristics_version || "unknown"}`,
     `- input suite: ${path.basename(outputPaths.inputSuitePath)}`,
     `- run result json: ${path.basename(outputPaths.runResultPath)}`,
     ""

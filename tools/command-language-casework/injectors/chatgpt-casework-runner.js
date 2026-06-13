@@ -10,6 +10,10 @@
   const HEARTBEAT_INTERVAL_MS = 3000;
   const OVERLAY_ID = "orion-command-language-casework-overlay";
   const TOOL_VERSION = "command-language-casework-runner-v1";
+  const HEURISTICS_API = root.OrionCaseworkHeuristics || (
+    typeof require === "function" ? require("../lib/casework-heuristics.js") : null
+  );
+  const HEURISTICS_VERSION = HEURISTICS_API?.CASEWORK_HEURISTICS_VERSION || "heuristics-unavailable";
   const TOOL_FAILURE_LABELS = {
     COMPOSER_NOT_FOUND: "TOOL_FAIL_COMPOSER_NOT_FOUND",
     COMPOSER_INSERT_VERIFY: "TOOL_FAIL_COMPOSER_INSERT_VERIFY",
@@ -1189,53 +1193,20 @@
   }
 
   function deriveObservedKeywords(caseResult) {
-    const combined = cleanText(caseResult.assistant_responses.join(" ")).toLowerCase();
-    const packetJson = safeJsonParse(String(caseResult.packet_sent || "").slice(String(caseResult.packet_sent || "").indexOf("{")));
-    const candidates = [
-      packetJson?.active_chunk_id,
-      packetJson?.active_chunk_label,
-      "clear trash",
-      "collect dishes",
-      "stack papers",
-      "pause",
-      "continue",
-      "done",
-      "move_on",
-      "next"
-    ];
-    return [...new Set(candidates.filter((item) => item && combined.includes(cleanText(item).toLowerCase())))];
+    if (!HEURISTICS_API?.extractObservedKeywords) {
+      return [];
+    }
+    return HEURISTICS_API.extractObservedKeywords(caseResult);
   }
 
   function heuristicClassify(caseResult) {
     if (caseResult.tool_failure_label) {
       return caseResult.tool_failure_label;
     }
-    const combined = cleanText(caseResult.assistant_responses.join(" ")).toLowerCase();
-    const replies = caseResult.scripted_user_replies_sent.map((value) => cleanText(value).toLowerCase());
-
-    if (
-      ["milestone 7", "transport", "insert only", "packet arrived", "composer"].some((token) =>
-        combined.includes(token)
-      ) &&
-      !combined.includes("clear trash") &&
-      !combined.includes("collect dishes")
-    ) {
-      return "FAIL_NO_ROUTE_ENGAGEMENT";
+    if (!HEURISTICS_API?.classifyCaseResult) {
+      return "HOLD_NEEDS_REVIEW";
     }
-
-    if (!replies.includes("move_on") && !replies.includes("next") && combined.includes("collect dishes")) {
-      return "FAIL_ADVANCED_WITHOUT_PERMISSION";
-    }
-
-    if (!replies.includes("done") && combined.includes("clear trash is complete")) {
-      return "FAIL_INVENTED_PROGRESS";
-    }
-
-    if (replies.length > 0 && !combined.includes("clear trash") && !combined.includes("collect dishes")) {
-      return "FAIL_LOST_ROUTE";
-    }
-
-    return "PASS_CANDIDATE";
+    return HEURISTICS_API.classifyCaseResult(caseResult).label;
   }
 
   function finalizeRunResult(runResult) {
@@ -1296,6 +1267,7 @@
       suite_id: runResult.suite_id,
       run_id: runResult.run_id,
       status: runResult.status,
+      heuristics_version: runResult.heuristics_version,
       cases: (runResult.cases || []).map((caseResult) => ({
         case_id: caseResult.case_id,
         case_status: caseResult.case_status,
@@ -1316,6 +1288,7 @@
       `- suite_id: ${runResult.suite_id}`,
       `- run_id: ${runResult.run_id}`,
       `- status: ${runResult.status}`,
+      `- heuristics_version: ${runResult.heuristics_version}`,
       `- downloaded_json: ${filename}`,
       ""
     ];
@@ -1460,6 +1433,8 @@
       completed_at: null,
       browser_context_note: browserContextNote,
       tool_version: TOOL_VERSION,
+      heuristics_version: HEURISTICS_VERSION,
+      generated_runner_source: browserContextNote.includes("self-contained") ? "self-contained" : "bootstrap",
       cases: [],
       warnings: [],
       errors: []
@@ -1695,6 +1670,7 @@
 
     const overlay = createOverlay(documentRef, {
       metaText: `suite_id: ${suite.suite_id}\ncase_count: ${(suite.cases || []).length}`,
+      diagnosticsText: `runner_version: ${TOOL_VERSION}\nheuristics_version: ${HEURISTICS_VERSION}`,
       statusText: isAllowedChatGptPage(locationRef)
         ? "Ready. Nothing will send until you click Run."
         : "Installed. For live execution, switch to a visible disposable ChatGPT test chat before clicking Run.",
@@ -1754,6 +1730,7 @@
     install,
     installSelfContained,
     __test: {
+      HEURISTICS_VERSION,
       TOOL_FAILURE_LABELS,
       makeAttemptDiagnostics,
       describeDiagnostics,

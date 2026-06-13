@@ -19,7 +19,11 @@ const {
     ...results
   };
 })();
-const { classifyCaseResult, extractObservedKeywords } = require("../lib/casework-heuristics.js");
+const {
+  CASEWORK_HEURISTICS_VERSION,
+  classifyCaseResult,
+  extractObservedKeywords
+} = require("../lib/casework-heuristics.js");
 const { writeCaseworkRunResults } = require("../lib/casework-results.js");
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,12 +34,14 @@ const RESULTS_DIR = path.join(TOOL_ROOT, "results");
 const DRAFTS_DIR = path.join(TOOL_ROOT, "drafts");
 const EXAMPLES_DIR = path.join(TOOL_ROOT, "examples");
 const INJECTOR_PATH = path.join(TOOL_ROOT, "injectors", "chatgpt-casework-runner.js");
+const HEURISTICS_PATH = path.join(TOOL_ROOT, "lib", "casework-heuristics.js");
 const DEFAULT_PORT = 4317;
 const DEFAULT_HOST = "127.0.0.1";
 const INDEX_HTML_PATH = path.join(PUBLIC_DIR, "index.html");
 
 const state = {
   tool_version: CASEWORK_TOOL_VERSION,
+  heuristics_version: CASEWORK_HEURISTICS_VERSION,
   started_at: new Date().toISOString(),
   runner: null,
   pending_run: null,
@@ -117,13 +123,16 @@ function getBootstrapSnippet(port) {
 }
 
 function getBootstrapScript(port) {
+  const heuristicsSource = fs.readFileSync(HEURISTICS_PATH, "utf8");
   const source = fs.readFileSync(INJECTOR_PATH, "utf8");
-  return `${source}\nwindow.OrionCommandLanguageCaseworkRunner.install({ serverBaseUrl: "http://127.0.0.1:${port}" });\n`;
+  return `${heuristicsSource}\n${source}\nwindow.OrionCommandLanguageCaseworkRunner.install({ serverBaseUrl: "http://127.0.0.1:${port}" });\n`;
 }
 
 function getSelfContainedPayload({ suite, runId, port }) {
+  const heuristicsSource = fs.readFileSync(HEURISTICS_PATH, "utf8");
   const source = fs.readFileSync(INJECTOR_PATH, "utf8");
-  return `${source}
+  return `${heuristicsSource}
+${source}
 window.OrionCommandLanguageCaseworkRunner.installSelfContained({
   runId: ${JSON.stringify(runId)},
   serverBaseUrl: ${JSON.stringify(`http://127.0.0.1:${port}`)},
@@ -179,6 +188,7 @@ function summarizeResultPaths(paths) {
 }
 
 function enrichCaseResults(runResult) {
+  runResult.heuristics_version = runResult.heuristics_version || CASEWORK_HEURISTICS_VERSION;
   runResult.cases = (runResult.cases || []).map((caseResult) => {
     const heuristic = classifyCaseResult(caseResult);
     return {
@@ -449,6 +459,7 @@ async function handleApi(request, response, url, port) {
         body.runResult?.browser_context_note ||
         "Real ChatGPT page with self-contained console payload.",
       tool_version: CASEWORK_TOOL_VERSION,
+      heuristics_version: body.runResult?.heuristics_version || CASEWORK_HEURISTICS_VERSION,
       warnings: body.runResult?.warnings || [],
       errors: body.runResult?.errors || []
     });

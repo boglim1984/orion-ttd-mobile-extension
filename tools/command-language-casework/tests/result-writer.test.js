@@ -20,6 +20,7 @@ test("result writer creates the expected artifact set", () => {
     completed_at: "2026-06-12T15:01:00.000Z",
     browser_context_note: "test",
     tool_version: "command-language-casework-runner-v1",
+    heuristics_version: "heuristics-route-alias-boundary-v2",
     warnings: [],
     errors: [],
     cases: [
@@ -67,4 +68,5 @@ test("result writer creates the expected artifact set", () => {
   assert.equal(fs.existsSync(output.runSummaryPath), true);
   assert.equal(fs.existsSync(output.rawTranscriptPath), true);
   assert.equal(fs.existsSync(path.join(output.caseLogsDir, "case-001.md")), true);
+  assert.match(fs.readFileSync(output.runSummaryPath, "utf8"), /heuristics_version: heuristics-route-alias-boundary-v2/);
 });

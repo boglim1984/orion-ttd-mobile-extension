@@ -10,6 +10,7 @@
     "completed_at",
     "browser_context_note",
     "tool_version",
+    "heuristics_version",
     "cases",
     "warnings",
     "errors"
@@ -31,6 +32,12 @@
       "type": "string"
     },
     "tool_version": {
+      "type": "string"
+    },
+    "heuristics_version": {
+      "type": "string"
+    },
+    "generated_runner_source": {
       "type": "string"
     },
     "cases": {

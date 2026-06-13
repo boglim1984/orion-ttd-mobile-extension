@@ -211,6 +211,38 @@
     "isolated_case_count": 1
   },
   {
+    "suite_id": "route_law_min_combo_cold_first_active_route_sequence_v1",
+    "run_id": "20260613-172912-route_law_min_combo_cold_first_active_route_sequence_v1",
+    "imported_at": "2026-06-13T21:29:21.426Z",
+    "raw_result_path": "study/raw/2026-06-13/route_law_min_combo_cold_first_active_route_sequence_v1__20260613-172912-route_law_min_combo_cold_first_active_route_sequence_v1.json",
+    "review_path": "study/reviews/2026-06-13/route_law_min_combo_cold_first_active_route_sequence_v1__20260613-172912-route_law_min_combo_cold_first_active_route_sequence_v1.md",
+    "case_count": 1,
+    "classification_counts": {
+      "PASS_CANDIDATE": 1
+    },
+    "status_counts": {
+      "RESPONDED": 1
+    },
+    "has_dom_turn_trace": true,
+    "warnings_errors_count": 0,
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "PASS": 1
+    },
+    "route_survival_counts": {
+      "survived": 1
+    },
+    "legal_verdict": "PASS",
+    "route_survival_outcome": "survived",
+    "suite_case_count": 1,
+    "suite_design_type": "smoke",
+    "suite_context_risk": "low",
+    "max_approximate_chat_turn_depth_before_case": 0,
+    "negative_control_positions": [],
+    "carryover_case_count": 0,
+    "isolated_case_count": 1
+  },
+  {
     "suite_id": "route_law_minimal_field_ablation_v1",
     "run_id": "20260613-155044-route_law_minimal_field_ablation_v1",
     "imported_at": "2026-06-13T19:50:52.884Z",

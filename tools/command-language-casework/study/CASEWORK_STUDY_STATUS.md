@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_min_combo_cold_first_retest_v1
+**Next Study Needed**: route_law_min_combo_cold_first_sequence_wrong_next_control_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: route_law_min_combo_001_active_next was first in order and advanced from clear_trash to collect_dishes. | route_law_min_combo_002 through 005 also advanced to collect_dishes but occurred after prior legal route exposure. | route_law_min_combo_006 sequence_wrong_next_conflict advanced to collect_dishes and rejected the conflicting stack_papers next field. | route_law_min_combo_007 active_only_regression advanced to collect_dishes late in the run, which demonstrates route carryover but does not overturn earlier cold active-only collapse.
+**Evidence reviewed**: route_law_cold_active_route_sequence_001 was run as a one-case cold-first suite in a fresh disposable chat. | The assistant first held for move_on, then after move_on answered exactly: New active chunk: collect_dishes. | The result was classified PASS_CANDIDATE and the diagnostics show no tool failure.
 **Current confidence**: medium
-**Open gap**: We know active+next works cold, but we do not yet know whether active+route_sequence, active+route_law, active+commit_policy, active+completion_condition, or active-only can work as first exposure without route carryover.
-**Test strategy**: Run a cold-first retest where each candidate appears first in its own tiny suite or fresh disposable chat: active+route_sequence first, active+route_law first, active+commit_policy first, active+completion_condition first, active-only first, plus a route_sequence+wrong-next first-case control if practical.
-**Avoid / do not repeat**: do not interpret late active-only success as cold active-only success | do not put active+next before every other candidate in the retest | do not use strict response_contract wording to rescue weak carriers | do not move to broad language expansion until cold-first minimum carrier evidence is separated from carryover | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: Use 5 to 6 one-case cold suites, or a runner mode that resets the disposable chat per case. Each candidate must be first exposure in its own context.
-**Retirement condition**: Retire this pointer when each candidate has been tested as first exposure and the study can distinguish true cold carriers from carriers that only pass after route carryover.
-**Next action for fresh chat**: Enter research-planning mode and design route_law_min_combo_cold_first_retest_v1 as a set of one-case cold-first suites or a reset-per-case strategy.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_minimum_viable_packet_combo_v1 result 20260613-171904-route_law_minimum_viable_packet_combo_v1.
+**Open gap**: We know active+route_sequence can carry legal advancement cold, but we do not yet know whether route_sequence defeats a conflicting wrong next_chunk_id when both are present in a cold first packet.
+**Test strategy**: Run one fresh disposable chat with a single cold case containing active_chunk_id, active_chunk_label, route_sequence, and a conflicting next_chunk_id/next_chunk_label pointing to stack_papers. The legal result should still be collect_dishes.
+**Avoid / do not repeat**: do not run the next control in the already warmed chat | do not bundle multiple cold cards into one warmed suite | do not add response_contract wording that rescues the route | do not treat active+route_sequence as fully retired until the wrong-next conflict control passes | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: One-case cold-first suite in a fresh disposable chat.
+**Retirement condition**: Retire this control when a cold packet with active+route_sequence plus conflicting wrong next_chunk_id advances to collect_dishes rather than stack_papers.
+**Next action for fresh chat**: Generate only the validator-ready one-case JSON suite for route_law_min_combo_cold_first_sequence_wrong_next_control_v1.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_min_combo_cold_first_active_route_sequence_v1 result 20260613-172912-route_law_min_combo_cold_first_active_route_sequence_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-13
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T21:22:45.196Z
-- Run count: 12
-- Case count: 72
-- Latest suite ID: route_law_minimum_viable_packet_combo_v1
-- Latest run ID: 20260613-171904-route_law_minimum_viable_packet_combo_v1
-- Classification counts: {"PASS_CANDIDATE":58,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":5,"HOLD_NEEDS_REVIEW":8}
+- Last tabulated at: 2026-06-13T21:33:45.958Z
+- Run count: 13
+- Case count: 73
+- Latest suite ID: route_law_min_combo_cold_first_active_route_sequence_v1
+- Latest run ID: 20260613-172912-route_law_min_combo_cold_first_active_route_sequence_v1
+- Classification counts: {"PASS_CANDIDATE":59,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":5,"HOLD_NEEDS_REVIEW":8}
 - Open findings count: 0
-- Case-law matrix rows: 72
+- Case-law matrix rows: 73
 
 ## Open findings
 Generated and/or manually curated.

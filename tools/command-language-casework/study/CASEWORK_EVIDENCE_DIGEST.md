@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_min_combo_cold_first_retest_v1
+- Next study: route_law_min_combo_cold_first_sequence_wrong_next_control_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
 - Current confidence: medium
-- Open gap: We know active+next works cold, but we do not yet know whether active+route_sequence, active+route_law, active+commit_policy, active+completion_condition, or active-only can work as first exposure without route carryover.
-- Suite shape recommendation: Use 5 to 6 one-case cold suites, or a runner mode that resets the disposable chat per case. Each candidate must be first exposure in its own context.
+- Open gap: We know active+route_sequence can carry legal advancement cold, but we do not yet know whether route_sequence defeats a conflicting wrong next_chunk_id when both are present in a cold first packet.
+- Suite shape recommendation: One-case cold-first suite in a fresh disposable chat.
 
 ## Evidence summary
 
-- Imported run count: 12
-- Imported case count: 72
-- Matrix row count: 72
-- Latest imported suite ID: route_law_minimum_viable_packet_combo_v1
-- Latest imported run ID: 20260613-171904-route_law_minimum_viable_packet_combo_v1
+- Imported run count: 13
+- Imported case count: 73
+- Matrix row count: 73
+- Latest imported suite ID: route_law_min_combo_cold_first_active_route_sequence_v1
+- Latest imported run ID: 20260613-172912-route_law_min_combo_cold_first_active_route_sequence_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_min_combo_cold_first_active_route_sequence_v1 / 20260613-172912-route_law_min_combo_cold_first_active_route_sequence_v1: 1 cases, legal=PASS, route=survived, design=smoke, context_risk=low
 - route_law_minimum_viable_packet_combo_v1 / 20260613-171904-route_law_minimum_viable_packet_combo_v1: 7 cases, legal=PASS, route=survived, design=regression, context_risk=medium
 - route_law_active_floor_isolation_v1 / 20260613-170853-route_law_active_floor_isolation_v1: 7 cases, legal=HOLD, route=unknown, design=matrix, context_risk=medium
-- route_law_field_floor_v2 / 20260613-165714-route_law_field_floor_v2: 9 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_field_floor_v2__20260613-165714-route_law_field_floor_v2.md
 - study/reviews/2026-06-13/route_law_active_floor_isolation_v1__20260613-170853-route_law_active_floor_isolation_v1.md
 - study/reviews/2026-06-13/route_law_minimum_viable_packet_combo_v1__20260613-171904-route_law_minimum_viable_packet_combo_v1.md
+- study/reviews/2026-06-13/route_law_min_combo_cold_first_active_route_sequence_v1__20260613-172912-route_law_min_combo_cold_first_active_route_sequence_v1.md
 
 ## Planning rule
 

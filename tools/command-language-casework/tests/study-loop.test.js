@@ -7,6 +7,11 @@ const { execSync } = require("node:child_process");
 const projectRoot = path.resolve(__dirname, "../../..");
 const caseworkRoot = path.join(projectRoot, "tools/command-language-casework");
 const studyDir = path.join(caseworkRoot, "study");
+const liveStatusPath = path.join(studyDir, "CASEWORK_STUDY_STATUS.json");
+
+function readLiveNextStudyNeeded() {
+  return JSON.parse(fs.readFileSync(liveStatusPath, "utf8")).manual_next_study.next_study_needed;
+}
 
 // Helpers
 function makeFakeResult(suiteId, runId, cases) {
@@ -27,6 +32,7 @@ test("study loop - import and tabulate with various classification fields", (t) 
   const testSuiteId = "test-loop-suite";
   const testRunId = "20260613-120000";
   const fakeResultPath = path.join(__dirname, "fake-result.json");
+  const expectedNextStudy = readLiveNextStudyNeeded();
   
   // 1. Create a fake result JSON
   const cases = [
@@ -94,8 +100,8 @@ test("study loop - import and tabulate with various classification fields", (t) 
   const statusObj = JSON.parse(fs.readFileSync(path.join(studyDir, "CASEWORK_STUDY_STATUS.json"), "utf8"));
   assert.strictEqual(
     statusObj.manual_next_study.next_study_needed,
-    "scorer_keyword_extraction_v3_fresh_validation",
-    "Stale manual next study should advance to the fresh scorer validation pointer"
+    expectedNextStudy,
+    "Tabulation should preserve the current manual next-study pointer"
   );
   assert.strictEqual(statusObj.computed_summary.latest_suite_id, testSuiteId, "Computed summary should update latest_suite_id");
   assert.ok(
@@ -178,14 +184,23 @@ test("tabulation recomputes legacy scorer rows from current heuristics", () => {
 
 test("tabulation status markdown no longer points at reflection-loop validation", () => {
   const tabulateScript = path.join(caseworkRoot, "scripts", "tabulate-casework-study.mjs");
+  const expectedNextStudy = readLiveNextStudyNeeded();
   execSync(`node "${tabulateScript}"`, { stdio: "ignore" });
 
   const statusMd = fs.readFileSync(path.join(studyDir, "CASEWORK_STUDY_STATUS.md"), "utf8");
-  assert.match(statusMd, /Next Study Needed\*\*: scorer_keyword_extraction_v3_fresh_validation/);
+  assert.match(
+    statusMd,
+    new RegExp(`Next Study Needed\\*\\*: ${expectedNextStudy.replace(/[.*+?^${}()|[\\]\\\\]/g, "\\$&")}`)
+  );
   assert.doesNotMatch(statusMd, /casework_reflection_loop_v1_validation/);
   assert.doesNotMatch(
     statusMd,
     /\*\*scorer_collect_dishes_false_lost_route_001\*\* \(open\)/,
     "Resolved scorer finding should not remain open in status markdown"
+  );
+  assert.doesNotMatch(
+    statusMd,
+    /\*\*Next Study Needed\*\*: scorer_keyword_extraction_v3_fresh_validation/,
+    "Completed scorer v3 agenda should not remain the active manual next-study pointer"
   );
 });

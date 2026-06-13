@@ -162,6 +162,7 @@ node tools/command-language-casework/scripts/tabulate-casework-study.mjs
 ```
 
 The next suite is allowed only after the manual next-study pointer has been checked and the reflection loop is complete.
+Completed manual next-study agendas must be explicitly retired before the next fresh-chat design cycle.
 
 ## Local Mirror Bundle v1
 

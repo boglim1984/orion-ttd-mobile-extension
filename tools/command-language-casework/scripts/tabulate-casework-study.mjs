@@ -103,7 +103,8 @@ function countValues(values) {
 
 const STALE_NEXT_STUDY_IDS = new Set([
   "casework_reflection_loop_v1_validation",
-  "scorer_keyword_extraction_v1_after_reflection_repair"
+  "scorer_keyword_extraction_v1_after_reflection_repair",
+  "scorer_keyword_extraction_v3_fresh_validation"
 ]);
 
 const AUTO_RESOLVED_FINDINGS = {
@@ -123,20 +124,24 @@ const AUTO_RESOLVED_FINDINGS = {
 
 function buildFreshValidationPointer() {
   return {
-    next_study_needed: "scorer_keyword_extraction_v3_fresh_validation",
+    next_study_needed: "casework_status_pointer_cleanup_v1",
     next_study_purpose:
-      "Run a small fresh scorer keyword validation suite against the real ChatGPT browser surface to prove the repaired v3 scorer classifies new evidence correctly, while preserving the stack_papers negative control.",
+      "Close the completed scorer_keyword_extraction_v3_fresh_validation agenda and harden the manual next-study workflow so satisfied manual pointers do not keep reappearing in fresh chats, launch bundles, or Command Center mirrored study-status context.",
     recommended_next_cases: [
-      "run one fresh collect_dishes advancement case on the real browser surface",
-      "run one wrong-next stack_papers negative control on the real browser surface",
-      "confirm repaired scorer rows still produce deterministic legal_verdict and route_survival_outcome values",
-      "confirm imported fresh runs leave wrong-next negatives classified as lost-route rather than survived"
+      "confirm CASEWORK_STUDY_STATUS.md and CASEWORK_STUDY_STATUS.json no longer point to scorer_keyword_extraction_v3_fresh_validation as the active next study",
+      "confirm the v3 scorer validation result remains recorded as completed and durable",
+      "confirm CASEWORK_OPEN_FINDINGS.md still reports no open findings",
+      "confirm Casework Start / TTD TESTS launch context surfaces the updated pointer",
+      "confirm Command Center mirrored study-status skill is refreshed after the pointer change",
+      "document or patch the closeout rule: completed manual next-study agendas must be explicitly retired before the next fresh-chat design cycle",
+      "set the following research pointer to route_law_language_expansion_v1 once cleanup is verified"
     ],
     next_action_for_fresh_chat:
-      "Do not redesign the scorer yet. Run a small fresh browser-surface validation of the repaired scorer, import the result, and confirm the negative stack_papers control still fails cleanly.",
-    set_by: "Codex tabulation repair",
+      "Do not design a new language suite yet. First confirm that the scorer v3 validation result is recorded as completed, then update the manual next-study pointer away from scorer validation. Verify that Casework Start / TTD TESTS fresh-chat context no longer routes back to the completed scorer v3 agenda. After this cleanup, resume command-language research with route_law_language_expansion_v1.",
+    set_by: "Billy / ChatGPT main dev-design review",
     set_at: new Date().toISOString().slice(0, 10),
-    source: "Post-scorer-repair status cleanup"
+    source:
+      "scorer_keyword_extraction_v3_fresh_validation imported result, run 20260613-142922-scorer_keyword_extraction_v3_fresh_validation; TTD TESTS post-run review; main dev/design closeout decision."
   };
 }
 

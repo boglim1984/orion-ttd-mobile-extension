@@ -17,6 +17,7 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 - Window model to preserve: design chat creates/reviews JSON, Casework GUI validates/runs setup, disposable ChatGPT test tab executes the runner.
 - Cumulative map rule: one-off result reviews should guide the immediate next move, but every case should also append high-detail normalized data to a single case-law/rule-design matrix for later analysis.
 - Legal integration rule: tomorrow's follow-up should weave the Orion TTD legal system into the test pipeline so results can be read through committed state, evidence, prose-as-claim, signals, smallest legal reduction, HOLD/REPAIR/REANCHOR, and PASS/FAIL route-survival language.
+- Integration simplification question: as these parts are connected, decide whether each part should stay separate, collapse into another artifact, or be redesigned because it overlaps or adds too much maintenance. Keep pieces that reduce confusion; simplify anything that becomes a second source of truth.
 
 ### Recommended Next Cases / Checks
 - Verify the launcher/window model opens or clearly instructs the three required surfaces: design chat, Casework GUI, disposable ChatGPT test tab.
@@ -26,6 +27,7 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 - Include fields such as suite_id, case_id, date, route_id, active_chunk_id, boundary_type, packet_style, steering_language, scripted_user_reply, expected_behavior, observed_behavior, classification, failure_layer, failure_class, repair_needed, repair_worked, important_excerpt, legal_verdict, legal_evidence_type, candidate_rule, candidate_skill_block, and next_status.
 - Confirm import/tabulation updates or preserves the manual next-study pointer correctly.
 - Confirm fresh skill-loaded chats refuse to design a new suite when the status says follow-up repair comes first.
+- During integration, explicitly check for overlap: status file = agenda, raw result JSON = evidence, reflection review = interpretation, case-law matrix = cumulative analysis, legal system = authority/evidence language, rulebook = agent behavior. Collapse or redesign any part that duplicates another role.
 - Add a tomorrow task to update `ttdmobile_coding_rulebook.md` so agents know how to use the reflection loop, cumulative case-law matrix, and legal-system test interpretation.
 
 ## Computed summary
@@ -36,7 +38,7 @@ Generated from raw result files.
 - Case count: 25
 - Latest suite ID: scorer_keyword_extraction_v2
 - Classification counts: {"PASS_CANDIDATE":13,"FAIL_LOST_ROUTE":12}
-- Open findings count: 4
+- Open findings count: 5
 
 ## Open findings
 Generated and/or manually curated.
@@ -45,4 +47,5 @@ Generated and/or manually curated.
 - **casework_window_model_miscount_001** (open): The real workflow needs three surfaces: design chat, Casework GUI, and disposable ChatGPT test tab. Startup/launcher behavior and docs should make this obvious.
 - **casework_case_law_matrix_missing_001** (open): One-off test results should also accumulate into a single high-detail case-law/rule-design matrix for later large-scale analysis and strong rule design.
 - **casework_legal_system_not_integrated_001** (open): The Orion TTD legal system exists but is not yet woven into the Casework test pipeline; future reflection/scoring should map evidence, claims, committed state, legal verdicts, and route-survival outcomes explicitly.
+- **casework_artifact_overlap_risk_001** (open): Reflection loop integration may create overlapping sources of truth. During integration, test whether each artifact reduces confusion or adds maintenance; collapse/redesign overlaps before adding more machinery.
 - **scorer_collect_dishes_false_lost_route_001** (open): Heuristic/scorer keyword extraction may miss collect_dishes even when assistant visible text contains the correct transition, causing false FAIL_LOST_ROUTE. Recommended next study after reflection repair: scorer_keyword_extraction_v1

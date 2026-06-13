@@ -1,7 +1,8 @@
 import {
   CASEWORK_SKILL_PROMPT,
   CASEWORK_SKILL_USAGE,
-  buildSkillBookmarklet
+  buildStartBookmarklet,
+  buildSnapshotBookmarklet
 } from "./casework-skill-setup.js";
 
 const suiteInput = document.querySelector("#suite-input");
@@ -32,8 +33,9 @@ const openResultsButton = document.querySelector("#open-results-button");
 const copySummaryButton = document.querySelector("#copy-summary-button");
 const copyLoaderButton = document.querySelector("#copy-loader-button");
 const copyResultInstructionsButton = document.querySelector("#copy-result-instructions-button");
-const copySkillBookmarkletButton = document.querySelector("#copy-skill-bookmarklet-button");
-const copySkillPromptButton = document.querySelector("#copy-skill-prompt-button");
+const copyStartBookmarkletButton = document.querySelector("#copy-start-bookmarklet-button");
+const copySkillSnapshotButton = document.querySelector("#copy-skill-snapshot-button");
+const copyStatusButton = document.getElementById("copy-status-button");
 const skillHowToUseButton = document.querySelector("#skill-how-to-use-button");
 
 const uiState = {
@@ -248,17 +250,17 @@ copyConsoleStepsButton.addEventListener("click", () =>
   })
 );
 
-copySkillBookmarkletButton.addEventListener("click", () =>
+copyStartBookmarkletButton.addEventListener("click", () =>
   withAction(async () => {
-    await copyToClipboard(buildSkillBookmarklet(), "Copied skill injection bookmarklet.");
-    setSkillSetupStatus("Bookmarklet copied. Save it in the browser bookmarks bar, then click it from the current ChatGPT dev chat.");
+    await copyToClipboard(buildStartBookmarklet(), "Copied Start Bookmarklet.");
+    setSkillSetupStatus("Start bookmarklet copied. Save it in the browser bookmarks bar. Click it to fetch the fresh Casework Designer Skill and launch support tabs.");
   })
 );
 
-copySkillPromptButton.addEventListener("click", () =>
+copySkillSnapshotButton.addEventListener("click", () =>
   withAction(async () => {
-    await copyToClipboard(CASEWORK_SKILL_PROMPT, "Copied skill prompt.");
-    setSkillSetupStatus("Skill prompt copied. Paste it directly if you do not want to save the bookmarklet first.");
+    await copyToClipboard(buildSnapshotBookmarklet(), "Copied skill snapshot bookmarklet.");
+    setSkillSetupStatus("Skill snapshot copied. This contains a static version of the prompt and may become stale.");
   })
 );
 

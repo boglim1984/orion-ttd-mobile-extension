@@ -58,11 +58,12 @@ The tool now also includes a Casework Designer Skill bookmarklet helper for the 
 
 ## Skill Bookmarklet And Launcher Split
 
-- the dev chat now has a dedicated `Copy Skill Bookmarklet` helper that injects the Command Language Casework Designer Skill prompt without sending
-- the bookmarklet shows a small popup that explains the mental model and points Billy to the support tabs
-- the bookmarklet does not start the local server, does not run tests, and does not click `Send`
-- the launcher now owns the support-tab job: start server, open Casework GUI, open disposable ChatGPT, copy setup note
-- focus preservation is best effort only; the launcher now says so directly instead of pretending it is guaranteed
+- the dev chat now has a tiny `Copy Start Bookmarklet` helper
+- the Casework Start bookmarklet triggers a macOS Shortcut
+- the Shortcut fetches the fresh skill from disk and copies it to the clipboard
+- the Shortcut also launches the local server, Casework GUI, and a disposable ChatGPT tab
+- the GUI provides a backup "Skill Snapshot" bookmarklet with a static embedded prompt
+- the bookmarklets do not run tests or click `Send`
 
 ## Handoff Tightening Update
 

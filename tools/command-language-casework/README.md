@@ -6,7 +6,7 @@ It exists so Billy and ChatGPT can design, run, and analyze `TTD_COMMAND_V1` lan
 
 ## What It Does
 
-- injects a Casework Designer Skill prompt into the current ChatGPT dev chat by bookmarklet, insert-only
+- injects a Casework Designer Skill prompt into the current ChatGPT dev chat by a "Casework Start" macOS Shortcut bridge (via tiny bookmarklet)
 - serves a local GUI for pasted suite JSON
 - validates suite structure before a run
 - provides a console-injected ChatGPT runner
@@ -38,8 +38,9 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 
 ## First Run
 
-1. In the current ChatGPT dev chat, use the GUI `Copy Skill Bookmarklet` helper and save/click that bookmarklet there.
-2. Run `tools/command-language-casework/launch-casework.command` to start the local server and open the Casework GUI plus a disposable ChatGPT support tab.
+1. In the current ChatGPT dev chat, use the GUI `Copy Start Bookmarklet` helper and save that bookmarklet.
+2. Click the bookmarklet. It triggers the macOS Shortcut which reads the fresh skill, copies it, and opens the Casework GUI plus a disposable ChatGPT support tab.
+3. Paste the copied skill into the composer.
 3. Ask the dev chat to design the next suite JSON block.
 4. Use the GUI step lane to load/paste that suite and validate it.
 5. Copy the self-contained runner for the current suite.
@@ -75,8 +76,8 @@ Each run includes:
 
 ## Notes
 
-- The skill bookmarklet injects the design/review prompt into the current dev chat and shows the next-step popup. It does not start the server, run tests, or click Send.
-- The launcher starts the local server and opens the support tabs quietly when macOS/Chrome allow it, but focus preservation is best effort only.
+- The Casework Start bookmarklet triggers the macOS Shortcut. The Shortcut reads the fresh skill from disk and opens support tabs. The bookmarklet itself is tiny and does not contain the skill body.
+- The `launch-casework.command` launcher starts the local server and opens the support tabs quietly when macOS/Chrome allow it.
 - The supported path is the self-contained payload, not the legacy localhost bootstrap.
 - The legacy loader and server-run buttons remain available as secondary tooling only.
 - Use this only in dedicated test chats.

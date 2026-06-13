@@ -33,7 +33,7 @@ The tool is evidence capture and batch running only. It does not gain route auth
 
 Core loop:
 
-1. The dev chat gets the Command Language Casework Designer Skill by insert-only bookmarklet.
+1. The dev chat gets the Command Language Casework Designer Skill via the macOS Casework Start Shortcut (triggered by a tiny bookmarklet).
 2. Billy asks that dev chat for a JSON suite block.
 3. Billy pastes the suite into the local GUI.
 4. Billy installs the runner in a disposable ChatGPT test chat.
@@ -47,7 +47,7 @@ Core loop:
 
 The GUI includes:
 
-- skill bookmarklet helpers for the dev/design chat
+- skill start bookmarklet to trigger macOS Shortcut and copy fresh skill
 - large suite JSON textarea
 - `Validate`
 - `Run`
@@ -142,17 +142,17 @@ node tools/command-language-casework/server/casework-server.mjs --validate tools
 ## How To Paste Suite Data
 
 - use an example suite from `tools/command-language-casework/examples/`
-- or paste JSON from the current dev chat after using the Command Language Casework Designer Skill bookmarklet
+- or paste JSON from the current dev chat after using the Casework Start bookmarklet/shortcut
 
 ## Skill Bookmarklet Split
 
-Skill bookmarklet:
+Skill bookmarklet / Shortcut:
 
-- injects the design/review skill into the current ChatGPT dev chat
-- shows a small popup explaining the next step
-- does not run the local server
+- tiny bookmarklet triggers the macOS Casework Start Shortcut
+- Shortcut fetches the fresh skill from disk and copies it to clipboard
+- shows an alert to paste the skill into the current ChatGPT dev chat
 - does not run tests
-- does not click `Send` by default
+- does not click `Send`
 - does not use cookies, storage, or credential APIs
 
 Launcher:
@@ -173,7 +173,7 @@ Disposable ChatGPT tab:
 
 ## Supported Runner Path
 
-- first use the skill bookmarklet in the current dev chat and get the suite block there
+- first click the Casework Start bookmarklet in the dev chat, paste the copied fresh skill, and get the suite block there
 - primary path: open disposable ChatGPT test chat, validate suite, then `Copy Self-Contained Runner`
 - paste the payload into a disposable ChatGPT test-chat console
 - nothing sends until Billy clicks the visible overlay `Run` button

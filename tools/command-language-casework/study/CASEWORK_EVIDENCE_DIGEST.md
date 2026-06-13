@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_minimal_field_ablation_v1
-- Purpose: Find the smallest command packet field set that still preserves route law after route_law_contract_relaxation_matrix_v1 showed relaxed packets can preserve continue, done, move_on, and side-question return behavior.
-- Current confidence: Confidence is now high that route law can survive relaxed response_contract wording, but medium/limited on which packet fields are actually carrying that behavior.
-- Open gap: The current evidence does not yet isolate whether route survival depends on active_chunk_id, active_chunk_label, next_chunk_id, next_chunk_label, route_sequence, allowed_intents, or free-text route_law wording.
-- Suite shape recommendation: Use 6 to 8 cases in one disposable chat. Mark the suite as ablation/matrix, preserve case order, and keep one late negative control.
+- Next study: route_law_field_floor_v2
+- Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
+- Current confidence: High that no single tested field family is individually required when route_law, commit_policy, route_sequence, active fields, or next fields provide alternate scaffolding. Still limited on the true floor because the first ablation suite did not remove free-text policy and structural fields together.
+- Open gap: The smallest carrier set is still unknown. The next run must test active-only, label-only, sequence-only, next-only, allowed_intents-only, policy-only, and nearly-empty packets without letting free-text route_law or commit_policy rescue every case.
+- Suite shape recommendation: Use 7 to 9 cases in one disposable chat. Preserve case order from strongest scaffold to weakest scaffold. Include one late wrong-next or near-empty negative control.
 
 ## Evidence summary
 
-- Imported run count: 8
-- Imported case count: 41
-- Matrix row count: 41
-- Latest imported suite ID: route_law_contract_relaxation_matrix_v1
-- Latest imported run ID: 20260613-153256-route_law_contract_relaxation_matrix_v1
+- Imported run count: 9
+- Imported case count: 49
+- Matrix row count: 49
+- Latest imported suite ID: route_law_minimal_field_ablation_v1
+- Latest imported run ID: 20260613-155044-route_law_minimal_field_ablation_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_minimal_field_ablation_v1 / 20260613-155044-route_law_minimal_field_ablation_v1: 8 cases, legal=PASS, route=survived, design=matrix, context_risk=high
 - route_law_contract_relaxation_matrix_v1 / 20260613-153256-route_law_contract_relaxation_matrix_v1: 8 cases, legal=FAIL, route=broken, design=matrix, context_risk=high
 - route_law_language_expansion_v1 / 20260613-145410-route_law_language_expansion_v1: 4 cases, legal=PASS, route=survived, design=contrast, context_risk=medium
-- scorer_keyword_extraction_v3_fresh_validation / 20260613-142922-scorer_keyword_extraction_v3_fresh_validation: 2 cases, legal=FAIL, route=broken, design=smoke, context_risk=low
 
 ## Recent review files
 
-- study/reviews/2026-06-13/scorer_keyword_extraction_v3_fresh_validation__20260613-142922-scorer_keyword_extraction_v3_fresh_validation.md
 - study/reviews/2026-06-13/route_law_language_expansion_v1__20260613-145410-route_law_language_expansion_v1.md
 - study/reviews/2026-06-13/route_law_contract_relaxation_matrix_v1__20260613-153256-route_law_contract_relaxation_matrix_v1.md
+- study/reviews/2026-06-13/route_law_minimal_field_ablation_v1__20260613-155044-route_law_minimal_field_ablation_v1.md
 
 ## Planning rule
 

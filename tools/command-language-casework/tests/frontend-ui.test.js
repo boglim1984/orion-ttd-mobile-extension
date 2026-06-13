@@ -32,6 +32,8 @@ test("frontend UI logic has robust validate button wiring", async () => {
 
   // 6. Validation displays error string
   assert.match(uiCode, /Validation failed:/, "JS must display 'Validation failed:' on error");
+  assert.match(uiCode, /Suite JSON could not be parsed/, "JS should surface parse failures");
+  assert.match(uiCode, /unescaped inner packet JSON/, "JS should hint about packet escaping on parse failures");
 
   // 7. Copy Runner disabled management exists
   assert.match(uiCode, /copySelfContainedButton\.disabled\s*=\s*true/, "JS must disable copy button initially or on edit");

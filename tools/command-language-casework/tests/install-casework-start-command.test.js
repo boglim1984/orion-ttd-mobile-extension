@@ -58,9 +58,16 @@ test("schema and bundled skill sources teach packet strings, not packet objects"
   assert.match(schemaSource, /"packet": \{/);
   assert.match(schemaSource, /"type": "string"/);
   assert.match(schemaSource, /Never use a nested object here/);
+  assert.match(schemaSource, /escape the inner quotes so the outer suite remains valid JSON/);
   assert.match(runnerSchemaSkill, /`packet` must be a string, never an object/);
+  assert.match(runnerSchemaSkill, /exactly one fenced `json` code block/);
+  assert.match(runnerSchemaSkill, /escape the inner quotes/);
+  assert.match(runnerSchemaSkill, /JSON\.parse/);
   assert.match(runnerSchemaSkill, /TTD_COMMAND_V1\\n/);
   assert.match(designerSkill, /`packet` must be a string, never an object/);
+  assert.match(designerSkill, /exactly one fenced `json` code block/);
+  assert.match(designerSkill, /Embedded packet JSON inside `packet` must have escaped quotes/);
+  assert.match(designerSkill, /parseable JSON/);
   assert.match(designerSkill, /If the GUI says `packet must be a non-empty string`/);
 });
 

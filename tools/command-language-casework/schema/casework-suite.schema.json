@@ -100,7 +100,7 @@
           "packet": {
             "type": "string",
             "minLength": 1,
-            "description": "Must be a non-empty string beginning with TTD_COMMAND_V1\\n followed by the packet JSON/text body. Never use a nested object here."
+            "description": "Must be a non-empty string, usually beginning with TTD_COMMAND_V1\\n followed by the packet JSON/text body. Never use a nested object here. If embedding JSON packet content inside this string, escape the inner quotes so the outer suite remains valid JSON."
           },
           "scripted_user_replies": {
             "type": "array",

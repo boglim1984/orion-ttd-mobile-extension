@@ -350,6 +350,9 @@ async function init() {
       await refreshState();
     } catch (error) {
       let message = `Validation failed: ${error.message}`;
+      if (error.message.includes("Suite JSON could not be parsed")) {
+        message += " If the parse error happens near a packet field, check for unescaped inner packet JSON. Packet should look like \"packet\": \"TTD_COMMAND_V1\\n{\\\"protocol\\\":\\\"TTD_COMMAND_V1\\\"}\".";
+      }
       if (error.message.includes("packet must be a non-empty string")) {
         message += " Packet must be a string like \"TTD_COMMAND_V1\\n{...}\", not a JSON object.";
       }

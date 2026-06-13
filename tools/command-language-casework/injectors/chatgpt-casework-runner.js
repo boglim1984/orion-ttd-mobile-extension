@@ -271,7 +271,11 @@
       controlsBeforeInsert: [],
       controlsAfterInsert: [],
       controlsAfterWait: [],
-      failureStage: "composer_insert",
+      lastStage: "composer_insert",
+      failureStage: null,
+      sendActivationStatus: "not_attempted",
+      sendActivationMethodUsed: "none",
+      sendActivationAttempts: [],
       fallbackMethodUsed: "none",
       submitAttempted: false,
       lastError: null,
@@ -354,8 +358,12 @@
       `send button aria-label: ${sendMeta.ariaLabel || "none"}`,
       `send button title: ${sendMeta.title || "none"}`,
       `send button data-testid: ${sendMeta.dataTestId || "none"}`,
+      `last stage: ${diagnostics.lastStage || "unknown"}`,
+      `send activation status: ${diagnostics.sendActivationStatus || "not_attempted"}`,
+      `send activation method used: ${diagnostics.sendActivationMethodUsed || "none"}`,
+      `send activation attempts: ${(diagnostics.sendActivationAttempts || []).join(", ") || "none"}`,
       `fallback method used: ${diagnostics.fallbackMethodUsed || "none"}`,
-      `failure stage: ${diagnostics.failureStage || "unknown"}`,
+      `failure stage: ${diagnostics.failureStage || "none"}`,
       `dom turn trace entries: ${Array.isArray(diagnostics.domTurnTrace) ? diagnostics.domTurnTrace.length : 0}`,
       `last error: ${diagnostics.lastError || "none"}`
     ].join("\n");
@@ -389,12 +397,208 @@
     return nodes.map((node) => cleanText(node.textContent || "")).filter(Boolean);
   }
 
+  function createSendBaseline(documentRef, composer) {
+    const userMessages = collectUserMessages(documentRef);
+    const assistantMessages = collectAssistantMessages(documentRef);
+    return {
+      userCount: userMessages.length,
+      lastUserText: userMessages[userMessages.length - 1] || "",
+      assistantCount: assistantMessages.length,
+      stopVisible: isStopButtonVisible(documentRef),
+      composerText: cleanText(getComposerText(composer))
+    };
+  }
+
+  function dispatchPointerMouseClick(node, documentRef) {
+    const view = documentRef.defaultView || root;
+    const rect = node?.getBoundingClientRect?.() || { left: 0, top: 0, width: 0, height: 0 };
+    const clientX = rect.left + Math.max(1, rect.width / 2);
+    const clientY = rect.top + Math.max(1, rect.height / 2);
+    const pointerPayload = {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      clientX,
+      clientY,
+      button: 0,
+      buttons: 1,
+      pointerType: "mouse"
+    };
+    const mousePayload = {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      clientX,
+      clientY,
+      button: 0,
+      buttons: 1
+    };
+    const PointerCtor = typeof view.PointerEvent === "function" ? view.PointerEvent : null;
+    const MouseCtor = typeof view.MouseEvent === "function" ? view.MouseEvent : view.Event;
+
+    node.dispatchEvent(PointerCtor ? new PointerCtor("pointerdown", pointerPayload) : new MouseCtor("pointerdown", mousePayload));
+    node.dispatchEvent(new MouseCtor("mousedown", mousePayload));
+    node.dispatchEvent(PointerCtor ? new PointerCtor("pointerup", pointerPayload) : new MouseCtor("pointerup", mousePayload));
+    node.dispatchEvent(new MouseCtor("mouseup", mousePayload));
+    node.dispatchEvent(new MouseCtor("click", mousePayload));
+  }
+
+  function dispatchEnterSequence(composer, documentRef) {
+    const view = documentRef.defaultView || root;
+    const KeyboardCtor = typeof view.KeyboardEvent === "function" ? view.KeyboardEvent : view.Event;
+    const payload = {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      key: "Enter",
+      code: "Enter",
+      which: 13,
+      keyCode: 13
+    };
+    composer.dispatchEvent(new KeyboardCtor("keydown", payload));
+    composer.dispatchEvent(new KeyboardCtor("keypress", payload));
+    composer.dispatchEvent(new KeyboardCtor("keyup", payload));
+  }
+
+  async function verifySendActivation(documentRef, composer, expectedText, baseline, diagnostics, timeoutMs = 1200) {
+    const startedAt = Date.now();
+    while (Date.now() - startedAt < timeoutMs) {
+      const userMessages = collectUserMessages(documentRef);
+      const assistantMessages = collectAssistantMessages(documentRef);
+      const stopVisible = isStopButtonVisible(documentRef);
+      const composerText = cleanText(getComposerText(composer));
+      const latestUserText = userMessages[userMessages.length - 1] || "";
+
+      if (userMessages.length > baseline.userCount && cleanText(latestUserText).includes(cleanText(expectedText))) {
+        return {
+          ok: true,
+          reason: "user_turn_appeared"
+        };
+      }
+      if (stopVisible && (!composerText || composerText !== baseline.composerText)) {
+        return {
+          ok: true,
+          reason: "stop_button_visible"
+        };
+      }
+      if (assistantMessages.length > baseline.assistantCount && (!composerText || composerText !== baseline.composerText)) {
+        return {
+          ok: true,
+          reason: "assistant_transition_visible"
+        };
+      }
+      if (!composerText) {
+        return {
+          ok: true,
+          reason: "composer_cleared"
+        };
+      }
+
+      await wait(120);
+    }
+
+    return {
+      ok: false,
+      reason: "no_send_verification_signal"
+    };
+  }
+
+  async function activateSendButton(documentRef, composer, sendButton, text, diagnostics) {
+    const form = composer?.closest?.("form");
+    const attempts = [
+      {
+        method: "button_click",
+        run() {
+          sendButton.click();
+        }
+      },
+      {
+        method: "pointer_mouse_click",
+        run() {
+          dispatchPointerMouseClick(sendButton, documentRef);
+        }
+      },
+      {
+        method: "keyboard_enter",
+        run() {
+          composer.focus?.();
+          dispatchEnterSequence(composer, documentRef);
+        }
+      },
+      {
+        method: "form_request_submit",
+        run() {
+          if (!form || typeof form.requestSubmit !== "function") {
+            throw new Error("form requestSubmit unavailable");
+          }
+          form.requestSubmit(sendButton);
+        }
+      },
+      {
+        method: "form_submit",
+        run() {
+          if (!form || typeof form.submit !== "function") {
+            throw new Error("form submit unavailable");
+          }
+          form.submit();
+        }
+      }
+    ];
+
+    diagnostics.lastStage = "send_activation";
+    diagnostics.submitAttempted = true;
+
+    for (const attempt of attempts) {
+      const baseline = createSendBaseline(documentRef, composer);
+      try {
+        attempt.run();
+      } catch (error) {
+        diagnostics.sendActivationAttempts.push(`${attempt.method}:threw:${error.message}`);
+        continue;
+      }
+
+      const verification = await verifySendActivation(documentRef, composer, text, baseline, diagnostics);
+      diagnostics.sendActivationAttempts.push(`${attempt.method}:${verification.ok ? "passed" : verification.reason}`);
+      if (verification.ok) {
+        diagnostics.sendActivationStatus = "passed";
+        diagnostics.sendActivationMethodUsed = attempt.method;
+        if (attempt.method !== "button_click") {
+          diagnostics.fallbackMethodUsed = attempt.method;
+        }
+        return diagnostics;
+      }
+    }
+
+    diagnostics.sendActivationStatus = "failed";
+    diagnostics.sendActivationMethodUsed = "none";
+    diagnostics.failureStage = "send_activation";
+    diagnostics.lastError = "All send activation methods failed verification.";
+    throw createToolFailure("MESSAGE_NOT_SENT", diagnostics.lastError, diagnostics);
+  }
+
   function isStopButtonVisible(documentRef) {
+    if (!documentRef) {
+      return false;
+    }
+
     for (const selector of STOP_GENERATION_SELECTORS) {
-      const node = documentRef.querySelector(selector);
+      const node = typeof documentRef.querySelector === "function"
+        ? documentRef.querySelector(selector)
+        : null;
       if (node && isVisible(node)) {
         return true;
       }
+
+      if (typeof documentRef.querySelectorAll === "function") {
+        const matches = [...documentRef.querySelectorAll(selector)];
+        if (matches.some((match) => isVisible(match))) {
+          return true;
+        }
+      }
+    }
+
+    if (typeof documentRef.querySelectorAll !== "function") {
+      return false;
     }
 
     return [...documentRef.querySelectorAll("button")]
@@ -706,6 +910,7 @@
     const startedAt = Date.now();
     while (Date.now() - startedAt < timeoutMs) {
       if (stopState.stopRequested) {
+        diagnostics.lastStage = "send_activation";
         diagnostics.failureStage = "send_activation";
         diagnostics.lastError = "Runner stop requested before send.";
         throw createToolFailure("MESSAGE_NOT_SENT", diagnostics.lastError, diagnostics);
@@ -919,13 +1124,13 @@
     diagnostics.composerTextVerified = composerText.includes(String(text || "").slice(0, Math.min(String(text || "").length, 24)));
     diagnostics.controlsAfterInsert = collectComposerControls(composer);
 
-    if (!diagnostics.composerTextVerified || !cleanText(composerText)) {
+      if (!diagnostics.composerTextVerified || !cleanText(composerText)) {
       diagnostics.failureStage = "composer_insert";
       diagnostics.lastError = "Composer text verification failed.";
       throw createToolFailure("COMPOSER_INSERT_VERIFY", diagnostics.lastError, diagnostics);
     }
 
-    diagnostics.failureStage = "composer_state_sync";
+    diagnostics.lastStage = "composer_state_sync";
     const sendButton = await waitForSendControl(documentRef, composer, diagnostics, stopState);
     if (!sendButton) {
       diagnostics.lastError = "Visible send button not found.";
@@ -938,10 +1143,7 @@
       throw createToolFailure("SEND_BUTTON_NOT_FOUND", diagnostics.lastError, diagnostics);
     }
 
-    diagnostics.failureStage = "send_activation";
-    diagnostics.submitAttempted = true;
-    sendButton.click();
-    return diagnostics;
+    return activateSendButton(documentRef, composer, sendButton, text, diagnostics);
   }
 
   function createBaseline(documentRef) {
@@ -1557,6 +1759,8 @@
       describeDiagnostics,
       rankSendButtonCandidate,
       findSendButton,
+      activateSendButton,
+      verifySendActivation,
       runSuiteLocally
     }
   };

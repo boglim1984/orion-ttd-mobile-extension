@@ -24,6 +24,10 @@ test("runner source keeps send behavior behind explicit casework control", () =>
   assert.match(runnerSource, /Accepted run/);
   assert.match(runnerSource, /Runner stop requested before send/);
   assert.match(runnerSource, /Visible send button not found/);
+  assert.match(runnerSource, /sendActivationStatus/);
+  assert.match(runnerSource, /pointer_mouse_click/);
+  assert.match(runnerSource, /keyboard_enter/);
+  assert.match(runnerSource, /form_request_submit/);
 });
 
 test("runner source supports self-contained payload without auto-run and with download fallback", () => {
@@ -36,15 +40,32 @@ test("runner source supports self-contained payload without auto-run and with do
   assert.match(runnerSource, /Local result upload was blocked by ChatGPT CSP/);
 });
 
+test("attempt diagnostics separate last stage from failure stage", () => {
+  const diagnostics = runner.__test.makeAttemptDiagnostics();
+  assert.equal(diagnostics.lastStage, "composer_insert");
+  assert.equal(diagnostics.failureStage, null);
+  assert.equal(diagnostics.sendActivationStatus, "not_attempted");
+  assert.equal(diagnostics.sendActivationMethodUsed, "none");
+  assert.deepEqual(diagnostics.sendActivationAttempts, []);
+});
+
 function createFakeButton({ ariaLabel = "", title = "", dataTestId = "", type = "", text = "", disabled = false, visible = true, formId = "form-a" } = {}) {
   return {
     disabled,
     textContent: text,
+    clickCount: 0,
     closest(selector) {
       if (selector === "form") {
         return formId ? { id: formId } : null;
       }
       return null;
+    },
+    click() {
+      this.clickCount += 1;
+      return true;
+    },
+    dispatchEvent() {
+      return true;
     },
     getAttribute(name) {
       if (name === "aria-label") {
@@ -69,6 +90,193 @@ function createFakeButton({ ariaLabel = "", title = "", dataTestId = "", type = 
     }
   };
 }
+
+function createKeyboardDocumentState() {
+  const state = {
+    userMessages: [],
+    assistantMessages: [],
+    stopVisible: false,
+    enterPresses: 0
+  };
+  const form = {
+    requestSubmitCount: 0,
+    submitCount: 0,
+    requestSubmit() {
+      this.requestSubmitCount += 1;
+    },
+    submit() {
+      this.submitCount += 1;
+    }
+  };
+  const composer = {
+    innerText: "TTD_ORION_POC_V1",
+    textContent: "TTD_ORION_POC_V1",
+    focus() {},
+    closest(selector) {
+      if (selector === "form") {
+        return form;
+      }
+      return null;
+    },
+    dispatchEvent(event) {
+      if (event.type === "keyup" && event.key === "Enter") {
+        state.enterPresses += 1;
+        if (state.enterPresses >= 1) {
+          state.userMessages.push("TTD_ORION_POC_V1");
+          this.innerText = "";
+          this.textContent = "";
+        }
+      }
+      return true;
+    }
+  };
+  const documentRef = {
+    defaultView: {
+      MouseEvent: class MouseEvent {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      },
+      KeyboardEvent: class KeyboardEvent {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      }
+    },
+    querySelectorAll(selector) {
+      if (selector === "[data-message-author-role='user']" || selector === "article [data-message-author-role='user']") {
+        return state.userMessages.map((text) => ({
+          textContent: text,
+          getBoundingClientRect() {
+            return { width: 120, height: 24 };
+          }
+        }));
+      }
+      if (selector === "[data-message-author-role='assistant']" || selector === "article [data-message-author-role='assistant']") {
+        return state.assistantMessages.map((text) => ({
+          textContent: text,
+          getBoundingClientRect() {
+            return { width: 120, height: 24 };
+          }
+        }));
+      }
+      if (selector === "button[data-testid='stop-button']" || selector === "button[aria-label*='Stop answering']" || selector === "button[aria-label*='stop answering']") {
+        return state.stopVisible ? [{
+          textContent: "Stop answering",
+          getBoundingClientRect() {
+            return { width: 120, height: 24 };
+          }
+        }] : [];
+      }
+      return [];
+    }
+  };
+  return { state, form, composer, documentRef };
+}
+
+test("button.click activation marks send activation passed when verification succeeds", async () => {
+  const { state, composer, documentRef } = createKeyboardDocumentState();
+  const sendButton = createFakeButton({
+    ariaLabel: "Send prompt",
+    dataTestId: "send-button",
+    type: "submit"
+  });
+  sendButton.click = function click() {
+    this.clickCount += 1;
+    state.userMessages.push("TTD_ORION_POC_V1");
+    composer.innerText = "";
+    composer.textContent = "";
+  };
+
+  const diagnostics = runner.__test.makeAttemptDiagnostics();
+  await runner.__test.activateSendButton(documentRef, composer, sendButton, "TTD_ORION_POC_V1", diagnostics);
+
+  assert.equal(diagnostics.sendActivationStatus, "passed");
+  assert.equal(diagnostics.sendActivationMethodUsed, "button_click");
+  assert.equal(diagnostics.failureStage, null);
+  assert.match(diagnostics.sendActivationAttempts.join("\n"), /button_click:passed/);
+});
+
+test("send activation ladder falls back after click verification fails", async () => {
+  const { state, form, composer, documentRef } = createKeyboardDocumentState();
+  const sendButton = createFakeButton({
+    ariaLabel: "Send prompt",
+    dataTestId: "send-button",
+    type: "submit"
+  });
+
+  const diagnostics = runner.__test.makeAttemptDiagnostics();
+  await runner.__test.activateSendButton(documentRef, composer, sendButton, "TTD_ORION_POC_V1", diagnostics);
+
+  assert.equal(diagnostics.sendActivationStatus, "passed");
+  assert.equal(diagnostics.sendActivationMethodUsed, "keyboard_enter");
+  assert.match(diagnostics.sendActivationAttempts[0], /button_click:no_send_verification_signal/);
+  assert.match(diagnostics.sendActivationAttempts[1], /pointer_mouse_click:no_send_verification_signal/);
+  assert.match(diagnostics.sendActivationAttempts[2], /keyboard_enter:passed/);
+  assert.equal(form.requestSubmitCount, 0);
+  assert.equal(form.submitCount, 0);
+});
+
+test("failed send activation records real failure stage and no success method", async () => {
+  const form = {
+    requestSubmit() {
+      throw new Error("blocked");
+    },
+    submit() {
+      throw new Error("blocked");
+    }
+  };
+  const composer = {
+    innerText: "TTD_ORION_POC_V1",
+    textContent: "TTD_ORION_POC_V1",
+    focus() {},
+    closest(selector) {
+      if (selector === "form") {
+        return form;
+      }
+      return null;
+    },
+    dispatchEvent() {
+      return true;
+    }
+  };
+  const documentRef = {
+    defaultView: {
+      MouseEvent: class MouseEvent {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      },
+      KeyboardEvent: class KeyboardEvent {
+        constructor(type, init = {}) {
+          this.type = type;
+          Object.assign(this, init);
+        }
+      }
+    },
+    querySelectorAll() {
+      return [];
+    }
+  };
+  const sendButton = createFakeButton({
+    ariaLabel: "Send prompt",
+    dataTestId: "send-button",
+    type: "submit"
+  });
+  const diagnostics = runner.__test.makeAttemptDiagnostics();
+
+  await assert.rejects(
+    runner.__test.activateSendButton(documentRef, composer, sendButton, "TTD_ORION_POC_V1", diagnostics),
+    /All send activation methods failed verification/
+  );
+  assert.equal(diagnostics.sendActivationStatus, "failed");
+  assert.equal(diagnostics.sendActivationMethodUsed, "none");
+  assert.equal(diagnostics.failureStage, "send_activation");
+  assert.match(diagnostics.sendActivationAttempts.join("\n"), /form_request_submit:threw:blocked/);
+});
 
 function createContentEditableComposer() {
   return {
@@ -386,12 +594,16 @@ test("thinking is not accepted as a completed assistant response and completion 
       return { width: 200, height: 40 };
     }
   };
+  let stopVisible = false;
   const sendButton = createFakeButton({
     ariaLabel: "Send message",
     dataTestId: "send-button",
     type: "submit"
   });
-  sendButton.click = () => {};
+  sendButton.click = () => {
+    composer.value = "";
+    stopVisible = true;
+  };
   const assistantNode = {
     textContent: "Thinking",
     getBoundingClientRect() {
@@ -427,7 +639,7 @@ test("thinking is not accepted as a completed assistant response and completion 
       if (selector === "button[data-testid='send-button']") {
         return sendButton;
       }
-      if (selector === "button[data-testid='stop-button']") {
+      if (selector === "button[data-testid='stop-button']" && stopVisible) {
         return stopButton;
       }
       return null;
@@ -440,10 +652,13 @@ test("thinking is not accepted as a completed assistant response and completion 
         return [sendButton];
       }
       if (selector === "form button") {
-        return [sendButton, stopButton];
+        return stopVisible ? [sendButton, stopButton] : [sendButton];
       }
       if (selector === "[data-message-author-role='assistant']") {
         return [assistantNode];
+      }
+      if (selector === "button") {
+        return stopVisible ? [sendButton, stopButton] : [sendButton];
       }
       return [];
     }
@@ -511,13 +726,14 @@ test("dom turn trace records stop and thinking fields during sequencing wait", a
       return { width: 200, height: 40 };
     }
   };
-  let stopVisible = true;
+  let stopVisible = false;
   const sendButton = createFakeButton({
     ariaLabel: "Send message",
     dataTestId: "send-button",
     type: "submit"
   });
   sendButton.click = () => {
+    composer.value = "";
     stopVisible = true;
   };
   const stopButton = createFakeButton({

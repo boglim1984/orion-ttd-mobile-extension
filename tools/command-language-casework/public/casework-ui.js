@@ -10,15 +10,6 @@ document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
   const suiteInput = document.querySelector("#suite-input");
-  if (!validateButton || !suiteInput || !copySelfContainedButton || !validationSummary) {
-    if (validationSummary) validationSummary.textContent = "Error: core controls missing.";
-    console.error("Core controls missing");
-    return;
-  }
-  
-  // Set initial disabled state
-  copySelfContainedButton.disabled = true;
-
   const loaderOutput = document.querySelector("#loader-output");
   const statusLogPanel = document.querySelector("#status-log-panel");
   const currentCasePanel = document.querySelector("#current-case-panel");
@@ -50,6 +41,23 @@ async function init() {
   const copySkillSnapshotButton = document.querySelector("#copy-skill-snapshot-button");
   const copyStatusButton = document.getElementById("copy-status-button");
   const skillHowToUseButton = document.querySelector("#skill-how-to-use-button");
+
+  const missingControls = [
+    ["suiteInput", suiteInput],
+    ["validateButton", validateButton],
+    ["copySelfContainedButton", copySelfContainedButton],
+    ["validationSummary", validationSummary]
+  ].filter(([, node]) => !node);
+
+  if (missingControls.length) {
+    console.error("Casework GUI core controls missing:", missingControls.map(([name]) => name).join(", "));
+    if (validationSummary) {
+      validationSummary.textContent = "Error: core controls missing: " + missingControls.map(([name]) => name).join(", ");
+    }
+    return;
+  }
+
+  copySelfContainedButton.disabled = true;
 
   const uiState = {
     suiteDirty: false,

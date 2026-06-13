@@ -38,7 +38,7 @@ test("frontend UI logic has robust validate button wiring", async () => {
   assert.match(uiCode, /copySelfContainedButton\.disabled\s*=\s*false/, "JS must enable copy button after valid suite");
 
   // 8. Defensive check exists
-  assert.match(uiCode, /!validateButton.*!suiteInput/, "JS must check for core controls existence");
+  assert.match(uiCode, /const missingControls = \[/, "JS must check for core controls existence");
 
   // 9. Forbidden behaviors
   assert.doesNotMatch(uiCode, /localStorage|sessionStorage|cookie/, "JS must not use storage");
@@ -51,7 +51,14 @@ test("frontend UI logic has robust validate button wiring", async () => {
   // 11. validateButton listener check
   assert.match(uiCode, /validateButton\.addEventListener\("click"/, "JS must have validateButton click listener");
 
-  // 12. Parse check via node
+  // 12. Declaration order check (no temporal dead zone)
+  const declarationIndex = uiCode.indexOf("const validateButton =");
+  const missingControlsIndex = uiCode.indexOf("const missingControls =");
+  assert.ok(declarationIndex !== -1, "validateButton must be declared");
+  assert.ok(missingControlsIndex !== -1, "missingControls check must exist");
+  assert.ok(declarationIndex < missingControlsIndex, "validateButton declaration must appear before missingControls check");
+
+  // 13. Parse check via node
   import("node:child_process").then(({ execSync }) => {
     assert.doesNotThrow(() => {
       execSync(`node --check "${UI_JS_PATH}"`, { stdio: "pipe" });

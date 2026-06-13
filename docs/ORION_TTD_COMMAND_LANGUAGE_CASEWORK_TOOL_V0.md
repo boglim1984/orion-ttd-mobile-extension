@@ -162,14 +162,17 @@ Payload parts:
 
 Desktop v1 behavior:
 
-- reads local Command Center mirror first
+- reads designer/schema skill context from the local Command Center worktree or repo
+- reads the current-study agenda from the live Orion repo status file:
+  `tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md`
 - falls back to the main local Command Center repo for skill files
 - strips YAML/frontmatter from skill files
 - copies a clean runtime bundle to clipboard
 - opens `launch-casework.command`
 - does not depend on Apps Script, Shortcuts, or live GitHub fetches
-- mirrors current study status as:
+- may include a mirrored current-study skill as non-authoritative cached context:
   `library/skills/chatgpt/command-language-casework-current-study-status-skill.md`
+- refuses to copy the bundle if the injected `Next Study Needed` pointer does not match the live Orion status file
 
 Launcher:
 
@@ -196,6 +199,8 @@ After meaningful result review, use:
 `tools/command-language-casework/scripts/import-tabulate-sync-casework-result.sh`
 
 This imports the result, tabulates Orion study status, mirrors the current study-status skill, and lets the next Desktop bundle carry the updated next-study pointer.
+
+Fresh skill-loaded chats and Desktop bundles must treat the live Orion `CASEWORK_STUDY_STATUS.md` file as the agenda authority. If the injected bundle reports a different `Next Study Needed` pointer, the bundle path is broken and should be rejected rather than trusted.
 
 ## Casework Reflection Loop v1
 

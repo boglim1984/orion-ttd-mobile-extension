@@ -25,4 +25,6 @@ test("casework docs mention the three-surface workflow and reflection loop", () 
   assert.match(reflectionText, /Only then design the next suite\./);
   assert.match(reflectionText, /Mermaid-first review/i);
   assert.match(reflectionText, /case-law matrix/i);
+  assert.match(reflectionText, /CASEWORK_STUDY_STATUS\.md/);
+  assert.match(reflectionText, /live Orion repo/i);
 });

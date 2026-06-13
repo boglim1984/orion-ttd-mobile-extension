@@ -164,11 +164,15 @@ The next suite is allowed only after the manual next-study pointer has been chec
   `tools/command-language-casework/scripts/install-casework-start-command.sh`
 - Payload parts:
   Designer Skill, Runner Schema Skill, Current Study Status Skill
-- Current study status is mirrored as a Command Center skill/source:
+- Agenda authority for fresh chats and Desktop bundles:
+  `tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md`
+- The mirrored Command Center current-study skill may still exist as cached context:
   `library/skills/chatgpt/command-language-casework-current-study-status-skill.md`
+- That mirror is non-authoritative until explicitly regenerated from the live Orion status.
 - After meaningful result review, use:
   `tools/command-language-casework/scripts/import-tabulate-sync-casework-result.sh`
-- That syncs the next-study pointer into the next clipboard bundle.
+- That refreshes the live study artifacts and may also regenerate the mirrored current-study skill.
+- The Desktop launcher now refuses to copy a bundle when the injected `Next Study Needed` pointer does not match the live Orion status file.
 - Desktop v1 does not depend on Apps Script, Shortcuts, or live GitHub.
 - Mobile/cloud routes may still use separate experimental router paths if Billy chooses them later.
 - Shortcut/bookmarklet start paths are experimental or demoted, not the supported desktop v1 path.

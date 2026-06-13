@@ -25,6 +25,7 @@ test("installer references local mirror designer, schema, current-study skill, a
   assert.match(installerSource, /command-language-casework-runner-schema-skill\.md/);
   assert.match(installerSource, /command-language-casework-current-study-status-skill\.md/);
   assert.match(installerSource, /CASEWORK_STUDY_STATUS\.md/);
+  assert.match(installerSource, /Current study source: live Orion status/);
   assert.match(installerSource, /Casework Start\.command/);
 });
 
@@ -32,7 +33,10 @@ test("installer builds a three-part bundle and strips frontmatter", () => {
   assert.match(installerSource, /strip_frontmatter/);
   assert.match(installerSource, /Part 1 — Casework Designer Skill/);
   assert.match(installerSource, /Part 2 — Casework Runner Schema Skill/);
-  assert.match(installerSource, /Part 3 — Casework Current Study Status Skill/);
+  assert.match(installerSource, /Part 3 — Current Casework Study Status/);
+  assert.match(installerSource, /Source: live Orion repo/);
+  assert.match(installerSource, /Casework bundle status pointer mismatch/);
+  assert.match(installerSource, /Refusing to copy stale Casework bundle/);
 });
 
 test("installer opens launch-casework.command and avoids deprecated desktop dependencies", () => {

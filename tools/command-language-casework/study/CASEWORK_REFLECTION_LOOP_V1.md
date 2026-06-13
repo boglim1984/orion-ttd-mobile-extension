@@ -127,9 +127,12 @@ These fields are interpretation aids for review and matrix work. They are not ru
 Before a new suite is designed:
 
 - check the current manual next-study pointer
+- treat the live Orion repo `CASEWORK_STUDY_STATUS.md` file as the agenda authority for fresh chats and Desktop bundles
 - keep the pointer human/LLM-owned
 - do not let tabulation overwrite that pointer by default
 - update status only after raw evidence, review, matrix, and legal interpretation are in place
+
+If a Desktop bundle or freshly loaded skill context reports a different `Next Study Needed` value than the live Orion `CASEWORK_STUDY_STATUS.md` file, treat that as a bundle assembly failure rather than a study-state change.
 
 If the reflection-loop work itself still needs validation, the next pointer should stay on a reflection-loop target rather than jumping back to new scorer/language design.
 

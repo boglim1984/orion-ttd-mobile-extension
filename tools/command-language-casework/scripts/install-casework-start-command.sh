@@ -31,9 +31,9 @@ LAUNCHER="/Users/oflahertys/Code Projects/ACTIVE/orion-ios-ttd-injector/ttd-mobi
     SCHEMA="$FALLBACK_CC_ROOT/$SCHEMA_REL"
   fi
 
-  CURRENT_STUDY="$PRIMARY_CC_ROOT/$CURRENT_STUDY_REL"
-  if [ ! -f "$CURRENT_STUDY" ]; then
-    CURRENT_STUDY="$FALLBACK_CC_ROOT/$CURRENT_STUDY_REL"
+  CURRENT_STUDY_MIRROR="$PRIMARY_CC_ROOT/$CURRENT_STUDY_REL"
+  if [ ! -f "$CURRENT_STUDY_MIRROR" ]; then
+    CURRENT_STUDY_MIRROR="$FALLBACK_CC_ROOT/$CURRENT_STUDY_REL"
   fi
 
   if [ ! -f "$DESIGNER" ]; then
@@ -42,13 +42,20 @@ LAUNCHER="/Users/oflahertys/Code Projects/ACTIVE/orion-ios-ttd-injector/ttd-mobi
     exit 1
   fi
 
-  PAYLOAD="$(/usr/bin/python3 - "$DESIGNER" "$SCHEMA" "$CURRENT_STUDY" "$STUDY_STATUS" <<'PY'
+  if [ ! -f "$STUDY_STATUS" ]; then
+    echo "ERROR: live Orion study status file not found"
+    echo "Expected: $STUDY_STATUS"
+    exit 1
+  fi
+
+  PAYLOAD="$(/usr/bin/python3 - "$DESIGNER" "$SCHEMA" "$CURRENT_STUDY_MIRROR" "$STUDY_STATUS" <<'PY'
 import sys
 from pathlib import Path
+import re
 
 designer_path = Path(sys.argv[1])
 schema_path = Path(sys.argv[2])
-current_study_path = Path(sys.argv[3])
+current_study_mirror_path = Path(sys.argv[3])
 study_path = Path(sys.argv[4])
 
 
@@ -94,25 +101,30 @@ else:
     warnings.append(f"WARNING: schema skill file missing at {schema_path}")
     parts.append("# Part 2 — Casework Runner Schema Skill\n\n" + warnings[-1])
 
-if current_study_path.exists():
-    current_study_body = load_skill_body(current_study_path)
-    parts.append("# Part 3 — Casework Current Study Status Skill\n\n" + current_study_body)
-else:
-    warnings.append(f"WARNING: current study status skill missing at {current_study_path}")
-    if study_path.exists():
-        study_body = clean_text(study_path.read_text(encoding="utf-8", errors="replace")).strip()
-        warnings.append(f"FALLBACK: bundling raw Orion study status from {study_path}")
-        parts.append(
-            "# Part 3 — Casework Current Study Status Skill\n\n"
-            + warnings[-2]
-            + "\n\n"
-            + warnings[-1]
-            + "\n\n"
-            + study_body
+study_body = clean_text(study_path.read_text(encoding="utf-8", errors="replace")).strip()
+parts.append(
+    "# Part 3 — Current Casework Study Status\n\n"
+    + "Source: live Orion repo `tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md`\n\n"
+    + study_body
+)
+
+
+def extract_next_study(text: str) -> str:
+    match = re.search(r"\*\*Next Study Needed\*\*:\s*(.+)", text)
+    return match.group(1).strip() if match else ""
+
+
+live_next_study = extract_next_study(study_body)
+payload_next_study = extract_next_study(parts[-1])
+
+if current_study_mirror_path.exists():
+    mirror_body = load_skill_body(current_study_mirror_path)
+    mirror_next_study = extract_next_study(mirror_body)
+    if mirror_next_study and live_next_study and mirror_next_study != live_next_study:
+        warnings.append(
+            "INFO: mirrored current-study skill is stale and not authoritative. "
+            f"Mirror={mirror_next_study} Live={live_next_study}"
         )
-    else:
-        warnings.append(f"WARNING: study status file missing at {study_path}")
-        parts.append("# Part 3 — Casework Current Study Status Skill\n\n" + warnings[-2] + "\n\n" + warnings[-1])
 
 header = f"""Billy is launching Casework from the local Command Center mirror.
 
@@ -133,6 +145,8 @@ payload = header + "\n\n".join(parts).strip() + "\n"
 for warning in warnings:
     print(f"[bundle-warning] {warning}", file=sys.stderr)
 
+print(f"[bundle-live-next-study] {live_next_study}", file=sys.stderr)
+print(f"[bundle-payload-next-study] {payload_next_study}", file=sys.stderr)
 print(payload)
 PY
 )"
@@ -148,7 +162,37 @@ PY
   fi
 
   if ! printf "%s" "$PAYLOAD" | /usr/bin/grep -q "Part 3 — Casework Current Study Status Skill"; then
-    echo "ERROR: payload missing Part 3"
+    if ! printf "%s" "$PAYLOAD" | /usr/bin/grep -q "Part 3 — Current Casework Study Status"; then
+      echo "ERROR: payload missing Part 3"
+      exit 1
+    fi
+  fi
+
+  LIVE_NEXT_STUDY="$(/usr/bin/python3 - "$STUDY_STATUS" <<'PY'
+import re
+import sys
+from pathlib import Path
+
+text = Path(sys.argv[1]).read_text(encoding="utf-8", errors="replace")
+match = re.search(r"\*\*Next Study Needed\*\*:\s*(.+)", text)
+print(match.group(1).strip() if match else "")
+PY
+)"
+
+  BUNDLE_NEXT_STUDY="$(printf "%s" "$PAYLOAD" | /usr/bin/python3 -c 'import re,sys; text=sys.stdin.read(); m=re.search(r"\*\*Next Study Needed\*\*:\s*(.+)", text); print(m.group(1).strip() if m else "")')"
+
+  if [ -z "$LIVE_NEXT_STUDY" ] || [ -z "$BUNDLE_NEXT_STUDY" ]; then
+    echo "ERROR: could not extract Next Study Needed pointer."
+    echo "Live status: $LIVE_NEXT_STUDY"
+    echo "Bundle status: $BUNDLE_NEXT_STUDY"
+    exit 1
+  fi
+
+  if [ "$LIVE_NEXT_STUDY" != "$BUNDLE_NEXT_STUDY" ]; then
+    echo "ERROR: Casework bundle status pointer mismatch."
+    echo "Live status: $LIVE_NEXT_STUDY"
+    echo "Bundle status: $BUNDLE_NEXT_STUDY"
+    echo "Refusing to copy stale Casework bundle."
     exit 1
   fi
 
@@ -156,8 +200,9 @@ PY
   echo "Copied local mirror payload bytes: $(printf "%s" "$PAYLOAD" | /usr/bin/wc -c)"
   echo "Designer source: $DESIGNER"
   echo "Schema source: $SCHEMA"
-  echo "Current study source: $CURRENT_STUDY"
-  echo "Study status source: $STUDY_STATUS"
+  echo "Current study source: live Orion status $STUDY_STATUS"
+  echo "Mirror study skill (non-authoritative): $CURRENT_STUDY_MIRROR"
+  echo "Next Study Needed: $LIVE_NEXT_STUDY"
 
   /usr/bin/open "$LAUNCHER"
   echo "Launcher opened"

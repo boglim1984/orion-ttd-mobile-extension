@@ -1,0 +1,62 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2dfebe-7e38-83ea-a8d9-dce91a6e1545",
+    "suite_id": "route_law_protocol_activation_frame_minimum_v1",
+    "run_id": "20260613-211109-route_law_protocol_activation_frame_minimum_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The protocol activation frame can be reduced much farther than expected: full, ablated, minimal, and carrier-only route_sequence/legal_successor frames all produced explicit collect_dishes movement, while no-active sentinels stayed inert. However, the active-only trap also produced collect_dishes, so the run exposes a carryover or latent route-recall hazard that prevents fully retiring the minimum-frame boundary.",
+    "language_lesson": "For a proven successor carrier, surrounding activation prose is not the main driver; active_chunk_id plus an explicit successor carrier is enough in this run. But after repeated positive examples, the model may infer collect_dishes even when the successor carrier is absent, so cold ordering and negative controls must be separated from late endurance evidence.",
+    "pointer_update": {
+      "next_study_needed": "route_law_minimum_frame_cold_order_isolation_v1",
+      "purpose": "Determine whether the active-only collect_dishes result was true minimum-frame inference, latent desk-reset memory, or same-chat carryover from earlier positive cases.",
+      "evidence_reviewed": [
+        "route_law_protocol_activation_frame_minimum_v1 completed with 18 responded cases and no apparent runner send failure.",
+        "Full, ablated, minimal, and carrier-only route_sequence/legal_successor cases produced explicit collect_dishes movement.",
+        "No-active sentinels produced no movement, preserving the active_chunk_id boundary.",
+        "The active-only trap unexpectedly produced collect_dishes despite lacking route_sequence or legal_successor carrier fields.",
+        "Route_id-only and next_chunk-authority traps produced no movement, so next_chunk did not become authority in this run."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "It is still unknown whether a stripped active-only packet can truly authorize successor movement in a cold context, or whether case 015 was caused by prior same-chat exposure to collect_dishes and the desk-reset route.",
+      "test_strategy": "Run an order-isolated suite that puts active-only, route_id-only, and next_chunk-only traps before any positive successor-carrier examples, then repeats the same traps after positives. Keep carrier-only route_sequence and legal_successor positives as anchors, but counterbalance early and late positions so carryover can be measured directly.",
+      "avoid": [
+        "Do not count late active-only collect_dishes as proof of a valid minimum frame without cold-first confirmation.",
+        "Do not let heuristic FAIL_LOST_ROUTE labels hide safety-success negative controls that correctly produce no movement.",
+        "Do not retest broad successor-source matrices.",
+        "Do not mix scorer repair with this language-boundary suite.",
+        "Do not treat next_chunk_id as authority."
+      ],
+      "suite_shape_recommendation": "18 cases. Start with cold active-only, route_id-only, next_chunk-only, and no-active traps before any collect_dishes carrier exposure; then run carrier-only route_sequence/legal_successor positives; then repeat the same traps late to measure carryover.",
+      "retirement_condition": "Retire when cold active-only and route_id-only traps remain inert, carrier-only successor frames still produce collect_dishes, no-active sentinels remain inert, and late repeats quantify whether carryover changes negative-control behavior.",
+      "next_action_for_fresh_chat": "Generate a validator-ready route_law_minimum_frame_cold_order_isolation_v1 suite focused on cold-first negative controls versus late repeats, with carrier-only successor positives used only as controlled anchors."
+    },
+    "reviewed_at": "2026-06-14T01:17:51.791Z"
+  },
+  "imported_result_path": "study/raw/2026-06-13/route_law_protocol_activation_frame_minimum_v1__20260613-211109-route_law_protocol_activation_frame_minimum_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_minimum_frame_cold_order_isolation_v1",
+    "purpose": "Determine whether the active-only collect_dishes result was true minimum-frame inference, latent desk-reset memory, or same-chat carryover from earlier positive cases.",
+    "evidence_reviewed": [
+      "route_law_protocol_activation_frame_minimum_v1 completed with 18 responded cases and no apparent runner send failure.",
+      "Full, ablated, minimal, and carrier-only route_sequence/legal_successor cases produced explicit collect_dishes movement.",
+      "No-active sentinels produced no movement, preserving the active_chunk_id boundary.",
+      "The active-only trap unexpectedly produced collect_dishes despite lacking route_sequence or legal_successor carrier fields.",
+      "Route_id-only and next_chunk-authority traps produced no movement, so next_chunk did not become authority in this run."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "It is still unknown whether a stripped active-only packet can truly authorize successor movement in a cold context, or whether case 015 was caused by prior same-chat exposure to collect_dishes and the desk-reset route.",
+    "test_strategy": "Run an order-isolated suite that puts active-only, route_id-only, and next_chunk-only traps before any positive successor-carrier examples, then repeats the same traps after positives. Keep carrier-only route_sequence and legal_successor positives as anchors, but counterbalance early and late positions so carryover can be measured directly.",
+    "avoid": [
+      "Do not count late active-only collect_dishes as proof of a valid minimum frame without cold-first confirmation.",
+      "Do not let heuristic FAIL_LOST_ROUTE labels hide safety-success negative controls that correctly produce no movement.",
+      "Do not retest broad successor-source matrices.",
+      "Do not mix scorer repair with this language-boundary suite.",
+      "Do not treat next_chunk_id as authority."
+    ],
+    "suite_shape_recommendation": "18 cases. Start with cold active-only, route_id-only, next_chunk-only, and no-active traps before any collect_dishes carrier exposure; then run carrier-only route_sequence/legal_successor positives; then repeat the same traps late to measure carryover.",
+    "retirement_condition": "Retire when cold active-only and route_id-only traps remain inert, carrier-only successor frames still produce collect_dishes, no-active sentinels remain inert, and late repeats quantify whether carryover changes negative-control behavior.",
+    "next_action_for_fresh_chat": "Generate a validator-ready route_law_minimum_frame_cold_order_isolation_v1 suite focused on cold-first negative controls versus late repeats, with carrier-only successor positives used only as controlled anchors."
+  },
+  "applied_at": "2026-06-14T01:17:51.800Z"
+}

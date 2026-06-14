@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_protocol_activation_frame_minimum_v1
+- Next study: route_law_minimum_frame_cold_order_isolation_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-- Current confidence: high
-- Open gap: The successor carrier question is mostly retired, but the minimum activation frame is still unknown. We need to know which surrounding protocol language is required for a reduced TTD_COMMAND_V1 packet to be treated as route state and to emit reducer-compatible successor movement rather than echoing, summarizing, or saying only 'Moved on from X'.
-- Suite shape recommendation: 18 cases. Use two stable positive carriers, one route_sequence-only and one legal_successor-only, then ablate activation-frame phrases around them. Include no-active sentinels, from-only traps, wrong-next controls, and late endurance repeats.
+- Current confidence: medium
+- Open gap: It is still unknown whether a stripped active-only packet can truly authorize successor movement in a cold context, or whether case 015 was caused by prior same-chat exposure to collect_dishes and the desk-reset route.
+- Suite shape recommendation: 18 cases. Start with cold active-only, route_id-only, next_chunk-only, and no-active traps before any collect_dishes carrier exposure; then run carrier-only route_sequence/legal_successor positives; then repeat the same traps late to measure carryover.
 
 ## Evidence summary
 
-- Imported run count: 25
-- Imported case count: 225
-- Matrix row count: 225
-- Latest imported suite ID: route_law_successor_source_counterbalanced_cold_retest_v1
-- Latest imported run ID: 20260613-205449-route_law_successor_source_counterbalanced_cold_retest_v1
+- Imported run count: 26
+- Imported case count: 243
+- Matrix row count: 243
+- Latest imported suite ID: route_law_protocol_activation_frame_minimum_v1
+- Latest imported run ID: 20260613-211109-route_law_protocol_activation_frame_minimum_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_protocol_activation_frame_minimum_v1 / 20260613-211109-route_law_protocol_activation_frame_minimum_v1: 18 cases, legal=FAIL, route=broken, design=smoke, context_risk=high
 - route_law_successor_source_counterbalanced_cold_retest_v1 / 20260613-205449-route_law_successor_source_counterbalanced_cold_retest_v1: 20 cases, legal=HOLD, route=unknown, design=regression, context_risk=high
 - route_law_successor_source_isolation_v1 / 20260613-204037-route_law_successor_source_isolation_v1: 18 cases, legal=HOLD, route=unknown, design=matrix, context_risk=high
-- route_law_cold_start_gating_isolation_v1 / 20260613-202902-route_law_cold_start_gating_isolation_v1: 18 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_cold_start_gating_isolation_v1__20260613-202902-route_law_cold_start_gating_isolation_v1.md
 - study/reviews/2026-06-13/route_law_successor_source_isolation_v1__20260613-204037-route_law_successor_source_isolation_v1.md
 - study/reviews/2026-06-13/route_law_successor_source_counterbalanced_cold_retest_v1__20260613-205449-route_law_successor_source_counterbalanced_cold_retest_v1.md
+- study/reviews/2026-06-13/route_law_protocol_activation_frame_minimum_v1__20260613-211109-route_law_protocol_activation_frame_minimum_v1.md
 
 ## Planning rule
 

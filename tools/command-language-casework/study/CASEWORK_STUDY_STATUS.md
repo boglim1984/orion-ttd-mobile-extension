@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_protocol_activation_frame_minimum_v1
+**Next Study Needed**: route_law_minimum_frame_cold_order_isolation_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: route_law_successor_source_counterbalanced_cold_retest_v1 completed with 20 responded cases and no apparent runner send failure. | No-active sentinel cases 001, 006, 015, and 020 stayed inert with 'No active chunk; movement not inferred.' | Cold route_sequence-only cases advanced to the intended successor and ignored wrong next_chunk hints. | Cold legal_successor-only cases advanced to the intended successor and ignored wrong next_chunk hints. | Active-only, route_id-only, and next_chunk-only cases produced from-only movement without naming a legal successor, so they are not sufficient successor carriers. | Desk-reset baselines confirmed clear_trash to collect_dishes with both route_sequence and legal_successor carrier forms.
-**Current confidence**: high
-**Open gap**: The successor carrier question is mostly retired, but the minimum activation frame is still unknown. We need to know which surrounding protocol language is required for a reduced TTD_COMMAND_V1 packet to be treated as route state and to emit reducer-compatible successor movement rather than echoing, summarizing, or saying only 'Moved on from X'.
-**Test strategy**: Run a focused protocol-frame ablation suite using already-proven carrier fields, especially route_sequence and legal_successor. Hold the route carrier constant while ablating activation language such as the protocol marker, route-holder frame, packet-interpretation frame, active-route-state wording, commit_policy, allowed_intents, and minimal response contract. Include from-only trap cases so the review distinguishes legal 'to successor' movement from weak 'from current' movement.
-**Avoid / do not repeat**: Do not retest route_id-only as if it might be a clean cold successor carrier. | Do not count 'Moved on from X' as legal successor advancement. | Do not let next_chunk_id become authority except as an unsafe-hint probe. | Do not mix scorer repair, Orion transport, and protocol-frame ablation in the same suite. | Do not repeat the full counterbalanced carrier matrix unless a later regression appears. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 18 cases. Use two stable positive carriers, one route_sequence-only and one legal_successor-only, then ablate activation-frame phrases around them. Include no-active sentinels, from-only traps, wrong-next controls, and late endurance repeats.
-**Retirement condition**: Retire when the smallest packet frame reliably produces explicit legal successor movement with a proven carrier, reduced frames fail or degrade in predictable ways, no-active sentinels remain inert, and from-only responses are clearly separated from reducer-grade legal advancement.
-**Next action for fresh chat**: Generate a validator-ready route_law_protocol_activation_frame_minimum_v1 suite that keeps successor carrier fields controlled while ablating the protocol activation frame and response contract.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_successor_source_counterbalanced_cold_retest_v1 result 20260613-205449-route_law_successor_source_counterbalanced_cold_retest_v1.
+**Evidence reviewed**: route_law_protocol_activation_frame_minimum_v1 completed with 18 responded cases and no apparent runner send failure. | Full, ablated, minimal, and carrier-only route_sequence/legal_successor cases produced explicit collect_dishes movement. | No-active sentinels produced no movement, preserving the active_chunk_id boundary. | The active-only trap unexpectedly produced collect_dishes despite lacking route_sequence or legal_successor carrier fields. | Route_id-only and next_chunk-authority traps produced no movement, so next_chunk did not become authority in this run.
+**Current confidence**: medium
+**Open gap**: It is still unknown whether a stripped active-only packet can truly authorize successor movement in a cold context, or whether case 015 was caused by prior same-chat exposure to collect_dishes and the desk-reset route.
+**Test strategy**: Run an order-isolated suite that puts active-only, route_id-only, and next_chunk-only traps before any positive successor-carrier examples, then repeats the same traps after positives. Keep carrier-only route_sequence and legal_successor positives as anchors, but counterbalance early and late positions so carryover can be measured directly.
+**Avoid / do not repeat**: Do not count late active-only collect_dishes as proof of a valid minimum frame without cold-first confirmation. | Do not let heuristic FAIL_LOST_ROUTE labels hide safety-success negative controls that correctly produce no movement. | Do not retest broad successor-source matrices. | Do not mix scorer repair with this language-boundary suite. | Do not treat next_chunk_id as authority. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 18 cases. Start with cold active-only, route_id-only, next_chunk-only, and no-active traps before any collect_dishes carrier exposure; then run carrier-only route_sequence/legal_successor positives; then repeat the same traps late to measure carryover.
+**Retirement condition**: Retire when cold active-only and route_id-only traps remain inert, carrier-only successor frames still produce collect_dishes, no-active sentinels remain inert, and late repeats quantify whether carryover changes negative-control behavior.
+**Next action for fresh chat**: Generate a validator-ready route_law_minimum_frame_cold_order_isolation_v1 suite focused on cold-first negative controls versus late repeats, with carrier-only successor positives used only as controlled anchors.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_protocol_activation_frame_minimum_v1 result 20260613-211109-route_law_protocol_activation_frame_minimum_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-14
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-14T01:05:45.470Z
-- Run count: 25
-- Case count: 225
-- Latest suite ID: route_law_successor_source_counterbalanced_cold_retest_v1
-- Latest run ID: 20260613-205449-route_law_successor_source_counterbalanced_cold_retest_v1
-- Classification counts: {"PASS_CANDIDATE":149,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":19,"HOLD_NEEDS_REVIEW":56}
+- Last tabulated at: 2026-06-14T01:17:52.154Z
+- Run count: 26
+- Case count: 243
+- Latest suite ID: route_law_protocol_activation_frame_minimum_v1
+- Latest run ID: 20260613-211109-route_law_protocol_activation_frame_minimum_v1
+- Classification counts: {"PASS_CANDIDATE":163,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":21,"HOLD_NEEDS_REVIEW":58}
 - Open findings count: 0
-- Case-law matrix rows: 225
+- Case-law matrix rows: 243
 
 ## Open findings
 Generated and/or manually curated.

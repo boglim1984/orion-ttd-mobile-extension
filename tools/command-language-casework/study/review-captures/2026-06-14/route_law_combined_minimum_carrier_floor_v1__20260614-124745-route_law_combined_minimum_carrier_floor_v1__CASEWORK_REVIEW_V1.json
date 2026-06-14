@@ -1,0 +1,62 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2ed9f0-b358-83ea-bc78-3c532a39a4f0",
+    "suite_id": "route_law_combined_minimum_carrier_floor_v1",
+    "run_id": "20260614-124745-route_law_combined_minimum_carrier_floor_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The suspected combined floor passed: TTD_COMMAND_V1 plus route_id plus active_chunk_id was sufficient, and command_id was optional. However, negative controls showed that route_id was not a reliable hard gate after route context existed: active_chunk_id-only, active label-only, damaged active_chunk_id, route_id plus label-only, and conflicting-label/no-route packets mostly still advanced to collect_dishes. Route_id-only correctly held, and wrong-next traps did not become authority.",
+    "language_lesson": "The model treats the outer TTD_COMMAND_V1 marker plus active-state cues as enough to engage route-law behavior after context. active_chunk_id remains the strongest movement anchor, but route_id absence alone does not reliably block movement in a warmed suite. The next test must separate true cold activation from suite-order carryover by testing no-route and label-only packets before any successful route_id+active_chunk_id examples.",
+    "pointer_update": {
+      "next_study_needed": "route_law_no_route_substrate_cold_isolation_v1",
+      "purpose": "Determine whether active_chunk_id-only, active_chunk_label-only, damaged active IDs, and no-route conflicting active-state packets advance when presented cold, before the chat has been warmed by successful route_id+active_chunk_id examples.",
+      "evidence_reviewed": [
+        "combined_floor_001, 002, and 003 showed marker plus route_id plus active_chunk_id advances clear_trash to collect_dishes, with command_id optional.",
+        "combined_floor_004, 005, 006, 007, 009, and 011 unexpectedly advanced to collect_dishes despite missing route_id, missing active_chunk_id, damaged active_chunk_id, or label-only/conflicting active-state forms.",
+        "combined_floor_008 route_id-only held with cannot_move_on_without_active_chunk_id, confirming active_chunk_id is more important than route_id for movement.",
+        "combined_floor_010 and 013 showed wrong next_chunk_id=stack_papers did not become authority when route_id plus active_chunk_id were present.",
+        "combined_floor_017 and 018 confirmed late known-good stripped carrier and explicit legal-successor controls still advanced correctly."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "It is not yet clear whether no-route and label-only movement is true cold behavior, suite-order carryover, semantic memory of desk-reset-v0, or a scorer/design artifact caused by placing positive floor cases before negative controls.",
+      "test_strategy": "Run an 18-case negative-first cold isolation suite. Put active_chunk_id-only, command_id+active_chunk_id-only, active_chunk_label-only, route_id+label-only, damaged active_chunk_id, and conflicting active-state/no-route packets in the first positions before any route_id+active_chunk_id positive example. Then introduce the suspected floor and wrong-next traps later as controls. Counterbalance repeats of no-route packets after the positive controls to measure warming/carryover.",
+      "avoid": [
+        "Do not expose route_sequence.",
+        "Do not expose legal_successor_chunk_id until late positive controls.",
+        "Do not place route_id+active_chunk_id positive cases before the first no-route negative controls.",
+        "Do not let keyword-only collect_dishes detection mark a negative-control breach as clean PASS without manual review.",
+        "Do not assume missing route_id is a hard guard based on prior single-family ablations."
+      ],
+      "suite_shape_recommendation": "18 cases, negative-first cold isolation. First 8 cases should be no-route or damaged-substrate probes; middle cases should introduce route_id+active_chunk_id and wrong-next controls; final cases should repeat no-route probes after warming plus late known-good controls.",
+      "retirement_condition": "Retire when the study can state whether active_chunk_id-only and active_chunk_label-only packets advance from a cold first position, whether route_id absence is ever a reliable blocker, and whether the observed movement in the combined floor suite was due to suite-order carryover.",
+      "next_action_for_fresh_chat": "Generate a validator-ready route_law_no_route_substrate_cold_isolation_v1 suite that starts with missing-route and label-only negative controls before any successful route_id+active_chunk_id carrier is shown."
+    },
+    "reviewed_at": "2026-06-14T17:17:09.168Z"
+  },
+  "imported_result_path": "study/raw/2026-06-14/route_law_combined_minimum_carrier_floor_v1__20260614-124745-route_law_combined_minimum_carrier_floor_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_no_route_substrate_cold_isolation_v1",
+    "purpose": "Determine whether active_chunk_id-only, active_chunk_label-only, damaged active IDs, and no-route conflicting active-state packets advance when presented cold, before the chat has been warmed by successful route_id+active_chunk_id examples.",
+    "evidence_reviewed": [
+      "combined_floor_001, 002, and 003 showed marker plus route_id plus active_chunk_id advances clear_trash to collect_dishes, with command_id optional.",
+      "combined_floor_004, 005, 006, 007, 009, and 011 unexpectedly advanced to collect_dishes despite missing route_id, missing active_chunk_id, damaged active_chunk_id, or label-only/conflicting active-state forms.",
+      "combined_floor_008 route_id-only held with cannot_move_on_without_active_chunk_id, confirming active_chunk_id is more important than route_id for movement.",
+      "combined_floor_010 and 013 showed wrong next_chunk_id=stack_papers did not become authority when route_id plus active_chunk_id were present.",
+      "combined_floor_017 and 018 confirmed late known-good stripped carrier and explicit legal-successor controls still advanced correctly."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "It is not yet clear whether no-route and label-only movement is true cold behavior, suite-order carryover, semantic memory of desk-reset-v0, or a scorer/design artifact caused by placing positive floor cases before negative controls.",
+    "test_strategy": "Run an 18-case negative-first cold isolation suite. Put active_chunk_id-only, command_id+active_chunk_id-only, active_chunk_label-only, route_id+label-only, damaged active_chunk_id, and conflicting active-state/no-route packets in the first positions before any route_id+active_chunk_id positive example. Then introduce the suspected floor and wrong-next traps later as controls. Counterbalance repeats of no-route packets after the positive controls to measure warming/carryover.",
+    "avoid": [
+      "Do not expose route_sequence.",
+      "Do not expose legal_successor_chunk_id until late positive controls.",
+      "Do not place route_id+active_chunk_id positive cases before the first no-route negative controls.",
+      "Do not let keyword-only collect_dishes detection mark a negative-control breach as clean PASS without manual review.",
+      "Do not assume missing route_id is a hard guard based on prior single-family ablations."
+    ],
+    "suite_shape_recommendation": "18 cases, negative-first cold isolation. First 8 cases should be no-route or damaged-substrate probes; middle cases should introduce route_id+active_chunk_id and wrong-next controls; final cases should repeat no-route probes after warming plus late known-good controls.",
+    "retirement_condition": "Retire when the study can state whether active_chunk_id-only and active_chunk_label-only packets advance from a cold first position, whether route_id absence is ever a reliable blocker, and whether the observed movement in the combined floor suite was due to suite-order carryover.",
+    "next_action_for_fresh_chat": "Generate a validator-ready route_law_no_route_substrate_cold_isolation_v1 suite that starts with missing-route and label-only negative controls before any successful route_id+active_chunk_id carrier is shown."
+  },
+  "applied_at": "2026-06-14T17:17:09.178Z"
+}

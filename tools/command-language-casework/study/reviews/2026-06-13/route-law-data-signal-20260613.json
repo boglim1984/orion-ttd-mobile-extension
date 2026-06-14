@@ -1,0 +1,153 @@
+{
+  "schema": "ROUTE_LAW_DATA_SIGNAL_V1",
+  "date": "2026-06-13",
+  "status": "study_synthesis",
+  "source": {
+    "source_chat_url": "https://chatgpt.com/c/6a2e150e-800c-83ea-bae3-9cfaadc9a262",
+    "repo_confirmed_files": [
+      "tools/command-language-casework/study/CASEWORK_STUDY_STATUS.md",
+      "tools/command-language-casework/study/CASEWORK_STUDY_STATUS.json",
+      "tools/command-language-casework/study/raw/2026-06-13/scorer_keyword_extraction_v3_fresh_validation__20260613-142922-scorer_keyword_extraction_v3_fresh_validation.json",
+      "tools/command-language-casework/study/raw/2026-06-13/route_law_active_floor_isolation_v1__20260613-170853-route_law_active_floor_isolation_v1.json",
+      "tools/command-language-casework/study/raw/2026-06-13/route_law_sequence_only_no_active_carrier_v1__20260613-185251-route_law_sequence_only_no_active_carrier_v1.json",
+      "tools/command-language-casework/study/raw/2026-06-13/route_law_successor_source_isolation_v1__20260613-204037-route_law_successor_source_isolation_v1.json",
+      "tools/command-language-casework/study/raw/2026-06-13/route_law_protocol_activation_frame_minimum_v1__20260613-221156-route_law_protocol_activation_frame_minimum_v1.json",
+      "tools/command-language-casework/study/raw/2026-06-13/route_law_cold_first_active_label_route_sequence_wrong_next_v1__20260613-181227-route_law_cold_first_active_label_route_sequence_wrong_next_v1.json"
+    ],
+    "chat_derived_notes": true,
+    "notes": "All findings are anchored to repo artifacts where possible. The label-vs-id scorer sensitivity claim remains partially hypothesis-driven because the latest repo slice does not isolate a same-packet output-surface A/B test."
+  },
+  "findings": [
+    {
+      "id": "active_chunk_gate",
+      "claim": "Missing active chunk blocks lawful inferred movement; active chunk is a gating floor rather than a standalone guarantee of advancement.",
+      "confidence": "high",
+      "evidence_pattern": "All sequence-only/no-active cases held or refused movement; no-active sentinels in successor-source and activation-minimum runs also held; packets with active_chunk_id plus route substrate advanced.",
+      "follow_up": "Run a cold same-packet A/B with and without active_chunk_id while keeping the rest of the carrier constant."
+    },
+    {
+      "id": "wrong_next_trap_value",
+      "claim": "Wrong next-chunk traps are a reliable discriminator because stronger legal carriers override them.",
+      "confidence": "high",
+      "evidence_pattern": "Route-sequence, route-id, and legal-successor carriers repeatedly produced collect_dishes despite wrong next_chunk_id=stack_papers; wrong-next-only negatives did not count as route survival.",
+      "follow_up": "Retain at least one wrong-next trap in every reduced-carrier suite."
+    },
+    {
+      "id": "successor_vs_next_authority",
+      "claim": "legal_successor_chunk_id beats wrong next_chunk_id, but the authority ordering among legal_successor, route_sequence, and route_id is not fully settled.",
+      "confidence": "medium",
+      "evidence_pattern": "Correct legal_successor overrode wrong next_chunk, but a conflict case with route_sequence correct and legal_successor wrong still resolved to collect_dishes.",
+      "follow_up": "Add explicit conflict pairs to test authority ordering rather than assuming it."
+    },
+    {
+      "id": "scorer_surface_sensitivity",
+      "claim": "Scorer sensitivity to output surface remains a live risk, though collect_dishes id-only is repo-confirmed to pass in the repaired scorer.",
+      "confidence": "medium",
+      "evidence_pattern": "The scorer fresh-validation run passed collect_dishes id-only, and the study status records a repaired collect_dishes false-lost-route issue; latest repo evidence does not isolate label-only versus id-only on the same packet.",
+      "follow_up": "Run a scorer-only A/B/C suite with id_only, label_only, and id_and_label surfaces on identical legal packets."
+    }
+  ],
+  "recommended_matrix_axes": {
+    "active_chunk": [
+      "present",
+      "missing"
+    ],
+    "legal_successor": [
+      "absent",
+      "present_correct",
+      "present_wrong"
+    ],
+    "next_chunk": [
+      "absent",
+      "correct",
+      "wrong"
+    ],
+    "output_surface": [
+      "id_only",
+      "label_only",
+      "id_and_label"
+    ]
+  },
+  "next_run_cases": [
+    {
+      "case_id": "matrix_001_minimal_legal_id_only",
+      "purpose": "Baseline legal move_on under the smallest known-good carrier.",
+      "active_chunk": "present",
+      "legal_successor": "absent",
+      "next_chunk": "absent",
+      "output_surface": "id_only"
+    },
+    {
+      "case_id": "matrix_002_minimal_legal_label_only",
+      "purpose": "Isolate scorer behavior on label-only output.",
+      "active_chunk": "present",
+      "legal_successor": "absent",
+      "next_chunk": "absent",
+      "output_surface": "label_only"
+    },
+    {
+      "case_id": "matrix_003_minimal_legal_id_and_label",
+      "purpose": "Check whether dual-surface output changes scoring or obedience.",
+      "active_chunk": "present",
+      "legal_successor": "absent",
+      "next_chunk": "absent",
+      "output_surface": "id_and_label"
+    },
+    {
+      "case_id": "matrix_004_wrong_next_baseline",
+      "purpose": "Confirm wrong next_chunk does not gain authority over a legal carrier.",
+      "active_chunk": "present",
+      "legal_successor": "absent",
+      "next_chunk": "wrong",
+      "output_surface": "id_only"
+    },
+    {
+      "case_id": "matrix_005_successor_over_wrong_next",
+      "purpose": "Confirm correct legal_successor beats wrong next_chunk.",
+      "active_chunk": "present",
+      "legal_successor": "present_correct",
+      "next_chunk": "wrong",
+      "output_surface": "id_only"
+    },
+    {
+      "case_id": "matrix_006_missing_active_same_packet",
+      "purpose": "Hold all other fields constant and verify no movement without active_chunk.",
+      "active_chunk": "missing",
+      "legal_successor": "absent",
+      "next_chunk": "wrong",
+      "output_surface": "id_only"
+    },
+    {
+      "case_id": "matrix_007_sequence_correct_successor_wrong",
+      "purpose": "Test whether route_sequence overrides a conflicting legal_successor.",
+      "active_chunk": "present",
+      "legal_successor": "present_wrong",
+      "next_chunk": "wrong",
+      "output_surface": "id_only"
+    },
+    {
+      "case_id": "matrix_008_successor_correct_no_sequence",
+      "purpose": "Test successor authority without route_sequence present.",
+      "active_chunk": "present",
+      "legal_successor": "present_correct",
+      "next_chunk": "wrong",
+      "output_surface": "id_only"
+    },
+    {
+      "case_id": "matrix_009_correct_next_only_no_legal_carrier",
+      "purpose": "Ensure next_chunk alone is not overcounted as route survival even when it points to the legal next step.",
+      "active_chunk": "missing",
+      "legal_successor": "absent",
+      "next_chunk": "correct",
+      "output_surface": "id_only"
+    },
+    {
+      "case_id": "matrix_010_known_good_repeat",
+      "purpose": "Late stability check against order effects.",
+      "active_chunk": "present",
+      "legal_successor": "absent",
+      "next_chunk": "absent",
+      "output_surface": "id_only"
+    }
+  ]
+}

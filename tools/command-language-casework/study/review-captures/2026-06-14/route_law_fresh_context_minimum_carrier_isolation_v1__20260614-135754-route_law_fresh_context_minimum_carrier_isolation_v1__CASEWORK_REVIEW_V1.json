@@ -1,0 +1,62 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2ee836-e6c8-83ea-8455-4bbdfad76402",
+    "suite_id": "route_law_fresh_context_minimum_carrier_isolation_v1",
+    "run_id": "20260614-135754-route_law_fresh_context_minimum_carrier_isolation_v1",
+    "review_verdict": "fail_retry",
+    "key_result": "Transport succeeded and all 18 cases responded, but the suite was run as one same-chat sequence rather than true fresh-context split isolation. Protocol-only and route_id-only held cleanly. After route_id had been introduced, active_chunk_id-only advanced to collect_dishes, showing carryover carrier completion rather than proving active_chunk_id-only is sufficient in a fresh chat.",
+    "language_lesson": "route_id-only does not authorize movement by itself, but it can appear to seed same-chat route context. A later active_chunk_id packet can then behave as movement authority and advance clear_trash to collect_dishes. Therefore minimum-carrier evidence must be measured in true first-position fresh contexts, not later positions inside a multi-case suite.",
+    "pointer_update": {
+      "next_study_needed": "route_law_fresh_context_minimum_carrier_isolation_v1_retry_split_micro_suites",
+      "purpose": "Retry the same minimum-carrier question with actual one-case-per-fresh-chat isolation so route memory cannot form before the candidate packet is tested.",
+      "evidence_reviewed": [
+        "fresh_min_carrier_001_protocol_only held with no route or active chunk.",
+        "fresh_min_carrier_002_route_id_only held because active_chunk_id was absent.",
+        "fresh_min_carrier_003_active_id_only advanced to collect_dishes only after route_id had already appeared in the same chat.",
+        "fresh_min_carrier_012_wrong_next_trap_with_active_id ignored stack_papers and advanced to collect_dishes inside the contaminated same-chat context.",
+        "fresh_min_carrier_018_explicit_legal_successor_sanity advanced to collect_dishes as expected."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "Still unknown which fields are sufficient when each packet is evaluated as the first meaningful route packet in a fresh disposable chat. The run produced strong carryover evidence but did not cleanly isolate active_chunk_id-only, route_id+active_chunk_id, activation_frame+route_id+active_chunk_id, or wrong-next behavior in fresh context.",
+      "test_strategy": "Generate split micro-suite JSON objects, each with exactly one case at top level, using distinct suite_id values and requiring a fresh disposable ChatGPT chat per micro-suite. Start with the highest-value probes: protocol-only, route_id-only, active_chunk_id-only, route_id+active_chunk_id, active_chunk_id+label without route_id, damaged allowed_intents, wrong-next with active_id, wrong-next without active_id, activation_frame+route_id+active_id, and explicit legal_successor sanity.",
+      "avoid": [
+        "Do not run all carrier candidates as one multi-case suite when measuring fresh-context minimum carrier.",
+        "Do not interpret later active_chunk_id-only advancement as fresh active_chunk_id-only authority if route_id appeared earlier in the same chat.",
+        "Do not expose route_sequence.",
+        "Do not expose legal_successor_chunk_id before the final sanity control.",
+        "Do not treat PASS_CANDIDATE as sufficient when the expected behavior was hold."
+      ],
+      "suite_shape_recommendation": "10 to 12 separate one-case micro-suites, each pasted and run in a fresh disposable ChatGPT tab. Keep packet text identical to the current candidate set, but make each candidate top-level suite JSON rather than a wrapper pack or a multi-case suite.",
+      "retirement_condition": "Retire when first-position isolated runs show whether route_id+active_chunk_id advances, whether route_id-only/active-only/label-only/no-route packets hold, whether wrong next_chunk_id is consistently ignored in fresh context, whether damaged allowed_intents blocks move_on, and whether explicit legal_successor still passes.",
+      "next_action_for_fresh_chat": "Generate validator-ready split micro-suite JSON, one suite object per candidate, starting with the highest-value 10 to 12 probes. Do not output a wrapper pack; each object must be directly pasteable into the Casework GUI and run in a fresh disposable chat."
+    },
+    "reviewed_at": "2026-06-14T18:05:24.916Z"
+  },
+  "imported_result_path": "study/raw/2026-06-14/route_law_fresh_context_minimum_carrier_isolation_v1__20260614-135754-route_law_fresh_context_minimum_carrier_isolation_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_fresh_context_minimum_carrier_isolation_v1_retry_split_micro_suites",
+    "purpose": "Retry the same minimum-carrier question with actual one-case-per-fresh-chat isolation so route memory cannot form before the candidate packet is tested.",
+    "evidence_reviewed": [
+      "fresh_min_carrier_001_protocol_only held with no route or active chunk.",
+      "fresh_min_carrier_002_route_id_only held because active_chunk_id was absent.",
+      "fresh_min_carrier_003_active_id_only advanced to collect_dishes only after route_id had already appeared in the same chat.",
+      "fresh_min_carrier_012_wrong_next_trap_with_active_id ignored stack_papers and advanced to collect_dishes inside the contaminated same-chat context.",
+      "fresh_min_carrier_018_explicit_legal_successor_sanity advanced to collect_dishes as expected."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "Still unknown which fields are sufficient when each packet is evaluated as the first meaningful route packet in a fresh disposable chat. The run produced strong carryover evidence but did not cleanly isolate active_chunk_id-only, route_id+active_chunk_id, activation_frame+route_id+active_chunk_id, or wrong-next behavior in fresh context.",
+    "test_strategy": "Generate split micro-suite JSON objects, each with exactly one case at top level, using distinct suite_id values and requiring a fresh disposable ChatGPT chat per micro-suite. Start with the highest-value probes: protocol-only, route_id-only, active_chunk_id-only, route_id+active_chunk_id, active_chunk_id+label without route_id, damaged allowed_intents, wrong-next with active_id, wrong-next without active_id, activation_frame+route_id+active_id, and explicit legal_successor sanity.",
+    "avoid": [
+      "Do not run all carrier candidates as one multi-case suite when measuring fresh-context minimum carrier.",
+      "Do not interpret later active_chunk_id-only advancement as fresh active_chunk_id-only authority if route_id appeared earlier in the same chat.",
+      "Do not expose route_sequence.",
+      "Do not expose legal_successor_chunk_id before the final sanity control.",
+      "Do not treat PASS_CANDIDATE as sufficient when the expected behavior was hold."
+    ],
+    "suite_shape_recommendation": "10 to 12 separate one-case micro-suites, each pasted and run in a fresh disposable ChatGPT tab. Keep packet text identical to the current candidate set, but make each candidate top-level suite JSON rather than a wrapper pack or a multi-case suite.",
+    "retirement_condition": "Retire when first-position isolated runs show whether route_id+active_chunk_id advances, whether route_id-only/active-only/label-only/no-route packets hold, whether wrong next_chunk_id is consistently ignored in fresh context, whether damaged allowed_intents blocks move_on, and whether explicit legal_successor still passes.",
+    "next_action_for_fresh_chat": "Generate validator-ready split micro-suite JSON, one suite object per candidate, starting with the highest-value 10 to 12 probes. Do not output a wrapper pack; each object must be directly pasteable into the Casework GUI and run in a fresh disposable chat."
+  },
+  "applied_at": "2026-06-14T18:05:24.919Z"
+}

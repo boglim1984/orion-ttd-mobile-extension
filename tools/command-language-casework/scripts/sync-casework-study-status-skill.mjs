@@ -155,17 +155,31 @@ function validatePointerAgainstDesignerSkill(statusText, ccRoot) {
   const actionText = actionMatch ? actionMatch[1] : "";
   const combinedText = (strategyText + " " + shapeText + " " + actionText).toLowerCase();
   
-  // Detect stale "small case" wording
-  const staleRegex = /\b(?:one|1|single|two|2|three|3|four|4|five|5|six|6|seven|7)\b\s*(?:[a-z0-9-]+\s+){0,2}cases?/i;
+  const staleRegexes = [
+    /\b(?:one|1|single|two|2|three|3|four|4|five|5|six|6|seven|7)\s*-?\s*(?:cold\s+)?cases?\b/i,
+    /\bmicro-suite\b/i,
+    /<\s*8\s*cases/i,
+    /\b(?:fewer|less)\s+than\s+8\s+cases/i
+  ];
   
-  if (staleRegex.test(combinedText)) {
+  let matchedStalePhrase = null;
+  for (const regex of staleRegexes) {
+    const match = combinedText.match(regex);
+    if (match) {
+      matchedStalePhrase = match[0];
+      break;
+    }
+  }
+  
+  if (matchedStalePhrase) {
     const pointerMatch = statusText.match(/\*\*Next Study Needed\*\*:\s*(.+)$/m);
     const pointerId = pointerMatch ? pointerMatch[1] : "unknown";
     
     throw new Error(`
 Casework Study Status Validation Failed:
 The active Designer Skill enforces a minimum suite floor of ${minimumFloor} cases.
-However, the current manual pointer text contains stale shape recommendations (e.g., "one-case", "< 8 cases").
+However, the current manual pointer text contains stale shape recommendations.
+Matched forbidden phrase: "${matchedStalePhrase}"
 
 Pointer ID: ${pointerId}
 Stale text detected in strategy/shape/action fields:

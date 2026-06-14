@@ -60,6 +60,23 @@ test("sync script lints stale 1-case pointers against 8-case designer skill rule
     }
     assert.ok(failedStrategy, "Sync script should throw validation error when given a stale Test strategy");
 
+    const validMd = `
+# Casework Study Status
+**Next Study Needed**: route_law_fresh_context_minimum_carrier_isolation_v1_retry_split_8case_suites
+**Test strategy**: Generate validator-ready 8-case suites. Every suite contains at least 8 cases. The carrier candidate under test appears at case 001 and the suite is run in a fresh disposable ChatGPT chat. Interpret the case 001 result as clean fresh-context carrier evidence. Cases 002-008 provide tail controls, sanity checks, and carryover observations.
+**Suite shape recommendation**: 10 to 12 validator-ready 8-case suites. Every suite starts with a different carrier candidate at case 001, followed by seven support cases. Candidate-first coverage should include protocol marker without route fields, route_id without active_chunk_id, active_chunk_id without route_id, route_id plus active_chunk_id, active_chunk_id plus label without route_id, damaged allowed_intents, wrong-next with active_id, wrong-next without active_id, activation_frame plus route_id plus active_id, and explicit legal_successor sanity.
+**Next action for fresh chat**: Generate validator-ready 8-case suite JSON objects with the target carrier candidate at case 001. Avoid wrapper packs. Every suite object must be directly pasteable into the Casework GUI and must contain at least 8 cases.
+`;
+
+    fs.writeFileSync(statusMdPath, validMd, "utf8");
+    let failedValid = false;
+    try {
+      execSync(`node "${syncScript}"`, { stdio: "pipe" });
+    } catch (err) {
+      failedValid = true;
+    }
+    assert.ok(!failedValid, "Sync script should NOT throw validation error when given valid 8-case wording with case 001 and support cases");
+
   } finally {
     // Restore
     if (originalMd) {

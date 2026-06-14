@@ -2,18 +2,18 @@
   "study_id": "command-language-casework-v1",
   "status_schema_version": 1,
   "manual_next_study": {
-    "next_study_needed": "route_law_fresh_context_minimum_carrier_isolation_v1",
+    "next_study_needed": "route_law_fresh_context_minimum_carrier_isolation_v1_retry_split_8case_suites",
     "next_study_purpose": "Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.",
     "evidence_reviewed": [
-      "order_context_001 positive-first stripped carrier advanced clear_trash -> collect_dishes.",
-      "order_context_002 wrong next_chunk_id=stack_papers was ignored and movement still went to collect_dishes.",
-      "route_id-only, no-route/no-active, label-only, and post-negative probes often advanced after prior positive examples, indicating same-chat carryover rather than clean packet authority.",
-      "order_context_010 damaged allowed_intents with move_on absent held at clear_trash.",
-      "order_context_018 explicit legal_successor sanity control advanced to collect_dishes."
+      "fresh_min_carrier_001_protocol_only held with no route or active chunk.",
+      "fresh_min_carrier_002_route_id_only held because active_chunk_id was absent.",
+      "fresh_min_carrier_003_active_id_only advanced to collect_dishes only after route_id had already appeared in the same chat.",
+      "fresh_min_carrier_012_wrong_next_trap_with_active_id ignored stack_papers and advanced to collect_dishes inside the contaminated same-chat context.",
+      "fresh_min_carrier_018_explicit_legal_successor_sanity advanced to collect_dishes as expected."
     ],
     "current_confidence": "medium",
-    "open_gap": "It is still unknown which fields are truly necessary when a packet is evaluated without prior route memory in the same chat. The current suite proves order/context carryover but cannot cleanly validate no-route negatives after positive priming.",
-    "test_strategy": "Run a fresh-context minimum-carrier isolation study. Each candidate should appear as the first meaningful route packet in its own fresh disposable chat or in separate tiny suites: no route/no active, route_id only, active_chunk_id only, label only, route_id + active_chunk_id, route_id + active label, wrong-next trap, no commit_policy, damaged allowed_intents, and explicit legal_successor sanity. Compare first-position outcomes rather than mixed same-chat outcomes.",
+    "open_gap": "Still unknown which fields are sufficient when each packet is evaluated as the first meaningful route packet in a fresh disposable chat. The run produced strong carryover evidence but did not cleanly isolate active_chunk_id-only, route_id+active_chunk_id, activation_frame+route_id+active_chunk_id, or wrong-next behavior in fresh context.",
+    "test_strategy": "Generate validator-ready 8-case suites. Every suite contains at least 8 cases. The carrier candidate under test appears at case 001 and the suite is run in a fresh disposable ChatGPT chat. Interpret the case 001 result as clean fresh-context carrier evidence. Cases 002-008 provide tail controls, sanity checks, and carryover observations.",
     "recommended_cases": [
       "strict full-field control for move_on from clear_trash to collect_dishes",
       "relaxed baseline matching the passing relaxed move_on shape",
@@ -30,8 +30,8 @@
       "A late negative control remains necessary so reduced packets do not teach the scorer to accept wrong-next movement."
     ],
     "avoid": [
-      "Do not put positive route_id + active_chunk_id examples before negative hold probes in the same chat when measuring minimum carrier.",
-      "Do not interpret later negative probes from this run as clean evidence of no-route behavior.",
+      "Do not run all carrier candidates as one multi-case suite when measuring fresh-context minimum carrier.",
+      "Do not interpret later active_chunk_id-only advancement as fresh active_chunk_id-only authority if route_id appeared earlier in the same chat.",
       "Do not expose route_sequence.",
       "Do not expose legal_successor_chunk_id before the final sanity control.",
       "Do not treat PASS_CANDIDATE as sufficient when the expected behavior was hold."
@@ -40,13 +40,13 @@
       "route_law_contract_relaxation_matrix_v1 as a clone",
       "route_law_language_expansion_v1 strict response_contract smoke behavior"
     ],
-    "suite_shape_recommendation": "15 to 18 total cases, but split into fresh-context runs or separate first-position micro-suites so each candidate is tested before route memory can form. Include paired wrong-next traps and one final explicit legal_successor sanity control.",
-    "retirement_condition": "Retire when first-position isolated runs show whether route_id + active_chunk_id advances, whether route_id-only/active-only/label-only/no-route packets hold, whether wrong next_chunk_id is consistently ignored, and whether explicit legal_successor still passes.",
-    "next_action_for_fresh_chat": "Generate route_law_fresh_context_minimum_carrier_isolation_v1 as a fresh-context or split-suite plan that prevents same-chat route memory from contaminating negative probes.",
+    "suite_shape_recommendation": "10 to 12 validator-ready 8-case suites. Every suite starts with a different carrier candidate at case 001, followed by seven support cases. Candidate-first coverage should include protocol marker without route fields, route_id without active_chunk_id, active_chunk_id without route_id, route_id plus active_chunk_id, active_chunk_id plus label without route_id, damaged allowed_intents, wrong-next with active_id, wrong-next without active_id, activation_frame plus route_id plus active_id, and explicit legal_successor sanity.",
+    "retirement_condition": "Retire when first-position isolated runs show whether route_id+active_chunk_id advances, whether route_id-only/active-only/label-only/no-route packets hold, whether wrong next_chunk_id is consistently ignored in fresh context, whether damaged allowed_intents blocks move_on, and whether explicit legal_successor still passes.",
+    "next_action_for_fresh_chat": "Generate validator-ready 8-case suite JSON objects with the target carrier candidate at case 001. Avoid wrapper packs. Every suite object must be directly pasteable into the Casework GUI and must contain at least 8 cases.",
     "set_by": "Billy / ChatGPT post-run review",
     "set_at": "2026-06-14",
-    "source": "Post-run CASEWORK_REVIEW_V1 for route_law_order_context_counterbalance_v1 result 20260614-133518-route_law_order_context_counterbalance_v1.",
-    "purpose": "Separate true packet-field authority from same-chat route memory by testing each minimal carrier candidate in first-position or fresh-context conditions."
+    "source": "Post-run CASEWORK_REVIEW_V1 for route_law_fresh_context_minimum_carrier_isolation_v1 result 20260614-135754-route_law_fresh_context_minimum_carrier_isolation_v1.",
+    "purpose": "Retry the minimum-carrier question while respecting the 8-case suite floor. Use validator-ready 8-case suites. In every suite, the target carrier candidate appears at case 001 in a fresh disposable chat. Cases 002-008 provide support observations and are not used as clean fresh-context carrier evidence."
   },
   "manual_notes": {
     "follow_up_repair_note": "Current concern: messy tests pile up without enough reflection, planning, ownership of the next-test status, or cumulative analysis surface. Make the post-run digest mandatory before the next suite is designed.",
@@ -93,19 +93,19 @@
     "next_status"
   ],
   "computed_summary": {
-    "last_tabulated_at": "2026-06-14T17:42:53.190Z",
-    "run_count": 34,
-    "case_count": 387,
-    "latest_suite_id": "route_law_order_context_counterbalance_v1",
-    "latest_run_id": "20260614-133518-route_law_order_context_counterbalance_v1",
+    "last_tabulated_at": "2026-06-14T18:14:08.824Z",
+    "run_count": 35,
+    "case_count": 405,
+    "latest_suite_id": "route_law_fresh_context_minimum_carrier_isolation_v1",
+    "latest_run_id": "20260614-135754-route_law_fresh_context_minimum_carrier_isolation_v1",
     "classification_counts": {
-      "PASS_CANDIDATE": 277,
+      "PASS_CANDIDATE": 289,
       "FAIL_INVENTED_PROGRESS": 1,
-      "FAIL_LOST_ROUTE": 28,
-      "HOLD_NEEDS_REVIEW": 81
+      "FAIL_LOST_ROUTE": 30,
+      "HOLD_NEEDS_REVIEW": 85
     },
     "open_findings_count": 0,
-    "matrix_row_count": 387
+    "matrix_row_count": 405
   },
   "open_findings": [],
   "artifact_roles": {

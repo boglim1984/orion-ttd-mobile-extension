@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_order_context_counterbalance_v1
+- Next study: route_law_fresh_context_minimum_carrier_isolation_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
 - Current confidence: medium
-- Open gap: It remains unknown whether route_id + active_chunk_id is a true minimum carrier when presented first, or whether the carrier only failed here because the negative-first cases primed missing-state guard behavior.
-- Suite shape recommendation: 18 cases, positive-first counterbalance. Cases 1-4 should test stripped carrier, wrong-next trap, route_id-only hold, and explicit active_chunk_id-only contrast. Cases 5-12 should run no-route/label/damaged probes. Cases 13-17 should repeat stripped carrier and key probes after negative exposure. Case 18 should be the explicit legal_successor sanity control.
+- Open gap: It is still unknown which fields are truly necessary when a packet is evaluated without prior route memory in the same chat. The current suite proves order/context carryover but cannot cleanly validate no-route negatives after positive priming.
+- Suite shape recommendation: 15 to 18 total cases, but split into fresh-context runs or separate first-position micro-suites so each candidate is tested before route memory can form. Include paired wrong-next traps and one final explicit legal_successor sanity control.
 
 ## Evidence summary
 
-- Imported run count: 33
-- Imported case count: 369
-- Matrix row count: 369
-- Latest imported suite ID: route_law_no_route_substrate_cold_isolation_v1
-- Latest imported run ID: 20260614-132322-route_law_no_route_substrate_cold_isolation_v1
+- Imported run count: 34
+- Imported case count: 387
+- Matrix row count: 387
+- Latest imported suite ID: route_law_order_context_counterbalance_v1
+- Latest imported run ID: 20260614-133518-route_law_order_context_counterbalance_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_order_context_counterbalance_v1 / 20260614-133518-route_law_order_context_counterbalance_v1: 18 cases, legal=HOLD, route=unknown, design=matrix, context_risk=high
 - route_law_no_route_substrate_cold_isolation_v1 / 20260614-132322-route_law_no_route_substrate_cold_isolation_v1: 18 cases, legal=FAIL, route=broken, design=endurance, context_risk=high
 - route_law_combined_minimum_carrier_floor_v1 / 20260614-124745-route_law_combined_minimum_carrier_floor_v1: 18 cases, legal=HOLD, route=unknown, design=endurance, context_risk=high
-- route_law_minimum_carrier_fields_cold_retest_v1 / 20260613-234019-route_law_minimum_carrier_fields_cold_retest_v1: 18 cases, legal=FAIL, route=broken, design=endurance, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_minimum_carrier_fields_cold_retest_v1__20260613-234019-route_law_minimum_carrier_fields_cold_retest_v1.md
 - study/reviews/2026-06-14/route_law_combined_minimum_carrier_floor_v1__20260614-124745-route_law_combined_minimum_carrier_floor_v1.md
 - study/reviews/2026-06-14/route_law_no_route_substrate_cold_isolation_v1__20260614-132322-route_law_no_route_substrate_cold_isolation_v1.md
+- study/reviews/2026-06-14/route_law_order_context_counterbalance_v1__20260614-133518-route_law_order_context_counterbalance_v1.md
 
 ## Planning rule
 

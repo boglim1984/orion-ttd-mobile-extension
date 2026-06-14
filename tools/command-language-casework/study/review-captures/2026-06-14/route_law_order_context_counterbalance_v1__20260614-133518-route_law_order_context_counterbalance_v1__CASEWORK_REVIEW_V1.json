@@ -1,0 +1,62 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2ee59c-9400-83ea-8344-f7c02c8a514b",
+    "suite_id": "route_law_order_context_counterbalance_v1",
+    "run_id": "20260614-133518-route_law_order_context_counterbalance_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "Positive-first route_id + active_chunk_id advanced from clear_trash to collect_dishes, and the positive-first wrong-next trap ignored stack_papers and still advanced to collect_dishes. However, later negative and damaged probes that were expected to hold often also advanced to collect_dishes, showing same-chat route memory/case-order carryover. The explicit final legal_successor sanity control passed.",
+    "language_lesson": "The model can treat route_id + active_chunk_id as enough route state when presented first, but once the chat has learned clear_trash -> collect_dishes, that learned route can leak into later reduced packets. Case order is itself a carrier and must be isolated before declaring true minimum packet fields.",
+    "pointer_update": {
+      "next_study_needed": "route_law_fresh_context_minimum_carrier_isolation_v1",
+      "purpose": "Separate true packet-field authority from same-chat route memory by testing each minimal carrier candidate in first-position or fresh-context conditions.",
+      "evidence_reviewed": [
+        "order_context_001 positive-first stripped carrier advanced clear_trash -> collect_dishes.",
+        "order_context_002 wrong next_chunk_id=stack_papers was ignored and movement still went to collect_dishes.",
+        "route_id-only, no-route/no-active, label-only, and post-negative probes often advanced after prior positive examples, indicating same-chat carryover rather than clean packet authority.",
+        "order_context_010 damaged allowed_intents with move_on absent held at clear_trash.",
+        "order_context_018 explicit legal_successor sanity control advanced to collect_dishes."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "It is still unknown which fields are truly necessary when a packet is evaluated without prior route memory in the same chat. The current suite proves order/context carryover but cannot cleanly validate no-route negatives after positive priming.",
+      "test_strategy": "Run a fresh-context minimum-carrier isolation study. Each candidate should appear as the first meaningful route packet in its own fresh disposable chat or in separate tiny suites: no route/no active, route_id only, active_chunk_id only, label only, route_id + active_chunk_id, route_id + active label, wrong-next trap, no commit_policy, damaged allowed_intents, and explicit legal_successor sanity. Compare first-position outcomes rather than mixed same-chat outcomes.",
+      "avoid": [
+        "Do not put positive route_id + active_chunk_id examples before negative hold probes in the same chat when measuring minimum carrier.",
+        "Do not interpret later negative probes from this run as clean evidence of no-route behavior.",
+        "Do not expose route_sequence.",
+        "Do not expose legal_successor_chunk_id before the final sanity control.",
+        "Do not treat PASS_CANDIDATE as sufficient when the expected behavior was hold."
+      ],
+      "suite_shape_recommendation": "15 to 18 total cases, but split into fresh-context runs or separate first-position micro-suites so each candidate is tested before route memory can form. Include paired wrong-next traps and one final explicit legal_successor sanity control.",
+      "retirement_condition": "Retire when first-position isolated runs show whether route_id + active_chunk_id advances, whether route_id-only/active-only/label-only/no-route packets hold, whether wrong next_chunk_id is consistently ignored, and whether explicit legal_successor still passes.",
+      "next_action_for_fresh_chat": "Generate route_law_fresh_context_minimum_carrier_isolation_v1 as a fresh-context or split-suite plan that prevents same-chat route memory from contaminating negative probes."
+    },
+    "reviewed_at": "2026-06-14T17:42:52.721Z"
+  },
+  "imported_result_path": "study/raw/2026-06-14/route_law_order_context_counterbalance_v1__20260614-133518-route_law_order_context_counterbalance_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_fresh_context_minimum_carrier_isolation_v1",
+    "purpose": "Separate true packet-field authority from same-chat route memory by testing each minimal carrier candidate in first-position or fresh-context conditions.",
+    "evidence_reviewed": [
+      "order_context_001 positive-first stripped carrier advanced clear_trash -> collect_dishes.",
+      "order_context_002 wrong next_chunk_id=stack_papers was ignored and movement still went to collect_dishes.",
+      "route_id-only, no-route/no-active, label-only, and post-negative probes often advanced after prior positive examples, indicating same-chat carryover rather than clean packet authority.",
+      "order_context_010 damaged allowed_intents with move_on absent held at clear_trash.",
+      "order_context_018 explicit legal_successor sanity control advanced to collect_dishes."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "It is still unknown which fields are truly necessary when a packet is evaluated without prior route memory in the same chat. The current suite proves order/context carryover but cannot cleanly validate no-route negatives after positive priming.",
+    "test_strategy": "Run a fresh-context minimum-carrier isolation study. Each candidate should appear as the first meaningful route packet in its own fresh disposable chat or in separate tiny suites: no route/no active, route_id only, active_chunk_id only, label only, route_id + active_chunk_id, route_id + active label, wrong-next trap, no commit_policy, damaged allowed_intents, and explicit legal_successor sanity. Compare first-position outcomes rather than mixed same-chat outcomes.",
+    "avoid": [
+      "Do not put positive route_id + active_chunk_id examples before negative hold probes in the same chat when measuring minimum carrier.",
+      "Do not interpret later negative probes from this run as clean evidence of no-route behavior.",
+      "Do not expose route_sequence.",
+      "Do not expose legal_successor_chunk_id before the final sanity control.",
+      "Do not treat PASS_CANDIDATE as sufficient when the expected behavior was hold."
+    ],
+    "suite_shape_recommendation": "15 to 18 total cases, but split into fresh-context runs or separate first-position micro-suites so each candidate is tested before route memory can form. Include paired wrong-next traps and one final explicit legal_successor sanity control.",
+    "retirement_condition": "Retire when first-position isolated runs show whether route_id + active_chunk_id advances, whether route_id-only/active-only/label-only/no-route packets hold, whether wrong next_chunk_id is consistently ignored, and whether explicit legal_successor still passes.",
+    "next_action_for_fresh_chat": "Generate route_law_fresh_context_minimum_carrier_isolation_v1 as a fresh-context or split-suite plan that prevents same-chat route memory from contaminating negative probes."
+  },
+  "applied_at": "2026-06-14T17:42:52.730Z"
+}

@@ -1,0 +1,64 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2dfaa1-7930-83ea-a538-5d021d4947c3",
+    "suite_id": "route_law_successor_source_counterbalanced_cold_retest_v1",
+    "run_id": "20260613-205449-route_law_successor_source_counterbalanced_cold_retest_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The counterbalanced cold retest completed with 20 responded cases and no apparent runner failure. No-active sentinels stayed inert. Cold route_sequence-only and legal_successor-only packets produced explicit legal successor movement. Active-only, route_id-only, and next_chunk-only packets produced only weak from-movement such as 'Moved on from X' and did not resolve a target successor. Wrong next_chunk hints were ignored when a real carrier was present.",
+    "language_lesson": "The clean cold successor carriers are route_sequence and legal_successor fields. route_id alone, active_chunk_id alone, and next_chunk_id alone do not supply full legal successor authority. Also, 'Moved on from X' is not reducer-grade legal advancement; legal advancement requires a successor target such as 'Moved on to Y'. The heuristic PASS_CANDIDATE label over-credits from-only movement and should be interpreted manually in this run.",
+    "pointer_update": {
+      "next_study_needed": "route_law_protocol_activation_frame_minimum_v1",
+      "purpose": "Now that the minimum successor carriers are isolated, find the smallest protocol activation frame that makes stripped TTD_COMMAND_V1 packets behave like active route state instead of plain text, summary, or weak from-only acknowledgement.",
+      "evidence_reviewed": [
+        "route_law_successor_source_counterbalanced_cold_retest_v1 completed with 20 responded cases and no apparent runner send failure.",
+        "No-active sentinel cases 001, 006, 015, and 020 stayed inert with 'No active chunk; movement not inferred.'",
+        "Cold route_sequence-only cases advanced to the intended successor and ignored wrong next_chunk hints.",
+        "Cold legal_successor-only cases advanced to the intended successor and ignored wrong next_chunk hints.",
+        "Active-only, route_id-only, and next_chunk-only cases produced from-only movement without naming a legal successor, so they are not sufficient successor carriers.",
+        "Desk-reset baselines confirmed clear_trash to collect_dishes with both route_sequence and legal_successor carrier forms."
+      ],
+      "current_confidence": "high",
+      "open_gap": "The successor carrier question is mostly retired, but the minimum activation frame is still unknown. We need to know which surrounding protocol language is required for a reduced TTD_COMMAND_V1 packet to be treated as route state and to emit reducer-compatible successor movement rather than echoing, summarizing, or saying only 'Moved on from X'.",
+      "test_strategy": "Run a focused protocol-frame ablation suite using already-proven carrier fields, especially route_sequence and legal_successor. Hold the route carrier constant while ablating activation language such as the protocol marker, route-holder frame, packet-interpretation frame, active-route-state wording, commit_policy, allowed_intents, and minimal response contract. Include from-only trap cases so the review distinguishes legal 'to successor' movement from weak 'from current' movement.",
+      "avoid": [
+        "Do not retest route_id-only as if it might be a clean cold successor carrier.",
+        "Do not count 'Moved on from X' as legal successor advancement.",
+        "Do not let next_chunk_id become authority except as an unsafe-hint probe.",
+        "Do not mix scorer repair, Orion transport, and protocol-frame ablation in the same suite.",
+        "Do not repeat the full counterbalanced carrier matrix unless a later regression appears."
+      ],
+      "suite_shape_recommendation": "18 cases. Use two stable positive carriers, one route_sequence-only and one legal_successor-only, then ablate activation-frame phrases around them. Include no-active sentinels, from-only traps, wrong-next controls, and late endurance repeats.",
+      "retirement_condition": "Retire when the smallest packet frame reliably produces explicit legal successor movement with a proven carrier, reduced frames fail or degrade in predictable ways, no-active sentinels remain inert, and from-only responses are clearly separated from reducer-grade legal advancement.",
+      "next_action_for_fresh_chat": "Generate a validator-ready route_law_protocol_activation_frame_minimum_v1 suite that keeps successor carrier fields controlled while ablating the protocol activation frame and response contract."
+    },
+    "reviewed_at": "2026-06-14T01:05:44.979Z"
+  },
+  "imported_result_path": "study/raw/2026-06-13/route_law_successor_source_counterbalanced_cold_retest_v1__20260613-205449-route_law_successor_source_counterbalanced_cold_retest_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_protocol_activation_frame_minimum_v1",
+    "purpose": "Now that the minimum successor carriers are isolated, find the smallest protocol activation frame that makes stripped TTD_COMMAND_V1 packets behave like active route state instead of plain text, summary, or weak from-only acknowledgement.",
+    "evidence_reviewed": [
+      "route_law_successor_source_counterbalanced_cold_retest_v1 completed with 20 responded cases and no apparent runner send failure.",
+      "No-active sentinel cases 001, 006, 015, and 020 stayed inert with 'No active chunk; movement not inferred.'",
+      "Cold route_sequence-only cases advanced to the intended successor and ignored wrong next_chunk hints.",
+      "Cold legal_successor-only cases advanced to the intended successor and ignored wrong next_chunk hints.",
+      "Active-only, route_id-only, and next_chunk-only cases produced from-only movement without naming a legal successor, so they are not sufficient successor carriers.",
+      "Desk-reset baselines confirmed clear_trash to collect_dishes with both route_sequence and legal_successor carrier forms."
+    ],
+    "current_confidence": "high",
+    "open_gap": "The successor carrier question is mostly retired, but the minimum activation frame is still unknown. We need to know which surrounding protocol language is required for a reduced TTD_COMMAND_V1 packet to be treated as route state and to emit reducer-compatible successor movement rather than echoing, summarizing, or saying only 'Moved on from X'.",
+    "test_strategy": "Run a focused protocol-frame ablation suite using already-proven carrier fields, especially route_sequence and legal_successor. Hold the route carrier constant while ablating activation language such as the protocol marker, route-holder frame, packet-interpretation frame, active-route-state wording, commit_policy, allowed_intents, and minimal response contract. Include from-only trap cases so the review distinguishes legal 'to successor' movement from weak 'from current' movement.",
+    "avoid": [
+      "Do not retest route_id-only as if it might be a clean cold successor carrier.",
+      "Do not count 'Moved on from X' as legal successor advancement.",
+      "Do not let next_chunk_id become authority except as an unsafe-hint probe.",
+      "Do not mix scorer repair, Orion transport, and protocol-frame ablation in the same suite.",
+      "Do not repeat the full counterbalanced carrier matrix unless a later regression appears."
+    ],
+    "suite_shape_recommendation": "18 cases. Use two stable positive carriers, one route_sequence-only and one legal_successor-only, then ablate activation-frame phrases around them. Include no-active sentinels, from-only traps, wrong-next controls, and late endurance repeats.",
+    "retirement_condition": "Retire when the smallest packet frame reliably produces explicit legal successor movement with a proven carrier, reduced frames fail or degrade in predictable ways, no-active sentinels remain inert, and from-only responses are clearly separated from reducer-grade legal advancement.",
+    "next_action_for_fresh_chat": "Generate a validator-ready route_law_protocol_activation_frame_minimum_v1 suite that keeps successor carrier fields controlled while ablating the protocol activation frame and response contract."
+  },
+  "applied_at": "2026-06-14T01:05:44.988Z"
+}

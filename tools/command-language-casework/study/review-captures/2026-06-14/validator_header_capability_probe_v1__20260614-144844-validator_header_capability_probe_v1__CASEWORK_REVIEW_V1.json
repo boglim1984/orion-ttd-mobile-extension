@@ -1,0 +1,58 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b/c/6a2ef6d7-e698-83ea-8c67-c80995e43f12",
+    "suite_id": "validator_header_capability_probe_v1",
+    "run_id": "20260614-144844-validator_header_capability_probe_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "Gate 1 passed. The Casework runner/GUI accepted and executed a packet string that did not start with TTD_COMMAND_V1 newline. Both the known-good header baseline and raw JSON no-header probe advanced clear_trash to collect_dishes and were classified PASS_CANDIDATE.",
+    "language_lesson": "The current tool stack can test true header-line ablation. Raw JSON containing route_id plus active_chunk_id can be sent through the runner and can activate route-state behavior in the model, so the next uncertainty is language robustness across damaged headers, variant headers, prefaced JSON, and no-header activation wording.",
+    "pointer_update": {
+      "next_study_needed": "route_law_header_line_ablation_route_active_carrier_8case_v1",
+      "purpose": "Run the actual 8-case language suite now that the validator-capability gate has proven non-header packet strings are runnable.",
+      "evidence_reviewed": [
+        "Case 001 known-good TTD_COMMAND_V1 header packet activated clear_trash and move_on advanced to collect_dishes.",
+        "Case 002 raw JSON packet without the first-line TTD_COMMAND_V1 header activated clear_trash and move_on advanced to collect_dishes.",
+        "Run completed with no warnings or errors and both cases were PASS_CANDIDATE."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "We know raw JSON without the header is runnable and worked in a minimal probe, but we have not yet isolated damaged headers, lowercase/variant headers, natural-language prefaces, protocol-only no-header packets, activation wording without header, or explicit legal_successor sanity inside a balanced suite.",
+      "test_strategy": "Generate and run the 8-case header-line ablation suite around route_id plus active_chunk_id: known-good header baseline, raw JSON no header, damaged header, lowercase or variant header, natural-language preface plus JSON, JSON protocol-only activation without header, activation wording without header, and final explicit legal_successor sanity.",
+      "avoid": [
+        "Do not pause for tool/schema repair; Gate 1 passed.",
+        "Do not retest JSON protocol or command_id as the main question.",
+        "Do not expose route_sequence.",
+        "Do not let next_chunk_id become authority.",
+        "Do not keep every case starting with TTD_COMMAND_V1 if the research question is header-line ablation."
+      ],
+      "suite_shape_recommendation": "8 cases, focused header-line ablation, with raw JSON and damaged/variant header contrasts plus one final explicit legal_successor sanity control.",
+      "retirement_condition": "Retire this pointer when the 8-case run shows whether the first-line TTD_COMMAND_V1 header is required for activation, whether raw JSON route_id plus active_chunk_id reliably activates without the header, and whether damaged or variant headers fail gracefully or preserve route law.",
+      "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_header_line_ablation_route_active_carrier_8case_v1 using the current runner schema. Gate 1 is already passed, so proceed to Gate 2."
+    },
+    "reviewed_at": "2026-06-14T18:54:25.511Z"
+  },
+  "imported_result_path": "study/raw/2026-06-14/validator_header_capability_probe_v1__20260614-144844-validator_header_capability_probe_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_header_line_ablation_route_active_carrier_8case_v1",
+    "purpose": "Run the actual 8-case language suite now that the validator-capability gate has proven non-header packet strings are runnable.",
+    "evidence_reviewed": [
+      "Case 001 known-good TTD_COMMAND_V1 header packet activated clear_trash and move_on advanced to collect_dishes.",
+      "Case 002 raw JSON packet without the first-line TTD_COMMAND_V1 header activated clear_trash and move_on advanced to collect_dishes.",
+      "Run completed with no warnings or errors and both cases were PASS_CANDIDATE."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "We know raw JSON without the header is runnable and worked in a minimal probe, but we have not yet isolated damaged headers, lowercase/variant headers, natural-language prefaces, protocol-only no-header packets, activation wording without header, or explicit legal_successor sanity inside a balanced suite.",
+    "test_strategy": "Generate and run the 8-case header-line ablation suite around route_id plus active_chunk_id: known-good header baseline, raw JSON no header, damaged header, lowercase or variant header, natural-language preface plus JSON, JSON protocol-only activation without header, activation wording without header, and final explicit legal_successor sanity.",
+    "avoid": [
+      "Do not pause for tool/schema repair; Gate 1 passed.",
+      "Do not retest JSON protocol or command_id as the main question.",
+      "Do not expose route_sequence.",
+      "Do not let next_chunk_id become authority.",
+      "Do not keep every case starting with TTD_COMMAND_V1 if the research question is header-line ablation."
+    ],
+    "suite_shape_recommendation": "8 cases, focused header-line ablation, with raw JSON and damaged/variant header contrasts plus one final explicit legal_successor sanity control.",
+    "retirement_condition": "Retire this pointer when the 8-case run shows whether the first-line TTD_COMMAND_V1 header is required for activation, whether raw JSON route_id plus active_chunk_id reliably activates without the header, and whether damaged or variant headers fail gracefully or preserve route law.",
+    "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_header_line_ablation_route_active_carrier_8case_v1 using the current runner schema. Gate 1 is already passed, so proceed to Gate 2."
+  },
+  "applied_at": "2026-06-14T18:54:25.513Z"
+}

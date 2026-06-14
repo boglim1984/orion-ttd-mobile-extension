@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1
+- Next study: route_law_header_line_ablation_route_active_carrier_8case_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
 - Current confidence: high
-- Open gap: The carrier-isolation family is satisfied for route_id plus active_chunk_id inside the current packet envelope. The remaining uncertainty is whether success depends on protocol scaffolding such as the TTD_COMMAND_V1 header line, the JSON protocol field, command_id presence, or other activation-frame language.
-- Suite shape recommendation: Use a validator-ready 8-case protocol-scaffolding ablation suite. Case 001 should be the known-good route_id plus active_chunk_id carrier baseline. Follow with controlled removals or additions of protocol/key/command/activation wording, a missing-field negative control, a wrong-next authority control, a damaged-intents control, and a final explicit legal_successor sanity case.
+- Open gap: The TTD_COMMAND_V1 header line itself has not been isolated. Current runner/schema habits prefer packet strings that start with TTD_COMMAND_V1, so a true header ablation may require either a runner-supported exception or a deliberate header-variant suite.
+- Suite shape recommendation: Use a validator-ready 8-case header-line ablation suite if the runner permits non-header packet strings; otherwise create a small tool-capability follow-up before language testing.
 
 ## Evidence summary
 
-- Imported run count: 37
-- Imported case count: 421
-- Matrix row count: 421
-- Latest imported suite ID: route_law_fresh_context_minimum_carrier_route_active_bare_cold_probe_8case_v1
-- Latest imported run ID: 20260614-142943-route_law_fresh_context_minimum_carrier_route_active_bare_cold_probe_8case_v1
+- Imported run count: 38
+- Imported case count: 429
+- Matrix row count: 429
+- Latest imported suite ID: route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1
+- Latest imported run ID: 20260614-144052-route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1 / 20260614-144052-route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1: 8 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 - route_law_fresh_context_minimum_carrier_route_active_bare_cold_probe_8case_v1 / 20260614-142943-route_law_fresh_context_minimum_carrier_route_active_bare_cold_probe_8case_v1: 8 cases, legal=FAIL, route=broken, design=smoke, context_risk=high
 - route_law_fresh_context_minimum_carrier_active_id_cold_probe_8case_v1 / 20260614-141845-route_law_fresh_context_minimum_carrier_active_id_cold_probe_8case_v1: 8 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
-- route_law_fresh_context_minimum_carrier_isolation_v1 / 20260614-135754-route_law_fresh_context_minimum_carrier_isolation_v1: 18 cases, legal=FAIL, route=broken, design=smoke, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-14/route_law_fresh_context_minimum_carrier_isolation_v1__20260614-135754-route_law_fresh_context_minimum_carrier_isolation_v1.md
 - study/reviews/2026-06-14/route_law_fresh_context_minimum_carrier_active_id_cold_probe_8case_v1__20260614-141845-route_law_fresh_context_minimum_carrier_active_id_cold_probe_8case_v1.md
 - study/reviews/2026-06-14/route_law_fresh_context_minimum_carrier_route_active_bare_cold_probe_8case_v1__20260614-142943-route_law_fresh_context_minimum_carrier_route_active_bare_cold_probe_8case_v1.md
+- study/reviews/2026-06-14/route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1__20260614-144052-route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1.md
 
 ## Planning rule
 

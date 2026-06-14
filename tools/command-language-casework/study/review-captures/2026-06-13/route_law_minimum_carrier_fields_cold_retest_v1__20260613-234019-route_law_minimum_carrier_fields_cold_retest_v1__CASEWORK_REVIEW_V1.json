@@ -1,0 +1,62 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2e215f-3bc4-83ea-b81d-c0f6bc9085bb",
+    "suite_id": "route_law_minimum_carrier_fields_cold_retest_v1",
+    "run_id": "20260613-234019-route_law_minimum_carrier_fields_cold_retest_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The stripped carrier was stable across cold, mid-suite, and final repeats. Route law survived removal of commit_policy, allowed_intents, active_chunk_label, and strict wording. No-active, no-route, label-only, unknown-route, and damaged-active sentinels produced no movement rather than unsafe inferred advancement. Wrong-next and conflicting-label controls confirmed that next_chunk_id is not authority and active_chunk_id beats label memory.",
+    "language_lesson": "Under the outer TTD_COMMAND_V1 marker, legal movement appears to require a valid route substrate plus a valid active_chunk_id. Other scaffolding fields help readability but are not individually required for move_on behavior. The model treats active_chunk_id as the strongest movement anchor: labels can be missing or conflicting without overriding the ID. Missing or invalid route/active substrate correctly blocks movement.",
+    "pointer_update": {
+      "next_study_needed": "route_law_combined_minimum_carrier_floor_v1",
+      "purpose": "Confirm the combined minimum carrier floor after single-family ablations showed that commit_policy, allowed_intents, active_chunk_label, and relaxed wording are individually optional while route_id and active_chunk_id appear necessary.",
+      "evidence_reviewed": [
+        "min_carrier_001, 004, 008, and 018 showed the stripped carrier repeatedly advanced clear_trash to collect_dishes without suite-order collapse.",
+        "min_carrier_003, 005, 007, and 012 showed no commit_policy, no allowed_intents, no active_chunk_label, and relaxed wording still preserved legal movement.",
+        "min_carrier_002, 009, 011, 013, and 014 showed missing active_chunk_id, missing route_id, label-only active state, unknown route_id, and damaged active_chunk_id blocked inferred movement with no movement responses.",
+        "min_carrier_006 and 017 showed wrong next_chunk_id=stack_papers did not become authority.",
+        "min_carrier_015 and 016 showed active_chunk_id controls over conflicting active_chunk_label."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "The suite tested mostly single-family ablations. It did not yet test the combined floor packets such as outer marker plus route_id plus active_chunk_id only, route_id plus active_chunk_id without command_id, active_chunk_id only, route_id only, or bare active ID with no other scaffolding.",
+      "test_strategy": "Run a combined-minimum floor suite with 15 to 18 cases. Start cold with the suspected floor: TTD_COMMAND_V1 plus route_id plus active_chunk_id only. Counterbalance repeats in early, middle, and late positions. Then test route_id+active_chunk_id without command_id, active_chunk_id without route_id, route_id without active_chunk_id, active_chunk_label-only, route_id plus active label only, route_id plus damaged active ID, and wrong-next traps. Include late known-good stripped carrier and explicit-successor controls only at the end.",
+      "avoid": [
+        "Do not retest broad activation-frame prose variants.",
+        "Do not expose route_sequence early.",
+        "Do not expose legal_successor early except as a late positive control.",
+        "Do not treat no movement on missing active_chunk_id or invalid route substrate as a language failure.",
+        "Do not assume single-field ablation proves the combined minimum floor."
+      ],
+      "suite_shape_recommendation": "15 to 18 cases, counterbalanced. Focus on combined carrier floor: outer marker + route_id + active_chunk_id as the suspected minimum, with controlled removals and late sentinels.",
+      "retirement_condition": "Retire when the study can state whether TTD_COMMAND_V1 plus route_id plus active_chunk_id is sufficient by itself, whether command_id is optional, and whether removing either route_id or active_chunk_id reliably blocks movement.",
+      "next_action_for_fresh_chat": "Generate a validator-ready route_law_combined_minimum_carrier_floor_v1 suite focused on combined minimum carrier packets, not single-family ablations."
+    },
+    "reviewed_at": "2026-06-14T03:47:17.710Z"
+  },
+  "imported_result_path": "study/raw/2026-06-13/route_law_minimum_carrier_fields_cold_retest_v1__20260613-234019-route_law_minimum_carrier_fields_cold_retest_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_combined_minimum_carrier_floor_v1",
+    "purpose": "Confirm the combined minimum carrier floor after single-family ablations showed that commit_policy, allowed_intents, active_chunk_label, and relaxed wording are individually optional while route_id and active_chunk_id appear necessary.",
+    "evidence_reviewed": [
+      "min_carrier_001, 004, 008, and 018 showed the stripped carrier repeatedly advanced clear_trash to collect_dishes without suite-order collapse.",
+      "min_carrier_003, 005, 007, and 012 showed no commit_policy, no allowed_intents, no active_chunk_label, and relaxed wording still preserved legal movement.",
+      "min_carrier_002, 009, 011, 013, and 014 showed missing active_chunk_id, missing route_id, label-only active state, unknown route_id, and damaged active_chunk_id blocked inferred movement with no movement responses.",
+      "min_carrier_006 and 017 showed wrong next_chunk_id=stack_papers did not become authority.",
+      "min_carrier_015 and 016 showed active_chunk_id controls over conflicting active_chunk_label."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "The suite tested mostly single-family ablations. It did not yet test the combined floor packets such as outer marker plus route_id plus active_chunk_id only, route_id plus active_chunk_id without command_id, active_chunk_id only, route_id only, or bare active ID with no other scaffolding.",
+    "test_strategy": "Run a combined-minimum floor suite with 15 to 18 cases. Start cold with the suspected floor: TTD_COMMAND_V1 plus route_id plus active_chunk_id only. Counterbalance repeats in early, middle, and late positions. Then test route_id+active_chunk_id without command_id, active_chunk_id without route_id, route_id without active_chunk_id, active_chunk_label-only, route_id plus active label only, route_id plus damaged active ID, and wrong-next traps. Include late known-good stripped carrier and explicit-successor controls only at the end.",
+    "avoid": [
+      "Do not retest broad activation-frame prose variants.",
+      "Do not expose route_sequence early.",
+      "Do not expose legal_successor early except as a late positive control.",
+      "Do not treat no movement on missing active_chunk_id or invalid route substrate as a language failure.",
+      "Do not assume single-field ablation proves the combined minimum floor."
+    ],
+    "suite_shape_recommendation": "15 to 18 cases, counterbalanced. Focus on combined carrier floor: outer marker + route_id + active_chunk_id as the suspected minimum, with controlled removals and late sentinels.",
+    "retirement_condition": "Retire when the study can state whether TTD_COMMAND_V1 plus route_id plus active_chunk_id is sufficient by itself, whether command_id is optional, and whether removing either route_id or active_chunk_id reliably blocks movement.",
+    "next_action_for_fresh_chat": "Generate a validator-ready route_law_combined_minimum_carrier_floor_v1 suite focused on combined minimum carrier packets, not single-family ablations."
+  },
+  "applied_at": "2026-06-14T03:47:17.719Z"
+}

@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_minimum_carrier_fields_cold_retest_v1
+- Next study: route_law_combined_minimum_carrier_floor_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-- Current confidence: high
-- Open gap: The protocol activation frame itself is no longer the main unknown. The remaining gap is the exact minimum carrier field set once the outer TTD_COMMAND_V1 marker is present, and whether the stripped carrier survives cold/counterbalanced retest without suite-order help.
-- Suite shape recommendation: 18 cases. Counterbalance stripped minimal carrier repeats, then ablate carrier fields one family at a time. Include no-active sentinel, wrong-next trap, unknown-route negative, and late known-good repeat.
+- Current confidence: medium
+- Open gap: The suite tested mostly single-family ablations. It did not yet test the combined floor packets such as outer marker plus route_id plus active_chunk_id only, route_id plus active_chunk_id without command_id, active_chunk_id only, route_id only, or bare active ID with no other scaffolding.
+- Suite shape recommendation: 15 to 18 cases, counterbalanced. Focus on combined carrier floor: outer marker + route_id + active_chunk_id as the suspected minimum, with controlled removals and late sentinels.
 
 ## Evidence summary
 
-- Imported run count: 30
-- Imported case count: 315
-- Matrix row count: 315
-- Latest imported suite ID: route_law_protocol_activation_frame_minimum_v1
-- Latest imported run ID: 20260613-221156-route_law_protocol_activation_frame_minimum_v1
+- Imported run count: 31
+- Imported case count: 333
+- Matrix row count: 333
+- Latest imported suite ID: route_law_minimum_carrier_fields_cold_retest_v1
+- Latest imported run ID: 20260613-234019-route_law_minimum_carrier_fields_cold_retest_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_minimum_carrier_fields_cold_retest_v1 / 20260613-234019-route_law_minimum_carrier_fields_cold_retest_v1: 18 cases, legal=FAIL, route=broken, design=endurance, context_risk=high
 - route_law_protocol_activation_frame_minimum_v1 / 20260613-221156-route_law_protocol_activation_frame_minimum_v1: 18 cases, legal=HOLD, route=unknown, design=endurance, context_risk=high
 - route_law_known_route_id_semantic_memory_isolation_v1 / 20260613-214944-route_law_known_route_id_semantic_memory_isolation_v1: 18 cases, legal=HOLD, route=unknown, design=endurance, context_risk=high
-- route_law_route_id_commit_policy_inference_isolation_v1 / 20260613-213717-route_law_route_id_commit_policy_inference_isolation_v1: 18 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_route_id_commit_policy_inference_isolation_v1__20260613-213717-route_law_route_id_commit_policy_inference_isolation_v1.md
 - study/reviews/2026-06-13/route_law_known_route_id_semantic_memory_isolation_v1__20260613-214944-route_law_known_route_id_semantic_memory_isolation_v1.md
 - study/reviews/2026-06-13/route_law_protocol_activation_frame_minimum_v1__20260613-221156-route_law_protocol_activation_frame_minimum_v1.md
+- study/reviews/2026-06-13/route_law_minimum_carrier_fields_cold_retest_v1__20260613-234019-route_law_minimum_carrier_fields_cold_retest_v1.md
 
 ## Planning rule
 

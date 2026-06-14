@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_fresh_context_minimum_carrier_isolation_v1_retry_split_8case_suites
+**Next Study Needed**: route_law_fresh_context_minimum_carrier_route_active_bare_cold_probe_8case_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: fresh_min_carrier_001_protocol_only held with no route or active chunk. | fresh_min_carrier_002_route_id_only held because active_chunk_id was absent. | fresh_min_carrier_003_active_id_only advanced to collect_dishes only after route_id had already appeared in the same chat. | fresh_min_carrier_012_wrong_next_trap_with_active_id ignored stack_papers and advanced to collect_dishes inside the contaminated same-chat context. | fresh_min_carrier_018_explicit_legal_successor_sanity advanced to collect_dishes as expected.
-**Current confidence**: medium
-**Open gap**: Still unknown which fields are sufficient when each packet is evaluated as the first meaningful route packet in a fresh disposable chat. The run produced strong carryover evidence but did not cleanly isolate active_chunk_id-only, route_id+active_chunk_id, activation_frame+route_id+active_chunk_id, or wrong-next behavior in fresh context.
-**Test strategy**: Generate validator-ready 8-case suites. Every suite contains at least 8 cases. The carrier candidate under test appears at case 001 and the suite is run in a fresh disposable ChatGPT chat. Interpret the case 001 result as clean fresh-context carrier evidence. Cases 002-008 provide tail controls, sanity checks, and carryover observations.
-**Avoid / do not repeat**: Do not run all carrier candidates as one multi-case suite when measuring fresh-context minimum carrier. | Do not interpret later active_chunk_id-only advancement as fresh active_chunk_id-only authority if route_id appeared earlier in the same chat. | Do not expose route_sequence. | Do not expose legal_successor_chunk_id before the final sanity control. | Do not treat PASS_CANDIDATE as sufficient when the expected behavior was hold. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 10 to 12 validator-ready 8-case suites. Every suite starts with a different carrier candidate at case 001, followed by seven support cases. Candidate-first coverage should include protocol marker without route fields, route_id without active_chunk_id, active_chunk_id without route_id, route_id plus active_chunk_id, active_chunk_id plus label without route_id, damaged allowed_intents, wrong-next with active_id, wrong-next without active_id, activation_frame plus route_id plus active_id, and explicit legal_successor sanity.
-**Retirement condition**: Retire when first-position isolated runs show whether route_id+active_chunk_id advances, whether route_id-only/active-only/label-only/no-route packets hold, whether wrong next_chunk_id is consistently ignored in fresh context, whether damaged allowed_intents blocks move_on, and whether explicit legal_successor still passes.
-**Next action for fresh chat**: Generate validator-ready 8-case suite JSON objects with the target carrier candidate at case 001. Avoid wrapper packs. Every suite object must be directly pasteable into the Casework GUI and must contain at least 8 cases.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_fresh_context_minimum_carrier_isolation_v1 result 20260614-135754-route_law_fresh_context_minimum_carrier_isolation_v1.
+**Evidence reviewed**: active_id_cold_probe_001_active_chunk_id_without_route_id held in fresh context: active_chunk_id named clear_trash but move_on had no authorized next chunk because route_id was missing. | active_id_cold_probe_002_route_id_only_tail held because active_chunk_id was missing. | active_id_cold_probe_003_route_id_plus_active_id_tail advanced to collect dishes once route_id and active_chunk_id were both present. | active_id_cold_probe_004_wrong_next_with_active_authority_tail ignored stack_papers and advanced to collect dishes. | active_id_cold_probe_005_wrong_next_without_active_id_tail held because active_chunk_id was missing. | active_id_cold_probe_006_damaged_allowed_intents_tail held because move_on was not in allowed_intents. | active_id_cold_probe_007_activation_frame_route_active_tail advanced to collect dishes. | active_id_cold_probe_008_explicit_successor_sanity_tail advanced to collect dishes.
+**Current confidence**: medium_high
+**Open gap**: The study now has clean cold evidence that active_chunk_id alone is insufficient. It still needs cold case 001 evidence for route_id plus active_chunk_id as the bare carrier, route_id plus active_chunk_id plus label, wrong-next behavior with active authority, wrong-next behavior without active authority, damaged allowed_intents, activation frame plus route and active, and explicit legal successor sanity.
+**Test strategy**: Generate another validator-ready 8-case suite. The target carrier for the next run should be route_id plus active_chunk_id in case 001, run in a fresh disposable ChatGPT chat. Cases 002-008 should provide support observations and controls while preserving the active 8-case suite floor.
+**Avoid / do not repeat**: Do not treat tail cases as fresh cold evidence. | Do not expose route_sequence. | Do not expose legal_successor_chunk_id before the final sanity control. | Do not let next_chunk_id become movement authority. | Do not design sub-8-case suites. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: Use a validator-ready 8-case suite. Case 001 should test route_id plus active_chunk_id without label, allowed_intents, commit_policy, activation_frame, or legal_successor_chunk_id. Cases 002-008 should cover route_id plus active_chunk_id plus label, route_id without active_chunk_id, active_chunk_id without route_id, wrong-next with active authority, wrong-next without active authority, damaged allowed_intents, and explicit legal_successor sanity.
+**Retirement condition**: Retire this carrier-isolation family when cold case 001 results show which field set is sufficient to advance clear_trash to collect_dishes, which reduced packets hold, whether wrong next_chunk_id is ignored under active authority, whether damaged allowed_intents blocks movement, and whether explicit successor sanity still passes.
+**Next action for fresh chat**: Generate route_law_fresh_context_minimum_carrier_route_active_bare_cold_probe_8case_v1 as a validator-ready 8-case suite with route_id plus active_chunk_id as case 001 and support cases 002-008.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_fresh_context_minimum_carrier_active_id_cold_probe_8case_v1 result 20260614-141845-route_law_fresh_context_minimum_carrier_active_id_cold_probe_8case_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-14
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-14T18:14:08.824Z
-- Run count: 35
-- Case count: 405
-- Latest suite ID: route_law_fresh_context_minimum_carrier_isolation_v1
-- Latest run ID: 20260614-135754-route_law_fresh_context_minimum_carrier_isolation_v1
-- Classification counts: {"PASS_CANDIDATE":289,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":30,"HOLD_NEEDS_REVIEW":85}
+- Last tabulated at: 2026-06-14T18:24:58.343Z
+- Run count: 36
+- Case count: 413
+- Latest suite ID: route_law_fresh_context_minimum_carrier_active_id_cold_probe_8case_v1
+- Latest run ID: 20260614-141845-route_law_fresh_context_minimum_carrier_active_id_cold_probe_8case_v1
+- Classification counts: {"PASS_CANDIDATE":296,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":30,"HOLD_NEEDS_REVIEW":86}
 - Open findings count: 0
-- Case-law matrix rows: 405
+- Case-law matrix rows: 413
 
 ## Open findings
 Generated and/or manually curated.

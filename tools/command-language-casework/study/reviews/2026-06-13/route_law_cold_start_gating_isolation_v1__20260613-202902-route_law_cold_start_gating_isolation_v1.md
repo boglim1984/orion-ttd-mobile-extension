@@ -1,0 +1,62 @@
+# Casework Review: route_law_cold_start_gating_isolation_v1
+
+- **Run ID**: `20260613-202902-route_law_cold_start_gating_isolation_v1`
+- **Imported At**: 2026-06-14T00:35:55.968Z
+- **Raw Result JSON**: `study/raw/2026-06-13/route_law_cold_start_gating_isolation_v1__20260613-202902-route_law_cold_start_gating_isolation_v1.json`
+- **Case Count**: 18
+
+## Reflection Checklist
+- [x] Mermaid-first review generated
+- [x] Most important pass identified: Active_chunk_id-only no-route probe (PASS_CANDIDATE)
+- [x] Most important failure identified: Cold protocol-only inert control (HOLD_NEEDS_REVIEW)
+- [x] Tool vs scorer vs language vs transport layer summarized deterministically
+- [x] Evidence usability noted: This run is usable evidence because it records route-law survival behavior.
+- [x] Study status change remains gated by reflection and matrix review
+- [ ] Human review may still refine the generated interpretation
+
+## Mermaid-first Review
+```mermaid
+flowchart TD
+  A["Run 20260613-202902-route_law_cold_start_gating_isolation_v1"] --> B["Pass cases: 9"]
+  A --> C["Fail cases: 0"]
+  A --> D["Tool failures: 0"]
+  B --> E["Preserve usable route-law evidence"]
+  C --> F["Classify failure layer and legal verdict"]
+  D --> G["Repair tooling before trusting route judgment"]
+  E --> H["Update matrix and keep manual next-study pointer under review"]
+  F --> H
+  G --> H
+```
+
+## Classification Summary
+- **HOLD_NEEDS_REVIEW**: 9
+- **PASS_CANDIDATE**: 9
+
+## Key Findings
+- Most important pass: Active_chunk_id-only no-route probe (PASS_CANDIDATE).
+- Most important failure: Cold protocol-only inert control (HOLD_NEEDS_REVIEW).
+- Evidence usability: This run is usable evidence because it records route-law survival behavior.
+
+## Layer Classification
+- Tool: No dominant tool failure pattern was recorded in this run.
+- Scorer: No obvious scorer dispute dominates beyond the recorded classifications.
+- Language: No route-law failure dominated the generated classifications.
+- Transport: Transport was not the dominant issue in this run.
+
+## Legal-system Interpretation
+- Committed state is law.
+- Logs and visible DOM text are admissible evidence.
+- Assistant prose is a claim, not state.
+- If evidence is ambiguous, HOLD and choose the smallest legal reduction.
+- PASS/FAIL describes route survival, not wording perfection.
+
+## Next Study Implication
+Keep the manual next-study pointer unchanged unless the reviewed matrix shows a stronger next-study need.
+
+## Artifact Paths
+- Raw evidence: `study/raw/2026-06-13/route_law_cold_start_gating_isolation_v1__20260613-202902-route_law_cold_start_gating_isolation_v1.json`
+- Review: `study/reviews/2026-06-13/route_law_cold_start_gating_isolation_v1__20260613-202902-route_law_cold_start_gating_isolation_v1.md`
+- Reflection loop: `study/CASEWORK_REFLECTION_LOOP_V1.md`
+- Case-law matrix: `study/case-law/CASEWORK_CASE_LAW_MATRIX_V1.md`
+
+> Note: Human/LLM review may refine the language lesson. Update the classification in the index if the heuristic/scorer was wrong.

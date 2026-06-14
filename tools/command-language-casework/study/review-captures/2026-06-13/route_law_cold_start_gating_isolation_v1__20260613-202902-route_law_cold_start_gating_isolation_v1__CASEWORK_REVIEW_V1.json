@@ -1,0 +1,60 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2df485-2220-83ea-9f36-c2e7457c8511",
+    "suite_id": "route_law_cold_start_gating_isolation_v1",
+    "run_id": "20260613-202902-route_law_cold_start_gating_isolation_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The carrier trial completed with 18 responded cases and no tool failures. Cold no-active controls stayed inert, late no-active retests also stayed inert, active_chunk_id plus route_id advanced clear_trash to collect_dishes, and active_chunk_id dominated wrong next_chunk hints. active_chunk_id without route_id recognized the current chunk but did not resolve the successor.",
+    "language_lesson": "active_chunk_id is the activation gate for treating a stripped TTD_COMMAND_V1 packet as route state. route_id is not sufficient to activate movement by itself, but it appears to provide or unlock successor resolution once active_chunk_id is present. active_chunk_label alone did not replace active_chunk_id. There was no evidence of late-run carryover contamination.",
+    "pointer_update": {
+      "next_study_needed": "route_law_successor_source_isolation_v1",
+      "purpose": "Now that active_chunk_id is isolated as the route-state activation carrier, determine what field supplies the legal successor: route_id, route_sequence, legal_successor_chunk_id, next_chunk_id, active_chunk_label, or learned desk-reset route memory.",
+      "evidence_reviewed": [
+        "carrier_trial_001 through carrier_trial_005 cold no-active controls produced no route advancement before any active case.",
+        "carrier_trial_006 active_chunk_id without route_id recognized clear_trash but did not resolve collect_dishes.",
+        "carrier_trial_007 active_chunk_id plus route_id advanced clear_trash to collect_dishes.",
+        "carrier_trial_011 through carrier_trial_014 showed active_chunk_id dominated wrong next_chunk hints.",
+        "carrier_trial_015 through carrier_trial_018 late no-active retests stayed inert, reducing carryover-contamination risk."
+      ],
+      "current_confidence": "high",
+      "open_gap": "The activation gate is now clear, but the successor source is not. It is unknown whether route_id itself resolves the route, whether the model is using ambient knowledge of desk-reset-v0, whether legal_successor_chunk_id can safely replace route_id, or whether route_sequence is required for novel/non-memorized routes.",
+      "test_strategy": "Run a successor-source isolation suite with active_chunk_id present in every positive case. Compare active_chunk_id only, active_chunk_id plus route_id, active_chunk_id plus route_sequence, active_chunk_id plus legal_successor_chunk_id, and conflict cases where route_id, route_sequence, legal_successor, and next_chunk disagree. Include at least one novel route_id or synthetic chunk sequence to separate true field use from memorized desk-reset knowledge.",
+      "avoid": [
+        "do not repeat broad cold-start no-active controls except for one or two sentinel controls",
+        "do not treat active_chunk_id-only partial movement as full legal advancement",
+        "do not use next_chunk_id as an authority unless the case is explicitly testing unsafe successor hint leakage",
+        "do not collapse activation carrier evidence and successor-resolution evidence into one verdict"
+      ],
+      "suite_shape_recommendation": "15 to 18 cases focused on successor-source isolation: active_chunk_id held constant, vary only successor-source fields, include route_id-vs-legal_successor conflicts, route_sequence-vs-next_chunk conflicts, and at least one novel synthetic route to test whether route_id is memorized or actually parsed.",
+      "retirement_condition": "Retire when one minimal successor-source carrier is identified: the model reliably advances from active_chunk_id to the intended legal successor with that field present, refuses or gives partial movement when it is absent, and ignores conflicting wrong-next hints.",
+      "next_action_for_fresh_chat": "Generate a validator-ready route_law_successor_source_isolation_v1 suite that keeps active_chunk_id present while isolating route_id, route_sequence, legal_successor_chunk_id, and wrong next_chunk hints as possible successor sources."
+    },
+    "reviewed_at": "2026-06-14T00:35:55.826Z"
+  },
+  "imported_result_path": "study/raw/2026-06-13/route_law_cold_start_gating_isolation_v1__20260613-202902-route_law_cold_start_gating_isolation_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_successor_source_isolation_v1",
+    "purpose": "Now that active_chunk_id is isolated as the route-state activation carrier, determine what field supplies the legal successor: route_id, route_sequence, legal_successor_chunk_id, next_chunk_id, active_chunk_label, or learned desk-reset route memory.",
+    "evidence_reviewed": [
+      "carrier_trial_001 through carrier_trial_005 cold no-active controls produced no route advancement before any active case.",
+      "carrier_trial_006 active_chunk_id without route_id recognized clear_trash but did not resolve collect_dishes.",
+      "carrier_trial_007 active_chunk_id plus route_id advanced clear_trash to collect_dishes.",
+      "carrier_trial_011 through carrier_trial_014 showed active_chunk_id dominated wrong next_chunk hints.",
+      "carrier_trial_015 through carrier_trial_018 late no-active retests stayed inert, reducing carryover-contamination risk."
+    ],
+    "current_confidence": "high",
+    "open_gap": "The activation gate is now clear, but the successor source is not. It is unknown whether route_id itself resolves the route, whether the model is using ambient knowledge of desk-reset-v0, whether legal_successor_chunk_id can safely replace route_id, or whether route_sequence is required for novel/non-memorized routes.",
+    "test_strategy": "Run a successor-source isolation suite with active_chunk_id present in every positive case. Compare active_chunk_id only, active_chunk_id plus route_id, active_chunk_id plus route_sequence, active_chunk_id plus legal_successor_chunk_id, and conflict cases where route_id, route_sequence, legal_successor, and next_chunk disagree. Include at least one novel route_id or synthetic chunk sequence to separate true field use from memorized desk-reset knowledge.",
+    "avoid": [
+      "do not repeat broad cold-start no-active controls except for one or two sentinel controls",
+      "do not treat active_chunk_id-only partial movement as full legal advancement",
+      "do not use next_chunk_id as an authority unless the case is explicitly testing unsafe successor hint leakage",
+      "do not collapse activation carrier evidence and successor-resolution evidence into one verdict"
+    ],
+    "suite_shape_recommendation": "15 to 18 cases focused on successor-source isolation: active_chunk_id held constant, vary only successor-source fields, include route_id-vs-legal_successor conflicts, route_sequence-vs-next_chunk conflicts, and at least one novel synthetic route to test whether route_id is memorized or actually parsed.",
+    "retirement_condition": "Retire when one minimal successor-source carrier is identified: the model reliably advances from active_chunk_id to the intended legal successor with that field present, refuses or gives partial movement when it is absent, and ignores conflicting wrong-next hints.",
+    "next_action_for_fresh_chat": "Generate a validator-ready route_law_successor_source_isolation_v1 suite that keeps active_chunk_id present while isolating route_id, route_sequence, legal_successor_chunk_id, and wrong next_chunk hints as possible successor sources."
+  },
+  "applied_at": "2026-06-14T00:35:55.835Z"
+}

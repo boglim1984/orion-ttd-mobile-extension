@@ -181,6 +181,44 @@
     "isolated_case_count": 1
   },
   {
+    "suite_id": "route_law_cold_start_gating_isolation_v1",
+    "run_id": "20260613-202902-route_law_cold_start_gating_isolation_v1",
+    "imported_at": "2026-06-14T00:29:15.381Z",
+    "raw_result_path": "study/raw/2026-06-13/route_law_cold_start_gating_isolation_v1__20260613-202902-route_law_cold_start_gating_isolation_v1.json",
+    "review_path": "study/reviews/2026-06-13/route_law_cold_start_gating_isolation_v1__20260613-202902-route_law_cold_start_gating_isolation_v1.md",
+    "case_count": 18,
+    "classification_counts": {
+      "HOLD_NEEDS_REVIEW": 9,
+      "PASS_CANDIDATE": 9
+    },
+    "status_counts": {
+      "RESPONDED": 18
+    },
+    "has_dom_turn_trace": true,
+    "warnings_errors_count": 0,
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "HOLD": 9,
+      "PASS": 9
+    },
+    "route_survival_counts": {
+      "unknown": 9,
+      "survived": 9
+    },
+    "legal_verdict": "HOLD",
+    "route_survival_outcome": "unknown",
+    "suite_case_count": 18,
+    "suite_design_type": "smoke",
+    "suite_context_risk": "high",
+    "max_approximate_chat_turn_depth_before_case": 51,
+    "negative_control_positions": [
+      "middle",
+      "late"
+    ],
+    "carryover_case_count": 17,
+    "isolated_case_count": 1
+  },
+  {
     "suite_id": "route_law_contract_relaxation_matrix_v1",
     "run_id": "20260613-153256-route_law_contract_relaxation_matrix_v1",
     "imported_at": "2026-06-13T19:33:06.622Z",

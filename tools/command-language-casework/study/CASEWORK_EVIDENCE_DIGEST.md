@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_cold_start_gating_isolation_v1
+- Next study: route_law_successor_source_isolation_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-- Current confidence: medium
-- Open gap: It is unknown whether active_chunk_id is actually the gating carrier. The model may be reconstructing the known desk-reset route from route_id, next_chunk labels, protocol framing, prior cases in the same run, or ambient learned context.
-- Suite shape recommendation: 15 to 20 cases focused on cold-start gating and order effects: start with next-only and route_id-only inert controls, then active-only first-case probes, then active plus wrong-next dominance probes, then late inert retests to measure contamination.
+- Current confidence: high
+- Open gap: The activation gate is now clear, but the successor source is not. It is unknown whether route_id itself resolves the route, whether the model is using ambient knowledge of desk-reset-v0, whether legal_successor_chunk_id can safely replace route_id, or whether route_sequence is required for novel/non-memorized routes.
+- Suite shape recommendation: 15 to 18 cases focused on successor-source isolation: active_chunk_id held constant, vary only successor-source fields, include route_id-vs-legal_successor conflicts, route_sequence-vs-next_chunk conflicts, and at least one novel synthetic route to test whether route_id is memorized or actually parsed.
 
 ## Evidence summary
 
-- Imported run count: 22
-- Imported case count: 169
-- Matrix row count: 169
-- Latest imported suite ID: route_law_protocol_activation_frame_v1
-- Latest imported run ID: 20260613-201524-route_law_protocol_activation_frame_v1
+- Imported run count: 23
+- Imported case count: 187
+- Matrix row count: 187
+- Latest imported suite ID: route_law_cold_start_gating_isolation_v1
+- Latest imported run ID: 20260613-202902-route_law_cold_start_gating_isolation_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_cold_start_gating_isolation_v1 / 20260613-202902-route_law_cold_start_gating_isolation_v1: 18 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 - route_law_protocol_activation_frame_v1 / 20260613-201524-route_law_protocol_activation_frame_v1: 17 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 - route_law_minimal_activation_scaffold_v1 / 20260613-194343-route_law_minimal_activation_scaffold_v1: 15 cases, legal=FAIL, route=broken, design=smoke, context_risk=high
-- route_law_next_chunk_latent_carrier_boundary_v1 / 20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1: 15 cases, legal=FAIL, route=broken, design=endurance, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_next_chunk_latent_carrier_boundary_v1__20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1.md
 - study/reviews/2026-06-13/route_law_minimal_activation_scaffold_v1__20260613-194343-route_law_minimal_activation_scaffold_v1.md
 - study/reviews/2026-06-13/route_law_protocol_activation_frame_v1__20260613-201524-route_law_protocol_activation_frame_v1.md
+- study/reviews/2026-06-13/route_law_cold_start_gating_isolation_v1__20260613-202902-route_law_cold_start_gating_isolation_v1.md
 
 ## Planning rule
 

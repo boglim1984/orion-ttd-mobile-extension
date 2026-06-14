@@ -1,0 +1,62 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2de9e0-ab4c-83ea-808f-e567924597ed",
+    "suite_id": "route_law_minimal_activation_scaffold_v1",
+    "run_id": "20260613-194343-route_law_minimal_activation_scaffold_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The 15-case minimal activation scaffold suite produced no successful clear_trash to collect_dishes activation without route_sequence. Active-only, active plus command_intent, active plus current_chunk/current_task wording, active plus commit_policy, active plus reducer_semantics, active plus minimal move_on_rule, active plus legal_successor, and active plus wrong-next dominance probes all failed to engage the route and mostly returned only the literal text move_on. The two next-only controls were HOLD_NEEDS_REVIEW and should be recorded as inert/non-activating rather than route-law passes.",
+    "language_lesson": "In stripped TTD_COMMAND_V1 packets, active_chunk_id and active_chunk_label plus small metadata scaffolds are not enough to make the model treat the packet as executable route state. The missing factor is likely not another field synonym but a conversational/protocol activation frame that tells the assistant how to read the packet, wait for Billy's allowed intent, and commit a state transition.",
+    "pointer_update": {
+      "next_study_needed": "route_law_protocol_activation_frame_v1",
+      "purpose": "Find the smallest instruction-frame wording that makes a stripped active_chunk packet behave as executable route state without using route_sequence.",
+      "evidence_reviewed": [
+        "route_law_minimal_activation_scaffold_v1 result 20260613-194343 showed 13 FAIL_LOST_ROUTE and 2 HOLD_NEEDS_REVIEW across 15 cases.",
+        "Active-only early and late retests both failed, so active_chunk_id and active_chunk_label alone are not actionable in this stripped packet style.",
+        "Small scaffold fields including command_intent, current_chunk/current_task wording, commit_policy, reducer_semantics, move_on_rule, and legal_successor_chunk_id did not activate the route.",
+        "Wrong-next dominance probes did not prove active-route dominance because the model did not engage the route at all.",
+        "Next-only controls remained non-activating and should be preserved as inert controls, not counted as successful route movement."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "It is still unknown what minimal protocol/instruction frame makes the assistant interpret TTD_COMMAND_V1 as active route state instead of echoing the allowed intent text. The next test must separate field-carrier failure from packet-activation failure.",
+      "test_strategy": "Run a focused protocol activation frame suite with active_chunk_id and active_chunk_label fixed to clear_trash / clear trash and no route_sequence. Vary only tiny instruction-frame additions: a route-holder identity sentence, an explicit packet interpretation sentence, a before-reply readiness contract, a minimal response_contract, and a minimal state-transition instruction. Include active-only controls early and late, next-only inert controls, and active plus wrong-next probes after an activation frame appears to work.",
+      "avoid": [
+        "do not add route_sequence in the core cases",
+        "do not repeat broad synonym scaffolds that already failed",
+        "do not treat next-only HOLD results as route-law passes",
+        "do not clone route_law_minimal_activation_scaffold_v1 with only field-name changes",
+        "do not use a strict output-only smoke contract that hides whether route state was actually understood"
+      ],
+      "suite_shape_recommendation": "15-case protocol activation frame suite: active-only baseline, minimal route-holder frame variants, minimal packet-interpretation variants, readiness/response-contract variants, wrong-next dominance probes only after activation frames, next-only inert controls, and late active-frame retest.",
+      "retirement_condition": "Retire this pointer when one or more minimal instruction-frame patterns reliably make active clear_trash advance exactly one legal step to collect_dishes without route_sequence, and when next-only controls remain inert.",
+      "next_action_for_fresh_chat": "Generate a validator-ready route_law_protocol_activation_frame_v1 suite focused on the smallest non-route_sequence instruction frame that makes active_chunk fields executable route state."
+    },
+    "reviewed_at": "2026-06-14T00:02:06.275Z"
+  },
+  "imported_result_path": "study/raw/2026-06-13/route_law_minimal_activation_scaffold_v1__20260613-194343-route_law_minimal_activation_scaffold_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_protocol_activation_frame_v1",
+    "purpose": "Find the smallest instruction-frame wording that makes a stripped active_chunk packet behave as executable route state without using route_sequence.",
+    "evidence_reviewed": [
+      "route_law_minimal_activation_scaffold_v1 result 20260613-194343 showed 13 FAIL_LOST_ROUTE and 2 HOLD_NEEDS_REVIEW across 15 cases.",
+      "Active-only early and late retests both failed, so active_chunk_id and active_chunk_label alone are not actionable in this stripped packet style.",
+      "Small scaffold fields including command_intent, current_chunk/current_task wording, commit_policy, reducer_semantics, move_on_rule, and legal_successor_chunk_id did not activate the route.",
+      "Wrong-next dominance probes did not prove active-route dominance because the model did not engage the route at all.",
+      "Next-only controls remained non-activating and should be preserved as inert controls, not counted as successful route movement."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "It is still unknown what minimal protocol/instruction frame makes the assistant interpret TTD_COMMAND_V1 as active route state instead of echoing the allowed intent text. The next test must separate field-carrier failure from packet-activation failure.",
+    "test_strategy": "Run a focused protocol activation frame suite with active_chunk_id and active_chunk_label fixed to clear_trash / clear trash and no route_sequence. Vary only tiny instruction-frame additions: a route-holder identity sentence, an explicit packet interpretation sentence, a before-reply readiness contract, a minimal response_contract, and a minimal state-transition instruction. Include active-only controls early and late, next-only inert controls, and active plus wrong-next probes after an activation frame appears to work.",
+    "avoid": [
+      "do not add route_sequence in the core cases",
+      "do not repeat broad synonym scaffolds that already failed",
+      "do not treat next-only HOLD results as route-law passes",
+      "do not clone route_law_minimal_activation_scaffold_v1 with only field-name changes",
+      "do not use a strict output-only smoke contract that hides whether route state was actually understood"
+    ],
+    "suite_shape_recommendation": "15-case protocol activation frame suite: active-only baseline, minimal route-holder frame variants, minimal packet-interpretation variants, readiness/response-contract variants, wrong-next dominance probes only after activation frames, next-only inert controls, and late active-frame retest.",
+    "retirement_condition": "Retire this pointer when one or more minimal instruction-frame patterns reliably make active clear_trash advance exactly one legal step to collect_dishes without route_sequence, and when next-only controls remain inert.",
+    "next_action_for_fresh_chat": "Generate a validator-ready route_law_protocol_activation_frame_v1 suite focused on the smallest non-route_sequence instruction frame that makes active_chunk fields executable route state."
+  },
+  "applied_at": "2026-06-14T00:02:06.277Z"
+}

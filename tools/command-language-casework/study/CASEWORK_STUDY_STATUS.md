@@ -5,19 +5,19 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_minimal_activation_scaffold_v1
+**Next Study Needed**: route_law_protocol_activation_frame_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: route_law_next_chunk_latent_001 and 002 showed no-field and allowed_intents-only packets stayed at pause and did not invent route movement. | route_law_next_chunk_latent_003 through 014 showed next_chunk_id-only, next_chunk_label-only, and paired next_chunk fields across collect_dishes, stack_papers, wipe_surface, and choose_next stayed at pause after move_on, so next_chunk-only was inert in this stripped packet style. | route_law_next_chunk_latent_015 showed explicit active_chunk clear_trash plus conflicting next_chunk stack_papers did not legally advance to collect_dishes and was classified FAIL_LOST_ROUTE, revealing an activation-scaffold gap.
+**Evidence reviewed**: route_law_minimal_activation_scaffold_v1 result 20260613-194343 showed 13 FAIL_LOST_ROUTE and 2 HOLD_NEEDS_REVIEW across 15 cases. | Active-only early and late retests both failed, so active_chunk_id and active_chunk_label alone are not actionable in this stripped packet style. | Small scaffold fields including command_intent, current_chunk/current_task wording, commit_policy, reducer_semantics, move_on_rule, and legal_successor_chunk_id did not activate the route. | Wrong-next dominance probes did not prove active-route dominance because the model did not engage the route at all. | Next-only controls remained non-activating and should be preserved as inert controls, not counted as successful route movement.
 **Current confidence**: medium
-**Open gap**: It is now unclear what minimum wording or field scaffold is required for active_chunk_id and active_chunk_label to become actionable in a stripped packet. Prior suites showed active carriers working when other scaffolding or context was present, but this suite showed explicit active fields alone can fail after a heavily pause-oriented reduced-packet sequence.
-**Test strategy**: Run a focused minimal activation scaffold suite. Keep active_chunk_id and active_chunk_label as the core carrier. Do not include route_sequence. Vary only small activation fields or phrases such as command intent, commit_policy, expected reducer semantics wording inside packet, active/current wording, and one minimal move_on rule. Include controls with active fields only, active plus wrong next, active plus next omitted, and next-only inert controls. Put explicit-active positive controls early and late to separate true scaffold effect from long-context pause contamination.
-**Avoid / do not repeat**: do not repeat the full 12-case next_chunk-only matrix unless needed as a small control | do not include route_sequence in core activation-scaffold cases | do not use broad route_law rescue wording that makes the minimum field carrier ambiguous | do not treat pause-only next_chunk results as PASS without recording them as inert/non-activating | do not overinterpret case 015 as disproving active carriers globally because earlier position-generalization runs already showed active carriers can work with other scaffolding | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 15-case activation-scaffold boundary suite: early active-only baseline, minimal scaffold variants, explicit active plus wrong-next dominance probes, next-only inert controls, and late active-only retest to check context/carryover.
-**Retirement condition**: Retire this pointer when one or more minimal non-route_sequence scaffolds reliably make active_chunk fields actionable for exact one-step move_on advancement, and when the suite distinguishes scaffold necessity from next_chunk latent-carrier behavior.
-**Next action for fresh chat**: Generate a validator-ready route_law_minimal_activation_scaffold_v1 suite focused on explicit active_chunk carriers with no route_sequence, varying only minimal activation wording or fields, with next_chunk-only inert controls and early/late active retests.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_next_chunk_latent_carrier_boundary_v1 result 20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1.
+**Open gap**: It is still unknown what minimal protocol/instruction frame makes the assistant interpret TTD_COMMAND_V1 as active route state instead of echoing the allowed intent text. The next test must separate field-carrier failure from packet-activation failure.
+**Test strategy**: Run a focused protocol activation frame suite with active_chunk_id and active_chunk_label fixed to clear_trash / clear trash and no route_sequence. Vary only tiny instruction-frame additions: a route-holder identity sentence, an explicit packet interpretation sentence, a before-reply readiness contract, a minimal response_contract, and a minimal state-transition instruction. Include active-only controls early and late, next-only inert controls, and active plus wrong-next probes after an activation frame appears to work.
+**Avoid / do not repeat**: do not add route_sequence in the core cases | do not repeat broad synonym scaffolds that already failed | do not treat next-only HOLD results as route-law passes | do not clone route_law_minimal_activation_scaffold_v1 with only field-name changes | do not use a strict output-only smoke contract that hides whether route state was actually understood | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 15-case protocol activation frame suite: active-only baseline, minimal route-holder frame variants, minimal packet-interpretation variants, readiness/response-contract variants, wrong-next dominance probes only after activation frames, next-only inert controls, and late active-frame retest.
+**Retirement condition**: Retire this pointer when one or more minimal instruction-frame patterns reliably make active clear_trash advance exactly one legal step to collect_dishes without route_sequence, and when next-only controls remain inert.
+**Next action for fresh chat**: Generate a validator-ready route_law_protocol_activation_frame_v1 suite focused on the smallest non-route_sequence instruction frame that makes active_chunk fields executable route state.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_minimal_activation_scaffold_v1 result 20260613-194343-route_law_minimal_activation_scaffold_v1.
 **Set by**: Billy / ChatGPT post-run review
-**Set at**: 2026-06-13
+**Set at**: 2026-06-14
 
 ### Why these cases
 - The previous pointer is satisfied because relaxed contracts preserved route law.
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-13T23:36:58.185Z
-- Run count: 20
-- Case count: 137
-- Latest suite ID: route_law_next_chunk_latent_carrier_boundary_v1
-- Latest run ID: 20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1
-- Classification counts: {"PASS_CANDIDATE":93,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":6,"HOLD_NEEDS_REVIEW":37}
+- Last tabulated at: 2026-06-14T00:02:06.554Z
+- Run count: 21
+- Case count: 152
+- Latest suite ID: route_law_minimal_activation_scaffold_v1
+- Latest run ID: 20260613-194343-route_law_minimal_activation_scaffold_v1
+- Classification counts: {"PASS_CANDIDATE":93,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":19,"HOLD_NEEDS_REVIEW":39}
 - Open findings count: 0
-- Case-law matrix rows: 137
+- Case-law matrix rows: 152
 
 ## Open findings
 Generated and/or manually curated.

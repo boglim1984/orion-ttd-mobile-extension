@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_minimal_activation_scaffold_v1
+- Next study: route_law_protocol_activation_frame_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
 - Current confidence: medium
-- Open gap: It is now unclear what minimum wording or field scaffold is required for active_chunk_id and active_chunk_label to become actionable in a stripped packet. Prior suites showed active carriers working when other scaffolding or context was present, but this suite showed explicit active fields alone can fail after a heavily pause-oriented reduced-packet sequence.
-- Suite shape recommendation: 15-case activation-scaffold boundary suite: early active-only baseline, minimal scaffold variants, explicit active plus wrong-next dominance probes, next-only inert controls, and late active-only retest to check context/carryover.
+- Open gap: It is still unknown what minimal protocol/instruction frame makes the assistant interpret TTD_COMMAND_V1 as active route state instead of echoing the allowed intent text. The next test must separate field-carrier failure from packet-activation failure.
+- Suite shape recommendation: 15-case protocol activation frame suite: active-only baseline, minimal route-holder frame variants, minimal packet-interpretation variants, readiness/response-contract variants, wrong-next dominance probes only after activation frames, next-only inert controls, and late active-frame retest.
 
 ## Evidence summary
 
-- Imported run count: 20
-- Imported case count: 137
-- Matrix row count: 137
-- Latest imported suite ID: route_law_next_chunk_latent_carrier_boundary_v1
-- Latest imported run ID: 20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1
+- Imported run count: 21
+- Imported case count: 152
+- Matrix row count: 152
+- Latest imported suite ID: route_law_minimal_activation_scaffold_v1
+- Latest imported run ID: 20260613-194343-route_law_minimal_activation_scaffold_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_minimal_activation_scaffold_v1 / 20260613-194343-route_law_minimal_activation_scaffold_v1: 15 cases, legal=FAIL, route=broken, design=smoke, context_risk=high
 - route_law_next_chunk_latent_carrier_boundary_v1 / 20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1: 15 cases, legal=FAIL, route=broken, design=endurance, context_risk=high
 - route_law_active_carrier_position_generalization_v1 / 20260613-191805-route_law_active_carrier_position_generalization_v1: 15 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
-- route_law_explicit_active_carrier_floor_confirmation_v1 / 20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1: 12 cases, legal=HOLD, route=unknown, design=endurance, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_explicit_active_carrier_floor_confirmation_v1__20260613-190753-route_law_explicit_active_carrier_floor_confirmation_v1.md
 - study/reviews/2026-06-13/route_law_active_carrier_position_generalization_v1__20260613-191805-route_law_active_carrier_position_generalization_v1.md
 - study/reviews/2026-06-13/route_law_next_chunk_latent_carrier_boundary_v1__20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1.md
+- study/reviews/2026-06-13/route_law_minimal_activation_scaffold_v1__20260613-194343-route_law_minimal_activation_scaffold_v1.md
 
 ## Planning rule
 

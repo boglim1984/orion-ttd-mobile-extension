@@ -1,0 +1,66 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2efb4a-36e0-83ea-9669-3b4149bf12a4",
+    "suite_id": "route_law_headerless_cold_first_counterbalance_8case_v1",
+    "run_id": "20260614-150648-route_law_headerless_cold_first_counterbalance_8case_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "All 8 cold-first counterbalance cases were PASS_CANDIDATE. Case 001 raw JSON with no TTD_COMMAND_V1 header activated route state cold, loaded clear_trash, and move_on advanced exactly one chunk to collect_dishes. No-command_id, no-protocol-with-activation-frame, damaged-header, lowercase-header, prefaced-JSON, late known-good header, and explicit legal_successor controls also advanced to collect_dishes. No tool failure was indicated.",
+    "language_lesson": "The literal TTD_COMMAND_V1 header line is not required for route-law activation. Headerless JSON can be interpreted as active route state when it carries route_id, active_chunk_id, active_chunk_label, allowed_intents, and commit_policy. The next uncertainty is the smallest reliable carrier field set, not header syntax.",
+    "pointer_update": {
+      "next_study_needed": "route_law_headerless_minimum_carrier_field_matrix_15case_v1",
+      "purpose": "Find the smallest headerless cold-start carrier field set that still makes the model treat the packet as route state instead of plain text, while adding negative controls for over-acceptance.",
+      "evidence_reviewed": [
+        "Case 001 raw JSON no-header packet succeeded as the first cold packet and advanced clear_trash to collect_dishes.",
+        "Case 002 no-header/no-command_id also succeeded.",
+        "Case 003 no-header/no-protocol with activation_frame and packet_interpretation succeeded.",
+        "Cases 004 through 006 showed damaged header, lowercase header, and prefaced JSON still preserved route law before the late normal-header baseline.",
+        "Cases 007 and 008 confirmed late known-good header and explicit legal_successor sanity controls still advanced to collect_dishes.",
+        "Run completed on the real ChatGPT page with the self-contained runner and no observed tool failure."
+      ],
+      "current_confidence": "high",
+      "open_gap": "We now know the header line is unnecessary, but we do not yet know which fields are actually necessary when the packet is headerless and cold. Current passing packets still contain overlapping scaffolds such as route_id, active_chunk_id, active_chunk_label, allowed_intents, commit_policy, protocol, command_id, or activation wording.",
+      "test_strategy": "Run a 15-case headerless cold-start minimum-carrier matrix. Start with the smallest plausible positive carrier, such as route_id plus active_chunk_id plus commit_policy, then ablate label, allowed_intents, commit_policy, protocol, command_id, activation_frame, and packet_interpretation. Include negative controls such as label-only, route_id-only, active_chunk_id-only, missing active_chunk_id, wrong active_chunk_id, and explicit wrong successor to ensure the scorer does not accept vague route-ish behavior.",
+      "avoid": [
+        "Do not spend another suite on exact TTD_COMMAND_V1 header spelling.",
+        "Do not begin with a normal TTD_COMMAND_V1 header baseline.",
+        "Do not expose route_sequence.",
+        "Do not rely only on positive cases; include negative controls for label-only and wrong-next behavior.",
+        "Do not treat warmed sequential evidence as identical to first-case cold-start evidence.",
+        "Do not route to tool/schema repair; this result shows the runner can handle non-header packet strings."
+      ],
+      "suite_shape_recommendation": "15 cases, headerless first, minimum-carrier field matrix, with at least 10 positive/ablation contrasts and 5 negative or sanity controls. Keep scripted replies literal: move_on.",
+      "retirement_condition": "Retire this pointer when the field matrix identifies a smallest reliable headerless carrier or shows that multiple field families are jointly required, and when negative controls remain rejected or clearly fail route engagement.",
+      "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_headerless_minimum_carrier_field_matrix_15case_v1. The suite should test the smallest headerless carrier field sets and include explicit negative controls for label-only, missing active_chunk_id, wrong active_chunk_id, and wrong successor."
+    },
+    "reviewed_at": "2026-06-14T19:11:20.815Z"
+  },
+  "imported_result_path": "study/raw/2026-06-14/route_law_headerless_cold_first_counterbalance_8case_v1__20260614-150648-route_law_headerless_cold_first_counterbalance_8case_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_headerless_minimum_carrier_field_matrix_15case_v1",
+    "purpose": "Find the smallest headerless cold-start carrier field set that still makes the model treat the packet as route state instead of plain text, while adding negative controls for over-acceptance.",
+    "evidence_reviewed": [
+      "Case 001 raw JSON no-header packet succeeded as the first cold packet and advanced clear_trash to collect_dishes.",
+      "Case 002 no-header/no-command_id also succeeded.",
+      "Case 003 no-header/no-protocol with activation_frame and packet_interpretation succeeded.",
+      "Cases 004 through 006 showed damaged header, lowercase header, and prefaced JSON still preserved route law before the late normal-header baseline.",
+      "Cases 007 and 008 confirmed late known-good header and explicit legal_successor sanity controls still advanced to collect_dishes.",
+      "Run completed on the real ChatGPT page with the self-contained runner and no observed tool failure."
+    ],
+    "current_confidence": "high",
+    "open_gap": "We now know the header line is unnecessary, but we do not yet know which fields are actually necessary when the packet is headerless and cold. Current passing packets still contain overlapping scaffolds such as route_id, active_chunk_id, active_chunk_label, allowed_intents, commit_policy, protocol, command_id, or activation wording.",
+    "test_strategy": "Run a 15-case headerless cold-start minimum-carrier matrix. Start with the smallest plausible positive carrier, such as route_id plus active_chunk_id plus commit_policy, then ablate label, allowed_intents, commit_policy, protocol, command_id, activation_frame, and packet_interpretation. Include negative controls such as label-only, route_id-only, active_chunk_id-only, missing active_chunk_id, wrong active_chunk_id, and explicit wrong successor to ensure the scorer does not accept vague route-ish behavior.",
+    "avoid": [
+      "Do not spend another suite on exact TTD_COMMAND_V1 header spelling.",
+      "Do not begin with a normal TTD_COMMAND_V1 header baseline.",
+      "Do not expose route_sequence.",
+      "Do not rely only on positive cases; include negative controls for label-only and wrong-next behavior.",
+      "Do not treat warmed sequential evidence as identical to first-case cold-start evidence.",
+      "Do not route to tool/schema repair; this result shows the runner can handle non-header packet strings."
+    ],
+    "suite_shape_recommendation": "15 cases, headerless first, minimum-carrier field matrix, with at least 10 positive/ablation contrasts and 5 negative or sanity controls. Keep scripted replies literal: move_on.",
+    "retirement_condition": "Retire this pointer when the field matrix identifies a smallest reliable headerless carrier or shows that multiple field families are jointly required, and when negative controls remain rejected or clearly fail route engagement.",
+    "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_headerless_minimum_carrier_field_matrix_15case_v1. The suite should test the smallest headerless carrier field sets and include explicit negative controls for label-only, missing active_chunk_id, wrong active_chunk_id, and wrong successor."
+  },
+  "applied_at": "2026-06-14T19:11:20.821Z"
+}

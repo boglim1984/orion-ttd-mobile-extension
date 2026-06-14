@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_headerless_cold_first_counterbalance_8case_v1
+- Next study: route_law_headerless_minimum_carrier_field_matrix_15case_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
 - Current confidence: high
-- Open gap: This suite proves header-line ablation works in a sequential run that begins with a known-good header baseline. It does not fully isolate cold-start headerless activation because later no-header cases may benefit from route-law warming or carryover from case 001.
-- Suite shape recommendation: 8 cases, no-header cold-first order, with normal header baseline delayed until late in the suite and explicit legal_successor sanity at the end.
+- Open gap: We now know the header line is unnecessary, but we do not yet know which fields are actually necessary when the packet is headerless and cold. Current passing packets still contain overlapping scaffolds such as route_id, active_chunk_id, active_chunk_label, allowed_intents, commit_policy, protocol, command_id, or activation wording.
+- Suite shape recommendation: 15 cases, headerless first, minimum-carrier field matrix, with at least 10 positive/ablation contrasts and 5 negative or sanity controls. Keep scripted replies literal: move_on.
 
 ## Evidence summary
 
-- Imported run count: 40
-- Imported case count: 439
-- Matrix row count: 439
-- Latest imported suite ID: route_law_header_line_ablation_route_active_carrier_8case_v1
-- Latest imported run ID: 20260614-145709-route_law_header_line_ablation_route_active_carrier_8case_v1
+- Imported run count: 41
+- Imported case count: 447
+- Matrix row count: 447
+- Latest imported suite ID: route_law_headerless_cold_first_counterbalance_8case_v1
+- Latest imported run ID: 20260614-150648-route_law_headerless_cold_first_counterbalance_8case_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_headerless_cold_first_counterbalance_8case_v1 / 20260614-150648-route_law_headerless_cold_first_counterbalance_8case_v1: 8 cases, legal=PASS, route=survived, design=smoke, context_risk=high
 - route_law_header_line_ablation_route_active_carrier_8case_v1 / 20260614-145709-route_law_header_line_ablation_route_active_carrier_8case_v1: 8 cases, legal=PASS, route=survived, design=smoke, context_risk=high
 - validator_header_capability_probe_v1 / 20260614-144844-validator_header_capability_probe_v1: 2 cases, legal=PASS, route=survived, design=smoke, context_risk=low
-- route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1 / 20260614-144052-route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1: 8 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-14/route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1__20260614-144052-route_law_protocol_activation_frame_ablation_route_active_carrier_8case_v1.md
 - study/reviews/2026-06-14/validator_header_capability_probe_v1__20260614-144844-validator_header_capability_probe_v1.md
 - study/reviews/2026-06-14/route_law_header_line_ablation_route_active_carrier_8case_v1__20260614-145709-route_law_header_line_ablation_route_active_carrier_8case_v1.md
+- study/reviews/2026-06-14/route_law_headerless_cold_first_counterbalance_8case_v1__20260614-150648-route_law_headerless_cold_first_counterbalance_8case_v1.md
 
 ## Planning rule
 

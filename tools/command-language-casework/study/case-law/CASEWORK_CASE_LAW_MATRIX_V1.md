@@ -13,9 +13,9 @@ Generated from `study/raw/` and review presence in `study/reviews/`.
 
 ## Current Snapshot
 
-- Row count: 243
-- Source run count: 26
-- Classification counts: {"PASS_CANDIDATE":163,"FAIL_INVENTED_PROGRESS":1,"HOLD_NEEDS_REVIEW":58,"FAIL_LOST_ROUTE":21}
+- Row count: 261
+- Source run count: 27
+- Classification counts: {"PASS_CANDIDATE":173,"FAIL_INVENTED_PROGRESS":1,"HOLD_NEEDS_REVIEW":66,"FAIL_LOST_ROUTE":21}
 
 ## Legal Mapping
 

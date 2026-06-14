@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_minimum_frame_cold_order_isolation_v1
+**Next Study Needed**: route_law_route_id_commit_policy_inference_isolation_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: route_law_protocol_activation_frame_minimum_v1 completed with 18 responded cases and no apparent runner send failure. | Full, ablated, minimal, and carrier-only route_sequence/legal_successor cases produced explicit collect_dishes movement. | No-active sentinels produced no movement, preserving the active_chunk_id boundary. | The active-only trap unexpectedly produced collect_dishes despite lacking route_sequence or legal_successor carrier fields. | Route_id-only and next_chunk-authority traps produced no movement, so next_chunk did not become authority in this run.
+**Evidence reviewed**: Cold active-only trap min_frame_cold_001 stayed on clear_trash after move_on, showing active_chunk_id alone did not authorize movement. | Late active-only repeat min_frame_late_013 also stayed on clear_trash after positive anchors, showing no active-only carryover movement in this run. | No-active route_id, next_chunk, legal_successor, and route_sequence sentinels produced no active chunk behavior, preserving the active_chunk_id boundary. | Carrier positives min_frame_anchor_007 through min_frame_anchor_012 advanced clear_trash to collect_dishes, confirming route_sequence/legal_successor carrier frames still work. | Active plus route_id plus wrong-next trap min_frame_cold_006 advanced to collect_dishes despite lacking route_sequence or legal_successor and despite next_chunk_id pointing at stack_papers. | Late repeat min_frame_late_018 reproduced the same collect_dishes movement, so the implicit route-memory gap is stable enough to isolate next.
 **Current confidence**: medium
-**Open gap**: It is still unknown whether a stripped active-only packet can truly authorize successor movement in a cold context, or whether case 015 was caused by prior same-chat exposure to collect_dishes and the desk-reset route.
-**Test strategy**: Run an order-isolated suite that puts active-only, route_id-only, and next_chunk-only traps before any positive successor-carrier examples, then repeats the same traps after positives. Keep carrier-only route_sequence and legal_successor positives as anchors, but counterbalance early and late positions so carryover can be measured directly.
-**Avoid / do not repeat**: Do not count late active-only collect_dishes as proof of a valid minimum frame without cold-first confirmation. | Do not let heuristic FAIL_LOST_ROUTE labels hide safety-success negative controls that correctly produce no movement. | Do not retest broad successor-source matrices. | Do not mix scorer repair with this language-boundary suite. | Do not treat next_chunk_id as authority. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 18 cases. Start with cold active-only, route_id-only, next_chunk-only, and no-active traps before any collect_dishes carrier exposure; then run carrier-only route_sequence/legal_successor positives; then repeat the same traps late to measure carryover.
-**Retirement condition**: Retire when cold active-only and route_id-only traps remain inert, carrier-only successor frames still produce collect_dishes, no-active sentinels remain inert, and late repeats quantify whether carryover changes negative-control behavior.
-**Next action for fresh chat**: Generate a validator-ready route_law_minimum_frame_cold_order_isolation_v1 suite focused on cold-first negative controls versus late repeats, with carrier-only successor positives used only as controlled anchors.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_protocol_activation_frame_minimum_v1 result 20260613-211109-route_law_protocol_activation_frame_minimum_v1.
+**Open gap**: It is unknown whether the collect_dishes movement in active+route_id+commit_policy traps comes from route_id knowledge, generic one-step commit-policy wording, prior exposure to collect_dishes in earlier no-active packets, or some combination of those fields.
+**Test strategy**: Run a cold-first factor-isolation suite with active_chunk_id present throughout, varying route_id, commit_policy wording, wrong next_chunk noise, and explicit no-successor wording before any packet exposes collect_dishes. Include late repeats after positive anchors to measure carryover. Keep no-active sentinels as safety controls and route_sequence/legal_successor positives as anchors.
+**Avoid / do not repeat**: Do not expose collect_dishes in early negative controls before the first active+route_id+commit_policy isolation cases. | Do not count heuristic PASS_CANDIDATE on active+wrong-next traps as true pass when the expected behavior forbids invented collect_dishes. | Do not treat next_chunk_id as authority. | Do not retest broad ablation matrices. | Do not mix scorer repair with this language-boundary suite. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 18 cases. Start with active_chunk_id-only, active+route_id, active+commit_policy-only, active+route_id+commit_policy, and active+wrong-next variants before any collect_dishes exposure. Then introduce controlled route_sequence/legal_successor positives. End with mirrored late repeats to quantify carryover.
+**Retirement condition**: Retire when the study can say which exact field combination first causes inferred collect_dishes movement without route_sequence/legal_successor, while no-active sentinels remain inert and explicit carrier positives still advance correctly.
+**Next action for fresh chat**: Generate a validator-ready route_law_route_id_commit_policy_inference_isolation_v1 suite focused on active_chunk_id plus route_id plus commit_policy factor isolation, with no early collect_dishes exposure before the critical negative controls.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_minimum_frame_cold_order_isolation_v1 result 20260613-212351-route_law_minimum_frame_cold_order_isolation_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-14
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-14T01:17:52.154Z
-- Run count: 26
-- Case count: 243
-- Latest suite ID: route_law_protocol_activation_frame_minimum_v1
-- Latest run ID: 20260613-211109-route_law_protocol_activation_frame_minimum_v1
-- Classification counts: {"PASS_CANDIDATE":163,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":21,"HOLD_NEEDS_REVIEW":58}
+- Last tabulated at: 2026-06-14T01:32:51.515Z
+- Run count: 27
+- Case count: 261
+- Latest suite ID: route_law_minimum_frame_cold_order_isolation_v1
+- Latest run ID: 20260613-212351-route_law_minimum_frame_cold_order_isolation_v1
+- Classification counts: {"PASS_CANDIDATE":173,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":21,"HOLD_NEEDS_REVIEW":66}
 - Open findings count: 0
-- Case-law matrix rows: 243
+- Case-law matrix rows: 261
 
 ## Open findings
 Generated and/or manually curated.

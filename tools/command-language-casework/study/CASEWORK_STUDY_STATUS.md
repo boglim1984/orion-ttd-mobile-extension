@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_header_line_ablation_route_active_carrier_8case_v1
+**Next Study Needed**: route_law_headerless_cold_first_counterbalance_8case_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: Case 001 known-good TTD_COMMAND_V1 header packet activated clear_trash and move_on advanced to collect_dishes. | Case 002 raw JSON packet without the first-line TTD_COMMAND_V1 header activated clear_trash and move_on advanced to collect_dishes. | Run completed with no warnings or errors and both cases were PASS_CANDIDATE.
-**Current confidence**: medium
-**Open gap**: We know raw JSON without the header is runnable and worked in a minimal probe, but we have not yet isolated damaged headers, lowercase/variant headers, natural-language prefaces, protocol-only no-header packets, activation wording without header, or explicit legal_successor sanity inside a balanced suite.
-**Test strategy**: Generate and run the 8-case header-line ablation suite around route_id plus active_chunk_id: known-good header baseline, raw JSON no header, damaged header, lowercase or variant header, natural-language preface plus JSON, JSON protocol-only activation without header, activation wording without header, and final explicit legal_successor sanity.
-**Avoid / do not repeat**: Do not pause for tool/schema repair; Gate 1 passed. | Do not retest JSON protocol or command_id as the main question. | Do not expose route_sequence. | Do not let next_chunk_id become authority. | Do not keep every case starting with TTD_COMMAND_V1 if the research question is header-line ablation. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 8 cases, focused header-line ablation, with raw JSON and damaged/variant header contrasts plus one final explicit legal_successor sanity control.
-**Retirement condition**: Retire this pointer when the 8-case run shows whether the first-line TTD_COMMAND_V1 header is required for activation, whether raw JSON route_id plus active_chunk_id reliably activates without the header, and whether damaged or variant headers fail gracefully or preserve route law.
-**Next action for fresh chat**: Generate validator-ready suite JSON for route_law_header_line_ablation_route_active_carrier_8case_v1 using the current runner schema. Gate 1 is already passed, so proceed to Gate 2.
-**Source**: Post-run CASEWORK_REVIEW_V1 for validator_header_capability_probe_v1 result 20260614-144844-validator_header_capability_probe_v1.
+**Evidence reviewed**: Case 001 known-good TTD_COMMAND_V1 header baseline activated clear_trash and move_on advanced to collect_dishes. | Case 002 raw JSON no-header packet activated clear_trash and move_on advanced to collect_dishes. | Case 003 damaged header and case 004 lowercase variant header both preserved route law and advanced to collect_dishes. | Cases 005 through 007 showed preface plus JSON, no-header/no-command_id, and no-header/no-protocol activation wording all preserved route law. | Case 008 explicit legal_successor sanity advanced to collect_dishes. | Run completed with no warnings or errors and all eight cases were PASS_CANDIDATE.
+**Current confidence**: high
+**Open gap**: This suite proves header-line ablation works in a sequential run that begins with a known-good header baseline. It does not fully isolate cold-start headerless activation because later no-header cases may benefit from route-law warming or carryover from case 001.
+**Test strategy**: Run an 8-case cold-first counterbalance suite where the first packets are headerless before any normal TTD_COMMAND_V1 baseline appears: raw JSON no header first, lowercase/damaged/prefaced variants early, no protocol/activation wording early, then a late known-good header baseline and explicit legal_successor sanity control.
+**Avoid / do not repeat**: Do not start the next suite with a known-good TTD_COMMAND_V1 header baseline. | Do not expose route_sequence. | Do not retest JSON protocol or command_id as the main question unless they are part of cold-first counterbalancing. | Do not treat warmed sequential evidence as identical to cold-start evidence. | Do not route to tool/schema repair; the validator and runner already support non-header packet strings. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 8 cases, no-header cold-first order, with normal header baseline delayed until late in the suite and explicit legal_successor sanity at the end.
+**Retirement condition**: Retire this pointer when a no-header or damaged-header packet succeeds or fails as the first cold packet, establishing whether headerless route activation is independent of prior header-warmed context.
+**Next action for fresh chat**: Generate validator-ready suite JSON for route_law_headerless_cold_first_counterbalance_8case_v1. The suite should deliberately place raw JSON no-header as case 001 and delay the normal TTD_COMMAND_V1 header baseline.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_header_line_ablation_route_active_carrier_8case_v1 result 20260614-145709-route_law_header_line_ablation_route_active_carrier_8case_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-14
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-14T18:54:25.963Z
-- Run count: 39
-- Case count: 431
-- Latest suite ID: validator_header_capability_probe_v1
-- Latest run ID: 20260614-144844-validator_header_capability_probe_v1
-- Classification counts: {"PASS_CANDIDATE":310,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":31,"HOLD_NEEDS_REVIEW":89}
+- Last tabulated at: 2026-06-14T19:03:54.890Z
+- Run count: 40
+- Case count: 439
+- Latest suite ID: route_law_header_line_ablation_route_active_carrier_8case_v1
+- Latest run ID: 20260614-145709-route_law_header_line_ablation_route_active_carrier_8case_v1
+- Classification counts: {"PASS_CANDIDATE":318,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":31,"HOLD_NEEDS_REVIEW":89}
 - Open findings count: 0
-- Case-law matrix rows: 431
+- Case-law matrix rows: 439
 
 ## Open findings
 Generated and/or manually curated.

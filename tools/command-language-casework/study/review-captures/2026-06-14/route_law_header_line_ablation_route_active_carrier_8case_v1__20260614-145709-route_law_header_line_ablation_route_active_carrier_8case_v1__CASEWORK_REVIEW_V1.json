@@ -1,0 +1,64 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b/c/6a2ef6d7-e698-83ea-8c67-c80995e43f12",
+    "suite_id": "route_law_header_line_ablation_route_active_carrier_8case_v1",
+    "run_id": "20260614-145709-route_law_header_line_ablation_route_active_carrier_8case_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The 8-case header-line ablation suite completed cleanly with no warnings or errors. All cases were PASS_CANDIDATE and advanced from clear_trash to collect_dishes, including raw JSON with no first-line header, damaged header, lowercase header, natural-language preface plus JSON, protocol-only no-header/no-command_id, no-header/no-protocol activation wording, and explicit legal_successor sanity.",
+    "language_lesson": "The first-line TTD_COMMAND_V1 header is not required for route-law behavior in this sequential warmed run. Route state survived across header absence, header damage, header case variation, natural-language preface, and stripped protocol scaffolding when route_id, active_chunk_id, allowed intents, and/or activation wording remained available. The next uncertainty is whether no-header packets work equally well as the first cold packet before any known-good header warms the chat.",
+    "pointer_update": {
+      "next_study_needed": "route_law_headerless_cold_first_counterbalance_8case_v1",
+      "purpose": "Confirm whether headerless route-state packets activate from a cold first case, before any normal TTD_COMMAND_V1 header baseline appears in the disposable runner chat.",
+      "evidence_reviewed": [
+        "Case 001 known-good TTD_COMMAND_V1 header baseline activated clear_trash and move_on advanced to collect_dishes.",
+        "Case 002 raw JSON no-header packet activated clear_trash and move_on advanced to collect_dishes.",
+        "Case 003 damaged header and case 004 lowercase variant header both preserved route law and advanced to collect_dishes.",
+        "Cases 005 through 007 showed preface plus JSON, no-header/no-command_id, and no-header/no-protocol activation wording all preserved route law.",
+        "Case 008 explicit legal_successor sanity advanced to collect_dishes.",
+        "Run completed with no warnings or errors and all eight cases were PASS_CANDIDATE."
+      ],
+      "current_confidence": "high",
+      "open_gap": "This suite proves header-line ablation works in a sequential run that begins with a known-good header baseline. It does not fully isolate cold-start headerless activation because later no-header cases may benefit from route-law warming or carryover from case 001.",
+      "test_strategy": "Run an 8-case cold-first counterbalance suite where the first packets are headerless before any normal TTD_COMMAND_V1 baseline appears: raw JSON no header first, lowercase/damaged/prefaced variants early, no protocol/activation wording early, then a late known-good header baseline and explicit legal_successor sanity control.",
+      "avoid": [
+        "Do not start the next suite with a known-good TTD_COMMAND_V1 header baseline.",
+        "Do not expose route_sequence.",
+        "Do not retest JSON protocol or command_id as the main question unless they are part of cold-first counterbalancing.",
+        "Do not treat warmed sequential evidence as identical to cold-start evidence.",
+        "Do not route to tool/schema repair; the validator and runner already support non-header packet strings."
+      ],
+      "suite_shape_recommendation": "8 cases, no-header cold-first order, with normal header baseline delayed until late in the suite and explicit legal_successor sanity at the end.",
+      "retirement_condition": "Retire this pointer when a no-header or damaged-header packet succeeds or fails as the first cold packet, establishing whether headerless route activation is independent of prior header-warmed context.",
+      "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_headerless_cold_first_counterbalance_8case_v1. The suite should deliberately place raw JSON no-header as case 001 and delay the normal TTD_COMMAND_V1 header baseline."
+    },
+    "reviewed_at": "2026-06-14T19:03:54.415Z"
+  },
+  "imported_result_path": "study/raw/2026-06-14/route_law_header_line_ablation_route_active_carrier_8case_v1__20260614-145709-route_law_header_line_ablation_route_active_carrier_8case_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_headerless_cold_first_counterbalance_8case_v1",
+    "purpose": "Confirm whether headerless route-state packets activate from a cold first case, before any normal TTD_COMMAND_V1 header baseline appears in the disposable runner chat.",
+    "evidence_reviewed": [
+      "Case 001 known-good TTD_COMMAND_V1 header baseline activated clear_trash and move_on advanced to collect_dishes.",
+      "Case 002 raw JSON no-header packet activated clear_trash and move_on advanced to collect_dishes.",
+      "Case 003 damaged header and case 004 lowercase variant header both preserved route law and advanced to collect_dishes.",
+      "Cases 005 through 007 showed preface plus JSON, no-header/no-command_id, and no-header/no-protocol activation wording all preserved route law.",
+      "Case 008 explicit legal_successor sanity advanced to collect_dishes.",
+      "Run completed with no warnings or errors and all eight cases were PASS_CANDIDATE."
+    ],
+    "current_confidence": "high",
+    "open_gap": "This suite proves header-line ablation works in a sequential run that begins with a known-good header baseline. It does not fully isolate cold-start headerless activation because later no-header cases may benefit from route-law warming or carryover from case 001.",
+    "test_strategy": "Run an 8-case cold-first counterbalance suite where the first packets are headerless before any normal TTD_COMMAND_V1 baseline appears: raw JSON no header first, lowercase/damaged/prefaced variants early, no protocol/activation wording early, then a late known-good header baseline and explicit legal_successor sanity control.",
+    "avoid": [
+      "Do not start the next suite with a known-good TTD_COMMAND_V1 header baseline.",
+      "Do not expose route_sequence.",
+      "Do not retest JSON protocol or command_id as the main question unless they are part of cold-first counterbalancing.",
+      "Do not treat warmed sequential evidence as identical to cold-start evidence.",
+      "Do not route to tool/schema repair; the validator and runner already support non-header packet strings."
+    ],
+    "suite_shape_recommendation": "8 cases, no-header cold-first order, with normal header baseline delayed until late in the suite and explicit legal_successor sanity at the end.",
+    "retirement_condition": "Retire this pointer when a no-header or damaged-header packet succeeds or fails as the first cold packet, establishing whether headerless route activation is independent of prior header-warmed context.",
+    "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_headerless_cold_first_counterbalance_8case_v1. The suite should deliberately place raw JSON no-header as case 001 and delay the normal TTD_COMMAND_V1 header baseline."
+  },
+  "applied_at": "2026-06-14T19:03:54.423Z"
+}

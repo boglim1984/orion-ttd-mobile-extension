@@ -682,6 +682,44 @@
     "isolated_case_count": 1
   },
   {
+    "suite_id": "route_law_successor_source_isolation_v1",
+    "run_id": "20260613-204037-route_law_successor_source_isolation_v1",
+    "imported_at": "2026-06-14T00:40:50.597Z",
+    "raw_result_path": "study/raw/2026-06-13/route_law_successor_source_isolation_v1__20260613-204037-route_law_successor_source_isolation_v1.json",
+    "review_path": "study/reviews/2026-06-13/route_law_successor_source_isolation_v1__20260613-204037-route_law_successor_source_isolation_v1.md",
+    "case_count": 18,
+    "classification_counts": {
+      "PASS_CANDIDATE": 16,
+      "HOLD_NEEDS_REVIEW": 2
+    },
+    "status_counts": {
+      "RESPONDED": 18
+    },
+    "has_dom_turn_trace": true,
+    "warnings_errors_count": 0,
+    "suspected_tool_findings": 0,
+    "legal_verdict_counts": {
+      "PASS": 16,
+      "HOLD": 2
+    },
+    "route_survival_counts": {
+      "survived": 16,
+      "unknown": 2
+    },
+    "legal_verdict": "HOLD",
+    "route_survival_outcome": "unknown",
+    "suite_case_count": 18,
+    "suite_design_type": "matrix",
+    "suite_context_risk": "high",
+    "max_approximate_chat_turn_depth_before_case": 51,
+    "negative_control_positions": [
+      "middle",
+      "late"
+    ],
+    "carryover_case_count": 17,
+    "isolated_case_count": 1
+  },
+  {
     "suite_id": "scorer_keyword_extraction_v2",
     "run_id": "20260613-001420-scorer_keyword_extraction_v2",
     "imported_at": "2026-06-13T04:14:36.910Z",

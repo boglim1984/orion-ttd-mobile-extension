@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_successor_source_isolation_v1
+- Next study: route_law_successor_source_counterbalanced_cold_retest_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-- Current confidence: high
-- Open gap: The activation gate is now clear, but the successor source is not. It is unknown whether route_id itself resolves the route, whether the model is using ambient knowledge of desk-reset-v0, whether legal_successor_chunk_id can safely replace route_id, or whether route_sequence is required for novel/non-memorized routes.
-- Suite shape recommendation: 15 to 18 cases focused on successor-source isolation: active_chunk_id held constant, vary only successor-source fields, include route_id-vs-legal_successor conflicts, route_sequence-vs-next_chunk conflicts, and at least one novel synthetic route to test whether route_id is memorized or actually parsed.
+- Current confidence: medium
+- Open gap: The model clearly follows route law once enough route context is present, but the true minimum cold successor carrier remains unknown. It is not yet isolated whether route_id alone can resolve a novel route, whether route_sequence is required, whether legal_successor_chunk_id is sufficient, or whether apparent route_id-only success came from prior-case carryover.
+- Suite shape recommendation: 18 to 24 cases. Use three or four synthetic routes with different first and second chunks. Counterbalance order: route_id-only cold first for one route, route_sequence-only cold first for another, legal_successor-only cold first for another, and active-only/no-successor controls before any exposure. Include wrong-next conflicts and late no-active sentinels.
 
 ## Evidence summary
 
-- Imported run count: 23
-- Imported case count: 187
-- Matrix row count: 187
-- Latest imported suite ID: route_law_cold_start_gating_isolation_v1
-- Latest imported run ID: 20260613-202902-route_law_cold_start_gating_isolation_v1
+- Imported run count: 24
+- Imported case count: 205
+- Matrix row count: 205
+- Latest imported suite ID: route_law_successor_source_isolation_v1
+- Latest imported run ID: 20260613-204037-route_law_successor_source_isolation_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_successor_source_isolation_v1 / 20260613-204037-route_law_successor_source_isolation_v1: 18 cases, legal=HOLD, route=unknown, design=matrix, context_risk=high
 - route_law_cold_start_gating_isolation_v1 / 20260613-202902-route_law_cold_start_gating_isolation_v1: 18 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 - route_law_protocol_activation_frame_v1 / 20260613-201524-route_law_protocol_activation_frame_v1: 17 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
-- route_law_minimal_activation_scaffold_v1 / 20260613-194343-route_law_minimal_activation_scaffold_v1: 15 cases, legal=FAIL, route=broken, design=smoke, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_minimal_activation_scaffold_v1__20260613-194343-route_law_minimal_activation_scaffold_v1.md
 - study/reviews/2026-06-13/route_law_protocol_activation_frame_v1__20260613-201524-route_law_protocol_activation_frame_v1.md
 - study/reviews/2026-06-13/route_law_cold_start_gating_isolation_v1__20260613-202902-route_law_cold_start_gating_isolation_v1.md
+- study/reviews/2026-06-13/route_law_successor_source_isolation_v1__20260613-204037-route_law_successor_source_isolation_v1.md
 
 ## Planning rule
 

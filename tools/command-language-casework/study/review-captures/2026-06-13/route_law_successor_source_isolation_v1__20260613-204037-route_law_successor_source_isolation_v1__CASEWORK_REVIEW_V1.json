@@ -1,0 +1,62 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a2df7b8-8bc0-83ea-b4be-4e18ecd9ce44",
+    "suite_id": "route_law_successor_source_isolation_v1",
+    "run_id": "20260613-204037-route_law_successor_source_isolation_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "Runner health was good and the language behavior was strong: 18/18 cases responded, no tool failure was apparent, desk-reset positive and conflict cases advanced clear_trash to collect_dishes, wrong next_chunk hints did not win, and no-active sentinels stayed inert with No active chunk. However, the suite does not fully identify the minimum successor-source carrier because the active-only control still included route_id and the synthetic route_id-only case ran after a synthetic sequence case, creating a carryover confound.",
+    "language_lesson": "Active_chunk_id now reliably activates route-state behavior, and the model strongly prefers the legal successor over unsafe wrong next_chunk hints. The remaining problem is not route-law survival but cold successor-source attribution: we still need to distinguish true field authority from route_id memorization, sequence carryover, and prior-case teaching.",
+    "pointer_update": {
+      "next_study_needed": "route_law_successor_source_counterbalanced_cold_retest_v1",
+      "purpose": "Retest successor-source authority with clean active-only controls and counterbalanced synthetic-route order so route_id, route_sequence, legal_successor_chunk_id, and wrong next_chunk hints can be separated without carryover contamination.",
+      "evidence_reviewed": [
+        "route_law_successor_source_isolation_v1 completed with 18 responded cases and no apparent runner send failure.",
+        "Desk-reset positive and conflict cases generally advanced clear_trash to collect_dishes, including wrong-next conflict cases where stack_papers was ignored.",
+        "No-active sentinel cases 012 and 018 stayed inert with No active chunk, reducing concern about broad carryover-driven movement.",
+        "Case 001 was intended as active-only but still included route_id, so it cannot prove active_chunk_id alone supplies successor resolution.",
+        "Synthetic route_id-only case 014 advanced gather_books to align_spines after case 013 had already supplied the synthetic route_sequence, so it may reflect cross-case route teaching rather than route_id-only authority."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "The model clearly follows route law once enough route context is present, but the true minimum cold successor carrier remains unknown. It is not yet isolated whether route_id alone can resolve a novel route, whether route_sequence is required, whether legal_successor_chunk_id is sufficient, or whether apparent route_id-only success came from prior-case carryover.",
+      "test_strategy": "Run a counterbalanced cold retest with multiple synthetic routes and paired order inversions. Include true active_chunk_id-only cases with no route_id, no route_sequence, no legal_successor, and no next_chunk. Test route_id-only before any sequence exposure for one synthetic route, route_sequence-only before any route_id exposure for another, and legal_successor-only before either route_id or sequence exposure for a third. Repeat wrong-next conflicts after each clean carrier source. Include no-active sentinels at beginning, middle, and end.",
+      "avoid": [
+        "Do not call a case active-only if route_id is present.",
+        "Do not place route_id-only synthetic cases after a route_sequence case for the same synthetic route.",
+        "Do not reuse one synthetic route across all carrier tests without counterbalancing order.",
+        "Do not treat PASS_CANDIDATE in a taught synthetic route as proof of cold route_id authority.",
+        "Do not let next_chunk_id become an authority except as an explicit unsafe-hint probe."
+      ],
+      "suite_shape_recommendation": "18 to 24 cases. Use three or four synthetic routes with different first and second chunks. Counterbalance order: route_id-only cold first for one route, route_sequence-only cold first for another, legal_successor-only cold first for another, and active-only/no-successor controls before any exposure. Include wrong-next conflicts and late no-active sentinels.",
+      "retirement_condition": "Retire when a clean cold carrier is identified: one field set reliably advances active_chunk_id to the intended legal successor before any prior exposure, absent successor fields do not produce full legal advancement, and wrong next_chunk hints are ignored across both desk-reset and novel synthetic routes.",
+      "next_action_for_fresh_chat": "Generate a validator-ready route_law_successor_source_counterbalanced_cold_retest_v1 suite with true active-only controls, multiple synthetic routes, cold first-exposure carrier tests, counterbalanced order, wrong-next conflicts, and no-active sentinels."
+    },
+    "reviewed_at": "2026-06-14T00:48:20.885Z"
+  },
+  "imported_result_path": "study/raw/2026-06-13/route_law_successor_source_isolation_v1__20260613-204037-route_law_successor_source_isolation_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_successor_source_counterbalanced_cold_retest_v1",
+    "purpose": "Retest successor-source authority with clean active-only controls and counterbalanced synthetic-route order so route_id, route_sequence, legal_successor_chunk_id, and wrong next_chunk hints can be separated without carryover contamination.",
+    "evidence_reviewed": [
+      "route_law_successor_source_isolation_v1 completed with 18 responded cases and no apparent runner send failure.",
+      "Desk-reset positive and conflict cases generally advanced clear_trash to collect_dishes, including wrong-next conflict cases where stack_papers was ignored.",
+      "No-active sentinel cases 012 and 018 stayed inert with No active chunk, reducing concern about broad carryover-driven movement.",
+      "Case 001 was intended as active-only but still included route_id, so it cannot prove active_chunk_id alone supplies successor resolution.",
+      "Synthetic route_id-only case 014 advanced gather_books to align_spines after case 013 had already supplied the synthetic route_sequence, so it may reflect cross-case route teaching rather than route_id-only authority."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "The model clearly follows route law once enough route context is present, but the true minimum cold successor carrier remains unknown. It is not yet isolated whether route_id alone can resolve a novel route, whether route_sequence is required, whether legal_successor_chunk_id is sufficient, or whether apparent route_id-only success came from prior-case carryover.",
+    "test_strategy": "Run a counterbalanced cold retest with multiple synthetic routes and paired order inversions. Include true active_chunk_id-only cases with no route_id, no route_sequence, no legal_successor, and no next_chunk. Test route_id-only before any sequence exposure for one synthetic route, route_sequence-only before any route_id exposure for another, and legal_successor-only before either route_id or sequence exposure for a third. Repeat wrong-next conflicts after each clean carrier source. Include no-active sentinels at beginning, middle, and end.",
+    "avoid": [
+      "Do not call a case active-only if route_id is present.",
+      "Do not place route_id-only synthetic cases after a route_sequence case for the same synthetic route.",
+      "Do not reuse one synthetic route across all carrier tests without counterbalancing order.",
+      "Do not treat PASS_CANDIDATE in a taught synthetic route as proof of cold route_id authority.",
+      "Do not let next_chunk_id become an authority except as an explicit unsafe-hint probe."
+    ],
+    "suite_shape_recommendation": "18 to 24 cases. Use three or four synthetic routes with different first and second chunks. Counterbalance order: route_id-only cold first for one route, route_sequence-only cold first for another, legal_successor-only cold first for another, and active-only/no-successor controls before any exposure. Include wrong-next conflicts and late no-active sentinels.",
+    "retirement_condition": "Retire when a clean cold carrier is identified: one field set reliably advances active_chunk_id to the intended legal successor before any prior exposure, absent successor fields do not produce full legal advancement, and wrong next_chunk hints are ignored across both desk-reset and novel synthetic routes.",
+    "next_action_for_fresh_chat": "Generate a validator-ready route_law_successor_source_counterbalanced_cold_retest_v1 suite with true active-only controls, multiple synthetic routes, cold first-exposure carrier tests, counterbalanced order, wrong-next conflicts, and no-active sentinels."
+  },
+  "applied_at": "2026-06-14T00:48:20.895Z"
+}

@@ -2,18 +2,19 @@
   "study_id": "command-language-casework-v1",
   "status_schema_version": 1,
   "manual_next_study": {
-    "next_study_needed": "route_law_no_route_substrate_cold_isolation_v1",
+    "next_study_needed": "route_law_order_context_counterbalance_v1",
     "next_study_purpose": "Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.",
     "evidence_reviewed": [
-      "combined_floor_001, 002, and 003 showed marker plus route_id plus active_chunk_id advances clear_trash to collect_dishes, with command_id optional.",
-      "combined_floor_004, 005, 006, 007, 009, and 011 unexpectedly advanced to collect_dishes despite missing route_id, missing active_chunk_id, damaged active_chunk_id, or label-only/conflicting active-state forms.",
-      "combined_floor_008 route_id-only held with cannot_move_on_without_active_chunk_id, confirming active_chunk_id is more important than route_id for movement.",
-      "combined_floor_010 and 013 showed wrong next_chunk_id=stack_papers did not become authority when route_id plus active_chunk_id were present.",
-      "combined_floor_017 and 018 confirmed late known-good stripped carrier and explicit legal-successor controls still advanced correctly."
+      "no_route_cold_001 and 002 held with no active_chunk_id rather than inventing route movement.",
+      "no_route_cold_003 and 004 held at clear_trash with active_chunk_id present but no route/legal successor.",
+      "no_route_cold_005, 006, and 015 held on label-only forms; heuristic FAIL_LOST_ROUTE should be treated as scorer/review artifact rather than language advancement.",
+      "no_route_cold_009 route_id + active_chunk_id unexpectedly held instead of advancing to collect_dishes.",
+      "no_route_cold_010 ignored wrong next_chunk_id but still held because no route sequence or legal successor was provided.",
+      "no_route_cold_018 explicit legal_successor advanced to collect_dishes, proving the runner and route language surface still work."
     ],
     "current_confidence": "medium",
-    "open_gap": "It is not yet clear whether no-route and label-only movement is true cold behavior, suite-order carryover, semantic memory of desk-reset-v0, or a scorer/design artifact caused by placing positive floor cases before negative controls.",
-    "test_strategy": "Run an 18-case negative-first cold isolation suite. Put active_chunk_id-only, command_id+active_chunk_id-only, active_chunk_label-only, route_id+label-only, damaged active_chunk_id, and conflicting active-state/no-route packets in the first positions before any route_id+active_chunk_id positive example. Then introduce the suspected floor and wrong-next traps later as controls. Counterbalance repeats of no-route packets after the positive controls to measure warming/carryover.",
+    "open_gap": "It remains unknown whether route_id + active_chunk_id is a true minimum carrier when presented first, or whether the carrier only failed here because the negative-first cases primed missing-state guard behavior.",
+    "test_strategy": "Generate a positive-first counterbalance suite. Put route_id + active_chunk_id stripped carrier and wrong-next trap in the first positions before any no-route or label-only negative probes. Then run the same no-route/damaged/label probes and repeat the stripped carrier after them. Keep legal_successor hidden until the final sanity control.",
     "recommended_cases": [
       "strict full-field control for move_on from clear_trash to collect_dishes",
       "relaxed baseline matching the passing relaxed move_on shape",
@@ -31,22 +32,22 @@
     ],
     "avoid": [
       "Do not expose route_sequence.",
-      "Do not expose legal_successor_chunk_id until late positive controls.",
-      "Do not place route_id+active_chunk_id positive cases before the first no-route negative controls.",
-      "Do not let keyword-only collect_dishes detection mark a negative-control breach as clean PASS without manual review.",
-      "Do not assume missing route_id is a hard guard based on prior single-family ablations."
+      "Do not expose legal_successor_chunk_id before the final positive sanity control.",
+      "Do not treat PASS_CANDIDATE as actual advancement when the assistant visibly held.",
+      "Do not interpret label-only FAIL_LOST_ROUTE heuristic rows as language failures without manual review.",
+      "Do not clone the same negative-first order."
     ],
     "do_not_repeat": [
       "route_law_contract_relaxation_matrix_v1 as a clone",
       "route_law_language_expansion_v1 strict response_contract smoke behavior"
     ],
-    "suite_shape_recommendation": "18 cases, negative-first cold isolation. First 8 cases should be no-route or damaged-substrate probes; middle cases should introduce route_id+active_chunk_id and wrong-next controls; final cases should repeat no-route probes after warming plus late known-good controls.",
-    "retirement_condition": "Retire when the study can state whether active_chunk_id-only and active_chunk_label-only packets advance from a cold first position, whether route_id absence is ever a reliable blocker, and whether the observed movement in the combined floor suite was due to suite-order carryover.",
-    "next_action_for_fresh_chat": "Generate a validator-ready route_law_no_route_substrate_cold_isolation_v1 suite that starts with missing-route and label-only negative controls before any successful route_id+active_chunk_id carrier is shown.",
+    "suite_shape_recommendation": "18 cases, positive-first counterbalance. Cases 1-4 should test stripped carrier, wrong-next trap, route_id-only hold, and explicit active_chunk_id-only contrast. Cases 5-12 should run no-route/label/damaged probes. Cases 13-17 should repeat stripped carrier and key probes after negative exposure. Case 18 should be the explicit legal_successor sanity control.",
+    "retirement_condition": "Retire when we can state whether route_id + active_chunk_id advances from first position, whether negative-first guard priming suppresses that advancement, and whether no-route probes remain holds in both orders.",
+    "next_action_for_fresh_chat": "Generate a validator-ready route_law_order_context_counterbalance_v1 suite using the same schema, with positive stripped-carrier controls before any no-route negative probes.",
     "set_by": "Billy / ChatGPT post-run review",
     "set_at": "2026-06-14",
-    "source": "Post-run CASEWORK_REVIEW_V1 for route_law_combined_minimum_carrier_floor_v1 result 20260614-124745-route_law_combined_minimum_carrier_floor_v1.",
-    "purpose": "Determine whether active_chunk_id-only, active_chunk_label-only, damaged active IDs, and no-route conflicting active-state packets advance when presented cold, before the chat has been warmed by successful route_id+active_chunk_id examples."
+    "source": "Post-run CASEWORK_REVIEW_V1 for route_law_no_route_substrate_cold_isolation_v1 result 20260614-132322-route_law_no_route_substrate_cold_isolation_v1.",
+    "purpose": "Run a positive-first counterbalance to determine whether route_id + active_chunk_id still advances when shown before missing-route guard probes, and whether negative-first framing suppresses the stripped carrier."
   },
   "manual_notes": {
     "follow_up_repair_note": "Current concern: messy tests pile up without enough reflection, planning, ownership of the next-test status, or cumulative analysis surface. Make the post-run digest mandatory before the next suite is designed.",
@@ -93,19 +94,19 @@
     "next_status"
   ],
   "computed_summary": {
-    "last_tabulated_at": "2026-06-14T17:17:09.588Z",
-    "run_count": 32,
-    "case_count": 351,
-    "latest_suite_id": "route_law_combined_minimum_carrier_floor_v1",
-    "latest_run_id": "20260614-124745-route_law_combined_minimum_carrier_floor_v1",
+    "last_tabulated_at": "2026-06-14T17:31:43.508Z",
+    "run_count": 33,
+    "case_count": 369,
+    "latest_suite_id": "route_law_no_route_substrate_cold_isolation_v1",
+    "latest_run_id": "20260614-132322-route_law_no_route_substrate_cold_isolation_v1",
     "classification_counts": {
-      "PASS_CANDIDATE": 250,
+      "PASS_CANDIDATE": 262,
       "FAIL_INVENTED_PROGRESS": 1,
-      "FAIL_LOST_ROUTE": 25,
-      "HOLD_NEEDS_REVIEW": 75
+      "FAIL_LOST_ROUTE": 28,
+      "HOLD_NEEDS_REVIEW": 78
     },
     "open_findings_count": 0,
-    "matrix_row_count": 351
+    "matrix_row_count": 369
   },
   "open_findings": [],
   "artifact_roles": {

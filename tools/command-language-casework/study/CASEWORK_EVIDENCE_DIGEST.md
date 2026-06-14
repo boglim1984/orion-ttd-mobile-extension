@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_no_route_substrate_cold_isolation_v1
+- Next study: route_law_order_context_counterbalance_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
 - Current confidence: medium
-- Open gap: It is not yet clear whether no-route and label-only movement is true cold behavior, suite-order carryover, semantic memory of desk-reset-v0, or a scorer/design artifact caused by placing positive floor cases before negative controls.
-- Suite shape recommendation: 18 cases, negative-first cold isolation. First 8 cases should be no-route or damaged-substrate probes; middle cases should introduce route_id+active_chunk_id and wrong-next controls; final cases should repeat no-route probes after warming plus late known-good controls.
+- Open gap: It remains unknown whether route_id + active_chunk_id is a true minimum carrier when presented first, or whether the carrier only failed here because the negative-first cases primed missing-state guard behavior.
+- Suite shape recommendation: 18 cases, positive-first counterbalance. Cases 1-4 should test stripped carrier, wrong-next trap, route_id-only hold, and explicit active_chunk_id-only contrast. Cases 5-12 should run no-route/label/damaged probes. Cases 13-17 should repeat stripped carrier and key probes after negative exposure. Case 18 should be the explicit legal_successor sanity control.
 
 ## Evidence summary
 
-- Imported run count: 32
-- Imported case count: 351
-- Matrix row count: 351
-- Latest imported suite ID: route_law_combined_minimum_carrier_floor_v1
-- Latest imported run ID: 20260614-124745-route_law_combined_minimum_carrier_floor_v1
+- Imported run count: 33
+- Imported case count: 369
+- Matrix row count: 369
+- Latest imported suite ID: route_law_no_route_substrate_cold_isolation_v1
+- Latest imported run ID: 20260614-132322-route_law_no_route_substrate_cold_isolation_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_no_route_substrate_cold_isolation_v1 / 20260614-132322-route_law_no_route_substrate_cold_isolation_v1: 18 cases, legal=FAIL, route=broken, design=endurance, context_risk=high
 - route_law_combined_minimum_carrier_floor_v1 / 20260614-124745-route_law_combined_minimum_carrier_floor_v1: 18 cases, legal=HOLD, route=unknown, design=endurance, context_risk=high
 - route_law_minimum_carrier_fields_cold_retest_v1 / 20260613-234019-route_law_minimum_carrier_fields_cold_retest_v1: 18 cases, legal=FAIL, route=broken, design=endurance, context_risk=high
-- route_law_protocol_activation_frame_minimum_v1 / 20260613-221156-route_law_protocol_activation_frame_minimum_v1: 18 cases, legal=HOLD, route=unknown, design=endurance, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_protocol_activation_frame_minimum_v1__20260613-221156-route_law_protocol_activation_frame_minimum_v1.md
 - study/reviews/2026-06-13/route_law_minimum_carrier_fields_cold_retest_v1__20260613-234019-route_law_minimum_carrier_fields_cold_retest_v1.md
 - study/reviews/2026-06-14/route_law_combined_minimum_carrier_floor_v1__20260614-124745-route_law_combined_minimum_carrier_floor_v1.md
+- study/reviews/2026-06-14/route_law_no_route_substrate_cold_isolation_v1__20260614-132322-route_law_no_route_substrate_cold_isolation_v1.md
 
 ## Planning rule
 

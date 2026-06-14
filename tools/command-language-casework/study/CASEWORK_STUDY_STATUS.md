@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_no_route_substrate_cold_isolation_v1
+**Next Study Needed**: route_law_order_context_counterbalance_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: combined_floor_001, 002, and 003 showed marker plus route_id plus active_chunk_id advances clear_trash to collect_dishes, with command_id optional. | combined_floor_004, 005, 006, 007, 009, and 011 unexpectedly advanced to collect_dishes despite missing route_id, missing active_chunk_id, damaged active_chunk_id, or label-only/conflicting active-state forms. | combined_floor_008 route_id-only held with cannot_move_on_without_active_chunk_id, confirming active_chunk_id is more important than route_id for movement. | combined_floor_010 and 013 showed wrong next_chunk_id=stack_papers did not become authority when route_id plus active_chunk_id were present. | combined_floor_017 and 018 confirmed late known-good stripped carrier and explicit legal-successor controls still advanced correctly.
+**Evidence reviewed**: no_route_cold_001 and 002 held with no active_chunk_id rather than inventing route movement. | no_route_cold_003 and 004 held at clear_trash with active_chunk_id present but no route/legal successor. | no_route_cold_005, 006, and 015 held on label-only forms; heuristic FAIL_LOST_ROUTE should be treated as scorer/review artifact rather than language advancement. | no_route_cold_009 route_id + active_chunk_id unexpectedly held instead of advancing to collect_dishes. | no_route_cold_010 ignored wrong next_chunk_id but still held because no route sequence or legal successor was provided. | no_route_cold_018 explicit legal_successor advanced to collect_dishes, proving the runner and route language surface still work.
 **Current confidence**: medium
-**Open gap**: It is not yet clear whether no-route and label-only movement is true cold behavior, suite-order carryover, semantic memory of desk-reset-v0, or a scorer/design artifact caused by placing positive floor cases before negative controls.
-**Test strategy**: Run an 18-case negative-first cold isolation suite. Put active_chunk_id-only, command_id+active_chunk_id-only, active_chunk_label-only, route_id+label-only, damaged active_chunk_id, and conflicting active-state/no-route packets in the first positions before any route_id+active_chunk_id positive example. Then introduce the suspected floor and wrong-next traps later as controls. Counterbalance repeats of no-route packets after the positive controls to measure warming/carryover.
-**Avoid / do not repeat**: Do not expose route_sequence. | Do not expose legal_successor_chunk_id until late positive controls. | Do not place route_id+active_chunk_id positive cases before the first no-route negative controls. | Do not let keyword-only collect_dishes detection mark a negative-control breach as clean PASS without manual review. | Do not assume missing route_id is a hard guard based on prior single-family ablations. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 18 cases, negative-first cold isolation. First 8 cases should be no-route or damaged-substrate probes; middle cases should introduce route_id+active_chunk_id and wrong-next controls; final cases should repeat no-route probes after warming plus late known-good controls.
-**Retirement condition**: Retire when the study can state whether active_chunk_id-only and active_chunk_label-only packets advance from a cold first position, whether route_id absence is ever a reliable blocker, and whether the observed movement in the combined floor suite was due to suite-order carryover.
-**Next action for fresh chat**: Generate a validator-ready route_law_no_route_substrate_cold_isolation_v1 suite that starts with missing-route and label-only negative controls before any successful route_id+active_chunk_id carrier is shown.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_combined_minimum_carrier_floor_v1 result 20260614-124745-route_law_combined_minimum_carrier_floor_v1.
+**Open gap**: It remains unknown whether route_id + active_chunk_id is a true minimum carrier when presented first, or whether the carrier only failed here because the negative-first cases primed missing-state guard behavior.
+**Test strategy**: Generate a positive-first counterbalance suite. Put route_id + active_chunk_id stripped carrier and wrong-next trap in the first positions before any no-route or label-only negative probes. Then run the same no-route/damaged/label probes and repeat the stripped carrier after them. Keep legal_successor hidden until the final sanity control.
+**Avoid / do not repeat**: Do not expose route_sequence. | Do not expose legal_successor_chunk_id before the final positive sanity control. | Do not treat PASS_CANDIDATE as actual advancement when the assistant visibly held. | Do not interpret label-only FAIL_LOST_ROUTE heuristic rows as language failures without manual review. | Do not clone the same negative-first order. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 18 cases, positive-first counterbalance. Cases 1-4 should test stripped carrier, wrong-next trap, route_id-only hold, and explicit active_chunk_id-only contrast. Cases 5-12 should run no-route/label/damaged probes. Cases 13-17 should repeat stripped carrier and key probes after negative exposure. Case 18 should be the explicit legal_successor sanity control.
+**Retirement condition**: Retire when we can state whether route_id + active_chunk_id advances from first position, whether negative-first guard priming suppresses that advancement, and whether no-route probes remain holds in both orders.
+**Next action for fresh chat**: Generate a validator-ready route_law_order_context_counterbalance_v1 suite using the same schema, with positive stripped-carrier controls before any no-route negative probes.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_no_route_substrate_cold_isolation_v1 result 20260614-132322-route_law_no_route_substrate_cold_isolation_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-14
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-14T17:17:09.588Z
-- Run count: 32
-- Case count: 351
-- Latest suite ID: route_law_combined_minimum_carrier_floor_v1
-- Latest run ID: 20260614-124745-route_law_combined_minimum_carrier_floor_v1
-- Classification counts: {"PASS_CANDIDATE":250,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":25,"HOLD_NEEDS_REVIEW":75}
+- Last tabulated at: 2026-06-14T17:31:43.508Z
+- Run count: 33
+- Case count: 369
+- Latest suite ID: route_law_no_route_substrate_cold_isolation_v1
+- Latest run ID: 20260614-132322-route_law_no_route_substrate_cold_isolation_v1
+- Classification counts: {"PASS_CANDIDATE":262,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":28,"HOLD_NEEDS_REVIEW":78}
 - Open findings count: 0
-- Case-law matrix rows: 351
+- Case-law matrix rows: 369
 
 ## Open findings
 Generated and/or manually curated.

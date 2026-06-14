@@ -1,0 +1,64 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b/c/6a2efe6f-29c4-83ea-a19b-f637b6670e26",
+    "suite_id": "route_law_headerless_minimum_carrier_field_matrix_15case_v1",
+    "run_id": "20260614-152243-route_law_headerless_minimum_carrier_field_matrix_15case_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The headerless minimum-carrier matrix completed with 15/15 responded and no observed tool failure. Cases 001 through 008 all preserved route law, including the cold first case with only route_id, active_chunk_id, and commit_policy. Label-only, route_id-only, active_chunk_id-only, and missing active_chunk_id controls did not create a clean false legal advance. Wrong active_chunk_id followed ID authority to wipe_surface rather than label text, and wrong explicit successor did not override the legal clear_trash to collect_dishes movement.",
+    "language_lesson": "A TTD_COMMAND_V1 header line is not required for route-law activation. A sparse headerless JSON packet can behave as active route state when it contains route_id, active_chunk_id, and a commit_policy. active_chunk_id appears to be the movement authority when it conflicts with active_chunk_label. The remaining minimum-carrier question is whether commit_policy is necessary, or whether route_id plus active_chunk_id alone is sufficient when tested directly and cold.",
+    "pointer_update": {
+      "next_study_needed": "route_law_headerless_two_field_minimum_confirmation_15case_v1",
+      "purpose": "Confirm whether the true minimum headerless carrier is route_id plus active_chunk_id alone, or whether commit_policy or activation wording is required for reliable cold route-law activation.",
+      "evidence_reviewed": [
+        "Case 001 passed cold with only route_id, active_chunk_id, and commit_policy, loading clear_trash and advancing to collect_dishes on move_on.",
+        "Cases 002 through 008 showed extra fields such as active_chunk_label, allowed_intents, activation_frame, packet_interpretation, protocol, and command_id are not necessary when route_id, active_chunk_id, and commit_policy are present or equivalent scaffold remains.",
+        "Cases 009 through 012 showed label-only, route_id-only, active_chunk_id-only, and missing active_chunk_id controls did not produce a clean legal clear_trash to collect_dishes pass.",
+        "Case 013 showed active_chunk_id outranks conflicting label text: stack_papers was loaded and moved to wipe_surface.",
+        "Case 014 showed an explicit wrong successor did not override route law; the assistant still advanced clear_trash to collect_dishes.",
+        "Case 015 confirmed explicit legal successor sanity still passes in a headerless packet."
+      ],
+      "current_confidence": "high",
+      "open_gap": "The exact two-field threshold remains untested. The completed suite proves route_id + active_chunk_id + commit_policy is sufficient, and proves each singleton or missing-active state is not sufficient, but it did not directly test route_id + active_chunk_id without commit_policy as the first cold packet or across repetitions.",
+      "test_strategy": "Run a 15-case confirmatory threshold suite. Put route_id + active_chunk_id with no commit_policy as case 001 cold. Repeat that two-field packet in multiple positions to check endurance and warmed-context effects. Contrast against route_id + active_chunk_id + commit_policy, route_id + active_chunk_id + activation_frame, route_id + active_chunk_id + packet_interpretation, route_id + active_chunk_id + allowed_intents, and direct negative controls. Include conflict cases where label disagrees with active_chunk_id and where commit_policy is absent.",
+      "avoid": [
+        "Do not repeat header spelling or normal TTD_COMMAND_V1 header baselines.",
+        "Do not expose route_sequence.",
+        "Do not over-scaffold every positive case with activation_frame or packet_interpretation.",
+        "Do not treat PASS_CANDIDATE on a conflict case as proof of clear_trash to collect_dishes unless the movement is actually legal for the stated active_chunk_id.",
+        "Do not route to tool repair; this run completed cleanly."
+      ],
+      "suite_shape_recommendation": "15 cases, headerless cold-start threshold confirmation. Use literal move_on. Include at least three direct route_id + active_chunk_id only trials, several one-field additions, and negative controls for each singleton, missing active_chunk_id, wrong active_chunk_id, and wrong successor.",
+      "retirement_condition": "Retire this pointer when route_id + active_chunk_id alone either passes reliably across cold and repeated positions, or fails clearly enough to show commit_policy or activation wording is required. Negative controls must continue to reject singleton and missing-active packets.",
+      "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_headerless_two_field_minimum_confirmation_15case_v1, centered on direct route_id + active_chunk_id only packets with no commit_policy."
+    },
+    "reviewed_at": "2026-06-14T19:28:45.357Z"
+  },
+  "imported_result_path": "study/raw/2026-06-14/route_law_headerless_minimum_carrier_field_matrix_15case_v1__20260614-152243-route_law_headerless_minimum_carrier_field_matrix_15case_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_headerless_two_field_minimum_confirmation_15case_v1",
+    "purpose": "Confirm whether the true minimum headerless carrier is route_id plus active_chunk_id alone, or whether commit_policy or activation wording is required for reliable cold route-law activation.",
+    "evidence_reviewed": [
+      "Case 001 passed cold with only route_id, active_chunk_id, and commit_policy, loading clear_trash and advancing to collect_dishes on move_on.",
+      "Cases 002 through 008 showed extra fields such as active_chunk_label, allowed_intents, activation_frame, packet_interpretation, protocol, and command_id are not necessary when route_id, active_chunk_id, and commit_policy are present or equivalent scaffold remains.",
+      "Cases 009 through 012 showed label-only, route_id-only, active_chunk_id-only, and missing active_chunk_id controls did not produce a clean legal clear_trash to collect_dishes pass.",
+      "Case 013 showed active_chunk_id outranks conflicting label text: stack_papers was loaded and moved to wipe_surface.",
+      "Case 014 showed an explicit wrong successor did not override route law; the assistant still advanced clear_trash to collect_dishes.",
+      "Case 015 confirmed explicit legal successor sanity still passes in a headerless packet."
+    ],
+    "current_confidence": "high",
+    "open_gap": "The exact two-field threshold remains untested. The completed suite proves route_id + active_chunk_id + commit_policy is sufficient, and proves each singleton or missing-active state is not sufficient, but it did not directly test route_id + active_chunk_id without commit_policy as the first cold packet or across repetitions.",
+    "test_strategy": "Run a 15-case confirmatory threshold suite. Put route_id + active_chunk_id with no commit_policy as case 001 cold. Repeat that two-field packet in multiple positions to check endurance and warmed-context effects. Contrast against route_id + active_chunk_id + commit_policy, route_id + active_chunk_id + activation_frame, route_id + active_chunk_id + packet_interpretation, route_id + active_chunk_id + allowed_intents, and direct negative controls. Include conflict cases where label disagrees with active_chunk_id and where commit_policy is absent.",
+    "avoid": [
+      "Do not repeat header spelling or normal TTD_COMMAND_V1 header baselines.",
+      "Do not expose route_sequence.",
+      "Do not over-scaffold every positive case with activation_frame or packet_interpretation.",
+      "Do not treat PASS_CANDIDATE on a conflict case as proof of clear_trash to collect_dishes unless the movement is actually legal for the stated active_chunk_id.",
+      "Do not route to tool repair; this run completed cleanly."
+    ],
+    "suite_shape_recommendation": "15 cases, headerless cold-start threshold confirmation. Use literal move_on. Include at least three direct route_id + active_chunk_id only trials, several one-field additions, and negative controls for each singleton, missing active_chunk_id, wrong active_chunk_id, and wrong successor.",
+    "retirement_condition": "Retire this pointer when route_id + active_chunk_id alone either passes reliably across cold and repeated positions, or fails clearly enough to show commit_policy or activation wording is required. Negative controls must continue to reject singleton and missing-active packets.",
+    "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_headerless_two_field_minimum_confirmation_15case_v1, centered on direct route_id + active_chunk_id only packets with no commit_policy."
+  },
+  "applied_at": "2026-06-14T19:28:45.360Z"
+}

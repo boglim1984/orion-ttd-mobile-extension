@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_protocol_activation_frame_v1
+**Next Study Needed**: route_law_cold_start_gating_isolation_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: route_law_minimal_activation_scaffold_v1 result 20260613-194343 showed 13 FAIL_LOST_ROUTE and 2 HOLD_NEEDS_REVIEW across 15 cases. | Active-only early and late retests both failed, so active_chunk_id and active_chunk_label alone are not actionable in this stripped packet style. | Small scaffold fields including command_intent, current_chunk/current_task wording, commit_policy, reducer_semantics, move_on_rule, and legal_successor_chunk_id did not activate the route. | Wrong-next dominance probes did not prove active-route dominance because the model did not engage the route at all. | Next-only controls remained non-activating and should be preserved as inert controls, not counted as successful route movement.
+**Evidence reviewed**: route_law_protocol_activation_frame_v1 result 20260613-201524 completed with 17 responded cases and no tool failures. | protocol_activation_001_active_only_baseline advanced from clear_trash to collect_dishes without legal_successor_chunk_id or route_sequence. | protocol_activation_014_wrong_next_dominance ignored wrong next_chunk stack_papers and produced collect_dishes. | protocol_activation_003_next_only_inert_control and protocol_activation_015_next_only_full_frame_control also produced clear_trash to collect_dishes despite missing active_chunk_id.
 **Current confidence**: medium
-**Open gap**: It is still unknown what minimal protocol/instruction frame makes the assistant interpret TTD_COMMAND_V1 as active route state instead of echoing the allowed intent text. The next test must separate field-carrier failure from packet-activation failure.
-**Test strategy**: Run a focused protocol activation frame suite with active_chunk_id and active_chunk_label fixed to clear_trash / clear trash and no route_sequence. Vary only tiny instruction-frame additions: a route-holder identity sentence, an explicit packet interpretation sentence, a before-reply readiness contract, a minimal response_contract, and a minimal state-transition instruction. Include active-only controls early and late, next-only inert controls, and active plus wrong-next probes after an activation frame appears to work.
-**Avoid / do not repeat**: do not add route_sequence in the core cases | do not repeat broad synonym scaffolds that already failed | do not treat next-only HOLD results as route-law passes | do not clone route_law_minimal_activation_scaffold_v1 with only field-name changes | do not use a strict output-only smoke contract that hides whether route state was actually understood | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 15-case protocol activation frame suite: active-only baseline, minimal route-holder frame variants, minimal packet-interpretation variants, readiness/response-contract variants, wrong-next dominance probes only after activation frames, next-only inert controls, and late active-frame retest.
-**Retirement condition**: Retire this pointer when one or more minimal instruction-frame patterns reliably make active clear_trash advance exactly one legal step to collect_dishes without route_sequence, and when next-only controls remain inert.
-**Next action for fresh chat**: Generate a validator-ready route_law_protocol_activation_frame_v1 suite focused on the smallest non-route_sequence instruction frame that makes active_chunk fields executable route state.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_minimal_activation_scaffold_v1 result 20260613-194343-route_law_minimal_activation_scaffold_v1.
+**Open gap**: It is unknown whether active_chunk_id is actually the gating carrier. The model may be reconstructing the known desk-reset route from route_id, next_chunk labels, protocol framing, prior cases in the same run, or ambient learned context.
+**Test strategy**: Run a cold-start gating isolation suite that places inert controls first and separates case order effects. Include no-active/no-next packet controls, route_id-only controls, next-only first controls, active-only first controls, active-only late retests, wrong-next probes, and repeated controls after successful active cases. Prefer unique session_ids per case and make the suite explicitly measure whether sequential carryover contaminates later controls.
+**Avoid / do not repeat**: do not add route_sequence | do not add more activation-frame variants until gating is isolated | do not count next-only HOLD results as route-law passes | do not retire protocol activation solely because all frame variants passed | do not mix cold-start evidence with late-run carryover evidence without labeling the run position | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 15 to 20 cases focused on cold-start gating and order effects: start with next-only and route_id-only inert controls, then active-only first-case probes, then active plus wrong-next dominance probes, then late inert retests to measure contamination.
+**Retirement condition**: Retire when active_chunk_id-containing packets reliably advance clear_trash to collect_dishes while packets without active_chunk_id remain inert in both first-position and late-position controls.
+**Next action for fresh chat**: Generate a validator-ready route_law_cold_start_gating_isolation_v1 suite that tests no-active controls before any successful active route case and records order/carryover effects explicitly.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_protocol_activation_frame_v1 result 20260613-201524-route_law_protocol_activation_frame_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-14
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-14T00:02:06.554Z
-- Run count: 21
-- Case count: 152
-- Latest suite ID: route_law_minimal_activation_scaffold_v1
-- Latest run ID: 20260613-194343-route_law_minimal_activation_scaffold_v1
-- Classification counts: {"PASS_CANDIDATE":93,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":19,"HOLD_NEEDS_REVIEW":39}
+- Last tabulated at: 2026-06-14T00:21:57.580Z
+- Run count: 22
+- Case count: 169
+- Latest suite ID: route_law_protocol_activation_frame_v1
+- Latest run ID: 20260613-201524-route_law_protocol_activation_frame_v1
+- Classification counts: {"PASS_CANDIDATE":108,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":19,"HOLD_NEEDS_REVIEW":41}
 - Open findings count: 0
-- Case-law matrix rows: 152
+- Case-law matrix rows: 169
 
 ## Open findings
 Generated and/or manually curated.

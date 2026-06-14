@@ -9,19 +9,19 @@
 
 ## Active research brief
 
-- Next study: route_law_protocol_activation_frame_v1
+- Next study: route_law_cold_start_gating_isolation_v1
 - Purpose: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
 - Current confidence: medium
-- Open gap: It is still unknown what minimal protocol/instruction frame makes the assistant interpret TTD_COMMAND_V1 as active route state instead of echoing the allowed intent text. The next test must separate field-carrier failure from packet-activation failure.
-- Suite shape recommendation: 15-case protocol activation frame suite: active-only baseline, minimal route-holder frame variants, minimal packet-interpretation variants, readiness/response-contract variants, wrong-next dominance probes only after activation frames, next-only inert controls, and late active-frame retest.
+- Open gap: It is unknown whether active_chunk_id is actually the gating carrier. The model may be reconstructing the known desk-reset route from route_id, next_chunk labels, protocol framing, prior cases in the same run, or ambient learned context.
+- Suite shape recommendation: 15 to 20 cases focused on cold-start gating and order effects: start with next-only and route_id-only inert controls, then active-only first-case probes, then active plus wrong-next dominance probes, then late inert retests to measure contamination.
 
 ## Evidence summary
 
-- Imported run count: 21
-- Imported case count: 152
-- Matrix row count: 152
-- Latest imported suite ID: route_law_minimal_activation_scaffold_v1
-- Latest imported run ID: 20260613-194343-route_law_minimal_activation_scaffold_v1
+- Imported run count: 22
+- Imported case count: 169
+- Matrix row count: 169
+- Latest imported suite ID: route_law_protocol_activation_frame_v1
+- Latest imported run ID: 20260613-201524-route_law_protocol_activation_frame_v1
 
 ## What appears proven
 
@@ -37,15 +37,15 @@
 
 ## Recent imported runs
 
+- route_law_protocol_activation_frame_v1 / 20260613-201524-route_law_protocol_activation_frame_v1: 17 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 - route_law_minimal_activation_scaffold_v1 / 20260613-194343-route_law_minimal_activation_scaffold_v1: 15 cases, legal=FAIL, route=broken, design=smoke, context_risk=high
 - route_law_next_chunk_latent_carrier_boundary_v1 / 20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1: 15 cases, legal=FAIL, route=broken, design=endurance, context_risk=high
-- route_law_active_carrier_position_generalization_v1 / 20260613-191805-route_law_active_carrier_position_generalization_v1: 15 cases, legal=HOLD, route=unknown, design=smoke, context_risk=high
 
 ## Recent review files
 
-- study/reviews/2026-06-13/route_law_active_carrier_position_generalization_v1__20260613-191805-route_law_active_carrier_position_generalization_v1.md
 - study/reviews/2026-06-13/route_law_next_chunk_latent_carrier_boundary_v1__20260613-192913-route_law_next_chunk_latent_carrier_boundary_v1.md
 - study/reviews/2026-06-13/route_law_minimal_activation_scaffold_v1__20260613-194343-route_law_minimal_activation_scaffold_v1.md
+- study/reviews/2026-06-13/route_law_protocol_activation_frame_v1__20260613-201524-route_law_protocol_activation_frame_v1.md
 
 ## Planning rule
 

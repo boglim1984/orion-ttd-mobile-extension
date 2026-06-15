@@ -5,19 +5,19 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_headerless_two_field_minimum_confirmation_15case_v1
+**Next Study Needed**: route_law_singleton_cold_start_order_effect_15case_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: Case 001 passed cold with only route_id, active_chunk_id, and commit_policy, loading clear_trash and advancing to collect_dishes on move_on. | Cases 002 through 008 showed extra fields such as active_chunk_label, allowed_intents, activation_frame, packet_interpretation, protocol, and command_id are not necessary when route_id, active_chunk_id, and commit_policy are present or equivalent scaffold remains. | Cases 009 through 012 showed label-only, route_id-only, active_chunk_id-only, and missing active_chunk_id controls did not produce a clean legal clear_trash to collect_dishes pass. | Case 013 showed active_chunk_id outranks conflicting label text: stack_papers was loaded and moved to wipe_surface. | Case 014 showed an explicit wrong successor did not override route law; the assistant still advanced clear_trash to collect_dishes. | Case 015 confirmed explicit legal successor sanity still passes in a headerless packet.
-**Current confidence**: high
-**Open gap**: The exact two-field threshold remains untested. The completed suite proves route_id + active_chunk_id + commit_policy is sufficient, and proves each singleton or missing-active state is not sufficient, but it did not directly test route_id + active_chunk_id without commit_policy as the first cold packet or across repetitions.
-**Test strategy**: Run a 15-case confirmatory threshold suite. Put route_id + active_chunk_id with no commit_policy as case 001 cold. Repeat that two-field packet in multiple positions to check endurance and warmed-context effects. Contrast against route_id + active_chunk_id + commit_policy, route_id + active_chunk_id + activation_frame, route_id + active_chunk_id + packet_interpretation, route_id + active_chunk_id + allowed_intents, and direct negative controls. Include conflict cases where label disagrees with active_chunk_id and where commit_policy is absent.
-**Avoid / do not repeat**: Do not repeat header spelling or normal TTD_COMMAND_V1 header baselines. | Do not expose route_sequence. | Do not over-scaffold every positive case with activation_frame or packet_interpretation. | Do not treat PASS_CANDIDATE on a conflict case as proof of clear_trash to collect_dishes unless the movement is actually legal for the stated active_chunk_id. | Do not route to tool repair; this run completed cleanly. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 15 cases, headerless cold-start threshold confirmation. Use literal move_on. Include at least three direct route_id + active_chunk_id only trials, several one-field additions, and negative controls for each singleton, missing active_chunk_id, wrong active_chunk_id, and wrong successor.
-**Retirement condition**: Retire this pointer when route_id + active_chunk_id alone either passes reliably across cold and repeated positions, or fails clearly enough to show commit_policy or activation wording is required. Negative controls must continue to reject singleton and missing-active packets.
-**Next action for fresh chat**: Generate validator-ready suite JSON for route_law_headerless_two_field_minimum_confirmation_15case_v1, centered on direct route_id + active_chunk_id only packets with no commit_policy.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_headerless_minimum_carrier_field_matrix_15case_v1 result 20260614-152243-route_law_headerless_minimum_carrier_field_matrix_15case_v1.
+**Evidence reviewed**: Cases 001, 002, and 009 showed route_id + active_chunk_id alone loads clear_trash and advances to collect_dishes on move_on. | Cases 003 through 008 showed one-field additions were unnecessary once route_id + active_chunk_id were present. | Case 010 unexpectedly showed active_chunk_label-only advanced to collect_dishes after prior route-state exposure. | Case 012 unexpectedly showed active_chunk_id-only advanced to collect_dishes after prior route-state exposure. | Case 011 showed route_id-only did not supply active state and returned active_chunk_id missing. | Case 013 should be manually reviewed as a negative-control success despite heuristic PASS_CANDIDATE because the assistant said Cannot advance: active_chunk_id missing. | Case 014 confirmed active_chunk_id outranks conflicting label text by moving stack_papers to wipe_surface. | Case 015 confirmed wrong explicit successor did not poison route law; clear_trash still advanced to collect_dishes.
+**Current confidence**: medium
+**Open gap**: Whether singleton fields are true route-state carriers in cold or near-cold context. The current run proves two-field sufficiency but does not prove two-field minimality because singleton controls passed only after earlier successful route-state packets.
+**Test strategy**: Run a 15-case order-effect suite with singleton packets before any route_id + active_chunk_id positive. Put active_chunk_id-only or label-only as the first cold case, keep the first block free of two-field positives, then introduce two-field positives later to test whether later singleton behavior changes after warming. Include route_id-only, label-only, active_chunk_id-only, missing-active, conflicting label, and wrong-successor controls. If possible, follow with a swapped-order companion run where the other singleton is case 001 cold.
+**Avoid / do not repeat**: Do not place singleton negatives after many route_id + active_chunk_id positives if the goal is cold sufficiency. | Do not call route_id + active_chunk_id the true minimum until singleton cold-start behavior is resolved. | Do not treat heuristic PASS_CANDIDATE on missing-active cases as a clean pass when the assistant text says it cannot advance. | Do not expose route_sequence. | Do not route to tool repair; this run completed cleanly. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 15 cases, singleton cold-start/order-effect matrix. Start with singleton probes before any two-field positive, then add two-field baseline and repeat singleton probes after warming to measure carryover.
+**Retirement condition**: Retire this pointer when active_chunk_id-only and label-only either pass in cold/near-cold positions or fail there but pass only after route-state warming. That will distinguish true singleton carrier sufficiency from same-chat carryover.
+**Next action for fresh chat**: Generate validator-ready suite JSON for route_law_singleton_cold_start_order_effect_15case_v1. Put singleton probes before any route_id + active_chunk_id positive and use move_on as the scripted reply.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_headerless_two_field_minimum_confirmation_15case_v1 result 20260614-161439-route_law_headerless_two_field_minimum_confirmation_15case_v1.
 **Set by**: Billy / ChatGPT post-run review
-**Set at**: 2026-06-14
+**Set at**: 2026-06-15
 
 ### Why these cases
 - The previous pointer is satisfied because relaxed contracts preserved route law.
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-14T19:28:45.844Z
-- Run count: 42
-- Case count: 462
-- Latest suite ID: route_law_headerless_minimum_carrier_field_matrix_15case_v1
-- Latest run ID: 20260614-152243-route_law_headerless_minimum_carrier_field_matrix_15case_v1
-- Classification counts: {"PASS_CANDIDATE":337,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":34,"HOLD_NEEDS_REVIEW":90}
+- Last tabulated at: 2026-06-15T15:00:36.145Z
+- Run count: 43
+- Case count: 477
+- Latest suite ID: route_law_headerless_two_field_minimum_confirmation_15case_v1
+- Latest run ID: 20260614-161439-route_law_headerless_two_field_minimum_confirmation_15case_v1
+- Classification counts: {"PASS_CANDIDATE":351,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":34,"HOLD_NEEDS_REVIEW":91}
 - Open findings count: 0
-- Case-law matrix rows: 462
+- Case-law matrix rows: 477
 
 ## Open findings
 Generated and/or manually curated.

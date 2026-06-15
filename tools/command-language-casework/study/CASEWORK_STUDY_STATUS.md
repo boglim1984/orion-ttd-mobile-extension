@@ -5,17 +5,17 @@
 ## Manual next-study pointer
 This is the human/LLM-reviewed next move. Tabulation must not overwrite it by default.
 
-**Next Study Needed**: route_law_label_singleton_true_cold_swapped_order_15case_v1
+**Next Study Needed**: route_law_label_activation_scaffold_ablation_15case_v1
 **Purpose**: Find the true minimum packet carrier set after route_law_minimal_field_ablation_v1 showed route law survives single-family ablations when alternate scaffolding remains.
-**Evidence reviewed**: Case 001 active_chunk_id-only loaded clear_trash and advanced to collect_dishes before any prior route-state exposure in the disposable runner tab. | Case 002 active_chunk_label-only advanced to collect_dishes before any two-field positive, but after case 001 had already established active_chunk_id-only behavior. | Cases 003 and 011 route_id-only failed safely with no active chunk, showing route_id alone is not an active-state carrier even after warming. | Cases 004 and 005 showed protocol does not appear necessary when active_chunk_id or active_chunk_label is present. | Case 006 showed route_id plus label but no active_chunk_id can still advance to collect_dishes, strengthening the label-carrier hypothesis. | Case 012 confirmed active_chunk_id precedence over conflicting label text by moving stack_papers to wipe_surface. | Case 013 confirmed wrong explicit successor did not poison route law; clear_trash still advanced to collect_dishes. | Case 014 confirmed a late packet with route metadata but no active field failed safely instead of importing prior state. | Case 015 confirmed the final route_id + active_chunk_id baseline still worked, so the run remained healthy.
+**Evidence reviewed**: Cases 001-005 recognized active_chunk_label text but refused move_on because active_chunk_id or a stronger carrier was absent. | Cases 006-008 failed safely with no active chunk field, so reduced packets did not import prior state. | Cases 009-011 showed active_chunk_id-only and active_chunk_id combinations still advance to collect_dishes. | Case 012 showed active_chunk_id takes precedence over conflicting active_chunk_label by advancing stack_papers to wipe_surface. | Cases 013-014 showed active_chunk_label can advance when paired with route_id, allowed_intents, commit_policy, and legal_successor metadata.
 **Current confidence**: medium
-**Open gap**: active_chunk_id-only is now strongly supported as a true cold singleton carrier, but active_chunk_label-only still needs a label-first case-001 confirmation. The current suite proves label-only can work near-cold before two-field warm-up, but not that it works as the first active-state packet in a fresh disposable chat.
-**Test strategy**: Run a 15-case swapped-order companion suite. Make case 001 active_chunk_label-only. Keep the first block free of active_chunk_id and free of route_id + active_chunk_id positives. Use route_id + label, protocol + label, and label spelling variants before introducing active_chunk_id. Then introduce active_chunk_id-only and two-field baselines later to compare order effects. Retain route_id-only, missing-active, conflicting-id-vs-label, and wrong-successor controls.
-**Avoid / do not repeat**: Do not place active_chunk_label-only after active_chunk_id-only if the goal is true label cold-start proof. | Do not expose route_sequence. | Do not call label-only fully proven true-cold until it passes as case 001 in a fresh disposable chat. | Do not route to tool repair; this run completed cleanly. | Do not treat HOLD_NEEDS_REVIEW on safe missing-active negatives as language failure when assistant text says it cannot advance. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
-**Suite shape recommendation**: 15 cases, label-first swapped-order singleton cold-start matrix. Start with active_chunk_label-only as case 001, then route_id + label and protocol + label, then route_id-only and missing-active negatives, then active_chunk_id-only and two-field baselines, then precedence and wrong-successor controls.
-**Retirement condition**: Retire this next pointer when active_chunk_label-only either passes as true case-001 cold-start carrier or fails in case-001 position while active_chunk_id-only continues to pass later. That will separate true label singleton sufficiency from active_chunk_id-induced same-chat warming.
-**Next action for fresh chat**: Generate validator-ready suite JSON for route_law_label_singleton_true_cold_swapped_order_15case_v1. Put active_chunk_label-only as case 001, keep active_chunk_id out of the first label-cold block, and use move_on as the scripted reply.
-**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_singleton_cold_start_order_effect_15case_v1 result 20260615-131839-route_law_singleton_cold_start_order_effect_15case_v1.
+**Open gap**: Which scaffold field or minimal combination makes active_chunk_label actionable: route_id, allowed_intents, commit_policy naming active_chunk_label, legal_successor_chunk_id/label, response_contract, or some interaction among them.
+**Test strategy**: Run a 15-case label-scaffold ablation suite with active_chunk_id absent from the first scaffold block. Start from active_chunk_label plus one scaffold field at a time, then pairwise combinations, then wrong-successor controls, then late active_chunk_id health baselines. The goal is to separate label recognition from legal advancement authority.
+**Avoid / do not repeat**: Do not call cases 001-005 semantic passes just because the heuristic marked PASS_CANDIDATE; they failed the expected advancement behavior. | Do not retest pure label-only as unresolved; it has now failed in true case-001 cold position. | Do not expose route_sequence. | Do not let legal_successor_chunk_id become hidden route authority without wrong-successor controls. | Do not route to tool repair; this run completed cleanly. | route_law_contract_relaxation_matrix_v1 as a clone | route_law_language_expansion_v1 strict response_contract smoke behavior
+**Suite shape recommendation**: 15 cases, label-scaffold ablation. Keep active_chunk_id absent until the late health block. Test active_chunk_label plus commit_policy, response_contract, allowed_intents, route_id, legal_successor fields, and wrong-successor variants, then finish with active_chunk_id-only and two-field baselines.
+**Retirement condition**: Retire when the run identifies a smallest scaffold that makes active_chunk_label actionable without active_chunk_id, or shows that only the larger successor/commit-policy composite works while smaller scaffold fields fail.
+**Next action for fresh chat**: Generate validator-ready suite JSON for route_law_label_activation_scaffold_ablation_15case_v1. Focus on active_chunk_label without active_chunk_id, ablate scaffold fields one at a time, include wrong-successor controls, and use move_on as the scripted reply.
+**Source**: Post-run CASEWORK_REVIEW_V1 for route_law_label_singleton_true_cold_swapped_order_15case_v1 result 20260615-133127-route_law_label_singleton_true_cold_swapped_order_15case_v1.
 **Set by**: Billy / ChatGPT post-run review
 **Set at**: 2026-06-15
 
@@ -41,14 +41,14 @@ This is the human/LLM-reviewed next move. Tabulation must not overwrite it by de
 ## Computed summary
 Generated from raw result files.
 
-- Last tabulated at: 2026-06-15T17:25:46.049Z
-- Run count: 44
-- Case count: 492
-- Latest suite ID: route_law_singleton_cold_start_order_effect_15case_v1
-- Latest run ID: 20260615-131839-route_law_singleton_cold_start_order_effect_15case_v1
-- Classification counts: {"PASS_CANDIDATE":363,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":34,"HOLD_NEEDS_REVIEW":94}
+- Last tabulated at: 2026-06-15T19:31:00.663Z
+- Run count: 45
+- Case count: 507
+- Latest suite ID: route_law_label_singleton_true_cold_swapped_order_15case_v1
+- Latest run ID: 20260615-133127-route_law_label_singleton_true_cold_swapped_order_15case_v1
+- Classification counts: {"PASS_CANDIDATE":375,"FAIL_INVENTED_PROGRESS":1,"FAIL_LOST_ROUTE":34,"HOLD_NEEDS_REVIEW":97}
 - Open findings count: 0
-- Case-law matrix rows: 492
+- Case-law matrix rows: 507
 
 ## Open findings
 Generated and/or manually curated.

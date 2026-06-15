@@ -1,0 +1,70 @@
+{
+  "original_review": {
+    "schema": "CASEWORK_REVIEW_V1",
+    "source_chat_url": "https://chatgpt.com/g/g-p-6a2d9ee3c5088191a02e4c72cd5f9f3b-ttd-tests/c/6a30332c-e018-83ea-816f-6a2b63cc8ced",
+    "suite_id": "route_law_singleton_cold_start_order_effect_15case_v1",
+    "run_id": "20260615-131839-route_law_singleton_cold_start_order_effect_15case_v1",
+    "review_verdict": "advance_pointer",
+    "key_result": "The run completed cleanly. active_chunk_id-only passed in true case-001 cold position by loading clear_trash and advancing to collect_dishes on move_on. active_chunk_label-only also advanced to collect_dishes before any route_id + active_chunk_id two-field positive, but because it followed the active_chunk_id-only singleton, it should be treated as near-cold rather than fully isolated cold proof. route_id-only failed safely both cold and warmed, saying route_id alone does not specify an active chunk. Protocol additions were unnecessary. route_id + label without active_chunk_id advanced to collect_dishes. active_chunk_id outranked conflicting label text by moving stack_papers to wipe_surface. Wrong explicit successor did not poison route law; clear_trash still advanced to collect_dishes. Late missing-active metadata failed safely.",
+    "language_lesson": "The smallest active-state carrier appears to be the active chunk field itself, not route_id. active_chunk_id is now strongly supported as a true cold singleton route-state carrier. active_chunk_label is also a plausible singleton carrier, but needs a label-first swapped-order confirmation because the current label-only pass happened after an active_chunk_id-only singleton had already succeeded. route_id names the route but does not supply active state. The model respects active_chunk_id over conflicting label text and does not blindly obey an explicitly wrong successor when route law is expressed.",
+    "pointer_update": {
+      "next_study_needed": "route_law_label_singleton_true_cold_swapped_order_15case_v1",
+      "purpose": "Confirm whether active_chunk_label alone is a true case-001 cold-start route-state carrier, rather than a near-cold pass warmed by the prior active_chunk_id-only singleton. Also replicate active_chunk_id-only after a label-first block and preserve route_id-only and missing-active negative controls.",
+      "evidence_reviewed": [
+        "Case 001 active_chunk_id-only loaded clear_trash and advanced to collect_dishes before any prior route-state exposure in the disposable runner tab.",
+        "Case 002 active_chunk_label-only advanced to collect_dishes before any two-field positive, but after case 001 had already established active_chunk_id-only behavior.",
+        "Cases 003 and 011 route_id-only failed safely with no active chunk, showing route_id alone is not an active-state carrier even after warming.",
+        "Cases 004 and 005 showed protocol does not appear necessary when active_chunk_id or active_chunk_label is present.",
+        "Case 006 showed route_id plus label but no active_chunk_id can still advance to collect_dishes, strengthening the label-carrier hypothesis.",
+        "Case 012 confirmed active_chunk_id precedence over conflicting label text by moving stack_papers to wipe_surface.",
+        "Case 013 confirmed wrong explicit successor did not poison route law; clear_trash still advanced to collect_dishes.",
+        "Case 014 confirmed a late packet with route metadata but no active field failed safely instead of importing prior state.",
+        "Case 015 confirmed the final route_id + active_chunk_id baseline still worked, so the run remained healthy."
+      ],
+      "current_confidence": "medium",
+      "open_gap": "active_chunk_id-only is now strongly supported as a true cold singleton carrier, but active_chunk_label-only still needs a label-first case-001 confirmation. The current suite proves label-only can work near-cold before two-field warm-up, but not that it works as the first active-state packet in a fresh disposable chat.",
+      "test_strategy": "Run a 15-case swapped-order companion suite. Make case 001 active_chunk_label-only. Keep the first block free of active_chunk_id and free of route_id + active_chunk_id positives. Use route_id + label, protocol + label, and label spelling variants before introducing active_chunk_id. Then introduce active_chunk_id-only and two-field baselines later to compare order effects. Retain route_id-only, missing-active, conflicting-id-vs-label, and wrong-successor controls.",
+      "avoid": [
+        "Do not place active_chunk_label-only after active_chunk_id-only if the goal is true label cold-start proof.",
+        "Do not expose route_sequence.",
+        "Do not call label-only fully proven true-cold until it passes as case 001 in a fresh disposable chat.",
+        "Do not route to tool repair; this run completed cleanly.",
+        "Do not treat HOLD_NEEDS_REVIEW on safe missing-active negatives as language failure when assistant text says it cannot advance."
+      ],
+      "suite_shape_recommendation": "15 cases, label-first swapped-order singleton cold-start matrix. Start with active_chunk_label-only as case 001, then route_id + label and protocol + label, then route_id-only and missing-active negatives, then active_chunk_id-only and two-field baselines, then precedence and wrong-successor controls.",
+      "retirement_condition": "Retire this next pointer when active_chunk_label-only either passes as true case-001 cold-start carrier or fails in case-001 position while active_chunk_id-only continues to pass later. That will separate true label singleton sufficiency from active_chunk_id-induced same-chat warming.",
+      "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_label_singleton_true_cold_swapped_order_15case_v1. Put active_chunk_label-only as case 001, keep active_chunk_id out of the first label-cold block, and use move_on as the scripted reply."
+    },
+    "reviewed_at": "2026-06-15T17:25:45.515Z"
+  },
+  "imported_result_path": "study/raw/2026-06-15/route_law_singleton_cold_start_order_effect_15case_v1__20260615-131839-route_law_singleton_cold_start_order_effect_15case_v1.json",
+  "applied_pointer_update": {
+    "next_study_needed": "route_law_label_singleton_true_cold_swapped_order_15case_v1",
+    "purpose": "Confirm whether active_chunk_label alone is a true case-001 cold-start route-state carrier, rather than a near-cold pass warmed by the prior active_chunk_id-only singleton. Also replicate active_chunk_id-only after a label-first block and preserve route_id-only and missing-active negative controls.",
+    "evidence_reviewed": [
+      "Case 001 active_chunk_id-only loaded clear_trash and advanced to collect_dishes before any prior route-state exposure in the disposable runner tab.",
+      "Case 002 active_chunk_label-only advanced to collect_dishes before any two-field positive, but after case 001 had already established active_chunk_id-only behavior.",
+      "Cases 003 and 011 route_id-only failed safely with no active chunk, showing route_id alone is not an active-state carrier even after warming.",
+      "Cases 004 and 005 showed protocol does not appear necessary when active_chunk_id or active_chunk_label is present.",
+      "Case 006 showed route_id plus label but no active_chunk_id can still advance to collect_dishes, strengthening the label-carrier hypothesis.",
+      "Case 012 confirmed active_chunk_id precedence over conflicting label text by moving stack_papers to wipe_surface.",
+      "Case 013 confirmed wrong explicit successor did not poison route law; clear_trash still advanced to collect_dishes.",
+      "Case 014 confirmed a late packet with route metadata but no active field failed safely instead of importing prior state.",
+      "Case 015 confirmed the final route_id + active_chunk_id baseline still worked, so the run remained healthy."
+    ],
+    "current_confidence": "medium",
+    "open_gap": "active_chunk_id-only is now strongly supported as a true cold singleton carrier, but active_chunk_label-only still needs a label-first case-001 confirmation. The current suite proves label-only can work near-cold before two-field warm-up, but not that it works as the first active-state packet in a fresh disposable chat.",
+    "test_strategy": "Run a 15-case swapped-order companion suite. Make case 001 active_chunk_label-only. Keep the first block free of active_chunk_id and free of route_id + active_chunk_id positives. Use route_id + label, protocol + label, and label spelling variants before introducing active_chunk_id. Then introduce active_chunk_id-only and two-field baselines later to compare order effects. Retain route_id-only, missing-active, conflicting-id-vs-label, and wrong-successor controls.",
+    "avoid": [
+      "Do not place active_chunk_label-only after active_chunk_id-only if the goal is true label cold-start proof.",
+      "Do not expose route_sequence.",
+      "Do not call label-only fully proven true-cold until it passes as case 001 in a fresh disposable chat.",
+      "Do not route to tool repair; this run completed cleanly.",
+      "Do not treat HOLD_NEEDS_REVIEW on safe missing-active negatives as language failure when assistant text says it cannot advance."
+    ],
+    "suite_shape_recommendation": "15 cases, label-first swapped-order singleton cold-start matrix. Start with active_chunk_label-only as case 001, then route_id + label and protocol + label, then route_id-only and missing-active negatives, then active_chunk_id-only and two-field baselines, then precedence and wrong-successor controls.",
+    "retirement_condition": "Retire this next pointer when active_chunk_label-only either passes as true case-001 cold-start carrier or fails in case-001 position while active_chunk_id-only continues to pass later. That will separate true label singleton sufficiency from active_chunk_id-induced same-chat warming.",
+    "next_action_for_fresh_chat": "Generate validator-ready suite JSON for route_law_label_singleton_true_cold_swapped_order_15case_v1. Put active_chunk_label-only as case 001, keep active_chunk_id out of the first label-cold block, and use move_on as the scripted reply."
+  },
+  "applied_at": "2026-06-15T17:25:45.526Z"
+}
